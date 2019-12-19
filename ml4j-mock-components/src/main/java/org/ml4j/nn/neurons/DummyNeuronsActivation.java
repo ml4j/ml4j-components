@@ -1,3 +1,16 @@
+/*
+ * Copyright 2019 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
+ */
 package org.ml4j.nn.neurons;
 
 import java.util.Objects;
@@ -9,6 +22,11 @@ import org.ml4j.MatrixFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Mock implementation of NeuronsActivation
+ * 
+ * @author Michael Lavelle
+ */
 public class DummyNeuronsActivation implements NeuronsActivation {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(DummyNeuronsActivation.class);
@@ -17,6 +35,11 @@ public class DummyNeuronsActivation implements NeuronsActivation {
 	protected int examples;
 	protected NeuronsActivationFeatureOrientation featureOrientation;
 	
+	/**
+	 * @param neurons The neurons that have been activated.
+	 * @param featureOrientation The feature orientation of the matrix representation of these activations.
+	 * @param examples The number of training examples that caused the activations.
+	 */
 	public DummyNeuronsActivation(Neurons neurons, NeuronsActivationFeatureOrientation featureOrientation, int examples) {
 		this.neurons = neurons;
 		this.examples = examples;
@@ -46,7 +69,7 @@ public class DummyNeuronsActivation implements NeuronsActivation {
 
 	@Override
 	public void close() {
-
+		// No-op
 	}
 
 	@Override
@@ -112,5 +135,4 @@ public class DummyNeuronsActivation implements NeuronsActivation {
 	public void setImmutable(boolean arg0) {
 		throw new UnsupportedOperationException();
 	}
-
 }
