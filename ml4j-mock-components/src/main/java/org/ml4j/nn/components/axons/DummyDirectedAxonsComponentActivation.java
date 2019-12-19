@@ -20,4 +20,9 @@ public class DummyDirectedAxonsComponentActivation extends DirectedAxonsComponen
 		LOGGER.debug("Back propagating gradient through DummyDirectedAxonsComponentActivation");
 		return gradient;
 	}
+
+	@Override
+	public float getTotalRegularisationCost() {
+		return 0;
+	}
 }

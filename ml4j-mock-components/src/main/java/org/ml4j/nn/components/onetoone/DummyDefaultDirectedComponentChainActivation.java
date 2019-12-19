@@ -9,6 +9,13 @@ import org.ml4j.nn.components.onetone.DefaultDirectedComponentChainActivation;
 import org.ml4j.nn.components.onetoone.base.DefaultDirectedComponentChainActivationBase;
 import org.ml4j.nn.neurons.NeuronsActivation;
 
+/**
+ * Mock implementation of DefaultDirectedComponentChainActivation, and provides logic to back propagate gradient through the activation.
+ * 
+ * Encapsulates the mock activations from a forward propagation through a DefaultDirectedComponentChain.
+ * 
+ * @author Michael Lavelle
+ */
 public class DummyDefaultDirectedComponentChainActivation extends DefaultDirectedComponentChainActivationBase implements DefaultDirectedComponentChainActivation {
 	
 	public DummyDefaultDirectedComponentChainActivation(NeuronsActivation output) {

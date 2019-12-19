@@ -14,6 +14,13 @@ import org.ml4j.nn.neurons.NeuronsActivation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Mock implementation of DefaultDirectedComponentChain.
+ * 
+ * Encapsulates a mock sequential chain of DefaultChainableDirectedComponents
+ * 
+ * @author Michael Lavelle
+ */
 public class DummyDefaultDirectedComponentChain extends DefaultDirectedComponentChainBase implements DefaultDirectedComponentChain {
 
 	/**
@@ -23,6 +30,11 @@ public class DummyDefaultDirectedComponentChain extends DefaultDirectedComponent
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(DummyDefaultDirectedComponentChain.class);
 
+	/**
+	 * DummyDefaultDirectedComponentChain constructor
+	 * 
+	 * @param sequentialComponents The list of DefaultChainableDirectedComponents with which to initialise this chain.
+	 */
 	public DummyDefaultDirectedComponentChain(List<DefaultChainableDirectedComponent<?, ?>> sequentialComponents) {
 		super(sequentialComponents);
 	}
@@ -40,7 +52,6 @@ public class DummyDefaultDirectedComponentChain extends DefaultDirectedComponent
 			inFlightActivation = activation.getOutput();
 			index++;
 		}
-		
 		
 		return new DummyDefaultDirectedComponentChainActivation(inFlightActivation);
 	}

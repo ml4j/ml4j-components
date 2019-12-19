@@ -9,7 +9,7 @@ import org.ml4j.nn.neurons.NeuronsActivation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class DummyDirectedAxonsComponent<L extends Neurons, R extends Neurons> extends DirectedAxonsComponentBase<L, R> implements DirectedAxonsComponent<L, R> {
+public class DummyDirectedAxonsComponent<L extends Neurons, R extends Neurons> extends DirectedAxonsComponentBase<L, R, Axons<? extends L, ? extends R, ?>> implements DirectedAxonsComponent<L, R> {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(DummyDirectedAxonsComponent.class);
 

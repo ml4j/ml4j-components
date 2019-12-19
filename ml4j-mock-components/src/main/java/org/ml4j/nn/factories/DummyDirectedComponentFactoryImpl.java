@@ -1,14 +1,12 @@
 package org.ml4j.nn.factories;
 
 import java.util.List;
+import java.util.function.IntSupplier;
 
 import org.ml4j.Matrix;
 import org.ml4j.nn.activationfunctions.DifferentiableActivationFunction;
 import org.ml4j.nn.axons.Axons;
 import org.ml4j.nn.axons.DummyAxons;
-import org.ml4j.nn.components.ChainableDirectedComponent;
-import org.ml4j.nn.components.ChainableDirectedComponentActivation;
-import org.ml4j.nn.components.DirectedComponentsContext;
 import org.ml4j.nn.components.activationfunctions.DifferentiableActivationFunctionComponent;
 import org.ml4j.nn.components.activationfunctions.DummyDifferentiableActivationFunctionComponent;
 import org.ml4j.nn.components.axons.BatchNormDirectedAxonsComponent;
@@ -31,8 +29,12 @@ import org.ml4j.nn.components.onetoone.DummyDefaultDirectedComponentChain;
 import org.ml4j.nn.components.onetoone.DummyDefaultDirectedComponentChainBipoleGraph;
 import org.ml4j.nn.neurons.Neurons;
 import org.ml4j.nn.neurons.Neurons3D;
-import org.ml4j.nn.neurons.NeuronsActivation;
 
+/**
+ * Mock implementation of DirectedComponentFactory
+ * 
+ * @author Michael Lavelle
+ */
 public class DummyDirectedComponentFactoryImpl implements DirectedComponentFactory {
 
 	@Override
@@ -46,11 +48,12 @@ public class DummyDirectedComponentFactoryImpl implements DirectedComponentFacto
 			Axons<L, R, ?> axons) {
 		return createDirectedAxonsComponent(axons.getLeftNeurons(), axons.getRightNeurons());
 	}
-	
-	private <L extends Neurons, R extends Neurons> DirectedAxonsComponent<L, R> createDirectedAxonsComponent(L leftNeurons, R rightNeurons) {
+
+	private <L extends Neurons, R extends Neurons> DirectedAxonsComponent<L, R> createDirectedAxonsComponent(
+			L leftNeurons, R rightNeurons) {
 		return new DummyDirectedAxonsComponent<>(createDummyAxons(leftNeurons, rightNeurons));
 	}
-	
+
 	@Override
 	public DirectedAxonsComponent<Neurons3D, Neurons3D> createConvolutionalAxonsComponent(Neurons3D leftNeurons,
 			Neurons3D rightNeurons, int strideWidth, int strideHeight, Integer paddingWidth, Integer paddingHeight,
@@ -102,8 +105,7 @@ public class DummyDirectedComponentFactoryImpl implements DirectedComponentFacto
 	}
 
 	@Override
-	public OneToManyDirectedComponent<?> createOneToManyDirectedComponent(
-			List<? extends ChainableDirectedComponent<NeuronsActivation, ? extends ChainableDirectedComponentActivation<NeuronsActivation>, DirectedComponentsContext>> targetComponents) {
+	public OneToManyDirectedComponent<?> createOneToManyDirectedComponent(IntSupplier targetComponentsCount) {
 		return new DummyOneToManyDirectedComponent();
 	}
 
@@ -116,9 +118,8 @@ public class DummyDirectedComponentFactoryImpl implements DirectedComponentFacto
 	@Override
 	public DifferentiableActivationFunctionComponent createDifferentiableActivationFunctionComponent(
 			DifferentiableActivationFunction differentiableActivationFunction) {
-			return new DummyDifferentiableActivationFunctionComponent(differentiableActivationFunction);
+		return new DummyDifferentiableActivationFunctionComponent(differentiableActivationFunction);
 	}
-
 
 	@Override
 	public DefaultDirectedComponentBipoleGraph createDirectedComponentBipoleGraph(
@@ -127,23 +128,20 @@ public class DummyDirectedComponentFactoryImpl implements DirectedComponentFacto
 		return new DummyDefaultDirectedComponentChainBipoleGraph(parallelComponentChainsBatch);
 	}
 
-
 	@Override
 	public DefaultDirectedComponentChain createDirectedComponentChain(
 			List<DefaultChainableDirectedComponent<?, ?>> sequentialComponents) {
 		return new DummyDefaultDirectedComponentChain(sequentialComponents);
 	}
 
-
 	@Override
 	public DefaultDirectedComponentChainBatch<DefaultDirectedComponentChain, DefaultDirectedComponentChainActivation> createDirectedComponentChainBatch(
 			List<DefaultDirectedComponentChain> parallelComponents) {
 		return new DummyDefaultComponentChainBatch(parallelComponents);
 	}
-	
+
 	private <L extends Neurons, R extends Neurons> Axons<L, R, ?> createDummyAxons(L leftNeurons, R rightNeurons) {
 		return new DummyAxons<>(leftNeurons, rightNeurons);
 	}
-	
-	
+
 }
