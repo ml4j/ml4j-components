@@ -15,8 +15,6 @@ package org.ml4j.nn.components.onetomany;
 
 import java.util.function.IntSupplier;
 
-import org.ml4j.nn.components.onetomany.DummyOneToManyDirectedComponent;
-import org.ml4j.nn.components.onetomany.OneToManyDirectedComponent;
 import org.ml4j.nn.components.onetomany.base.OneToManyDirectedComponentTestBase;
 
 /**

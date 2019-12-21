@@ -24,6 +24,8 @@ import org.ml4j.nn.components.onetone.DefaultDirectedComponentBipoleGraphActivat
 import org.ml4j.nn.components.onetone.DefaultDirectedComponentChain;
 import org.ml4j.nn.components.onetone.DefaultDirectedComponentChainActivation;
 import org.ml4j.nn.components.onetoone.base.DefaultDirectedComponentChainBipoleGraphBase;
+import org.ml4j.nn.neurons.DummyNeuronsActivation;
+import org.ml4j.nn.neurons.Neurons;
 import org.ml4j.nn.neurons.NeuronsActivation;
 
 public class DummyDefaultDirectedComponentChainBipoleGraph extends DefaultDirectedComponentChainBipoleGraphBase implements DefaultDirectedComponentBipoleGraph {
@@ -35,9 +37,9 @@ public class DummyDefaultDirectedComponentChainBipoleGraph extends DefaultDirect
 	
 	private DefaultDirectedComponentChainBatch<DefaultDirectedComponentChain, DefaultDirectedComponentChainActivation> parallelComponentChainsBatch;
 
-	public DummyDefaultDirectedComponentChainBipoleGraph(
+	public DummyDefaultDirectedComponentChainBipoleGraph(Neurons inputNeurons, Neurons outputNeurons,
 			DefaultDirectedComponentChainBatch<DefaultDirectedComponentChain, DefaultDirectedComponentChainActivation> parallelComponentChainsBatch) {
-		super(parallelComponentChainsBatch);
+		super(inputNeurons, outputNeurons, parallelComponentChainsBatch);
 	}
 
 	@Override
@@ -48,7 +50,8 @@ public class DummyDefaultDirectedComponentChainBipoleGraph extends DefaultDirect
 	@Override
 	public DefaultDirectedComponentBipoleGraphActivation forwardPropagate(NeuronsActivation neuronsActivation,
 			DirectedComponentsContext context) {
-		return new DummyDefaultDirectedComponentBipoleGraphActivation(neuronsActivation);
+		return new DummyDefaultDirectedComponentBipoleGraphActivation(new DummyNeuronsActivation(getOutputNeurons(),
+				neuronsActivation.getFeatureOrientation(), neuronsActivation.getExampleCount()));
 	}
 
 	@Override
@@ -58,7 +61,7 @@ public class DummyDefaultDirectedComponentChainBipoleGraph extends DefaultDirect
 
 	@Override
 	public DefaultDirectedComponentBipoleGraph dup() {
-		return new DummyDefaultDirectedComponentChainBipoleGraph(parallelComponentChainsBatch.dup());
+		return new DummyDefaultDirectedComponentChainBipoleGraph(inputNeurons, outputNeurons, parallelComponentChainsBatch.dup());
 	}
 
 }

@@ -35,19 +35,19 @@ import org.mockito.MockitoAnnotations;
 public abstract class DirectedAxonsComponentTestBase {
 
 	@Mock
-	private NeuronsActivation mockNeuronsActivation;
+	protected NeuronsActivation mockNeuronsActivation;
 	
 	@Mock
-	private AxonsContext mockAxonsContext;
+	protected AxonsContext mockAxonsContext;
 	
 	@Mock
-	private Axons<Neurons, Neurons, ?> mockAxons;
+	protected Axons<Neurons, Neurons, ?> mockAxons;
 	
 	@Mock
-	private DirectedComponentsContext mockDirectedComponentsContext;
+	protected DirectedComponentsContext mockDirectedComponentsContext;
 	
 	@Mock
-	private MatrixFactory mockMatrixFactory;
+	protected MatrixFactory mockMatrixFactory;
 	
 	@Before
 	public void setup() {

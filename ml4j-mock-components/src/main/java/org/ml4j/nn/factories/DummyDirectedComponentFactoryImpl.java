@@ -19,7 +19,7 @@ import java.util.function.IntSupplier;
 import org.ml4j.Matrix;
 import org.ml4j.nn.activationfunctions.DifferentiableActivationFunction;
 import org.ml4j.nn.axons.Axons;
-import org.ml4j.nn.axons.DummyAxons;
+import org.ml4j.nn.axons.NoOpAxons;
 import org.ml4j.nn.components.activationfunctions.DifferentiableActivationFunctionComponent;
 import org.ml4j.nn.components.activationfunctions.DummyDifferentiableActivationFunctionComponent;
 import org.ml4j.nn.components.axons.BatchNormDirectedAxonsComponent;
@@ -125,20 +125,20 @@ public class DummyDirectedComponentFactoryImpl implements DirectedComponentFacto
 	@Override
 	public ManyToOneDirectedComponent<?> createManyToOneDirectedComponent(
 			PathCombinationStrategy pathCombinationStrategy) {
-		return new DummyManyToOneDirectedComponent();
+		return new DummyManyToOneDirectedComponent(pathCombinationStrategy);
 	}
 
 	@Override
-	public DifferentiableActivationFunctionComponent createDifferentiableActivationFunctionComponent(
+	public DifferentiableActivationFunctionComponent createDifferentiableActivationFunctionComponent(Neurons neurons, 
 			DifferentiableActivationFunction differentiableActivationFunction) {
-		return new DummyDifferentiableActivationFunctionComponent(differentiableActivationFunction);
+		return new DummyDifferentiableActivationFunctionComponent(neurons, differentiableActivationFunction);
 	}
 
 	@Override
-	public DefaultDirectedComponentBipoleGraph createDirectedComponentBipoleGraph(
+	public DefaultDirectedComponentBipoleGraph createDirectedComponentBipoleGraph(Neurons leftNeurons, Neurons rightNeurons,
 			DefaultDirectedComponentChainBatch<DefaultDirectedComponentChain, DefaultDirectedComponentChainActivation> parallelComponentChainsBatch,
 			PathCombinationStrategy pathCombinationStrategy) {
-		return new DummyDefaultDirectedComponentChainBipoleGraph(parallelComponentChainsBatch);
+		return new DummyDefaultDirectedComponentChainBipoleGraph(leftNeurons, rightNeurons, parallelComponentChainsBatch);
 	}
 
 	@Override
@@ -154,7 +154,7 @@ public class DummyDirectedComponentFactoryImpl implements DirectedComponentFacto
 	}
 
 	private <L extends Neurons, R extends Neurons> Axons<L, R, ?> createDummyAxons(L leftNeurons, R rightNeurons) {
-		return new DummyAxons<>(leftNeurons, rightNeurons);
+		return new NoOpAxons<>(leftNeurons, rightNeurons);
 	}
 
 }

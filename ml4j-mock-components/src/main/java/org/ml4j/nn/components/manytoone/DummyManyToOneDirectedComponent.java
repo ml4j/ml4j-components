@@ -23,6 +23,10 @@ import org.slf4j.LoggerFactory;
 
 public class DummyManyToOneDirectedComponent extends ManyToOneDirectedComponentBase<DummyManyToOneDirectedComponentActivation> implements ManyToOneDirectedComponent<DummyManyToOneDirectedComponentActivation> {
 
+	public DummyManyToOneDirectedComponent(PathCombinationStrategy pathCombinationStrategy) {
+		super(pathCombinationStrategy);
+	}
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(DummyManyToOneDirectedComponent.class);
 	
 	/**s
@@ -39,6 +43,6 @@ public class DummyManyToOneDirectedComponent extends ManyToOneDirectedComponentB
 
 	@Override
 	public ManyToOneDirectedComponent<DummyManyToOneDirectedComponentActivation> dup() {
-		return new DummyManyToOneDirectedComponent();
+		return new DummyManyToOneDirectedComponent(pathCombinationStrategy);
 	}
 }

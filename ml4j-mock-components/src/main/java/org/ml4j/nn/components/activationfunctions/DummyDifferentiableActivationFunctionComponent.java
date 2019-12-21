@@ -16,9 +16,16 @@ package org.ml4j.nn.components.activationfunctions;
 import org.ml4j.nn.activationfunctions.DifferentiableActivationFunction;
 import org.ml4j.nn.activationfunctions.DifferentiableActivationFunctionActivation;
 import org.ml4j.nn.components.activationfunctions.base.DifferentiableActivationFunctionComponentBase;
+import org.ml4j.nn.neurons.Neurons;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.ml4j.nn.neurons.NeuronsActivationContext;
 
+/**
+ * Mock implementation of 
+ * 
+ * @author Michael Lavelle
+ *
+ */
 public class DummyDifferentiableActivationFunctionComponent extends DifferentiableActivationFunctionComponentBase implements DifferentiableActivationFunctionComponent {
 
 	/**
@@ -26,8 +33,8 @@ public class DummyDifferentiableActivationFunctionComponent extends Differentiab
 	 */
 	private static final long serialVersionUID = -6033017517698579773L;
 	
-	public DummyDifferentiableActivationFunctionComponent(DifferentiableActivationFunction activationFunction){
-		super(activationFunction);
+	public DummyDifferentiableActivationFunctionComponent(Neurons neurons, DifferentiableActivationFunction activationFunction){
+		super(neurons, activationFunction);
 	}
 
 	@Override
@@ -38,7 +45,7 @@ public class DummyDifferentiableActivationFunctionComponent extends Differentiab
 
 	@Override
 	public DifferentiableActivationFunctionComponent dup() {
-		return new DummyDifferentiableActivationFunctionComponent(activationFunction);
+		return new DummyDifferentiableActivationFunctionComponent(neurons, activationFunction);
 	}
 
 }

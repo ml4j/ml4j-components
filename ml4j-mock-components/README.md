@@ -1,4 +1,4 @@
-# ml4j-components-impl
+# ml4j-mock-components
 
-Implementation of ml4j-components-api
+Mock implementation of plug-and-play  ml4j-components
 

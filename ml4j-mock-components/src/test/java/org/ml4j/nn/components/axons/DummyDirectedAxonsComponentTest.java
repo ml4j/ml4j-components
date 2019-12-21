@@ -17,7 +17,7 @@ import org.ml4j.nn.axons.Axons;
 import org.ml4j.nn.components.axons.base.DirectedAxonsComponentTestBase;
 import org.ml4j.nn.neurons.Neurons;
 
-public class DirectedAxonsComponentTest extends DirectedAxonsComponentTestBase {
+public class DummyDirectedAxonsComponentTest extends DirectedAxonsComponentTestBase {
 
 	@Override
 	protected <L extends Neurons, R extends Neurons> DirectedAxonsComponent<L, R> createDirectedAxonsComponentUnderTest(

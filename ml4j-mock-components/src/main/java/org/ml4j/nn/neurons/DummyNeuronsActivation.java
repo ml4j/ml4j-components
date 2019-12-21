@@ -73,7 +73,7 @@ public class DummyNeuronsActivation implements NeuronsActivation {
 	}
 
 	@Override
-	public void combineFeaturesInline(NeuronsActivation arg0) {
+	public void combineFeaturesInline(NeuronsActivation arg0, MatrixFactory matrixFactory) {
 		throw new UnsupportedOperationException();
 	}
 
