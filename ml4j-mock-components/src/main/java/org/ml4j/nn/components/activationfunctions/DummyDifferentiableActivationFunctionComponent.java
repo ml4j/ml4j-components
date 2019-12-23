@@ -21,7 +21,7 @@ import org.ml4j.nn.neurons.NeuronsActivation;
 import org.ml4j.nn.neurons.NeuronsActivationContext;
 
 /**
- * Mock implementation of 
+ * Mock implementation of DifferentiableActivationFunctionComponent
  * 
  * @author Michael Lavelle
  *
@@ -38,9 +38,10 @@ public class DummyDifferentiableActivationFunctionComponent extends Differentiab
 	}
 
 	@Override
-	public DifferentiableActivationFunctionComponentActivation forwardPropagate(NeuronsActivation neuronsActivation,
+	public DifferentiableActivationFunctionComponentActivation forwardPropagate(NeuronsActivation inputActivation,
 			NeuronsActivationContext context) {
-		return new DummyDifferentiableActivationFunctionComponentActivation(this, neuronsActivation, neuronsActivation);
+		// In this mock, just return the input as output.
+		return new DummyDifferentiableActivationFunctionComponentActivation(this, inputActivation, inputActivation);
 	}
 
 	@Override

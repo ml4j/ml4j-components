@@ -43,13 +43,13 @@ public class DummyDifferentiableActivationFunctionComponentActivation extends Di
 	@Override
 	public DirectedComponentGradient<NeuronsActivation> backPropagate(
 			DirectedComponentGradient<NeuronsActivation> gradient) {
-		LOGGER.debug("Back propagating gradient through DummyDifferentiableActivationFunctionActivation");
+		LOGGER.debug("Mock back propagating gradient through DummyDifferentiableActivationFunctionComponentActivation");
 		return gradient;
 	}
 
 	@Override
 	public DirectedComponentGradient<NeuronsActivation> backPropagate(CostFunctionGradient costFunctionGradient) {
-		LOGGER.debug("Back propagating cost function gradient through DummyDifferentiableActivationFunctionActivation");
+		LOGGER.debug("Mock back propagating cost function gradient through DummyDifferentiableActivationFunctionComponentActivation");
 		return new DirectedComponentGradientImpl<>(output);
 	}
 }

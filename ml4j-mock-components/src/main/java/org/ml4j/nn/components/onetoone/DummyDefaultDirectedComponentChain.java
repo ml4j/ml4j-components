@@ -55,7 +55,7 @@ public class DummyDefaultDirectedComponentChain extends DefaultDirectedComponent
 	@Override
 	public DefaultDirectedComponentChainActivation forwardPropagate(NeuronsActivation neuronsActivation,
 			DirectedComponentsContext context) {
-		LOGGER.debug("Forward propagating through DummyDirectedComponentChain");
+		LOGGER.debug("Mock forward propagating through DummyDefaultDirectedComponentChain");
 		NeuronsActivation inFlightActivation = neuronsActivation;
 		List<DefaultChainableDirectedComponentActivation> activations = new ArrayList<>();
 		int index = 0;
