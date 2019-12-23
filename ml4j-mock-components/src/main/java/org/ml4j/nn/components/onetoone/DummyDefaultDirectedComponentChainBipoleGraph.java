@@ -50,7 +50,7 @@ public class DummyDefaultDirectedComponentChainBipoleGraph extends DefaultDirect
 	@Override
 	public DefaultDirectedComponentBipoleGraphActivation forwardPropagate(NeuronsActivation neuronsActivation,
 			DirectedComponentsContext context) {
-		return new DummyDefaultDirectedComponentBipoleGraphActivation(new DummyNeuronsActivation(getOutputNeurons(),
+		return new DummyDefaultDirectedComponentBipoleGraphActivation(this, new DummyNeuronsActivation(getOutputNeurons(),
 				neuronsActivation.getFeatureOrientation(), neuronsActivation.getExampleCount()));
 	}
 

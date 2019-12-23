@@ -18,6 +18,7 @@ import java.util.List;
 
 import org.ml4j.nn.components.DirectedComponentGradient;
 import org.ml4j.nn.components.onetone.DefaultChainableDirectedComponentActivation;
+import org.ml4j.nn.components.onetone.DefaultDirectedComponentChain;
 import org.ml4j.nn.components.onetone.DefaultDirectedComponentChainActivation;
 import org.ml4j.nn.components.onetoone.base.DefaultDirectedComponentChainActivationBase;
 import org.ml4j.nn.neurons.NeuronsActivation;
@@ -29,10 +30,10 @@ import org.ml4j.nn.neurons.NeuronsActivation;
  * 
  * @author Michael Lavelle
  */
-public class DummyDefaultDirectedComponentChainActivation extends DefaultDirectedComponentChainActivationBase implements DefaultDirectedComponentChainActivation {
+public class DummyDefaultDirectedComponentChainActivation extends DefaultDirectedComponentChainActivationBase<DefaultDirectedComponentChain> implements DefaultDirectedComponentChainActivation {
 	
-	public DummyDefaultDirectedComponentChainActivation(NeuronsActivation output) {
-		super(output);
+	public DummyDefaultDirectedComponentChainActivation(DefaultDirectedComponentChain componentChain, NeuronsActivation output) {
+		super(componentChain, output);
 	}
 	
 	@Override

@@ -55,6 +55,7 @@ public class DummyOneToManyDirectedComponent extends OneToManyDirectedComponentB
 	@Override
 	public DummyOneToManyDirectedComponentActivation forwardPropagate(NeuronsActivation neuronsActivation,
 			DirectedComponentsContext context) {
+		neuronsActivation.setImmutable(true);
 		LOGGER.debug("Mock splitting input neurons activation into multiple output neurons activations" );
 		return new DummyOneToManyDirectedComponentActivation(neuronsActivation, targetComponentsCountSupplier.getAsInt());
 	}

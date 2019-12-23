@@ -66,7 +66,7 @@ public class DummyDefaultDirectedComponentChain extends DefaultDirectedComponent
 			index++;
 		}
 		
-		return new DummyDefaultDirectedComponentChainActivation(inFlightActivation);
+		return new DummyDefaultDirectedComponentChainActivation(this, inFlightActivation);
 	}
 
 	@Override

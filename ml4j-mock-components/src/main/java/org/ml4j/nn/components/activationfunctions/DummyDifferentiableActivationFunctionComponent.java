@@ -14,7 +14,7 @@
 package org.ml4j.nn.components.activationfunctions;
 
 import org.ml4j.nn.activationfunctions.DifferentiableActivationFunction;
-import org.ml4j.nn.activationfunctions.DifferentiableActivationFunctionActivation;
+import org.ml4j.nn.activationfunctions.DifferentiableActivationFunctionComponentActivation;
 import org.ml4j.nn.components.activationfunctions.base.DifferentiableActivationFunctionComponentBase;
 import org.ml4j.nn.neurons.Neurons;
 import org.ml4j.nn.neurons.NeuronsActivation;
@@ -38,9 +38,9 @@ public class DummyDifferentiableActivationFunctionComponent extends Differentiab
 	}
 
 	@Override
-	public DifferentiableActivationFunctionActivation forwardPropagate(NeuronsActivation neuronsActivation,
+	public DifferentiableActivationFunctionComponentActivation forwardPropagate(NeuronsActivation neuronsActivation,
 			NeuronsActivationContext context) {
-		return new DummyDifferentiableActivationFunctionComponentActivation(neuronsActivation, neuronsActivation);
+		return new DummyDifferentiableActivationFunctionComponentActivation(this, neuronsActivation, neuronsActivation);
 	}
 
 	@Override
