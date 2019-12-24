@@ -51,68 +51,68 @@ import org.ml4j.nn.neurons.Neurons3D;
 public class DummyDirectedComponentFactoryImpl implements DirectedComponentFactory {
 
 	@Override
-	public DirectedAxonsComponent<Neurons, Neurons> createFullyConnectedAxonsComponent(Neurons leftNeurons,
+	public DirectedAxonsComponent<Neurons, Neurons, ?> createFullyConnectedAxonsComponent(Neurons leftNeurons,
 			Neurons rightNeurons, Matrix connectionWeights, Matrix biases) {
 		return createDirectedAxonsComponent(leftNeurons, rightNeurons);
 	}
 
 	@Override
-	public <L extends Neurons, R extends Neurons> DirectedAxonsComponent<L, R> createDirectedAxonsComponent(
+	public <L extends Neurons, R extends Neurons> DirectedAxonsComponent<L, R, ?> createDirectedAxonsComponent(
 			Axons<L, R, ?> axons) {
 		return createDirectedAxonsComponent(axons.getLeftNeurons(), axons.getRightNeurons());
 	}
 
-	private <L extends Neurons, R extends Neurons> DirectedAxonsComponent<L, R> createDirectedAxonsComponent(
+	private <L extends Neurons, R extends Neurons> DirectedAxonsComponent<L, R, ?> createDirectedAxonsComponent(
 			L leftNeurons, R rightNeurons) {
 		return new DummyDirectedAxonsComponent<>(createDummyAxons(leftNeurons, rightNeurons));
 	}
 
 	@Override
-	public DirectedAxonsComponent<Neurons3D, Neurons3D> createConvolutionalAxonsComponent(Neurons3D leftNeurons,
+	public DirectedAxonsComponent<Neurons3D, Neurons3D, ?> createConvolutionalAxonsComponent(Neurons3D leftNeurons,
 			Neurons3D rightNeurons, int strideWidth, int strideHeight, Integer paddingWidth, Integer paddingHeight,
 			Matrix connectionWeights, Matrix biases) {
 		return createDirectedAxonsComponent(leftNeurons, rightNeurons);
 	}
 
 	@Override
-	public DirectedAxonsComponent<Neurons3D, Neurons3D> createMaxPoolingAxonsComponent(Neurons3D leftNeurons,
+	public DirectedAxonsComponent<Neurons3D, Neurons3D, ?> createMaxPoolingAxonsComponent(Neurons3D leftNeurons,
 			Neurons3D rightNeurons, int strideWidth, int strideHeight, Integer paddingWidth, Integer paddingHeight,
 			boolean scaleOutputs) {
 		return createDirectedAxonsComponent(leftNeurons, rightNeurons);
 	}
 
 	@Override
-	public DirectedAxonsComponent<Neurons3D, Neurons3D> createAveragePoolingAxonsComponent(Neurons3D leftNeurons,
+	public DirectedAxonsComponent<Neurons3D, Neurons3D, ?> createAveragePoolingAxonsComponent(Neurons3D leftNeurons,
 			Neurons3D rightNeurons, int strideWidth, int strideHeight, Integer paddingWidth, Integer paddingHeight) {
 		return createDirectedAxonsComponent(leftNeurons, rightNeurons);
 	}
 
 	@Override
-	public <N extends Neurons> BatchNormDirectedAxonsComponent<N, N> createBatchNormAxonsComponent(N leftNeurons,
+	public <N extends Neurons> BatchNormDirectedAxonsComponent<N, ?> createBatchNormAxonsComponent(N leftNeurons,
 			N rightNeurons) {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public <N extends Neurons> BatchNormDirectedAxonsComponent<N, N> createBatchNormAxonsComponent(N leftNeurons,
+	public <N extends Neurons> BatchNormDirectedAxonsComponent<N, ?> createBatchNormAxonsComponent(N leftNeurons,
 			N rightNeurons, Matrix gamma, Matrix beta, Matrix mean, Matrix stddev) {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public BatchNormDirectedAxonsComponent<Neurons3D, Neurons3D> createConvolutionalBatchNormAxonsComponent(
+	public BatchNormDirectedAxonsComponent<Neurons3D, ?> createConvolutionalBatchNormAxonsComponent(
 			Neurons3D leftNeurons, Neurons3D rightNeurons) {
 		return new DummyBatchNormDirectedAxonsComponent<>(createDummyAxons(leftNeurons, rightNeurons));
 	}
 
 	@Override
-	public BatchNormDirectedAxonsComponent<Neurons3D, Neurons3D> createConvolutionalBatchNormAxonsComponent(
+	public BatchNormDirectedAxonsComponent<Neurons3D, ?> createConvolutionalBatchNormAxonsComponent(
 			Neurons3D leftNeurons, Neurons3D rightNeurons, Matrix gamma, Matrix beta, Matrix mean, Matrix stddev) {
 		return new DummyBatchNormDirectedAxonsComponent<>(createDummyAxons(leftNeurons, rightNeurons));
 	}
 
 	@Override
-	public <N extends Neurons> DirectedAxonsComponent<N, N> createPassThroughAxonsComponent(N leftNeurons,
+	public <N extends Neurons> DirectedAxonsComponent<N, N, ?> createPassThroughAxonsComponent(N leftNeurons,
 			N rightNeurons) {
 		return createDirectedAxonsComponent(leftNeurons, rightNeurons);
 	}

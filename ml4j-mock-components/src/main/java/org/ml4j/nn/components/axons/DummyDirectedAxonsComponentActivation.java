@@ -13,17 +13,18 @@
  */
 package org.ml4j.nn.components.axons;
 
+import org.ml4j.nn.axons.Axons;
 import org.ml4j.nn.components.DirectedComponentGradient;
 import org.ml4j.nn.components.axons.base.DirectedAxonsComponentActivationBase;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class DummyDirectedAxonsComponentActivation extends DirectedAxonsComponentActivationBase implements DirectedAxonsComponentActivation {
+public class DummyDirectedAxonsComponentActivation<A extends Axons<?, ?, ?>> extends DirectedAxonsComponentActivationBase<A> implements DirectedAxonsComponentActivation {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(DummyDirectedAxonsComponentActivation.class);
 
-	public DummyDirectedAxonsComponentActivation(DirectedAxonsComponent<?, ?> axonsComponent, NeuronsActivation output) {
+	public DummyDirectedAxonsComponentActivation(DirectedAxonsComponent<?, ?, A> axonsComponent, NeuronsActivation output) {
 		super(axonsComponent, output);
 	}
 	

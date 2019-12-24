@@ -23,8 +23,8 @@ import org.ml4j.nn.neurons.NeuronsActivation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class DummyBatchNormDirectedAxonsComponent<L extends Neurons, R extends Neurons> extends DirectedAxonsComponentBase<L, R, Axons<? extends L, ? extends R, ?>> 
-	implements BatchNormDirectedAxonsComponent<L, R> {
+public class DummyBatchNormDirectedAxonsComponent<L extends Neurons> extends DirectedAxonsComponentBase<L, L, Axons<L, L, ?>> 
+	implements BatchNormDirectedAxonsComponent<L, Axons<L, L, ?>> {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(DummyDirectedAxonsComponent.class);
 	/**
@@ -33,7 +33,7 @@ public class DummyBatchNormDirectedAxonsComponent<L extends Neurons, R extends N
 	private static final long serialVersionUID = 1L;
 
 	
-	public DummyBatchNormDirectedAxonsComponent(Axons<? extends L, ? extends R, ?> axons) {
+	public DummyBatchNormDirectedAxonsComponent(Axons<L, L, ?> axons) {
 		super(axons);
 	}
 
@@ -63,14 +63,14 @@ public class DummyBatchNormDirectedAxonsComponent<L extends Neurons, R extends N
 	}
 
 	@Override
-	public BatchNormDirectedAxonsComponent<L, R> dup() {
+	public BatchNormDirectedAxonsComponent<L, Axons<L, L, ?>> dup() {
 		return new DummyBatchNormDirectedAxonsComponent<>(axons.dup());
 	}
 
 	@Override
 	public DirectedAxonsComponentActivation forwardPropagate(NeuronsActivation neuronsActivation, AxonsContext axonsContext) {
 		LOGGER.debug("Forward propagating through DummyDirectedAxonsComponent");
-		return new DummyDirectedAxonsComponentActivation(this, new DummyNeuronsActivation(axons.getRightNeurons(), 
+		return new DummyDirectedAxonsComponentActivation<>(this, new DummyNeuronsActivation(axons.getRightNeurons(), 
 				neuronsActivation.getFeatureOrientation(), neuronsActivation.getExampleCount()));
 	}
 
