@@ -21,7 +21,10 @@ import org.ml4j.nn.components.DirectedComponentsContext;
 import org.ml4j.nn.components.manytomany.base.DefaultComponentChainBatchBase;
 import org.ml4j.nn.components.onetone.DefaultDirectedComponentChain;
 import org.ml4j.nn.components.onetone.DefaultDirectedComponentChainActivation;
+import org.ml4j.nn.components.onetoone.DummyDefaultDirectedComponentChainBipoleGraph;
 import org.ml4j.nn.neurons.NeuronsActivation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class DummyDefaultComponentChainBatch extends DefaultComponentChainBatchBase implements DefaultDirectedComponentChainBatch<DefaultDirectedComponentChain, DefaultDirectedComponentChainActivation> {
 
@@ -30,6 +33,9 @@ public class DummyDefaultComponentChainBatch extends DefaultComponentChainBatchB
 	 */
 	private static final long serialVersionUID = 1L;
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(DummyDefaultComponentChainBatch.class);
+
+	
 	public DummyDefaultComponentChainBatch(List<DefaultDirectedComponentChain> parallelComponents) {
 		super(parallelComponents);
 	}
@@ -46,6 +52,9 @@ public class DummyDefaultComponentChainBatch extends DefaultComponentChainBatchB
 			chainActivations.add(chainActivation);
 			index++;
 		}
+		LOGGER.debug("Mock forward propagating through DummyDefaultComponentChainBatch");
+
+		
 		return new DummyDirectedComponentChainBatchActivation(chainActivations);
 	}
 	

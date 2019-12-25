@@ -27,6 +27,8 @@ import org.ml4j.nn.components.onetoone.base.DefaultDirectedComponentChainBipoleG
 import org.ml4j.nn.neurons.DummyNeuronsActivation;
 import org.ml4j.nn.neurons.Neurons;
 import org.ml4j.nn.neurons.NeuronsActivation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class DummyDefaultDirectedComponentChainBipoleGraph extends DefaultDirectedComponentChainBipoleGraphBase implements DefaultDirectedComponentBipoleGraph {
 
@@ -35,6 +37,8 @@ public class DummyDefaultDirectedComponentChainBipoleGraph extends DefaultDirect
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	private static final Logger LOGGER = LoggerFactory.getLogger(DummyDefaultDirectedComponentChainBipoleGraph.class);
+
 	private DefaultDirectedComponentChainBatch<DefaultDirectedComponentChain, DefaultDirectedComponentChainActivation> parallelComponentChainsBatch;
 
 	public DummyDefaultDirectedComponentChainBipoleGraph(Neurons inputNeurons, Neurons outputNeurons,
@@ -50,6 +54,12 @@ public class DummyDefaultDirectedComponentChainBipoleGraph extends DefaultDirect
 	@Override
 	public DefaultDirectedComponentBipoleGraphActivation forwardPropagate(NeuronsActivation neuronsActivation,
 			DirectedComponentsContext context) {
+		
+		if (neuronsActivation.getFeatureCount() != getInputNeurons().getNeuronCountExcludingBias()) {
+			throw new IllegalStateException(neuronsActivation.getFeatureCount() + ":" + getInputNeurons().getNeuronCountExcludingBias());
+		}
+		LOGGER.debug("Mock forward propagating through DummyDefaultDirectedComponentChainBipoleGraph");
+
 		return new DummyDefaultDirectedComponentBipoleGraphActivation(this, new DummyNeuronsActivation(getOutputNeurons(),
 				neuronsActivation.getFeatureOrientation(), neuronsActivation.getExampleCount()));
 	}

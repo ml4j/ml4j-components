@@ -15,7 +15,9 @@ package org.ml4j.nn.components.axons;
 
 import org.ml4j.Matrix;
 import org.ml4j.nn.axons.Axons;
+import org.ml4j.nn.axons.AxonsActivation;
 import org.ml4j.nn.axons.AxonsContext;
+import org.ml4j.nn.axons.NoOpAxonsActivation;
 import org.ml4j.nn.components.axons.base.DirectedAxonsComponentBase;
 import org.ml4j.nn.neurons.DummyNeuronsActivation;
 import org.ml4j.nn.neurons.Neurons;
@@ -70,8 +72,19 @@ public class DummyBatchNormDirectedAxonsComponent<L extends Neurons> extends Dir
 	@Override
 	public DirectedAxonsComponentActivation forwardPropagate(NeuronsActivation neuronsActivation, AxonsContext axonsContext) {
 		LOGGER.debug("Forward propagating through DummyDirectedAxonsComponent");
-		return new DummyDirectedAxonsComponentActivation<>(this, new DummyNeuronsActivation(axons.getRightNeurons(), 
-				neuronsActivation.getFeatureOrientation(), neuronsActivation.getExampleCount()));
+		
+		if (neuronsActivation.getFeatureCount() != getInputNeurons().getNeuronCountExcludingBias()) {
+			throw new IllegalArgumentException();
+		}
+		
+		NeuronsActivation dummyOutput = new DummyNeuronsActivation(axons.getRightNeurons(), 
+				neuronsActivation.getFeatureOrientation(), neuronsActivation.getExampleCount());
+		if (dummyOutput.getFeatureCount() != getOutputNeurons().getNeuronCountExcludingBias()) {
+			throw new IllegalArgumentException();
+		}
+		AxonsActivation dummyAxonsActivation = new NoOpAxonsActivation(axons, neuronsActivation, dummyOutput);
+	
+		return new DummyDirectedAxonsComponentActivation<>(this, dummyAxonsActivation, axonsContext);
 	}
 
 }

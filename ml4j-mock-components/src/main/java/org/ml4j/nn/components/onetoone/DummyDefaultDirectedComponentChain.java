@@ -57,6 +57,11 @@ public class DummyDefaultDirectedComponentChain extends DefaultDirectedComponent
 			DirectedComponentsContext context) {
 		LOGGER.debug("Mock forward propagating through DummyDefaultDirectedComponentChain");
 		NeuronsActivation inFlightActivation = neuronsActivation;
+		
+		if (inFlightActivation.getFeatureCount() != getInputNeurons().getNeuronCountExcludingBias()) {
+			throw new IllegalStateException();
+		}
+		
 		List<DefaultChainableDirectedComponentActivation> activations = new ArrayList<>();
 		int index = 0;
 		for (DefaultChainableDirectedComponent<?, ?> component : sequentialComponents) {
@@ -64,6 +69,10 @@ public class DummyDefaultDirectedComponentChain extends DefaultDirectedComponent
 			activations.add(activation);
 			inFlightActivation = activation.getOutput();
 			index++;
+		}
+		
+		if (inFlightActivation.getFeatureCount() != getOutputNeurons().getNeuronCountExcludingBias()) {
+			throw new IllegalStateException();
 		}
 		
 		return new DummyDefaultDirectedComponentChainActivation(this, inFlightActivation);

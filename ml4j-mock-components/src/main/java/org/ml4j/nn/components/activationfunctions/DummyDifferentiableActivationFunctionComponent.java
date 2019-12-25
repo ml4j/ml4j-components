@@ -40,7 +40,7 @@ public class DummyDifferentiableActivationFunctionComponent extends Differentiab
 	@Override
 	public DifferentiableActivationFunctionComponentActivation forwardPropagate(NeuronsActivation inputActivation,
 			NeuronsActivationContext context) {
-		// In this mock, just return the input as output.
+		// Just return the input activation for this mock
 		return new DummyDifferentiableActivationFunctionComponentActivation(this, inputActivation, inputActivation);
 	}
 

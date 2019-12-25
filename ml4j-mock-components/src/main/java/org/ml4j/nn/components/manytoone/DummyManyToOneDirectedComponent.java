@@ -17,7 +17,9 @@ import java.util.List;
 
 import org.ml4j.nn.components.DirectedComponentsContext;
 import org.ml4j.nn.components.manytoone.base.ManyToOneDirectedComponentBase;
+import org.ml4j.nn.neurons.DummyNeuronsActivation;
 import org.ml4j.nn.neurons.NeuronsActivation;
+import org.ml4j.nn.neurons.Neurons;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,7 +40,18 @@ public class DummyManyToOneDirectedComponent extends ManyToOneDirectedComponentB
 	public DummyManyToOneDirectedComponentActivation forwardPropagate(List<NeuronsActivation> neuronActivations,
 			DirectedComponentsContext context) {
 		LOGGER.debug("Mock combining multiple neurons activations into a single output neurons activation") ;
-		return new DummyManyToOneDirectedComponentActivation(neuronActivations.size(), neuronActivations.get(0));
+		int outputNeuronCount;
+		if (pathCombinationStrategy == PathCombinationStrategy.ADDITION) {
+			outputNeuronCount = neuronActivations.get(0).getFeatureCount();
+		} else if (pathCombinationStrategy == PathCombinationStrategy.FILTER_CONCAT){
+			outputNeuronCount = neuronActivations.stream().mapToInt(a -> a.getFeatureCount()).sum();
+		} else {
+			throw new UnsupportedOperationException("Path combination strategy of:" + pathCombinationStrategy + " not supported");
+		}
+		Neurons mockOutputNeurons = new Neurons(outputNeuronCount, false);
+		NeuronsActivation mockOutput = new DummyNeuronsActivation(mockOutputNeurons, neuronActivations.get(0).getFeatureOrientation(), 
+				neuronActivations.get(0).getExampleCount());
+		return new DummyManyToOneDirectedComponentActivation(neuronActivations.size(), mockOutput);
 	}
 
 	@Override

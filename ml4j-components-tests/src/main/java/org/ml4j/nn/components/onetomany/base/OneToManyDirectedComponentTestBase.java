@@ -19,12 +19,15 @@ import java.util.function.IntSupplier;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.ml4j.MatrixFactory;
 import org.ml4j.nn.components.DirectedComponentType;
 import org.ml4j.nn.components.DirectedComponentsContext;
 import org.ml4j.nn.components.onetomany.OneToManyDirectedComponent;
 import org.ml4j.nn.components.onetomany.OneToManyDirectedComponentActivation;
 import org.ml4j.nn.neurons.NeuronsActivation;
+import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 /**
@@ -39,11 +42,21 @@ public abstract class OneToManyDirectedComponentTestBase {
 	private NeuronsActivation mockNeuronsActivation;
 	
 	@Mock
+	protected MatrixFactory mockMatrixFactory;
+	
+	@Mock
 	private DirectedComponentsContext mockDirectedComponentsContext;
 	
 	@Before
 	public void setup() {
 	    MockitoAnnotations.initMocks(this);
+	    
+	    Mockito.when(mockDirectedComponentsContext.getMatrixFactory()).thenReturn(mockMatrixFactory);
+
+	    Mockito.when(mockNeuronsActivation.getFeatureCount()).thenReturn(100);
+	    Mockito.when(mockNeuronsActivation.getExampleCount()).thenReturn(32);
+	    Mockito.when(mockNeuronsActivation.getFeatureOrientation()).thenReturn(NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET);
+
 	}
 
 	private OneToManyDirectedComponent<?> createOneToManyDirectedAxonsComponent(IntSupplier targetComponentsCount) {
@@ -75,6 +88,14 @@ public abstract class OneToManyDirectedComponentTestBase {
 		List<NeuronsActivation> outputs = activation.getOutput();
 		Assert.assertNotNull(outputs);
 		Assert.assertEquals(targetComponentCount, outputs.size());
+		outputs.forEach(o -> Assert.assertNotEquals(0, o.getFeatureCount()));
+		outputs.forEach(o -> Assert.assertNotEquals(0, o.getExampleCount()));
+		outputs.forEach(o -> Assert.assertNotNull(o.getFeatureOrientation()));
+
+		outputs.forEach(o -> Assert.assertEquals(mockNeuronsActivation.getFeatureCount(), o.getFeatureCount()));
+		outputs.forEach(o -> Assert.assertEquals(mockNeuronsActivation.getExampleCount(), o.getExampleCount()));
+		outputs.forEach(o -> Assert.assertEquals(mockNeuronsActivation.getFeatureOrientation(), o.getFeatureOrientation()));
+
 	}
 	
 	@Test

@@ -15,6 +15,7 @@ package org.ml4j.nn.components.axons;
 
 import org.ml4j.nn.axons.Axons;
 import org.ml4j.nn.axons.AxonsContext;
+import org.ml4j.nn.axons.NoOpAxonsActivation;
 import org.ml4j.nn.components.axons.base.DirectedAxonsComponentBase;
 import org.ml4j.nn.neurons.DummyNeuronsActivation;
 import org.ml4j.nn.neurons.Neurons;
@@ -38,8 +39,17 @@ public class DummyDirectedAxonsComponent<L extends Neurons, R extends Neurons> e
 	@Override
 	public DirectedAxonsComponentActivation forwardPropagate(NeuronsActivation neuronsActivation, AxonsContext context) {
 		LOGGER.debug("Forward propagating through DummyDirectedAxonsComponent");
-		return new DummyDirectedAxonsComponentActivation<>(this, new DummyNeuronsActivation(axons.getRightNeurons(), 
-				neuronsActivation.getFeatureOrientation(), neuronsActivation.getExampleCount()));
+		
+		if (neuronsActivation.getFeatureCount() != this.getInputNeurons().getNeuronCountExcludingBias()) {
+			throw new IllegalArgumentException();
+		}
+		
+		NeuronsActivation dummyOutput = new DummyNeuronsActivation(axons.getRightNeurons(), 
+				neuronsActivation.getFeatureOrientation(), neuronsActivation.getExampleCount());
+		if (dummyOutput.getFeatureCount() != getOutputNeurons().getNeuronCountExcludingBias()) {
+			throw new IllegalArgumentException();
+		}
+		return new DummyDirectedAxonsComponentActivation<>(this, new NoOpAxonsActivation(axons, neuronsActivation, dummyOutput), context);
 	}
 
 	@Override
