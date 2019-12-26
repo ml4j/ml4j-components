@@ -13,13 +13,12 @@
  */
 package org.ml4j.nn.components.manytomany;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.ml4j.nn.components.onetone.DefaultChainableDirectedComponent;
 import org.ml4j.nn.components.onetone.DefaultDirectedComponentChain;
 import org.ml4j.nn.components.onetoone.DummyDefaultDirectedComponentChain;
+import org.ml4j.nn.components.onetoone.base.DefaultDirectedComponentChainTestBase;
 
 /**
  * Unit test for DummyOneToManyDirectedComponent.
@@ -27,14 +26,12 @@ import org.ml4j.nn.components.onetoone.DummyDefaultDirectedComponentChain;
  * @author Michael Lavelle
  *
  */
-public class DummyDefaultComponentChainBatchTest extends DefaultDirectedComponentChainBatchTestBase {
+public class DummyDefaultDirectedComponentChainTest extends DefaultDirectedComponentChainTestBase {
 
 	@Override
-	protected DefaultDirectedComponentChainBatch createDefaultDirectedComponentChainBatchUnderTest(
+	protected DefaultDirectedComponentChain createDefaultDirectedComponentChainUnderTest(
 			List<DefaultChainableDirectedComponent<?, ?>> components) {
-		
-		List<DefaultDirectedComponentChain> chains = components.stream().map(c -> new DummyDefaultDirectedComponentChain(Arrays.asList(c))).collect(Collectors.toList());
-		return new DummyDefaultComponentChainBatch(chains);
+		return new DummyDefaultDirectedComponentChain(components);
 	}
 
 }

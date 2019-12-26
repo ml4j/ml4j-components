@@ -16,15 +16,12 @@ package org.ml4j.nn.components.onetoone;
 import java.util.Arrays;
 import java.util.List;
 
-import org.ml4j.nn.components.DirectedComponentBatchActivation;
 import org.ml4j.nn.components.manytomany.DefaultDirectedComponentChainBatch;
+import org.ml4j.nn.components.manytomany.DefaultDirectedComponentChainBatchActivation;
 import org.ml4j.nn.components.onetone.DefaultChainableDirectedComponent;
-import org.ml4j.nn.components.onetone.DefaultDirectedComponentChain;
-import org.ml4j.nn.components.onetone.DefaultDirectedComponentChainActivation;
 import org.ml4j.nn.components.onetoone.base.DefaultDirectedComponentChainBipoleGraphBase;
 import org.ml4j.nn.components.onetoone.base.DefaultDirectedComponentChainBipoleGraphTestBase;
 import org.ml4j.nn.neurons.Neurons;
-import org.ml4j.nn.neurons.NeuronsActivation;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 
@@ -37,10 +34,10 @@ import org.mockito.Mockito;
 public class DummyDefaultDirectedComponentChainBipoleGraphTest extends DefaultDirectedComponentChainBipoleGraphTestBase {
 
 	@Mock
-	private DefaultDirectedComponentChainBatch<DefaultDirectedComponentChain, DefaultDirectedComponentChainActivation> mockComponentChainBatch;
+	private DefaultDirectedComponentChainBatch mockComponentChainBatch;
 	
 	@Mock
-	private DirectedComponentBatchActivation<NeuronsActivation, DefaultDirectedComponentChainActivation> mockComponentChainBatchActivation;
+	private DefaultDirectedComponentChainBatchActivation mockComponentChainBatchActivation;
 	
 	@Override
 	protected DefaultDirectedComponentChainBipoleGraphBase createDefaultDirectedComponentChainBipoleGraphUnderTest(

@@ -21,8 +21,6 @@ import org.ml4j.nn.components.manytomany.DefaultDirectedComponentChainBatch;
 import org.ml4j.nn.components.onetone.DefaultChainableDirectedComponent;
 import org.ml4j.nn.components.onetone.DefaultDirectedComponentBipoleGraph;
 import org.ml4j.nn.components.onetone.DefaultDirectedComponentBipoleGraphActivation;
-import org.ml4j.nn.components.onetone.DefaultDirectedComponentChain;
-import org.ml4j.nn.components.onetone.DefaultDirectedComponentChainActivation;
 import org.ml4j.nn.components.onetoone.base.DefaultDirectedComponentChainBipoleGraphBase;
 import org.ml4j.nn.neurons.DummyNeuronsActivation;
 import org.ml4j.nn.neurons.Neurons;
@@ -39,15 +37,15 @@ public class DummyDefaultDirectedComponentChainBipoleGraph extends DefaultDirect
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(DummyDefaultDirectedComponentChainBipoleGraph.class);
 
-	private DefaultDirectedComponentChainBatch<DefaultDirectedComponentChain, DefaultDirectedComponentChainActivation> parallelComponentChainsBatch;
+	private DefaultDirectedComponentChainBatch parallelComponentChainsBatch;
 
 	public DummyDefaultDirectedComponentChainBipoleGraph(Neurons inputNeurons, Neurons outputNeurons,
-			DefaultDirectedComponentChainBatch<DefaultDirectedComponentChain, DefaultDirectedComponentChainActivation> parallelComponentChainsBatch) {
+			DefaultDirectedComponentChainBatch parallelComponentChainsBatch) {
 		super(inputNeurons, outputNeurons, parallelComponentChainsBatch);
 	}
 
 	@Override
-	public DefaultDirectedComponentChainBatch<DefaultDirectedComponentChain, DefaultDirectedComponentChainActivation> getEdges() {
+	public DefaultDirectedComponentChainBatch getEdges() {
 		throw new UnsupportedOperationException();
 	}
 	

@@ -17,10 +17,12 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.ml4j.nn.components.DirectedComponentGradient;
+import org.ml4j.nn.components.DirectedComponentGradientImpl;
 import org.ml4j.nn.components.onetone.DefaultChainableDirectedComponentActivation;
 import org.ml4j.nn.components.onetone.DefaultDirectedComponentChain;
 import org.ml4j.nn.components.onetone.DefaultDirectedComponentChainActivation;
 import org.ml4j.nn.components.onetoone.base.DefaultDirectedComponentChainActivationBase;
+import org.ml4j.nn.neurons.DummyNeuronsActivation;
 import org.ml4j.nn.neurons.NeuronsActivation;
 
 /**
@@ -32,19 +34,14 @@ import org.ml4j.nn.neurons.NeuronsActivation;
  */
 public class DummyDefaultDirectedComponentChainActivation extends DefaultDirectedComponentChainActivationBase<DefaultDirectedComponentChain> implements DefaultDirectedComponentChainActivation {
 	
-	public DummyDefaultDirectedComponentChainActivation(DefaultDirectedComponentChain componentChain, NeuronsActivation output) {
-		super(componentChain, output);
-	}
-	
-	@Override
-	public List<DefaultChainableDirectedComponentActivation> getActivations() {
-		return Arrays.asList(this);
+	public DummyDefaultDirectedComponentChainActivation(DefaultDirectedComponentChain componentChain, List<DefaultChainableDirectedComponentActivation> activations, NeuronsActivation output) {
+		super(componentChain, activations, output);
 	}
 
 	@Override
 	public DirectedComponentGradient<NeuronsActivation> backPropagate(
 			DirectedComponentGradient<NeuronsActivation> gradient) {
-		return gradient;
+		return new DirectedComponentGradientImpl<NeuronsActivation>(new DummyNeuronsActivation(originatingComponent.getInputNeurons(), gradient.getOutput().getFeatureOrientation(), gradient.getOutput().getExampleCount()));
 	}
 
 	@Override

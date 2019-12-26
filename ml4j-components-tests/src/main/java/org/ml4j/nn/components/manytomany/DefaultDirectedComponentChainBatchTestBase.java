@@ -20,7 +20,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.ml4j.MatrixFactory;
-import org.ml4j.nn.components.DirectedComponentBatchActivation;
 import org.ml4j.nn.components.DirectedComponentType;
 import org.ml4j.nn.components.DirectedComponentsContext;
 import org.ml4j.nn.components.onetone.DefaultChainableDirectedComponent;
@@ -104,24 +103,24 @@ public abstract class DefaultDirectedComponentChainBatchTestBase {
 
 	}
 
-	private DefaultDirectedComponentChainBatch<?, ?> createDefaultDirectedComponentChainBatch(List<DefaultChainableDirectedComponent<?, ?>> parallelComponents) {
+	private DefaultDirectedComponentChainBatch createDefaultDirectedComponentChainBatch(List<DefaultChainableDirectedComponent<?, ?>> parallelComponents) {
 		return createDefaultDirectedComponentChainBatchUnderTest(parallelComponents);
 	}
 		
-	protected abstract DefaultDirectedComponentChainBatch<?, ?> createDefaultDirectedComponentChainBatchUnderTest(List<DefaultChainableDirectedComponent<?, ?>> components);
+	protected abstract DefaultDirectedComponentChainBatch createDefaultDirectedComponentChainBatchUnderTest(List<DefaultChainableDirectedComponent<?, ?>> components);
 
 	@Test
 	public void testConstruction() {	
 		
 		List<DefaultChainableDirectedComponent<?, ?>> mockComponents = Arrays.asList(mockComponent1, mockComponent2);
-		DefaultDirectedComponentChainBatch<?, ?> chainBatch = createDefaultDirectedComponentChainBatch(mockComponents);
+		DefaultDirectedComponentChainBatch chainBatch = createDefaultDirectedComponentChainBatch(mockComponents);
 		Assert.assertNotNull(chainBatch);
 	}
 	
 	@Test
 	public void testGetComponentType() {	
 		List<DefaultChainableDirectedComponent<?, ?>> mockComponents = Arrays.asList(mockComponent1, mockComponent2);
-		DefaultDirectedComponentChainBatch<?, ?> chainBatch = createDefaultDirectedComponentChainBatch(mockComponents);
+		DefaultDirectedComponentChainBatch chainBatch = createDefaultDirectedComponentChainBatch(mockComponents);
 		Assert.assertNotNull(chainBatch);
 		Assert.assertEquals(DirectedComponentType.COMPONENT_CHAIN_BATCH, chainBatch.getComponentType());
 	}
@@ -130,10 +129,10 @@ public abstract class DefaultDirectedComponentChainBatchTestBase {
 	public void testForwardPropagate() {	
 				
 		List<DefaultChainableDirectedComponent<?, ?>> mockComponents = Arrays.asList(mockComponent1, mockComponent2);
-		DefaultDirectedComponentChainBatch<?, ?> chainBatch = createDefaultDirectedComponentChainBatch(mockComponents);
+		DefaultDirectedComponentChainBatch chainBatch = createDefaultDirectedComponentChainBatch(mockComponents);
 		Assert.assertNotNull(chainBatch);
 		
-		DirectedComponentBatchActivation<NeuronsActivation, ?> chainBatchActivation =  chainBatch.forwardPropagate(Arrays.asList(mockNeuronsActivation1, mockNeuronsActivation2), mockDirectedComponentsContext);
+		DefaultDirectedComponentChainBatchActivation chainBatchActivation =  chainBatch.forwardPropagate(Arrays.asList(mockNeuronsActivation1, mockNeuronsActivation2), mockDirectedComponentsContext);
 		Assert.assertNotNull(chainBatchActivation);
 		List<NeuronsActivation> outputs = chainBatchActivation.getOutput();
 		Assert.assertNotNull(outputs);

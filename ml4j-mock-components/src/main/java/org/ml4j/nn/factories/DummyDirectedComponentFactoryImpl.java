@@ -37,7 +37,6 @@ import org.ml4j.nn.components.onetomany.OneToManyDirectedComponent;
 import org.ml4j.nn.components.onetone.DefaultChainableDirectedComponent;
 import org.ml4j.nn.components.onetone.DefaultDirectedComponentBipoleGraph;
 import org.ml4j.nn.components.onetone.DefaultDirectedComponentChain;
-import org.ml4j.nn.components.onetone.DefaultDirectedComponentChainActivation;
 import org.ml4j.nn.components.onetoone.DummyDefaultDirectedComponentChain;
 import org.ml4j.nn.components.onetoone.DummyDefaultDirectedComponentChainBipoleGraph;
 import org.ml4j.nn.neurons.Neurons;
@@ -136,7 +135,7 @@ public class DummyDirectedComponentFactoryImpl implements DirectedComponentFacto
 
 	@Override
 	public DefaultDirectedComponentBipoleGraph createDirectedComponentBipoleGraph(Neurons leftNeurons, Neurons rightNeurons,
-			DefaultDirectedComponentChainBatch<DefaultDirectedComponentChain, DefaultDirectedComponentChainActivation> parallelComponentChainsBatch,
+			DefaultDirectedComponentChainBatch parallelComponentChainsBatch,
 			PathCombinationStrategy pathCombinationStrategy) {
 		return new DummyDefaultDirectedComponentChainBipoleGraph(leftNeurons, rightNeurons, parallelComponentChainsBatch);
 	}
@@ -148,7 +147,7 @@ public class DummyDirectedComponentFactoryImpl implements DirectedComponentFacto
 	}
 
 	@Override
-	public DefaultDirectedComponentChainBatch<DefaultDirectedComponentChain, DefaultDirectedComponentChainActivation> createDirectedComponentChainBatch(
+	public DefaultDirectedComponentChainBatch createDirectedComponentChainBatch(
 			List<DefaultDirectedComponentChain> parallelComponents) {
 		return new DummyDefaultComponentChainBatch(parallelComponents);
 	}

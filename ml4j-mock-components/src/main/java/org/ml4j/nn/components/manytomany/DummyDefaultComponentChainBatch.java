@@ -14,19 +14,20 @@
 package org.ml4j.nn.components.manytomany;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-import org.ml4j.nn.components.DirectedComponentBatchActivation;
+import org.ml4j.nn.components.ChainableDirectedComponent;
+import org.ml4j.nn.components.ChainableDirectedComponentActivation;
 import org.ml4j.nn.components.DirectedComponentsContext;
 import org.ml4j.nn.components.manytomany.base.DefaultComponentChainBatchBase;
 import org.ml4j.nn.components.onetone.DefaultDirectedComponentChain;
 import org.ml4j.nn.components.onetone.DefaultDirectedComponentChainActivation;
-import org.ml4j.nn.components.onetoone.DummyDefaultDirectedComponentChainBipoleGraph;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class DummyDefaultComponentChainBatch extends DefaultComponentChainBatchBase implements DefaultDirectedComponentChainBatch<DefaultDirectedComponentChain, DefaultDirectedComponentChainActivation> {
+public class DummyDefaultComponentChainBatch extends DefaultComponentChainBatchBase implements DefaultDirectedComponentChainBatch {
 
 	/**
 	 * Default serialization id.
@@ -41,7 +42,7 @@ public class DummyDefaultComponentChainBatch extends DefaultComponentChainBatchB
 	}
 	
 	@Override
-	public DirectedComponentBatchActivation<NeuronsActivation, DefaultDirectedComponentChainActivation> forwardPropagate(
+	public DefaultDirectedComponentChainBatchActivation forwardPropagate(
 			List<NeuronsActivation> neuronActivations, DirectedComponentsContext context) {
 		// TODO
 		int index = 0;
@@ -59,8 +60,19 @@ public class DummyDefaultComponentChainBatch extends DefaultComponentChainBatchB
 	}
 	
 	@Override
-	public DefaultDirectedComponentChainBatch<DefaultDirectedComponentChain, DefaultDirectedComponentChainActivation> dup() {
+	public DefaultDirectedComponentChainBatch dup() {
 		return new DummyDefaultComponentChainBatch(parallelComponents);
+	}
+
+	@Override
+	public DirectedComponentsContext getContext(DirectedComponentsContext directedComponentsContext,
+			int componentIndex) {
+		return directedComponentsContext;
+	}
+
+	@Override
+	public List<ChainableDirectedComponent<List<NeuronsActivation>, ? extends ChainableDirectedComponentActivation<List<NeuronsActivation>>, ?>> decompose() {
+		return Arrays.asList(this);
 	}
 
 }
