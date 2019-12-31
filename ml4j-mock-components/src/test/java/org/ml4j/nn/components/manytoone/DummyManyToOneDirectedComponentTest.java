@@ -13,11 +13,11 @@
  */
 package org.ml4j.nn.components.manytoone;
 
+import org.ml4j.MatrixFactory;
 import org.ml4j.nn.components.manytoone.base.ManyToOneDirectedComponentTestBase;
+import org.ml4j.nn.components.mocks.MockTestData;
 import org.ml4j.nn.neurons.NeuronsActivation;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
 
 
 /**
@@ -26,14 +26,7 @@ import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
  * @author Michael Lavelle
  *
  */
-public class DummyManyToOneDirectedComponentTest extends ManyToOneDirectedComponentTestBase {
-
-	@Mock
-	private NeuronsActivation mockNeuronsActivation1;
-	
-	@Mock
-	private NeuronsActivation mockNeuronsActivation2;
-	
+public class DummyManyToOneDirectedComponentTest extends ManyToOneDirectedComponentTestBase {	
 	
 	@Override
 	protected ManyToOneDirectedComponent<?> createManyToOneDirectedComponentUnderTest(
@@ -42,21 +35,13 @@ public class DummyManyToOneDirectedComponentTest extends ManyToOneDirectedCompon
 	}
 
 	@Override
-	protected NeuronsActivation createNeuronsActivation1(int featureCount, int examples) {
-		Mockito.when(mockNeuronsActivation1.getFeatureCount()).thenReturn(featureCount);
-		Mockito.when(mockNeuronsActivation1.getExampleCount()).thenReturn(examples);
-		Mockito.when(mockNeuronsActivation1.getFeatureOrientation()).thenReturn(NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET);
-
-		return mockNeuronsActivation1;
+	public NeuronsActivation createNeuronsActivation(int featureCount, int exampleCount) {
+		return MockTestData.mockNeuronsActivation(featureCount, exampleCount);
 	}
 	
 	@Override
-	protected NeuronsActivation createNeuronsActivation2(int featureCount, int examples) {
-		Mockito.when(mockNeuronsActivation2.getFeatureCount()).thenReturn(featureCount);
-		Mockito.when(mockNeuronsActivation2.getExampleCount()).thenReturn(examples);
-		Mockito.when(mockNeuronsActivation2.getFeatureOrientation()).thenReturn(NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET);
-
-		return mockNeuronsActivation2;
+	protected MatrixFactory createMatrixFactory() {
+		return Mockito.mock(MatrixFactory.class);
 	}
 
 }

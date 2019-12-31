@@ -11,7 +11,7 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-package org.ml4j.nn.components.manytomany;
+package org.ml4j.nn.components.manytomany.base;
 
 import java.util.Arrays;
 import java.util.List;
@@ -19,14 +19,15 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.ml4j.MatrixFactory;
 import org.ml4j.nn.components.DirectedComponentType;
 import org.ml4j.nn.components.DirectedComponentsContext;
+import org.ml4j.nn.components.base.TestBase;
+import org.ml4j.nn.components.manytomany.DefaultDirectedComponentChainBatch;
+import org.ml4j.nn.components.manytomany.DefaultDirectedComponentChainBatchActivation;
 import org.ml4j.nn.components.onetone.DefaultChainableDirectedComponent;
 import org.ml4j.nn.components.onetone.DefaultChainableDirectedComponentActivation;
 import org.ml4j.nn.neurons.Neurons;
 import org.ml4j.nn.neurons.NeuronsActivation;
-import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
@@ -37,22 +38,15 @@ import org.mockito.MockitoAnnotations;
  * @author Michael Lavelle
  *
  */
-public abstract class DefaultDirectedComponentChainBatchTestBase {
+public abstract class DefaultDirectedComponentChainBatchTestBase extends TestBase {
 
 
-	@Mock
 	protected NeuronsActivation mockNeuronsActivation1;
-	
-	@Mock
-	protected MatrixFactory mockMatrixFactory;
-	
-	@Mock
+		
 	protected NeuronsActivation mockNeuronsActivation2;
 	
-	@Mock
 	protected NeuronsActivation mockNeuronsActivation3;
 
-	@Mock
 	protected NeuronsActivation mockNeuronsActivation4;
 	
 	@Mock
@@ -74,28 +68,19 @@ public abstract class DefaultDirectedComponentChainBatchTestBase {
 	public void setup() {
 	    MockitoAnnotations.initMocks(this);
 	    
-	    Mockito.when(mockDirectedComponentsContext.getMatrixFactory()).thenReturn(mockMatrixFactory);
+	    Mockito.when(mockDirectedComponentsContext.getMatrixFactory()).thenReturn(matrixFactory);
 	    
-	    Mockito.when(mockNeuronsActivation1.getFeatureCount()).thenReturn(100);
-	    Mockito.when(mockNeuronsActivation1.getExampleCount()).thenReturn(32);
-	    Mockito.when(mockNeuronsActivation1.getFeatureOrientation()).thenReturn(NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET);
-	    Mockito.when(mockNeuronsActivation2.getFeatureCount()).thenReturn(200);
-	    Mockito.when(mockNeuronsActivation2.getExampleCount()).thenReturn(32);
-	    Mockito.when(mockNeuronsActivation2.getFeatureOrientation()).thenReturn(NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET);
-	    Mockito.when(mockNeuronsActivation3.getFeatureCount()).thenReturn(300);
-	    Mockito.when(mockNeuronsActivation3.getExampleCount()).thenReturn(32);
-	    Mockito.when(mockNeuronsActivation3.getFeatureOrientation()).thenReturn(NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET);
+	    this.mockNeuronsActivation1 = createNeuronsActivation(100, 32);
+	    this.mockNeuronsActivation2 = createNeuronsActivation(200, 32);
+	    this.mockNeuronsActivation3 = createNeuronsActivation(300, 32);
+	    this.mockNeuronsActivation4 = createNeuronsActivation(400, 32);
+
 	    
 	    Mockito.when(mockComponent1.getInputNeurons()).thenReturn(new Neurons(100, false));
 	    Mockito.when(mockComponent2.getInputNeurons()).thenReturn(new Neurons(200, false));
 	    Mockito.when(mockComponent1.getOutputNeurons()).thenReturn(new Neurons(300, false));
 	    Mockito.when(mockComponent2.getOutputNeurons()).thenReturn(new Neurons(400, false));
 	   
-	    
-	    Mockito.when(mockNeuronsActivation4.getFeatureCount()).thenReturn(400);
-	    Mockito.when(mockNeuronsActivation4.getExampleCount()).thenReturn(32);
-	    Mockito.when(mockNeuronsActivation4.getFeatureOrientation()).thenReturn(NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET);
-	    
 		Mockito.when(mockComponent1.forwardPropagate(Mockito.eq(mockNeuronsActivation1), Mockito.any())).thenReturn(mockComponent1Activation);
 		Mockito.when(mockComponent2.forwardPropagate(Mockito.eq(mockNeuronsActivation2), Mockito.any())).thenReturn(mockComponent2Activation);
 		Mockito.when(mockComponent1Activation.getOutput()).thenReturn(mockNeuronsActivation3);

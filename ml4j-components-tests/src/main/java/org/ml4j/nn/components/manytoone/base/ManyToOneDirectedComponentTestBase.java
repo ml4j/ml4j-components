@@ -21,9 +21,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.ml4j.nn.components.DirectedComponentType;
 import org.ml4j.nn.components.DirectedComponentsContext;
+import org.ml4j.nn.components.base.TestBase;
 import org.ml4j.nn.components.manytoone.ManyToOneDirectedComponent;
 import org.ml4j.nn.components.manytoone.ManyToOneDirectedComponentActivation;
 import org.ml4j.nn.components.manytoone.PathCombinationStrategy;
+import org.ml4j.nn.components.mocks.MockTestData;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -34,27 +36,16 @@ import org.mockito.MockitoAnnotations;
  * @author Michael Lavelle
  *
  */
-public abstract class ManyToOneDirectedComponentTestBase {
+public abstract class ManyToOneDirectedComponentTestBase extends TestBase {
 	
-	protected NeuronsActivation neuronsActivation1;
-	
-	protected NeuronsActivation neuronsActivation2;
 	
 	@Mock
 	protected DirectedComponentsContext mockDirectedComponentsContext;
 	
 	@Before
 	public void setup() {
-	    MockitoAnnotations.initMocks(this);
-	  
-	    neuronsActivation1 = createNeuronsActivation1(100, 32);
-	    neuronsActivation2 = createNeuronsActivation2(200, 32);
-	    
+	    MockitoAnnotations.initMocks(this);	    
 	}
-	
-	protected abstract NeuronsActivation createNeuronsActivation1(int featureCount, int examples);
-	protected abstract NeuronsActivation createNeuronsActivation2(int featureCount, int examples);
-
 
 	private ManyToOneDirectedComponent<?> createManyToOneDirectedAxonsComponent(PathCombinationStrategy pathCombinationStrategy) {
 		return createManyToOneDirectedComponentUnderTest(pathCombinationStrategy);
@@ -74,22 +65,28 @@ public abstract class ManyToOneDirectedComponentTestBase {
 		Assert.assertNotNull(manyToOneDirectedComponent);
 		Assert.assertEquals(DirectedComponentType.MANY_TO_ONE, manyToOneDirectedComponent.getComponentType());
 	}
-	
+		
 	@Test
 	public void testForwardPropagate() {	
-				
+		
+		NeuronsActivation inputActivation1 = createNeuronsActivation(100, 32);
+		NeuronsActivation inputActivation2 = createNeuronsActivation(100, 32);
+
 		ManyToOneDirectedComponent<?> manyToOneDirectedComponent = createManyToOneDirectedAxonsComponent(PathCombinationStrategy.FILTER_CONCAT);
 		Assert.assertNotNull(manyToOneDirectedComponent);
-		List<NeuronsActivation> mockNeuronActivations = Arrays.asList(neuronsActivation1, neuronsActivation2);
-		ManyToOneDirectedComponentActivation activation =  manyToOneDirectedComponent.forwardPropagate(mockNeuronActivations, mockDirectedComponentsContext);
+		
+		List<NeuronsActivation> mockNeuronActivations = Arrays.asList(inputActivation1, inputActivation2);
+		ManyToOneDirectedComponentActivation activation = manyToOneDirectedComponent.forwardPropagate(mockNeuronActivations, mockDirectedComponentsContext);
 		Assert.assertNotNull(activation);
+		
 		NeuronsActivation output = activation.getOutput();
+		
 		Assert.assertNotNull(output);
 		Assert.assertEquals(mockNeuronActivations.stream().mapToInt(a -> a.getFeatureCount()).sum(), output.getFeatureCount());
-		Assert.assertEquals(neuronsActivation1.getExampleCount(), output.getExampleCount());
-		Assert.assertEquals(neuronsActivation2.getExampleCount(), output.getExampleCount());
-		Assert.assertEquals(neuronsActivation1.getFeatureOrientation(), output.getFeatureOrientation());
-		Assert.assertEquals(neuronsActivation2.getFeatureOrientation(), output.getFeatureOrientation());
+		Assert.assertEquals(inputActivation1.getExampleCount(), output.getExampleCount());
+		Assert.assertEquals(inputActivation2.getExampleCount(), output.getExampleCount());
+		Assert.assertEquals(inputActivation1.getFeatureOrientation(), output.getFeatureOrientation());
+		Assert.assertEquals(inputActivation2.getFeatureOrientation(), output.getFeatureOrientation());
 	}
 	
 	@Test
@@ -102,7 +99,10 @@ public abstract class ManyToOneDirectedComponentTestBase {
 		Assert.assertNotNull(dupComponent);
 		Assert.assertEquals(DirectedComponentType.MANY_TO_ONE, oneToManyDirectedComponent.getComponentType());
 		
-		List<NeuronsActivation> mockNeuronActivations = Arrays.asList(neuronsActivation1, neuronsActivation2);
+		NeuronsActivation inputActivation1 = MockTestData.mockNeuronsActivation(100, 32);
+		NeuronsActivation inputActivation2 = MockTestData.mockNeuronsActivation(100, 32);
+		
+		List<NeuronsActivation> mockNeuronActivations = Arrays.asList(inputActivation1, inputActivation2);
 		ManyToOneDirectedComponentActivation activation =  oneToManyDirectedComponent.forwardPropagate(mockNeuronActivations, mockDirectedComponentsContext);
 
 		ManyToOneDirectedComponentActivation dupActivation =  dupComponent.forwardPropagate(mockNeuronActivations, mockDirectedComponentsContext);

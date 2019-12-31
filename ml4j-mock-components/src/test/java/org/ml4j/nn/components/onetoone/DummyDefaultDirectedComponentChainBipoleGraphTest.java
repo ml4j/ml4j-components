@@ -16,12 +16,17 @@ package org.ml4j.nn.components.onetoone;
 import java.util.Arrays;
 import java.util.List;
 
+import org.ml4j.MatrixFactory;
+import org.ml4j.nn.components.factories.DirectedComponentFactory;
 import org.ml4j.nn.components.manytomany.DefaultDirectedComponentChainBatch;
 import org.ml4j.nn.components.manytomany.DefaultDirectedComponentChainBatchActivation;
+import org.ml4j.nn.components.manytoone.PathCombinationStrategy;
+import org.ml4j.nn.components.mocks.MockTestData;
 import org.ml4j.nn.components.onetone.DefaultChainableDirectedComponent;
 import org.ml4j.nn.components.onetoone.base.DefaultDirectedComponentChainBipoleGraphBase;
 import org.ml4j.nn.components.onetoone.base.DefaultDirectedComponentChainBipoleGraphTestBase;
 import org.ml4j.nn.neurons.Neurons;
+import org.ml4j.nn.neurons.NeuronsActivation;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 
@@ -38,16 +43,26 @@ public class DummyDefaultDirectedComponentChainBipoleGraphTest extends DefaultDi
 	
 	@Mock
 	private DefaultDirectedComponentChainBatchActivation mockComponentChainBatchActivation;
-	
+
 	@Override
 	protected DefaultDirectedComponentChainBipoleGraphBase createDefaultDirectedComponentChainBipoleGraphUnderTest(
-			List<DefaultChainableDirectedComponent<?, ?>> components) {
-		
+			DirectedComponentFactory factory, List<DefaultChainableDirectedComponent<?, ?>> components,
+			PathCombinationStrategy pathCombinationStrategy) {
 		Mockito.when(mockComponentChainBatch.forwardPropagate(Arrays.asList(mockNeuronsActivation1, mockNeuronsActivation2), mockDirectedComponentsContext))
 		.thenReturn(mockComponentChainBatchActivation);
 		Mockito.when(mockComponentChainBatchActivation.getOutput()).thenReturn(Arrays.asList(mockNeuronsActivation3, mockNeuronsActivation4));
 	
 		return new DummyDefaultDirectedComponentChainBipoleGraph(new Neurons(10, false), new Neurons(100, false), mockComponentChainBatch);
+	}
+	
+	@Override
+	protected MatrixFactory createMatrixFactory() {
+		return Mockito.mock(MatrixFactory.class);
+	}
+
+	@Override
+	public NeuronsActivation createNeuronsActivation(int featureCount, int exampleCount) {
+		return MockTestData.mockNeuronsActivation(featureCount, exampleCount);
 	}
 
 }

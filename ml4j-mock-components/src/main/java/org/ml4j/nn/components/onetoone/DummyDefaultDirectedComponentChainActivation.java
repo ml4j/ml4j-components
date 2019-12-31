@@ -34,8 +34,8 @@ import org.ml4j.nn.neurons.NeuronsActivation;
  */
 public class DummyDefaultDirectedComponentChainActivation extends DefaultDirectedComponentChainActivationBase<DefaultDirectedComponentChain> implements DefaultDirectedComponentChainActivation {
 	
-	public DummyDefaultDirectedComponentChainActivation(DefaultDirectedComponentChain componentChain, List<DefaultChainableDirectedComponentActivation> activations, NeuronsActivation output) {
-		super(componentChain, activations, output);
+	public DummyDefaultDirectedComponentChainActivation(DefaultDirectedComponentChain componentChain, List<DefaultChainableDirectedComponentActivation> activations) {
+		super(componentChain, activations, activations.get(activations.size() - 1).getOutput());
 	}
 
 	@Override

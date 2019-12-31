@@ -8,5 +8,7 @@
 	<modules>
 		<module>ml4j-components-tests</module>
                 <module>ml4j-mock-components</module>
+		<module>ml4j-mock-axons</module>
+		<module>ml4j-mock-activationfunctions</module>
 	 </modules>
 </project>

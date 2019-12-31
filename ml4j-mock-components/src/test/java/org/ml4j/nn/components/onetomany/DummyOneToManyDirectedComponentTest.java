@@ -15,7 +15,11 @@ package org.ml4j.nn.components.onetomany;
 
 import java.util.function.IntSupplier;
 
+import org.ml4j.MatrixFactory;
+import org.ml4j.nn.components.mocks.MockTestData;
 import org.ml4j.nn.components.onetomany.base.OneToManyDirectedComponentTestBase;
+import org.ml4j.nn.neurons.NeuronsActivation;
+import org.mockito.Mockito;
 
 /**
  * Unit test for DummyOneToManyDirectedComponent.
@@ -28,6 +32,16 @@ public class DummyOneToManyDirectedComponentTest extends OneToManyDirectedCompon
 	@Override
 	protected OneToManyDirectedComponent<?> createOneToManyDirectedComponentUnderTest(IntSupplier targetComponentsCount){
 		return new DummyOneToManyDirectedComponent(targetComponentsCount);
+	}
+	
+	@Override
+	protected MatrixFactory createMatrixFactory() {
+		return Mockito.mock(MatrixFactory.class);
+	}
+
+	@Override
+	public NeuronsActivation createNeuronsActivation(int featureCount, int exampleCount) {
+		return MockTestData.mockNeuronsActivation(featureCount, exampleCount);
 	}
 
 }

@@ -18,13 +18,13 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.ml4j.MatrixFactory;
 import org.ml4j.nn.axons.Axons;
 import org.ml4j.nn.axons.AxonsContext;
 import org.ml4j.nn.components.DirectedComponentType;
 import org.ml4j.nn.components.DirectedComponentsContext;
 import org.ml4j.nn.components.axons.DirectedAxonsComponent;
 import org.ml4j.nn.components.axons.DirectedAxonsComponentActivation;
+import org.ml4j.nn.components.base.TestBase;
 import org.ml4j.nn.components.onetone.DefaultChainableDirectedComponent;
 import org.ml4j.nn.neurons.Neurons;
 import org.ml4j.nn.neurons.NeuronsActivation;
@@ -33,10 +33,11 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-public abstract class DirectedAxonsComponentTestBase {
+public abstract class DirectedAxonsComponentTestBase extends TestBase {
 
-	@Mock
 	protected NeuronsActivation mockInputActivation;
+	
+	protected NeuronsActivation mockOutputActivation;
 	
 	@Mock
 	protected AxonsContext mockAxonsContext;
@@ -47,14 +48,12 @@ public abstract class DirectedAxonsComponentTestBase {
 	@Mock
 	protected DirectedComponentsContext mockDirectedComponentsContext;
 	
-	@Mock
-	protected MatrixFactory mockMatrixFactory;
-	
 	@Before
 	public void setup() {
 	    MockitoAnnotations.initMocks(this);
-	    
-	    Mockito.when(mockDirectedComponentsContext.getMatrixFactory()).thenReturn(mockMatrixFactory);
+	    Mockito.when(mockDirectedComponentsContext.getMatrixFactory()).thenReturn(matrixFactory);
+	    this.mockInputActivation = createNeuronsActivation(100, 32);
+	    this.mockOutputActivation = createNeuronsActivation(120, 32);
 
 	}
 
@@ -154,7 +153,7 @@ public abstract class DirectedAxonsComponentTestBase {
 		DirectedAxonsComponent<?, ?, ?> directedAxonsComponent = createDirectedAxonsComponent(leftNeurons, rightNeurons);
 
 		
-		Mockito.when(mockDirectedComponentsContext.getMatrixFactory()).thenReturn(mockMatrixFactory);
+		Mockito.when(mockDirectedComponentsContext.getMatrixFactory()).thenReturn(matrixFactory);
 
 		
 		AxonsContext axonsContext = directedAxonsComponent.getContext(mockDirectedComponentsContext, 0);
@@ -164,7 +163,7 @@ public abstract class DirectedAxonsComponentTestBase {
 		Assert.assertEquals(0,  axonsContext.getRegularisationLambda(), 0.0000000001);
 		Assert.assertEquals(1,  axonsContext.getLeftHandInputDropoutKeepProbability(), 0.0000000001);
 		Assert.assertNotNull(axonsContext.getMatrixFactory());
-		Assert.assertSame(mockMatrixFactory, axonsContext.getMatrixFactory());
+		Assert.assertSame(matrixFactory, axonsContext.getMatrixFactory());
 
 	}
 

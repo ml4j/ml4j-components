@@ -16,7 +16,6 @@ package org.ml4j.nn.components.axons.base;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.ml4j.MatrixFactory;
 import org.ml4j.nn.axons.Axons;
 import org.ml4j.nn.axons.AxonsActivation;
 import org.ml4j.nn.axons.AxonsContext;
@@ -24,23 +23,20 @@ import org.ml4j.nn.components.DirectedComponentGradient;
 import org.ml4j.nn.components.DirectedComponentsContext;
 import org.ml4j.nn.components.axons.DirectedAxonsComponent;
 import org.ml4j.nn.components.axons.DirectedAxonsComponentActivation;
+import org.ml4j.nn.components.base.TestBase;
+import org.ml4j.nn.components.mocks.MockTestData;
+import org.ml4j.nn.neurons.Neurons;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.ml4j.nn.neurons.Neurons;
-import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
-
 import org.mockito.MockitoAnnotations;
 
-public abstract class DirectedAxonsComponentActivationTestBase {
+public abstract class DirectedAxonsComponentActivationTestBase extends TestBase {
 
-	@Mock
 	protected NeuronsActivation mockOutputActivation;
 	
-	@Mock
 	protected NeuronsActivation mockInputActivation;
 	
-	@Mock
 	protected NeuronsActivation mockOutputActivationRightToLeft;
 	
 	@Mock
@@ -54,20 +50,10 @@ public abstract class DirectedAxonsComponentActivationTestBase {
 	protected DirectedComponentsContext mockDirectedComponentsContext;
 	
 	@Mock
-	protected MatrixFactory mockMatrixFactory;
-	
-	@Mock
 	protected AxonsActivation mockAxonsActivation;
-	
 	
 	@Mock
 	protected AxonsActivation mockAxonsActivationRightToLeft;
-	
-	@Mock
-	protected DirectedComponentGradient<NeuronsActivation> mockInboundGradient;
-	
-	@Mock
-	protected NeuronsActivation mockGradientActivation;
 	
 	@SuppressWarnings("rawtypes")
 	@Mock
@@ -76,8 +62,10 @@ public abstract class DirectedAxonsComponentActivationTestBase {
 	@Before
 	public void setup() {
 	    MockitoAnnotations.initMocks(this);
-	    Mockito.when(mockDirectedComponentsContext.getMatrixFactory()).thenReturn(mockMatrixFactory);
-
+	    Mockito.when(mockDirectedComponentsContext.getMatrixFactory()).thenReturn(matrixFactory);
+	    this.mockInputActivation = createNeuronsActivation(100, 32);
+	    this.mockOutputActivation = createNeuronsActivation(110, 32);
+	    this.mockOutputActivationRightToLeft = createNeuronsActivation(100, 32);
 	}
 
 	private  <L extends Neurons, R extends Neurons, A extends Axons<L, R, A>> DirectedAxonsComponentActivation createDirectedAxonsComponentActivation(DirectedAxonsComponent<L, R, A> axonsComponent, AxonsActivation axonsActivation, AxonsContext axonsContext) {
@@ -118,42 +106,21 @@ public abstract class DirectedAxonsComponentActivationTestBase {
 	@Test
 	public void testBackPropagate() {
 		
-		Mockito.when(mockInboundGradient.getOutput()).thenReturn(mockGradientActivation);
-		Mockito.when(mockGradientActivation.getFeatureCount()).thenReturn(110);
-		Mockito.when(mockGradientActivation.getExampleCount()).thenReturn(32);
-		Mockito.when(mockGradientActivation.getFeatureOrientation()).thenReturn(NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET);
-
-
-		Mockito.when(mockOutputActivationRightToLeft.getFeatureCount()).thenReturn(100);
-		Mockito.when(mockOutputActivationRightToLeft.getExampleCount()).thenReturn(32);
-		Mockito.when(mockOutputActivationRightToLeft.getFeatureOrientation()).thenReturn(NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET);
+		DirectedComponentGradient<NeuronsActivation> mockInboundGradient = MockTestData.mockComponentGradient(110, 32, this);
 		
-		
-		Mockito.when(mockOutputActivation.getFeatureCount()).thenReturn(110);
-		Mockito.when(mockOutputActivation.getExampleCount()).thenReturn(32);
-		Mockito.when(mockOutputActivation.getFeatureOrientation()).thenReturn(NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET);
-
 		Mockito.when(mockAxons.getLeftNeurons()).thenReturn(new Neurons(100, false));
 		Mockito.when(mockAxons.getRightNeurons()).thenReturn(new Neurons(110, false));
 
 		Mockito.when(mockAxonsActivation.getPostDropoutOutput()).thenReturn(mockOutputActivation);
 		Mockito.when(mockAxonsActivation.getPostDropoutInput()).thenReturn(mockInputActivation);
 
-		Mockito.when(mockInputActivation.getExampleCount()).thenReturn(32);
-		Mockito.when(mockInputActivation.getFeatureCount()).thenReturn(100);
-		Mockito.when(mockInputActivation.getFeatureOrientation()).thenReturn(NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET);
-		
-		
-
-
 		Mockito.when(mockAxonsActivation.getAxons()).thenReturn(mockAxons);
 		Mockito.when(mockAxonsComponent.getAxons()).thenReturn(mockAxons);
 
-		Mockito.when(mockAxons.pushRightToLeft(mockGradientActivation,mockAxonsActivation, mockAxonsContext)).thenReturn(mockAxonsActivationRightToLeft);
+		Mockito.when(mockAxons.pushRightToLeft(mockInboundGradient.getOutput(), mockAxonsActivation, mockAxonsContext)).thenReturn(mockAxonsActivationRightToLeft);
 		Mockito.when(mockAxonsActivationRightToLeft.getPostDropoutOutput()).thenReturn(mockOutputActivationRightToLeft);
 		Mockito.when(mockAxonsActivationRightToLeft.getPostDropoutInput()).thenReturn(mockOutputActivationRightToLeft);
 
-		
 		DirectedAxonsComponentActivation directedAxonsComponentActivation = createDirectedAxonsComponentActivation(mockAxonsComponent, mockAxonsActivation, mockAxonsContext);
 		Assert.assertNotNull(directedAxonsComponentActivation);
 		

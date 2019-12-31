@@ -75,7 +75,7 @@ public class DummyDefaultDirectedComponentChain extends DefaultDirectedComponent
 			throw new IllegalStateException();
 		}
 		
-		return new DummyDefaultDirectedComponentChainActivation(this, activations, inFlightActivation);
+		return new DummyDefaultDirectedComponentChainActivation(this, activations);
 	}
 
 	@Override

@@ -15,9 +15,13 @@ package org.ml4j.nn.components.onetoone;
 
 import java.util.List;
 
+import org.ml4j.MatrixFactory;
+import org.ml4j.nn.components.mocks.MockTestData;
 import org.ml4j.nn.components.onetone.DefaultChainableDirectedComponent;
 import org.ml4j.nn.components.onetone.DefaultDirectedComponentChain;
 import org.ml4j.nn.components.onetoone.base.DefaultDirectedComponentChainTestBase;
+import org.ml4j.nn.neurons.NeuronsActivation;
+import org.mockito.Mockito;
 
 /**
  * Unit test for DummyOneToManyDirectedComponent.
@@ -31,6 +35,16 @@ public class DummyDefaultDirectedComponentChainTest extends DefaultDirectedCompo
 	protected DefaultDirectedComponentChain createDefaultDirectedComponentChainUnderTest(
 			List<DefaultChainableDirectedComponent<?, ?>> components) {
 		return new DummyDefaultDirectedComponentChain(components);
+	}
+	
+	@Override
+	protected MatrixFactory createMatrixFactory() {
+		return Mockito.mock(MatrixFactory.class);
+	}
+
+	@Override
+	public NeuronsActivation createNeuronsActivation(int featureCount, int exampleCount) {
+		return MockTestData.mockNeuronsActivation(featureCount, exampleCount);
 	}
 
 }

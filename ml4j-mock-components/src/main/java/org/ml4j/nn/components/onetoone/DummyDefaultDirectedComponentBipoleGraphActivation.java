@@ -17,10 +17,12 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.ml4j.nn.components.DirectedComponentGradient;
+import org.ml4j.nn.components.DirectedComponentGradientImpl;
 import org.ml4j.nn.components.onetone.DefaultChainableDirectedComponentActivation;
 import org.ml4j.nn.components.onetone.DefaultDirectedComponentBipoleGraph;
 import org.ml4j.nn.components.onetone.DefaultDirectedComponentBipoleGraphActivation;
 import org.ml4j.nn.components.onetoone.base.DefaultDirectedComponentBipoleGraphActivationBase;
+import org.ml4j.nn.neurons.DummyNeuronsActivation;
 import org.ml4j.nn.neurons.NeuronsActivation;
 
 public class DummyDefaultDirectedComponentBipoleGraphActivation extends DefaultDirectedComponentBipoleGraphActivationBase
@@ -33,7 +35,8 @@ public class DummyDefaultDirectedComponentBipoleGraphActivation extends DefaultD
 	@Override
 	public DirectedComponentGradient<NeuronsActivation> backPropagate(
 			DirectedComponentGradient<NeuronsActivation> gradient) {
-		return gradient;
+		return new DirectedComponentGradientImpl<>(gradient.getTotalTrainableAxonsGradients(), new DummyNeuronsActivation(this.originatingComponent.getInputNeurons(), gradient.getOutput().getFeatureOrientation(), 
+				gradient.getOutput().getExampleCount()));
 	}
 
 	@Override

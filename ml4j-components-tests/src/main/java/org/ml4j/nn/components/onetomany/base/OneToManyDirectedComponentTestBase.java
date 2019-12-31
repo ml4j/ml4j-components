@@ -19,13 +19,13 @@ import java.util.function.IntSupplier;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.ml4j.MatrixFactory;
 import org.ml4j.nn.components.DirectedComponentType;
 import org.ml4j.nn.components.DirectedComponentsContext;
+import org.ml4j.nn.components.base.TestBase;
+import org.ml4j.nn.components.mocks.MockTestData;
 import org.ml4j.nn.components.onetomany.OneToManyDirectedComponent;
 import org.ml4j.nn.components.onetomany.OneToManyDirectedComponentActivation;
 import org.ml4j.nn.neurons.NeuronsActivation;
-import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
@@ -36,13 +36,8 @@ import org.mockito.MockitoAnnotations;
  * @author Michael Lavelle
  *
  */
-public abstract class OneToManyDirectedComponentTestBase {
+public abstract class OneToManyDirectedComponentTestBase extends TestBase{
 
-	@Mock
-	private NeuronsActivation mockNeuronsActivation;
-	
-	@Mock
-	protected MatrixFactory mockMatrixFactory;
 	
 	@Mock
 	private DirectedComponentsContext mockDirectedComponentsContext;
@@ -50,13 +45,7 @@ public abstract class OneToManyDirectedComponentTestBase {
 	@Before
 	public void setup() {
 	    MockitoAnnotations.initMocks(this);
-	    
-	    Mockito.when(mockDirectedComponentsContext.getMatrixFactory()).thenReturn(mockMatrixFactory);
-
-	    Mockito.when(mockNeuronsActivation.getFeatureCount()).thenReturn(100);
-	    Mockito.when(mockNeuronsActivation.getExampleCount()).thenReturn(32);
-	    Mockito.when(mockNeuronsActivation.getFeatureOrientation()).thenReturn(NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET);
-
+	    Mockito.when(mockDirectedComponentsContext.getMatrixFactory()).thenReturn(matrixFactory);
 	}
 
 	private OneToManyDirectedComponent<?> createOneToManyDirectedAxonsComponent(IntSupplier targetComponentsCount) {
@@ -82,6 +71,9 @@ public abstract class OneToManyDirectedComponentTestBase {
 		
 		int targetComponentCount = (int)(100 * Math.random());
 		
+		
+		NeuronsActivation mockNeuronsActivation = MockTestData.mockNeuronsActivation(100, 32);
+		
 		OneToManyDirectedComponent<?> oneToManyDirectedComponent = createOneToManyDirectedAxonsComponent(() -> targetComponentCount);
 		OneToManyDirectedComponentActivation activation =  oneToManyDirectedComponent.forwardPropagate(mockNeuronsActivation, mockDirectedComponentsContext);
 		Assert.assertNotNull(activation);
@@ -106,6 +98,9 @@ public abstract class OneToManyDirectedComponentTestBase {
 		OneToManyDirectedComponent<?> oneToManyDirectedComponent = createOneToManyDirectedAxonsComponent(() -> targetComponentCount);
 
 		OneToManyDirectedComponent<?> dupComponent = oneToManyDirectedComponent.dup();
+		
+		NeuronsActivation mockNeuronsActivation = MockTestData.mockNeuronsActivation(100, 32);
+
 		
 		OneToManyDirectedComponentActivation dupActivation =  dupComponent.forwardPropagate(mockNeuronsActivation, mockDirectedComponentsContext);
 		List<NeuronsActivation> outputs = dupActivation.getOutput();
