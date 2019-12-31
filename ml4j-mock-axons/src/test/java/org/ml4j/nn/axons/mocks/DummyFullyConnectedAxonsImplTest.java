@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.ml4j.MatrixFactory;
 import org.ml4j.jblas.JBlasRowMajorMatrixFactory;
 import org.ml4j.nn.axons.FullyConnectedAxons;
+import org.ml4j.nn.axons.base.AxonsTestBase;
 import org.ml4j.nn.neurons.Neurons;
 
 public class DummyFullyConnectedAxonsImplTest extends AxonsTestBase<FullyConnectedAxons> {
