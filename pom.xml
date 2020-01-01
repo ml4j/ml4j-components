@@ -10,5 +10,6 @@
                 <module>ml4j-mock-components</module>
 		<module>ml4j-mock-axons</module>
 		<module>ml4j-mock-activationfunctions</module>
+		<module>ml4j-default-components</module>
 	 </modules>
 </project>
