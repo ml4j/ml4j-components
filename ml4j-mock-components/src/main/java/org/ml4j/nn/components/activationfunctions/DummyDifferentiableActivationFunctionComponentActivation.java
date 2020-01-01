@@ -23,7 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Dummy implementation of DifferentiableActivationFunctionActivation, encapsulating the activations from a DummyDifferentiableActivationFunction
+ * Dummy implementation of DifferentiableActivationFunctionComponentActivation, encapsulating the activations from a DummyDifferentiableActivationFunctionComponent
  * and providing the logic required in order to back propagate gradients back through the activations.
  * 
  * @author Michael Lavelle
@@ -33,8 +33,9 @@ public class DummyDifferentiableActivationFunctionComponentActivation extends Di
 	private static final Logger LOGGER = LoggerFactory.getLogger(DummyDifferentiableActivationFunctionComponentActivation.class);
 		
 	/**
-	 * @param input The input to the DummyDifferentiableActivationFunction
-	 * @param output The output from the DummyDifferentiableActivationFunction
+	 * @param activationFunctionComponent The DummyDifferentiableActivationFunctionComponent that generated this activation.
+	 * @param input The input to the DummyDifferentiableActivationFunctionComponent
+	 * @param output The output from the DummyDifferentiableActivationFunctionComponent
 	 */
 	public DummyDifferentiableActivationFunctionComponentActivation(DifferentiableActivationFunctionComponent activationFunctionComponent, NeuronsActivation input, NeuronsActivation output) {
 		super(activationFunctionComponent, input, output);

@@ -27,7 +27,7 @@ import org.ml4j.nn.neurons.NeuronsActivation;
 import org.mockito.Mockito;
 
 /**
- * Unit test for DummyOneToManyDirectedComponent.
+ * Unit test for DummyDefaultComponentChainBatch.
  * 
  * @author Michael Lavelle
  *

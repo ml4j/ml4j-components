@@ -37,8 +37,6 @@ public class DummyDefaultDirectedComponentChainBipoleGraph extends DefaultDirect
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(DummyDefaultDirectedComponentChainBipoleGraph.class);
 
-	private DefaultDirectedComponentChainBatch parallelComponentChainsBatch;
-
 	public DummyDefaultDirectedComponentChainBipoleGraph(Neurons inputNeurons, Neurons outputNeurons,
 			DefaultDirectedComponentChainBatch parallelComponentChainsBatch) {
 		super(inputNeurons, outputNeurons, parallelComponentChainsBatch);
