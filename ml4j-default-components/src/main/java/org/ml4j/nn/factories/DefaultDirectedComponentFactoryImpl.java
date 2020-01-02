@@ -20,6 +20,7 @@ import org.ml4j.Matrix;
 import org.ml4j.MatrixFactory;
 import org.ml4j.nn.activationfunctions.DifferentiableActivationFunction;
 import org.ml4j.nn.axons.Axons;
+import org.ml4j.nn.axons.Axons3DConfig;
 import org.ml4j.nn.axons.PassThroughAxonsImpl;
 import org.ml4j.nn.axons.factories.AxonsFactory;
 import org.ml4j.nn.components.activationfunctions.DefaultDifferentiableActivationFunctionComponentImpl;
@@ -49,12 +50,12 @@ import org.ml4j.nn.neurons.Neurons3D;
  * 
  * @author Michael Lavelle
  */
-public class DefaultDirectedComponentFactoryImpl10 implements DirectedComponentFactory {
+public class DefaultDirectedComponentFactoryImpl implements DirectedComponentFactory {
 
 	private MatrixFactory matrixFactory;
 	private AxonsFactory axonsFactory;
 	
-	public DefaultDirectedComponentFactoryImpl10(MatrixFactory matrixFactory, AxonsFactory axonsFactory) {
+	public DefaultDirectedComponentFactoryImpl(MatrixFactory matrixFactory, AxonsFactory axonsFactory) {
 		this.matrixFactory = matrixFactory;
 		this.axonsFactory = axonsFactory;
 	}
@@ -73,24 +74,23 @@ public class DefaultDirectedComponentFactoryImpl10 implements DirectedComponentF
 
 	@Override
 	public DirectedAxonsComponent<Neurons3D, Neurons3D, ?> createConvolutionalAxonsComponent(Neurons3D leftNeurons,
-			Neurons3D rightNeurons, int strideWidth, int strideHeight, Integer paddingWidth, Integer paddingHeight,
+			Neurons3D rightNeurons, Axons3DConfig config,
 			Matrix connectionWeights, Matrix biases) {
-		return createDirectedAxonsComponent(axonsFactory.createConvolutionalAxons(leftNeurons, rightNeurons, strideWidth, strideHeight, 
-				paddingWidth, paddingHeight, connectionWeights, biases));
+		return createDirectedAxonsComponent(axonsFactory.createConvolutionalAxons(leftNeurons, rightNeurons, config, connectionWeights, biases));
 	}
 
 	@Override
 	public DirectedAxonsComponent<Neurons3D, Neurons3D, ?> createMaxPoolingAxonsComponent(Neurons3D leftNeurons,
-			Neurons3D rightNeurons, int strideWidth, int strideHeight, Integer paddingWidth, Integer paddingHeight,
+			Neurons3D rightNeurons, Axons3DConfig config,
 			boolean scaleOutputs) {
-		return createDirectedAxonsComponent(axonsFactory.createMaxPoolingAxons(leftNeurons, rightNeurons, scaleOutputs, strideWidth, strideHeight, paddingWidth, paddingHeight));
+		return createDirectedAxonsComponent(axonsFactory.createMaxPoolingAxons(leftNeurons, rightNeurons, scaleOutputs, config));
 	}
 
 	@Override
 	public DirectedAxonsComponent<Neurons3D, Neurons3D, ?> createAveragePoolingAxonsComponent(Neurons3D leftNeurons,
-			Neurons3D rightNeurons, int strideWidth, int strideHeight, Integer paddingWidth, Integer paddingHeight) {
+			Neurons3D rightNeurons, Axons3DConfig config) {
 		return createDirectedAxonsComponent(axonsFactory.createAveragePoolingAxons(leftNeurons, rightNeurons, 
-				strideWidth, strideHeight, paddingWidth, paddingHeight));
+				config));
 	}
 
 	@Override

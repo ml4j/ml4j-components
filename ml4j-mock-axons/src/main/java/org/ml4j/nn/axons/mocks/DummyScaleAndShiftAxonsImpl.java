@@ -2,10 +2,12 @@ package org.ml4j.nn.axons.mocks;
 
 import org.ml4j.Matrix;
 import org.ml4j.MatrixFactory;
+import org.ml4j.nn.axons.AxonWeights;
+import org.ml4j.nn.axons.AxonWeightsAdjustment;
+import org.ml4j.nn.axons.AxonWeightsAdjustmentDirection;
 import org.ml4j.nn.axons.AxonsActivation;
 import org.ml4j.nn.axons.AxonsActivationImpl;
 import org.ml4j.nn.axons.AxonsContext;
-import org.ml4j.nn.axons.ConnectionWeightsAdjustmentDirection;
 import org.ml4j.nn.axons.ScaleAndShiftAxons;
 import org.ml4j.nn.neurons.ImageNeuronsActivation;
 import org.ml4j.nn.neurons.ImageNeuronsActivationImpl;
@@ -38,36 +40,6 @@ public class DummyScaleAndShiftAxonsImpl<N extends Neurons> implements ScaleAndS
 
 	private N leftNeurons;
 	private N rightNeurons;
-
-	@Override
-	public void adjustConnectionWeights(Matrix adjustments, ConnectionWeightsAdjustmentDirection adjustmentDirection) {
-		// No-op
-	}
-
-	@Override
-	public void adjustLeftToRightBiases(Matrix adjustments, ConnectionWeightsAdjustmentDirection adjustmentDirection) {
-		// No-op
-	}
-
-	@Override
-	public void adjustRightToLeftBiases(Matrix adjustments, ConnectionWeightsAdjustmentDirection adjustmentDirection) {
-		// No-op
-	}
-
-	@Override
-	public Matrix getDetachedConnectionWeights() {
-		return null;
-	}
-
-	@Override
-	public Matrix getDetachedLeftToRightBiases() {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public Matrix getDetachedRightToLeftBiases() {
-		throw new UnsupportedOperationException();
-	}
 
 	@Override
 	public N getLeftNeurons() {
@@ -139,6 +111,17 @@ public class DummyScaleAndShiftAxonsImpl<N extends Neurons> implements ScaleAndS
 	@Override
 	public Matrix getShiftColumnVector() {
 		return shiftColumnVector;
+	}
+
+	@Override
+	public void adjustAxonWeights(AxonWeightsAdjustment adjustments,
+			AxonWeightsAdjustmentDirection adjustmentDirection) {
+		// No-op
+	}
+
+	@Override
+	public AxonWeights getDetachedAxonWeights() {
+		throw new UnsupportedOperationException();
 	}
 
 }

@@ -1,11 +1,13 @@
 package org.ml4j.nn.axons.mocks;
 
-import org.ml4j.Matrix;
 import org.ml4j.MatrixFactory;
+import org.ml4j.nn.axons.AxonWeights;
+import org.ml4j.nn.axons.AxonWeightsAdjustment;
+import org.ml4j.nn.axons.AxonWeightsAdjustmentDirection;
+import org.ml4j.nn.axons.Axons3DConfig;
 import org.ml4j.nn.axons.AxonsActivation;
 import org.ml4j.nn.axons.AxonsActivationImpl;
 import org.ml4j.nn.axons.AxonsContext;
-import org.ml4j.nn.axons.ConnectionWeightsAdjustmentDirection;
 import org.ml4j.nn.axons.ConvolutionalAxons;
 import org.ml4j.nn.neurons.ImageNeuronsActivationImpl;
 import org.ml4j.nn.neurons.Neurons3D;
@@ -20,54 +22,23 @@ public class DummyConvolutionalAxonsImpl implements ConvolutionalAxons {
 	private static final long serialVersionUID = 1L;
 
 	private MatrixFactory matrixFactory;
-	private int strideWidth;
-	private int strideHeight;
-	private int paddingWidth;
-	private int paddingHeight;
+	private Axons3DConfig config;
 
 	public DummyConvolutionalAxonsImpl(MatrixFactory matrixFactory, Neurons3D leftNeurons, Neurons3D rightNeurons,
-			int strideWidth, int strideHeight, int paddingWidth, int paddingHeight) {
+			Axons3DConfig config) {
 		super();
 		this.matrixFactory = matrixFactory;
 		this.leftNeurons = leftNeurons;
 		this.rightNeurons = rightNeurons;
-		this.paddingHeight = paddingHeight;
-		this.paddingWidth = paddingWidth;
-		this.strideHeight = strideHeight;
-		this.strideWidth = strideWidth;
+		this.config = config;
 	}
 
 	private Neurons3D leftNeurons;
 	private Neurons3D rightNeurons;
 
 	@Override
-	public void adjustConnectionWeights(Matrix adjustments, ConnectionWeightsAdjustmentDirection adjustmentDirection) {
+	public void adjustAxonWeights(AxonWeightsAdjustment adjustment, AxonWeightsAdjustmentDirection adjustmentDirection) {
 		// No-op
-	}
-
-	@Override
-	public void adjustLeftToRightBiases(Matrix adjustments, ConnectionWeightsAdjustmentDirection adjustmentDirection) {
-		// No-op
-	}
-
-	@Override
-	public void adjustRightToLeftBiases(Matrix adjustments, ConnectionWeightsAdjustmentDirection adjustmentDirection) {
-		// No-op
-	}
-
-	@Override
-	public Matrix getDetachedConnectionWeights() {
-		return null;
-	}
-
-	@Override
-	public Matrix getDetachedLeftToRightBiases() {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public Matrix getDetachedRightToLeftBiases() {
-		throw new UnsupportedOperationException();
 	}
 
 	@Override
@@ -113,33 +84,14 @@ public class DummyConvolutionalAxonsImpl implements ConvolutionalAxons {
 	}
 
 	@Override
-	public int getFilterHeight() {
+	public AxonWeights getDetachedAxonWeights() {
 		throw new UnsupportedOperationException();
 	}
 
-	@Override
-	public int getFilterWidth() {
-		throw new UnsupportedOperationException();
-	}
 
 	@Override
-	public int getStrideHeight() {
-		return strideHeight;
-	}
-
-	@Override
-	public int getStrideWidth() {
-		return strideWidth;
-	}
-
-	@Override
-	public int getZeroPaddingHeight() {
-		return paddingHeight;
-	}
-
-	@Override
-	public int getZeroPaddingWidth() {
-		return paddingWidth;
+	public Axons3DConfig getConfig() {
+		return config;
 	}
 
 }

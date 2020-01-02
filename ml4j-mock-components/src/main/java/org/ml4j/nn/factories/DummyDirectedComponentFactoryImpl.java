@@ -19,6 +19,7 @@ import java.util.function.IntSupplier;
 import org.ml4j.Matrix;
 import org.ml4j.nn.activationfunctions.DifferentiableActivationFunction;
 import org.ml4j.nn.axons.Axons;
+import org.ml4j.nn.axons.Axons3DConfig;
 import org.ml4j.nn.axons.NoOpAxons;
 import org.ml4j.nn.components.activationfunctions.DifferentiableActivationFunctionComponent;
 import org.ml4j.nn.components.activationfunctions.DummyDifferentiableActivationFunctionComponent;
@@ -68,21 +69,21 @@ public class DummyDirectedComponentFactoryImpl implements DirectedComponentFacto
 
 	@Override
 	public DirectedAxonsComponent<Neurons3D, Neurons3D, ?> createConvolutionalAxonsComponent(Neurons3D leftNeurons,
-			Neurons3D rightNeurons, int strideWidth, int strideHeight, Integer paddingWidth, Integer paddingHeight,
+			Neurons3D rightNeurons, Axons3DConfig config,
 			Matrix connectionWeights, Matrix biases) {
 		return createDirectedAxonsComponent(leftNeurons, rightNeurons);
 	}
 
 	@Override
 	public DirectedAxonsComponent<Neurons3D, Neurons3D, ?> createMaxPoolingAxonsComponent(Neurons3D leftNeurons,
-			Neurons3D rightNeurons, int strideWidth, int strideHeight, Integer paddingWidth, Integer paddingHeight,
+			Neurons3D rightNeurons, Axons3DConfig config,
 			boolean scaleOutputs) {
 		return createDirectedAxonsComponent(leftNeurons, rightNeurons);
 	}
 
 	@Override
 	public DirectedAxonsComponent<Neurons3D, Neurons3D, ?> createAveragePoolingAxonsComponent(Neurons3D leftNeurons,
-			Neurons3D rightNeurons, int strideWidth, int strideHeight, Integer paddingWidth, Integer paddingHeight) {
+			Neurons3D rightNeurons, Axons3DConfig config) {
 		return createDirectedAxonsComponent(leftNeurons, rightNeurons);
 	}
 

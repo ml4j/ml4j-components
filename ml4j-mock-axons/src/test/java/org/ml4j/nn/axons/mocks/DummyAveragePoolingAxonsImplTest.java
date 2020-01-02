@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.ml4j.MatrixFactory;
 import org.ml4j.jblas.JBlasRowMajorMatrixFactory;
 import org.ml4j.nn.axons.AveragePoolingAxons;
+import org.ml4j.nn.axons.Axons3DConfig;
 import org.ml4j.nn.axons.base.Axons3DTestBase;
 import org.ml4j.nn.components.mocks.MockTestData;
 import org.ml4j.nn.neurons.Neurons3D;
@@ -21,9 +22,8 @@ public class DummyAveragePoolingAxonsImplTest extends Axons3DTestBase<AveragePoo
 	}
 
 	@Override
-	protected AveragePoolingAxons createAxonsUnderTest(Neurons3D leftNeurons, Neurons3D rightNeurons, int strideWidth,
-			int strideHeight, Integer paddingWidth, Integer paddingHeight) {
-		return new DummyAveragePoolingAxonsImpl(matrixFactory, leftNeurons, rightNeurons, strideWidth, strideHeight);
+	protected AveragePoolingAxons createAxonsUnderTest(Neurons3D leftNeurons, Neurons3D rightNeurons, Axons3DConfig config) {
+		return new DummyAveragePoolingAxonsImpl(matrixFactory, leftNeurons, rightNeurons, config);
 	}
 
 	@Override

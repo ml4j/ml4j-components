@@ -2,6 +2,7 @@ package org.ml4j.nn.axons.mocks;
 
 import org.ml4j.MatrixFactory;
 import org.ml4j.nn.axons.AveragePoolingAxons;
+import org.ml4j.nn.axons.Axons3DConfig;
 import org.ml4j.nn.axons.AxonsActivation;
 import org.ml4j.nn.axons.AxonsActivationImpl;
 import org.ml4j.nn.axons.AxonsContext;
@@ -18,17 +19,15 @@ public class DummyAveragePoolingAxonsImpl implements AveragePoolingAxons {
 	private static final long serialVersionUID = 1L;
 
 	private MatrixFactory matrixFactory;
-	private int strideWidth;
-	private int strideHeight;
+	private Axons3DConfig config;
 
 	public DummyAveragePoolingAxonsImpl(MatrixFactory matrixFactory, Neurons3D leftNeurons, Neurons3D rightNeurons,
-			int strideWidth, int strideHeight) {
+			Axons3DConfig config) {
 		super();
 		this.matrixFactory = matrixFactory;
 		this.leftNeurons = leftNeurons;
 		this.rightNeurons = rightNeurons;
-		this.strideHeight = strideHeight;
-		this.strideWidth = strideWidth;
+		this.config = config;
 	}
 
 	private Neurons3D leftNeurons;
@@ -77,22 +76,8 @@ public class DummyAveragePoolingAxonsImpl implements AveragePoolingAxons {
 	}
 
 	@Override
-	public int getFilterHeight() {
-		throw new UnsupportedOperationException();
+	public Axons3DConfig getConfig() {
+		return config;
 	}
 
-	@Override
-	public int getFilterWidth() {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public int getStrideHeight() {
-		return strideHeight;
-	}
-
-	@Override
-	public int getStrideWidth() {
-		return strideWidth;
-	}
 }

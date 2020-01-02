@@ -3,6 +3,7 @@ package org.ml4j.nn.axons.mocks;
 import org.junit.Before;
 import org.ml4j.MatrixFactory;
 import org.ml4j.jblas.JBlasRowMajorMatrixFactory;
+import org.ml4j.nn.axons.Axons3DConfig;
 import org.ml4j.nn.axons.MaxPoolingAxons;
 import org.ml4j.nn.axons.base.Axons3DTestBase;
 import org.ml4j.nn.components.mocks.MockTestData;
@@ -21,9 +22,8 @@ public class DummyMaxPoolingAxonsImplTest extends Axons3DTestBase<MaxPoolingAxon
 	}
 
 	@Override
-	protected MaxPoolingAxons createAxonsUnderTest(Neurons3D leftNeurons, Neurons3D rightNeurons, int strideWidth,
-			int strideHeight, Integer paddingWidth, Integer paddingHeight) {
-		return new DummyMaxPoolingAxonsImpl(matrixFactory, leftNeurons, rightNeurons, strideWidth, strideHeight);
+	protected MaxPoolingAxons createAxonsUnderTest(Neurons3D leftNeurons, Neurons3D rightNeurons, Axons3DConfig config) {
+		return new DummyMaxPoolingAxonsImpl(matrixFactory, leftNeurons, rightNeurons, config);
 	}
 
 	@Override

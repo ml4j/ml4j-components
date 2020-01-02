@@ -19,6 +19,7 @@ import org.ml4j.MatrixFactory;
 import org.ml4j.nn.axons.Axons;
 import org.ml4j.nn.axons.AxonsActivation;
 import org.ml4j.nn.axons.AxonsContext;
+import org.ml4j.nn.axons.ScaleAndShiftAxons;
 import org.ml4j.nn.components.axons.base.DirectedAxonsComponentBase;
 import org.ml4j.nn.neurons.ImageNeuronsActivation;
 import org.ml4j.nn.neurons.ImageNeuronsActivationImpl;
@@ -40,6 +41,8 @@ public class DefaultBatchNormDirectedAxonsComponentImpl<L extends Neurons> exten
 	
 	private Matrix exponentiallyWeightedAverageInputFeatureMeans;
 	private Matrix exponentiallyWeightedAverageInputFeatureVariances;
+	// TODO
+	private float betaForExponentiallyWeightedAverages = 0.99f;
 
 	
 	public DefaultBatchNormDirectedAxonsComponentImpl(Axons<L, L, ?> axons, Matrix mean, Matrix stddev) {
@@ -50,27 +53,27 @@ public class DefaultBatchNormDirectedAxonsComponentImpl<L extends Neurons> exten
 
 	@Override
 	public float getBetaForExponentiallyWeightedAverages() {
-		throw new UnsupportedOperationException();
+		return betaForExponentiallyWeightedAverages;
 	}
 
 	@Override
 	public Matrix getExponentiallyWeightedAverageInputFeatureMeans() {
-		throw new UnsupportedOperationException();
+		return exponentiallyWeightedAverageInputFeatureMeans;
 	}
 
 	@Override
 	public Matrix getExponentiallyWeightedAverageInputFeatureVariances() {
-		throw new UnsupportedOperationException();
+		return exponentiallyWeightedAverageInputFeatureVariances;
 	}
 
 	@Override
-	public void setExponentiallyWeightedAverageInputFeatureMeans(Matrix arg0) {
-		throw new UnsupportedOperationException();		
+	public void setExponentiallyWeightedAverageInputFeatureMeans(Matrix exponentiallyWeightedAverageInputFeatureMeans) {
+		this.exponentiallyWeightedAverageInputFeatureMeans = exponentiallyWeightedAverageInputFeatureMeans;	
 	}
 
 	@Override
-	public void setExponentiallyWeightedAverageInputFeatureVariances(Matrix arg0) {
-		throw new UnsupportedOperationException();		
+	public void setExponentiallyWeightedAverageInputFeatureVariances(Matrix exponentiallyWeightedAverageInputFeatureVariances) {
+		this.exponentiallyWeightedAverageInputFeatureVariances = exponentiallyWeightedAverageInputFeatureVariances;
 	}
 
 	@Override
@@ -105,7 +108,7 @@ public class DefaultBatchNormDirectedAxonsComponentImpl<L extends Neurons> exten
 		AxonsActivation axonsActivation =
 				axons.pushLeftToRight(xhatN, null, axonsContext);
 		// TODO
-		return new DefaultBatchNormDirectedAxonsComponentActivationImpl<>(this, axonsActivation, axonsContext);
+		return new PrototypeBatchNormDirectedAxonsComponentActivationImpl(this, (ScaleAndShiftAxons) this.axons, axonsActivation, meanColumnVector, varianceColumnVector, axonsContext);
 	}
 	
 	

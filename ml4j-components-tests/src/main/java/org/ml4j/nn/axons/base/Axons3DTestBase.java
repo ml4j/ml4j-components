@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.ml4j.nn.axons.Axons;
+import org.ml4j.nn.axons.Axons3DConfig;
 import org.ml4j.nn.axons.AxonsActivation;
 import org.ml4j.nn.axons.AxonsContext;
 import org.ml4j.nn.components.base.TestBase;
@@ -31,11 +32,11 @@ public abstract class Axons3DTestBase<A extends Axons<?, ?, ?>> extends TestBase
 	@Before
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
-		axons = createAxonsUnderTest(leftNeurons, rightNeurons, 0, 0, 0, 0);
+		axons = createAxonsUnderTest(leftNeurons, rightNeurons, new Axons3DConfig());
 		this.mockLeftToRightInputActivation = createNeuronsActivation(100, 32);
 	}
 	
-	protected abstract A createAxonsUnderTest(Neurons3D leftNeurons, Neurons3D rightNeurons, int strideWidth, int strideHeight, Integer paddingWidth, Integer paddingHeight);
+	protected abstract A createAxonsUnderTest(Neurons3D leftNeurons, Neurons3D rightNeurons, Axons3DConfig config);
 	
 	@Test
 	public void testGetLeftNeurons() {
