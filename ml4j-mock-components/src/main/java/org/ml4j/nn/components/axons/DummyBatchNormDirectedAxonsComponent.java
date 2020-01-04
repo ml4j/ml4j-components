@@ -82,7 +82,7 @@ public class DummyBatchNormDirectedAxonsComponent<L extends Neurons> extends Dir
 		if (dummyOutput.getFeatureCount() != getOutputNeurons().getNeuronCountExcludingBias()) {
 			throw new IllegalArgumentException();
 		}
-		AxonsActivation dummyAxonsActivation = new NoOpAxonsActivation(axons, neuronsActivation, dummyOutput);
+		AxonsActivation dummyAxonsActivation = new NoOpAxonsActivation(axons, () -> neuronsActivation, dummyOutput);
 	
 		return new DummyDirectedAxonsComponentActivation<>(this, dummyAxonsActivation, axonsContext);
 	}

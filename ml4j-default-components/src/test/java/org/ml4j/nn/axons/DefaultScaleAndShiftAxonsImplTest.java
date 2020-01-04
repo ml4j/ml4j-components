@@ -1,15 +1,15 @@
-package org.ml4j.nn.axons.mocks;
+package org.ml4j.nn.axons;
 
 import org.junit.Before;
 import org.ml4j.MatrixFactory;
 import org.ml4j.jblas.JBlasRowMajorMatrixFactory;
-import org.ml4j.nn.axons.ScaleAndShiftAxons;
 import org.ml4j.nn.axons.base.AxonsTestBase;
 import org.ml4j.nn.components.mocks.MockTestData;
 import org.ml4j.nn.neurons.Neurons;
 import org.ml4j.nn.neurons.NeuronsActivation;
 
-public class DummyScaleAndShiftAxonsImplTest extends AxonsTestBase<ScaleAndShiftAxons<?>> {
+public class DefaultScaleAndShiftAxonsImplTest extends AxonsTestBase<ScaleAndShiftAxons<?>> {
+
 
 	@Before
 	@Override
@@ -19,9 +19,9 @@ public class DummyScaleAndShiftAxonsImplTest extends AxonsTestBase<ScaleAndShift
 
 	@Override
 	protected ScaleAndShiftAxons<?> createAxonsUnderTest(Neurons leftNeurons, Neurons rightNeurons) {
-		return new DummyScaleAndShiftAxonsImpl<>(matrixFactory, leftNeurons, rightNeurons);
+		return new DefaultScaleAndShiftAxonsImpl<>(matrixFactory, leftNeurons, rightNeurons);
 	}
-
+	
 	@Override
 	protected MatrixFactory createMatrixFactory() {
 		return new JBlasRowMajorMatrixFactory();
@@ -31,5 +31,6 @@ public class DummyScaleAndShiftAxonsImplTest extends AxonsTestBase<ScaleAndShift
 	public NeuronsActivation createNeuronsActivation(int featureCount, int exampleCount) {
 		return MockTestData.mockNeuronsActivation(featureCount, exampleCount);
 	}
+	
 
 }

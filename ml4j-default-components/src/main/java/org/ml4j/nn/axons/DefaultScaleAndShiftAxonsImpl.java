@@ -1,14 +1,7 @@
-package org.ml4j.nn.axons.mocks;
+package org.ml4j.nn.axons;
 
 import org.ml4j.Matrix;
 import org.ml4j.MatrixFactory;
-import org.ml4j.nn.axons.AxonWeights;
-import org.ml4j.nn.axons.AxonWeightsAdjustment;
-import org.ml4j.nn.axons.AxonWeightsAdjustmentDirection;
-import org.ml4j.nn.axons.AxonsActivation;
-import org.ml4j.nn.axons.AxonsActivationImpl;
-import org.ml4j.nn.axons.AxonsContext;
-import org.ml4j.nn.axons.ScaleAndShiftAxons;
 import org.ml4j.nn.neurons.ImageNeuronsActivation;
 import org.ml4j.nn.neurons.ImageNeuronsActivationImpl;
 import org.ml4j.nn.neurons.Neurons;
@@ -17,7 +10,7 @@ import org.ml4j.nn.neurons.NeuronsActivation;
 import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
 import org.ml4j.nn.neurons.NeuronsActivationImpl;
 
-public class DummyScaleAndShiftAxonsImpl<N extends Neurons> implements ScaleAndShiftAxons<N> {
+public class DefaultScaleAndShiftAxonsImpl<N extends Neurons> implements ScaleAndShiftAxons<N> {
 
 	/**
 	 * Default serialization id.
@@ -29,7 +22,7 @@ public class DummyScaleAndShiftAxonsImpl<N extends Neurons> implements ScaleAndS
 	private Matrix scaleColumnVector;
 	private Matrix shiftColumnVector;
 
-	public DummyScaleAndShiftAxonsImpl(MatrixFactory matrixFactory, N leftNeurons, N rightNeurons) {
+	public DefaultScaleAndShiftAxonsImpl(MatrixFactory matrixFactory, N leftNeurons, N rightNeurons) {
 		super();
 		this.matrixFactory = matrixFactory;
 		this.leftNeurons = leftNeurons;
@@ -54,6 +47,7 @@ public class DummyScaleAndShiftAxonsImpl<N extends Neurons> implements ScaleAndS
 	@Override
 	public AxonsActivation pushLeftToRight(NeuronsActivation leftNeuronsActivation,
 			AxonsActivation previousRightToLeftActivation, AxonsContext axonsContext) {
+		// TODO - currently mock implementation
 		if (leftNeuronsActivation instanceof ImageNeuronsActivation) {
 			return new AxonsActivationImpl(this, null, () -> leftNeuronsActivation,
 					new ImageNeuronsActivationImpl(
@@ -75,6 +69,7 @@ public class DummyScaleAndShiftAxonsImpl<N extends Neurons> implements ScaleAndS
 	@Override
 	public AxonsActivation pushRightToLeft(NeuronsActivation rightNeuronsActivation,
 			AxonsActivation previousLeftToRightActivation, AxonsContext axonsContext) {
+		// TODO - currently mock implementation
 		if (rightNeuronsActivation instanceof ImageNeuronsActivation) {
 			return new AxonsActivationImpl(this, null, () -> rightNeuronsActivation,
 					new ImageNeuronsActivationImpl(

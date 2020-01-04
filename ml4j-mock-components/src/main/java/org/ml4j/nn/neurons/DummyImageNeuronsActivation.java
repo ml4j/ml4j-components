@@ -44,12 +44,12 @@ public class DummyImageNeuronsActivation extends DummyNeuronsActivation implemen
 	}
 
 	@Override
-	public Matrix im2Col(MatrixFactory arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6) {
+	public Matrix im2ColConv(MatrixFactory arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6) {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public Matrix im2Col2(MatrixFactory arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6) {
+	public Matrix im2ColPool(MatrixFactory arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6) {
 		throw new UnsupportedOperationException();
 	}
 

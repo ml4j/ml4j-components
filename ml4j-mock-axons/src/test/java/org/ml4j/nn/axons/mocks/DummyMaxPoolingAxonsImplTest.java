@@ -35,5 +35,15 @@ public class DummyMaxPoolingAxonsImplTest extends Axons3DTestBase<MaxPoolingAxon
 	public NeuronsActivation createNeuronsActivation(int featureCount, int exampleCount) {
 		return MockTestData.mockNeuronsActivation(featureCount, exampleCount);
 	}
+	
+	@Override
+	protected int getExpectedReformattedInputColumns() {
+		return 32;
+	}
+
+	@Override
+	protected int getExpectedReformattedInputRows() {
+		return 784 * 3;
+	}
 
 }

@@ -74,14 +74,16 @@ public class DefaultDirectedAxonsComponentActivationImpl<A extends Axons<?, ?, ?
 
 			LOGGER.debug("Calculating Axons Gradients");
 			
-			Matrix first = rightToLeftAxonsGradientActivatoin.getPostDropoutInput().getActivations(axonsContext.getMatrixFactory());
+			Matrix first = rightToLeftAxonsGradientActivatoin.getPostDropoutInput().get().getActivations(axonsContext.getMatrixFactory());
 
 			EditableMatrix totalTrainableAxonsGradientMatrixNonBias = null;
 			Matrix totalTrainableAxonsGradientMatrixBias = null;
 			
-			try (InterrimMatrix second = leftToRightAxonsActivation.getPostDropoutInput().getActivations(axonsContext.getMatrixFactory()).transpose().asInterrimMatrix()) {
+			try (InterrimMatrix second1 = leftToRightAxonsActivation.getPostDropoutInput().get().getActivations(axonsContext.getMatrixFactory()).asInterrimMatrix()) {
+			try (InterrimMatrix second = second1.transpose().asInterrimMatrix()) {
 				
 				totalTrainableAxonsGradientMatrixNonBias = first.mmul(second).asEditableMatrix();
+			}
 			}
 
 			if (directedAxonsComponent.getAxons().getLeftNeurons().hasBiasUnit()) {

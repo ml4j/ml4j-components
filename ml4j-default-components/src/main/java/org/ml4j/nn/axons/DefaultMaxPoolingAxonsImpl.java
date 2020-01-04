@@ -1,20 +1,12 @@
-package org.ml4j.nn.axons.mocks;
+package org.ml4j.nn.axons;
 
 import org.ml4j.MatrixFactory;
-import org.ml4j.nn.axons.AxonWeights;
-import org.ml4j.nn.axons.AxonWeightsAdjustment;
-import org.ml4j.nn.axons.AxonWeightsAdjustmentDirection;
-import org.ml4j.nn.axons.Axons3DConfig;
-import org.ml4j.nn.axons.AxonsActivation;
-import org.ml4j.nn.axons.AxonsActivationImpl;
-import org.ml4j.nn.axons.AxonsContext;
-import org.ml4j.nn.axons.ConvolutionalAxons;
 import org.ml4j.nn.neurons.ImageNeuronsActivationImpl;
 import org.ml4j.nn.neurons.Neurons3D;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
 
-public class DummyConvolutionalAxonsImpl implements ConvolutionalAxons {
+public class DefaultMaxPoolingAxonsImpl implements MaxPoolingAxons {
 
 	/**
 	 * Default serialization id.
@@ -24,7 +16,7 @@ public class DummyConvolutionalAxonsImpl implements ConvolutionalAxons {
 	private MatrixFactory matrixFactory;
 	private Axons3DConfig config;
 
-	public DummyConvolutionalAxonsImpl(MatrixFactory matrixFactory, Neurons3D leftNeurons, Neurons3D rightNeurons,
+	public DefaultMaxPoolingAxonsImpl(MatrixFactory matrixFactory, Neurons3D leftNeurons, Neurons3D rightNeurons,
 			Axons3DConfig config) {
 		super();
 		this.matrixFactory = matrixFactory;
@@ -35,11 +27,6 @@ public class DummyConvolutionalAxonsImpl implements ConvolutionalAxons {
 
 	private Neurons3D leftNeurons;
 	private Neurons3D rightNeurons;
-
-	@Override
-	public void adjustAxonWeights(AxonWeightsAdjustment adjustment, AxonWeightsAdjustmentDirection adjustmentDirection) {
-		// No-op
-	}
 
 	@Override
 	public Neurons3D getLeftNeurons() {
@@ -54,6 +41,7 @@ public class DummyConvolutionalAxonsImpl implements ConvolutionalAxons {
 	@Override
 	public AxonsActivation pushLeftToRight(NeuronsActivation leftNeuronsActivation,
 			AxonsActivation previousRightToLeftActivation, AxonsContext axonsContext) {
+		// TODO - currently mock implementation
 		return new AxonsActivationImpl(this, null, () -> leftNeuronsActivation,
 				new ImageNeuronsActivationImpl(
 						matrixFactory.createMatrix(rightNeurons.getNeuronCountExcludingBias(),
@@ -65,6 +53,7 @@ public class DummyConvolutionalAxonsImpl implements ConvolutionalAxons {
 	@Override
 	public AxonsActivation pushRightToLeft(NeuronsActivation rightNeuronsActivation,
 			AxonsActivation previousLeftToRightActivation, AxonsContext axonsContext) {
+		// TODO - currently mock implementation		
 		return new AxonsActivationImpl(this, null, () -> rightNeuronsActivation,
 				new ImageNeuronsActivationImpl(
 						matrixFactory.createMatrix(leftNeurons.getNeuronCountExcludingBias(),
@@ -74,20 +63,14 @@ public class DummyConvolutionalAxonsImpl implements ConvolutionalAxons {
 	}
 
 	@Override
-	public ConvolutionalAxons dup() {
+	public MaxPoolingAxons dup() {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public boolean isTrainable(AxonsContext axonsContext) {
-		return true;
+		return false;
 	}
-
-	@Override
-	public AxonWeights getDetachedAxonWeights() {
-		throw new UnsupportedOperationException();
-	}
-
 
 	@Override
 	public Axons3DConfig getConfig() {

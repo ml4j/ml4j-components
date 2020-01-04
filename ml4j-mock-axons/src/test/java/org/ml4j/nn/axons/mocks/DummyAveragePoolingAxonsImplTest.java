@@ -36,4 +36,14 @@ public class DummyAveragePoolingAxonsImplTest extends Axons3DTestBase<AveragePoo
 		return MockTestData.mockNeuronsActivation(featureCount, exampleCount);
 	}
 
+	@Override
+	protected int getExpectedReformattedInputColumns() {
+		return 32;
+	}
+
+	@Override
+	protected int getExpectedReformattedInputRows() {
+		return 784 * 3;
+	}
+
 }

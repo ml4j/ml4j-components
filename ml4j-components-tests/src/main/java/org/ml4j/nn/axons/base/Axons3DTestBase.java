@@ -12,6 +12,7 @@ import org.ml4j.nn.neurons.Neurons;
 import org.ml4j.nn.neurons.Neurons3D;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 public abstract class Axons3DTestBase<A extends Axons<?, ?, ?>> extends TestBase {
@@ -32,11 +33,24 @@ public abstract class Axons3DTestBase<A extends Axons<?, ?, ?>> extends TestBase
 	@Before
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
+		Mockito.when(leftNeurons.getNeuronCountExcludingBias()).thenReturn(784 * 3);
+		Mockito.when(leftNeurons.getDepth()).thenReturn(3);
+		Mockito.when(leftNeurons.getWidth()).thenReturn(28);
+		Mockito.when(leftNeurons.getHeight()).thenReturn(28);
+		Mockito.when(rightNeurons.getNeuronCountExcludingBias()).thenReturn(400 * 2);
+		Mockito.when(rightNeurons.getDepth()).thenReturn(2);
+		Mockito.when(rightNeurons.getWidth()).thenReturn(20);
+		Mockito.when(rightNeurons.getHeight()).thenReturn(20);
 		axons = createAxonsUnderTest(leftNeurons, rightNeurons, new Axons3DConfig());
-		this.mockLeftToRightInputActivation = createNeuronsActivation(100, 32);
+		Mockito.when(mockAxonsContext.getMatrixFactory()).thenReturn(matrixFactory);
+		this.mockLeftToRightInputActivation = createNeuronsActivation(784 * 3, 32);
 	}
 	
 	protected abstract A createAxonsUnderTest(Neurons3D leftNeurons, Neurons3D rightNeurons, Axons3DConfig config);
+	
+	protected abstract int getExpectedReformattedInputRows();
+	protected abstract int getExpectedReformattedInputColumns();
+
 	
 	@Test
 	public void testGetLeftNeurons() {
@@ -55,10 +69,10 @@ public abstract class Axons3DTestBase<A extends Axons<?, ?, ?>> extends TestBase
 		
 		AxonsActivation leftToRightActivation = axons.pushLeftToRight(mockLeftToRightInputActivation, null, mockAxonsContext);
 		Assert.assertNotNull(leftToRightActivation);
-		NeuronsActivation postDropoutInput = leftToRightActivation.getPostDropoutInput();
+		NeuronsActivation postDropoutInput = leftToRightActivation.getPostDropoutInput().get();
 		Assert.assertNotNull(postDropoutInput);
-		Assert.assertEquals(mockLeftToRightInputActivation.getFeatureCount(), postDropoutInput.getFeatureCount());
-		Assert.assertEquals(mockLeftToRightInputActivation.getExampleCount(), postDropoutInput.getExampleCount());
+		Assert.assertEquals(getExpectedReformattedInputRows(), postDropoutInput.getFeatureCount());
+		Assert.assertEquals(getExpectedReformattedInputColumns(), postDropoutInput.getExampleCount());
 		Assert.assertEquals(mockLeftToRightInputActivation.getFeatureOrientation(), postDropoutInput.getFeatureOrientation());
 
 		NeuronsActivation postDropoutOutput = leftToRightActivation.getPostDropoutOutput();

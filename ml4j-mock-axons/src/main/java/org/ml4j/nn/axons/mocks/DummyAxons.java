@@ -43,7 +43,7 @@ public class DummyAxons<L extends Neurons, R extends Neurons, A extends Axons<L,
 				leftNeuronsActivation.getExampleCount());
 		NeuronsActivation outputActivation = new NeuronsActivationImpl(output,
 				leftNeuronsActivation.getFeatureOrientation());
-		return new DummyAxonsActivation(this, leftNeuronsActivation, outputActivation);
+		return new DummyAxonsActivation(this, () -> leftNeuronsActivation, outputActivation);
 	}
 
 	@Override

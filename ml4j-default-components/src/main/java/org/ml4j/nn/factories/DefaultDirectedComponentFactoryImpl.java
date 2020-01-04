@@ -54,10 +54,16 @@ public class DefaultDirectedComponentFactoryImpl implements DirectedComponentFac
 
 	private MatrixFactory matrixFactory;
 	private AxonsFactory axonsFactory;
+	private DirectedComponentFactory directedComponentFactory;
 	
 	public DefaultDirectedComponentFactoryImpl(MatrixFactory matrixFactory, AxonsFactory axonsFactory) {
 		this.matrixFactory = matrixFactory;
 		this.axonsFactory = axonsFactory;
+		this.directedComponentFactory = this;
+	}
+
+	public void setDirectedComponentFactory(DirectedComponentFactory directedComponentFactory) {
+		this.directedComponentFactory = directedComponentFactory;
 	}
 
 	@Override
@@ -161,7 +167,7 @@ public class DefaultDirectedComponentFactoryImpl implements DirectedComponentFac
 	public DefaultDirectedComponentBipoleGraph createDirectedComponentBipoleGraph(Neurons leftNeurons, Neurons rightNeurons,
 			DefaultDirectedComponentChainBatch parallelComponentChainsBatch,
 			PathCombinationStrategy pathCombinationStrategy) {
-		return new DefaultDirectedComponentChainBipoleGraphImpl(this, leftNeurons, rightNeurons, parallelComponentChainsBatch, pathCombinationStrategy);
+		return new DefaultDirectedComponentChainBipoleGraphImpl(directedComponentFactory, leftNeurons, rightNeurons, parallelComponentChainsBatch, pathCombinationStrategy);
 	}
 
 	@Override

@@ -46,7 +46,7 @@ public class DummyMaxPoolingAxonsImpl implements MaxPoolingAxons {
 	@Override
 	public AxonsActivation pushLeftToRight(NeuronsActivation leftNeuronsActivation,
 			AxonsActivation previousRightToLeftActivation, AxonsContext axonsContext) {
-		return new AxonsActivationImpl(this, null, leftNeuronsActivation,
+		return new AxonsActivationImpl(this, null, () -> leftNeuronsActivation,
 				new ImageNeuronsActivationImpl(
 						matrixFactory.createMatrix(rightNeurons.getNeuronCountExcludingBias(),
 								leftNeuronsActivation.getExampleCount()),
@@ -57,7 +57,7 @@ public class DummyMaxPoolingAxonsImpl implements MaxPoolingAxons {
 	@Override
 	public AxonsActivation pushRightToLeft(NeuronsActivation rightNeuronsActivation,
 			AxonsActivation previousLeftToRightActivation, AxonsContext axonsContext) {
-		return new AxonsActivationImpl(this, null, rightNeuronsActivation,
+		return new AxonsActivationImpl(this, null, () -> rightNeuronsActivation,
 				new ImageNeuronsActivationImpl(
 						matrixFactory.createMatrix(leftNeurons.getNeuronCountExcludingBias(),
 								rightNeuronsActivation.getExampleCount()),

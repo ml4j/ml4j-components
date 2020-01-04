@@ -1,14 +1,15 @@
 package org.ml4j.nn.axons;
 
 import org.ml4j.nn.neurons.NeuronsActivation;
+import java.util.function.Supplier;
 
 public class NoOpAxonsActivation implements AxonsActivation {
 	
 	private Axons<?, ?, ?> axons;
-	private NeuronsActivation input;
+	private Supplier<NeuronsActivation> input;
 	private NeuronsActivation output;
 	
-	public NoOpAxonsActivation(Axons<?, ?, ?> axons, NeuronsActivation input, NeuronsActivation output) {
+	public NoOpAxonsActivation(Axons<?, ?, ?> axons, Supplier<NeuronsActivation> input, NeuronsActivation output) {
 		this.axons = axons;
 		this.input = input;
 		this.output = output;
@@ -31,7 +32,7 @@ public class NoOpAxonsActivation implements AxonsActivation {
 	}
 
 	@Override
-	public NeuronsActivation getPostDropoutInput() {
+	public Supplier<NeuronsActivation> getPostDropoutInput() {
 		return input;
 	}
 }

@@ -92,6 +92,7 @@ public class DefaultBatchNormDirectedAxonsComponentImpl<L extends Neurons> exten
 		*/
 		
 		Matrix activations = input.getActivations(axonsContext.getMatrixFactory());
+		
 		Matrix meanColumnVector = getMeanColumnVector(activations, axonsContext.getMatrixFactory(), axonsContext.isTrainingContext());
 
 		Matrix varianceColumnVector = getVarianceColumnVector(activations, axonsContext.getMatrixFactory(),

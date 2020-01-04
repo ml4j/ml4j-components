@@ -1,37 +1,29 @@
-package org.ml4j.nn.axons.mocks;
+package org.ml4j.nn.axons;
 
-import org.ml4j.MatrixFactory;
-import org.ml4j.nn.axons.AxonWeights;
-import org.ml4j.nn.axons.AxonWeightsAdjustment;
-import org.ml4j.nn.axons.AxonWeightsAdjustmentDirection;
-import org.ml4j.nn.axons.AxonsActivation;
-import org.ml4j.nn.axons.AxonsActivationImpl;
-import org.ml4j.nn.axons.AxonsContext;
-import org.ml4j.nn.axons.FullyConnectedAxons;
+import org.ml4j.Matrix;
 import org.ml4j.nn.neurons.Neurons;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
 import org.ml4j.nn.neurons.NeuronsActivationImpl;
 
-public class DummyFullyConnectedAxonsImpl implements FullyConnectedAxons {
+public class DefaultFullyConnectedAxonsImpl implements FullyConnectedAxons {
 
 	/**
 	 * Default serialization id.
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private MatrixFactory matrixFactory;
+	private Neurons leftNeurons;
+	private Neurons rightNeurons;
+	private AxonWeights axonWeights;
 
-	public DummyFullyConnectedAxonsImpl(MatrixFactory matrixFactory, Neurons leftNeurons, Neurons rightNeurons) {
+	public DefaultFullyConnectedAxonsImpl(Neurons leftNeurons, Neurons rightNeurons, AxonWeights axonWeights) {
 		super();
-		this.matrixFactory = matrixFactory;
+		this.axonWeights = axonWeights;
 		this.leftNeurons = leftNeurons;
 		this.rightNeurons = rightNeurons;
 	}
-
-	private Neurons leftNeurons;
-	private Neurons rightNeurons;
-
+	
 	@Override
 	public Neurons getLeftNeurons() {
 		return leftNeurons;
@@ -45,10 +37,13 @@ public class DummyFullyConnectedAxonsImpl implements FullyConnectedAxons {
 	@Override
 	public AxonsActivation pushLeftToRight(NeuronsActivation leftNeuronsActivation,
 			AxonsActivation previousRightToLeftActivation, AxonsContext axonsContext) {
+		
+		Matrix output = axonWeights.applyToLeftToRightInput(leftNeuronsActivation.getActivations(axonsContext.getMatrixFactory()))
+				.asEditableMatrix();
+		
 		return new AxonsActivationImpl(this, null, () -> leftNeuronsActivation,
 				new NeuronsActivationImpl(
-						matrixFactory.createMatrix(rightNeurons.getNeuronCountExcludingBias(),
-								leftNeuronsActivation.getExampleCount()),
+						output,
 						NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET),
 				leftNeurons, rightNeurons);
 	}
@@ -56,33 +51,35 @@ public class DummyFullyConnectedAxonsImpl implements FullyConnectedAxons {
 	@Override
 	public AxonsActivation pushRightToLeft(NeuronsActivation rightNeuronsActivation,
 			AxonsActivation previousLeftToRightActivation, AxonsContext axonsContext) {
+		Matrix output = axonWeights.applyToRightToLeftInput(rightNeuronsActivation.getActivations(axonsContext.getMatrixFactory()))
+				.asEditableMatrix();
+		
 		return new AxonsActivationImpl(this, null, () -> rightNeuronsActivation,
 				new NeuronsActivationImpl(
-						matrixFactory.createMatrix(leftNeurons.getNeuronCountExcludingBias(),
-								rightNeuronsActivation.getExampleCount()),
+						output,
 						NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET),
 				leftNeurons, rightNeurons);
 	}
 
 	@Override
 	public FullyConnectedAxons dup() {
-		throw new UnsupportedOperationException();
+		return new DefaultFullyConnectedAxonsImpl(leftNeurons, rightNeurons, axonWeights.dup());
 	}
 
 	@Override
 	public boolean isTrainable(AxonsContext axonsContext) {
-		return true;
+		return !axonsContext.isWithFreezeOut();
 	}
 
 	@Override
-	public void adjustAxonWeights(AxonWeightsAdjustment adjustments,
+	public void adjustAxonWeights(AxonWeightsAdjustment adjustment,
 			AxonWeightsAdjustmentDirection adjustmentDirection) {
-		// No-op
+		axonWeights.adjustWeights(adjustment, adjustmentDirection);
 	}
 
 	@Override
 	public AxonWeights getDetachedAxonWeights() {
-		throw new UnsupportedOperationException();
+		return axonWeights.dup();
 	}
 
 }

@@ -112,14 +112,14 @@ public abstract class DirectedAxonsComponentActivationTestBase extends TestBase 
 		Mockito.when(mockAxons.getRightNeurons()).thenReturn(new Neurons(110, false));
 
 		Mockito.when(mockAxonsActivation.getPostDropoutOutput()).thenReturn(mockOutputActivation);
-		Mockito.when(mockAxonsActivation.getPostDropoutInput()).thenReturn(mockInputActivation);
+		Mockito.when(mockAxonsActivation.getPostDropoutInput()).thenReturn(() -> mockInputActivation);
 
 		Mockito.when(mockAxonsActivation.getAxons()).thenReturn(mockAxons);
 		Mockito.when(mockAxonsComponent.getAxons()).thenReturn(mockAxons);
 
 		Mockito.when(mockAxons.pushRightToLeft(mockInboundGradient.getOutput(), mockAxonsActivation, mockAxonsContext)).thenReturn(mockAxonsActivationRightToLeft);
 		Mockito.when(mockAxonsActivationRightToLeft.getPostDropoutOutput()).thenReturn(mockOutputActivationRightToLeft);
-		Mockito.when(mockAxonsActivationRightToLeft.getPostDropoutInput()).thenReturn(mockOutputActivationRightToLeft);
+		Mockito.when(mockAxonsActivationRightToLeft.getPostDropoutInput()).thenReturn(() -> mockOutputActivationRightToLeft);
 
 		DirectedAxonsComponentActivation directedAxonsComponentActivation = createDirectedAxonsComponentActivation(mockAxonsComponent, mockAxonsActivation, mockAxonsContext);
 		Assert.assertNotNull(directedAxonsComponentActivation);

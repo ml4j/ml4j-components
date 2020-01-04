@@ -13,9 +13,9 @@
  */
 package org.ml4j.nn.components.manytomany;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.ml4j.nn.components.ChainableDirectedComponent;
 import org.ml4j.nn.components.ChainableDirectedComponentActivation;
@@ -27,7 +27,10 @@ import org.ml4j.nn.neurons.NeuronsActivation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class DefaultComponentChainBatchImpl extends DefaultComponentChainBatchBase implements DefaultDirectedComponentChainBatch {
+import com.codepoetics.protonpack.StreamUtils;
+
+public class DefaultComponentChainBatchImpl extends DefaultComponentChainBatchBase
+		implements DefaultDirectedComponentChainBatch {
 
 	/**
 	 * Default serialization id.
@@ -36,27 +39,24 @@ public class DefaultComponentChainBatchImpl extends DefaultComponentChainBatchBa
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(DefaultComponentChainBatchImpl.class);
 
-	
 	public DefaultComponentChainBatchImpl(List<DefaultDirectedComponentChain> parallelComponents) {
 		super(parallelComponents);
 	}
-	
-	@Override
-	public DefaultDirectedComponentChainBatchActivation forwardPropagate(
-			List<NeuronsActivation> neuronActivations, DirectedComponentsContext context) {
-		int index = 0;
-		List<DefaultDirectedComponentChainActivation> chainActivations = new ArrayList<>();
-		for (NeuronsActivation neuronActivation : neuronActivations) {
-			DefaultDirectedComponentChain chain = parallelComponents.get(index);
-			DefaultDirectedComponentChainActivation chainActivation = chain.forwardPropagate(neuronActivation, context);
-			chainActivations.add(chainActivation);
-			index++;
-		}
-		LOGGER.debug("Forward propagating through DefaultComponentChainBatchImpl");
 
+	@Override
+	public DefaultDirectedComponentChainBatchActivation forwardPropagate(List<NeuronsActivation> neuronActivations,
+			DirectedComponentsContext context) {
+
+		LOGGER.debug("Forward propagating through DefaultComponentChainBatchImpl");
+		
+		List<DefaultDirectedComponentChainActivation> chainActivations = StreamUtils
+				.zipWithIndex(neuronActivations.parallelStream())
+				.map(a -> parallelComponents.get((int) a.getIndex()).forwardPropagate(a.getValue(), context))
+				.collect(Collectors.toList());
+		
 		return new DefaultDirectedComponentChainBatchActivationImpl(chainActivations);
 	}
-	
+
 	@Override
 	public DefaultDirectedComponentChainBatch dup() {
 		return new DefaultComponentChainBatchImpl(parallelComponents);

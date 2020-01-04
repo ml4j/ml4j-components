@@ -49,7 +49,7 @@ public class DummyDirectedAxonsComponent<L extends Neurons, R extends Neurons> e
 		if (dummyOutput.getFeatureCount() != getOutputNeurons().getNeuronCountExcludingBias()) {
 			throw new IllegalArgumentException();
 		}
-		return new DummyDirectedAxonsComponentActivation<>(this, new NoOpAxonsActivation(axons, neuronsActivation, dummyOutput), context);
+		return new DummyDirectedAxonsComponentActivation<>(this, new NoOpAxonsActivation(axons, () -> neuronsActivation, dummyOutput), context);
 	}
 
 	@Override
