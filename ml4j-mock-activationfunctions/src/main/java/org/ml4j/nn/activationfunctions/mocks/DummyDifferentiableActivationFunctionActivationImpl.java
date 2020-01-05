@@ -2,34 +2,13 @@ package org.ml4j.nn.activationfunctions.mocks;
 
 import org.ml4j.nn.activationfunctions.DifferentiableActivationFunction;
 import org.ml4j.nn.activationfunctions.DifferentiableActivationFunctionActivation;
+import org.ml4j.nn.activationfunctions.base.DifferentiableActivationFunctionActivationBase;
 import org.ml4j.nn.neurons.NeuronsActivation;
 
-public class DummyDifferentiableActivationFunctionActivationImpl implements DifferentiableActivationFunctionActivation {
+public class DummyDifferentiableActivationFunctionActivationImpl extends DifferentiableActivationFunctionActivationBase implements DifferentiableActivationFunctionActivation {
 
-	private NeuronsActivation output;
-	private NeuronsActivation input;
-	private DifferentiableActivationFunction activationFunction;
-	
-	public DummyDifferentiableActivationFunctionActivationImpl(DifferentiableActivationFunction activationFunction, NeuronsActivation input, NeuronsActivation output) {
-		this.output = output;
-		this.input = input;
-		this.activationFunction = activationFunction;	
+	public DummyDifferentiableActivationFunctionActivationImpl(DifferentiableActivationFunction activationFunction,
+			NeuronsActivation input, NeuronsActivation output) {
+		super(activationFunction, input, output);
 	}
-	
-	
-	@Override
-	public DifferentiableActivationFunction getActivationFunction() {
-		return activationFunction;
-	}
-
-	@Override
-	public NeuronsActivation getInput() {
-		return input;
-	}
-
-	@Override
-	public NeuronsActivation getOutput() {
-		return output;
-	}
-
 }

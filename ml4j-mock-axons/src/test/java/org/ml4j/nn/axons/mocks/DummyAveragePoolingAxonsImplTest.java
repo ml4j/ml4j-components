@@ -9,6 +9,7 @@ import org.ml4j.nn.axons.base.Axons3DTestBase;
 import org.ml4j.nn.components.mocks.MockTestData;
 import org.ml4j.nn.neurons.Neurons3D;
 import org.ml4j.nn.neurons.NeuronsActivation;
+import org.mockito.Mockito;
 
 public class DummyAveragePoolingAxonsImplTest extends Axons3DTestBase<AveragePoolingAxons> {
 
@@ -19,6 +20,16 @@ public class DummyAveragePoolingAxonsImplTest extends Axons3DTestBase<AveragePoo
 	public void setUp() {
 		matrixFactory = new JBlasRowMajorMatrixFactory();
 		super.setUp();
+		Mockito.when(leftNeurons.getNeuronCountExcludingBias()).thenReturn(400 * 2);
+		Mockito.when(leftNeurons.getDepth()).thenReturn(2);
+		Mockito.when(leftNeurons.getWidth()).thenReturn(20);
+		Mockito.when(leftNeurons.getHeight()).thenReturn(20);
+		Mockito.when(rightNeurons.getNeuronCountExcludingBias()).thenReturn(100 * 2);
+		Mockito.when(rightNeurons.getDepth()).thenReturn(2);
+		Mockito.when(rightNeurons.getWidth()).thenReturn(10);
+		Mockito.when(rightNeurons.getHeight()).thenReturn(10);
+		Mockito.when(mockAxonsContext.getMatrixFactory()).thenReturn(matrixFactory);
+		this.mockLeftToRightInputActivation = createNeuronsActivation(400 * 2, 32);
 	}
 
 	@Override
@@ -43,7 +54,7 @@ public class DummyAveragePoolingAxonsImplTest extends Axons3DTestBase<AveragePoo
 
 	@Override
 	protected int getExpectedReformattedInputRows() {
-		return 784 * 3;
+		return 400 * 2;
 	}
 
 }

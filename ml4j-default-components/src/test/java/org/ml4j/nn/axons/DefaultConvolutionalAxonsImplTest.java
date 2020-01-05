@@ -27,6 +27,16 @@ public class DefaultConvolutionalAxonsImplTest extends Axons3DTestBase<Convoluti
 	@Override
 	public void setUp() {
 		super.setUp();
+		Mockito.when(leftNeurons.getNeuronCountExcludingBias()).thenReturn(784 * 3);
+		Mockito.when(leftNeurons.getDepth()).thenReturn(3);
+		Mockito.when(leftNeurons.getWidth()).thenReturn(28);
+		Mockito.when(leftNeurons.getHeight()).thenReturn(28);
+		Mockito.when(rightNeurons.getNeuronCountExcludingBias()).thenReturn(400 * 2);
+		Mockito.when(rightNeurons.getDepth()).thenReturn(2);
+		Mockito.when(rightNeurons.getWidth()).thenReturn(20);
+		Mockito.when(rightNeurons.getHeight()).thenReturn(20);
+		Mockito.when(mockAxonsContext.getMatrixFactory()).thenReturn(matrixFactory);
+		this.mockLeftToRightInputActivation = createNeuronsActivation(784 * 3, 32);
 	}
 
 	@Override

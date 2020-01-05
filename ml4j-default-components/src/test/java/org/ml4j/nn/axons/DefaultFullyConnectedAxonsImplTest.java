@@ -19,7 +19,7 @@ public class DefaultFullyConnectedAxonsImplTest extends AxonsTestBase<FullyConne
 
 	@Override
 	protected FullyConnectedAxons createAxonsUnderTest(Neurons leftNeurons, Neurons rightNeurons) {
-		AxonWeights axonWeights = new AxonWeightsImpl(leftNeurons.getNeuronCountExcludingBias(), rightNeurons.getNeuronCountExcludingBias(), matrixFactory.createMatrix(rightNeurons.getNeuronCountExcludingBias(), 
+		AxonWeights axonWeights = new FullyConnectedAxonWeightsImpl(leftNeurons.getNeuronCountExcludingBias(), rightNeurons.getNeuronCountExcludingBias(), matrixFactory.createMatrix(rightNeurons.getNeuronCountExcludingBias(), 
 				leftNeurons.getNeuronCountExcludingBias()), matrixFactory.createMatrix(rightNeurons.getNeuronCountExcludingBias(),1 
 						), null);
 		return new DefaultFullyConnectedAxonsImpl(leftNeurons, rightNeurons, axonWeights);

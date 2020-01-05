@@ -5,22 +5,22 @@ import org.ml4j.Matrix;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class AxonWeightsImpl implements AxonWeights {
+public abstract class AxonWeightsBase implements AxonWeights {
 
 	/**
 	 * Default serialization id.
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(AxonWeightsImpl.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(AxonWeightsBase.class);
 
-	private int inputNeuronCount;
-	private int outputNeuronCount;
-	private EditableMatrix leftToRightBiases;
-	private EditableMatrix rightToLeftBiases;
-	private EditableMatrix connectionWeights;
+	protected int inputNeuronCount;
+	protected int outputNeuronCount;
+	protected EditableMatrix leftToRightBiases;
+	protected EditableMatrix rightToLeftBiases;
+	protected EditableMatrix connectionWeights;
 
-	public AxonWeightsImpl(int inputNeuronCount, int outputNeuronCount, Matrix connectionWeights,
+	public AxonWeightsBase(int inputNeuronCount, int outputNeuronCount, Matrix connectionWeights,
 			Matrix leftToRightBiases, Matrix rightToLeftBiases) {
 		super();
 		this.inputNeuronCount = inputNeuronCount;
@@ -52,32 +52,6 @@ public class AxonWeightsImpl implements AxonWeights {
 				rightToLeftBiases.subi(axonWeightsAdjustment.getRightToLeftBiases().get());
 			}
 		}
-	}
-
-	@Override
-	public Matrix applyToRightToLeftInput(Matrix input) {
-
-		EditableMatrix output = connectionWeights.transpose().mmul(input).asEditableMatrix();
-		if (rightToLeftBiases != null) {
-			output.addiColumnVector(rightToLeftBiases);
-		}
-		return output;
-	}
-
-	@Override
-	public Matrix applyToLeftToRightInput(Matrix input) {
-		EditableMatrix output = connectionWeights.mmul(input).asEditableMatrix();
-		if (leftToRightBiases != null) {
-			output.addiColumnVector(leftToRightBiases);
-		}
-		return output;
-	}
-
-	@Override
-	public AxonWeights dup() {
-		return new AxonWeightsImpl(inputNeuronCount, outputNeuronCount, connectionWeights.dup(),
-				leftToRightBiases == null ? null : leftToRightBiases.dup(),
-				rightToLeftBiases == null ? null : rightToLeftBiases.dup());
 	}
 
 	@Override
