@@ -1,14 +1,19 @@
 package org.ml4j.nn.factories;
 
+import java.util.Optional;
+
 import org.ml4j.Matrix;
 import org.ml4j.MatrixFactory;
 import org.ml4j.nn.axons.AveragePoolingAxons;
+import org.ml4j.nn.axons.AxonWeightsInitialiser;
 import org.ml4j.nn.axons.Axons3DConfig;
 import org.ml4j.nn.axons.ConvolutionalAxons;
 import org.ml4j.nn.axons.DefaultAveragePoolingAxonsImpl;
 import org.ml4j.nn.axons.DefaultConvolutionalAxonsImpl;
+import org.ml4j.nn.axons.DefaultFullyConnectedAxonWeightsInitialiser;
 import org.ml4j.nn.axons.DefaultFullyConnectedAxonsImpl;
 import org.ml4j.nn.axons.DefaultMaxPoolingAxonsImpl;
+import org.ml4j.nn.axons.DefaultScaleAndShiftAxonWeightsInitialiser;
 import org.ml4j.nn.axons.DefaultScaleAndShiftAxonsImpl;
 import org.ml4j.nn.axons.FullyConnectedAxonWeightsImpl;
 import org.ml4j.nn.axons.FullyConnectedAxons;
@@ -35,21 +40,35 @@ public class DefaultAxonsFactoryImpl implements AxonsFactory {
 	@Override
 	public FullyConnectedAxons createFullyConnectedAxons(Neurons leftNeurons, Neurons rightNeurons,
 			Matrix connectionWeights, Matrix biases) {
-		return new DefaultFullyConnectedAxonsImpl(leftNeurons, rightNeurons, new FullyConnectedAxonWeightsImpl(leftNeurons.getNeuronCountExcludingBias(), 
-				rightNeurons.getNeuronCountExcludingBias(), connectionWeights, biases, null));
+		return createFullyConnectedAxons(leftNeurons, rightNeurons, connectionWeights, biases, null);
 	}
 
 	@Override
 	public FullyConnectedAxons createFullyConnectedAxons(Neurons leftNeurons, Neurons rightNeurons,
 			Matrix connectionWeights, Matrix leftToRightBiases, Matrix rightToLeftBiases) {
-		return new DefaultFullyConnectedAxonsImpl(leftNeurons, rightNeurons,  new FullyConnectedAxonWeightsImpl(leftNeurons.getNeuronCountExcludingBias(), 
-				rightNeurons.getNeuronCountExcludingBias(), connectionWeights, leftToRightBiases, rightToLeftBiases));
+
+		AxonWeightsInitialiser axonWeightsInitialiser = new DefaultFullyConnectedAxonWeightsInitialiser(leftNeurons,
+				rightNeurons);
+
+		Matrix initialConnectionWeights = connectionWeights == null
+				? axonWeightsInitialiser.getInitialConnectionWeights(matrixFactory)
+				: connectionWeights;
+		Optional<Matrix> initialLeftToRightBiases = leftToRightBiases == null
+				? axonWeightsInitialiser.getInitialLeftToRightBiases(matrixFactory)
+				: Optional.of(leftToRightBiases);
+		Optional<Matrix> initialRightToLeftBiases = rightToLeftBiases == null
+				? axonWeightsInitialiser.getInitialRightToLeftBiases(matrixFactory)
+				: Optional.of(rightToLeftBiases);
+
+		return new DefaultFullyConnectedAxonsImpl(leftNeurons, rightNeurons,
+				new FullyConnectedAxonWeightsImpl(leftNeurons.getNeuronCountExcludingBias(),
+						rightNeurons.getNeuronCountExcludingBias(), initialConnectionWeights,
+						initialLeftToRightBiases.isPresent() ? initialLeftToRightBiases.get() : null,
+						initialRightToLeftBiases.isPresent() ? initialRightToLeftBiases.get() : null));
 	}
 
 	@Override
 	public AveragePoolingAxons createAveragePoolingAxons(Neurons3D leftNeurons, Neurons3D rightNeurons, Axons3DConfig config) {
-		//return new AveragePoolingAxonsAlternateImpl(matrixFactory, leftNeurons, rightNeurons,
-		//		config);
 		return new DefaultAveragePoolingAxonsImpl(matrixFactory, leftNeurons, rightNeurons, config);
 	}
 
@@ -67,11 +86,18 @@ public class DefaultAxonsFactoryImpl implements AxonsFactory {
 	@Override
 	public <N extends Neurons> ScaleAndShiftAxons<N> createScaleAndShiftAxons(N leftNeurons, N rightNeurons,
 			Matrix gamma, Matrix beta) {
-		Matrix initialGamma = gamma != null ? gamma
-				: matrixFactory.createOnes(rightNeurons.getNeuronCountExcludingBias(), 1);
-		Matrix initialBeta = beta != null ? beta
-				: matrixFactory.createOnes(rightNeurons.getNeuronCountExcludingBias(), 1).asEditableMatrix().muli(0.01f);
-		ScaleAndShiftAxonWeightsImpl weights = new ScaleAndShiftAxonWeightsImpl(leftNeurons.getNeuronCountExcludingBias(), rightNeurons.getNeuronCountExcludingBias(),initialGamma, initialBeta, null);
+
+		AxonWeightsInitialiser axonWeightsInitialiser = new DefaultScaleAndShiftAxonWeightsInitialiser(leftNeurons);
+		
+		Matrix initialGamma = gamma == null
+				? axonWeightsInitialiser.getInitialConnectionWeights(matrixFactory)
+				: gamma;
+		Optional<Matrix> initialBeta = beta == null
+				? axonWeightsInitialiser.getInitialLeftToRightBiases(matrixFactory)
+				: Optional.of(beta);
+		
+		ScaleAndShiftAxonWeightsImpl weights = new ScaleAndShiftAxonWeightsImpl(leftNeurons.getNeuronCountExcludingBias(), 
+				rightNeurons.getNeuronCountExcludingBias(),initialGamma, initialBeta.isPresent() ? initialBeta.get() : null, null);
 		return new DefaultScaleAndShiftAxonsImpl<>(leftNeurons, rightNeurons, weights);
 	}
 

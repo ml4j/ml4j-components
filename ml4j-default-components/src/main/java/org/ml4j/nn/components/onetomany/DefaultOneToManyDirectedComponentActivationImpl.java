@@ -14,6 +14,7 @@
 package org.ml4j.nn.components.onetomany;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.ml4j.MatrixFactory;
 import org.ml4j.nn.components.DirectedComponentGradient;
@@ -56,6 +57,7 @@ public class DefaultOneToManyDirectedComponentActivationImpl extends OneToManyDi
 		LOGGER.debug("Back propagating multiple gradient neurons activations into a single combined neurons activation");
 		List<NeuronsActivation> gradients = gradient.getOutput();
 		boolean allImage = gradients.stream().allMatch(g -> g instanceof ImageNeuronsActivation);
+		
 		NeuronsActivation totalActivation = null;
 		if (allImage) {
 			totalActivation = new NeuronsActivationImpl(matrixFactory.createMatrix(gradients.get(0).getRows(), 

@@ -33,6 +33,11 @@ public class DefaultScaleAndShiftAxonsImpl<N extends Neurons> extends WeightedAx
 	public Matrix getShiftColumnVector() {
 		return axonWeights.getLeftToRightBiases();
 	}
+
+	@Override
+	protected boolean isLeftInputDropoutSupported() {
+		return false;
+	}
 	
 	
 }

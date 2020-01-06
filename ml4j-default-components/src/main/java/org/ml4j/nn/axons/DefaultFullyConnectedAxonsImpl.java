@@ -17,4 +17,9 @@ public class DefaultFullyConnectedAxonsImpl extends WeightedAxonsBase<Neurons, N
 	public FullyConnectedAxons dup() {
 		return new DefaultFullyConnectedAxonsImpl(leftNeurons, rightNeurons, axonWeights.dup());
 	}
+
+	@Override
+	protected boolean isLeftInputDropoutSupported() {
+		return true;
+	}
 }

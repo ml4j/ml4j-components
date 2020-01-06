@@ -130,13 +130,12 @@ public class DefaultConvolutionalAxonsImpl implements ConvolutionalAxons {
 		NeuronsActivation reformatted = reformatLeftToRightInput(axonsContext.getMatrixFactory(),
 				leftNeuronsActivation);
 
-		// TODO
-		AxonsActivation nestedActivation = fullyConnectedAxons.pushLeftToRight(reformatted, null, axonsContext);
+		AxonsActivation nestedActivation = fullyConnectedAxons.pushLeftToRight(reformatted, previousRightToLeftActivation, axonsContext);
 
 		Matrix output = reformatLeftToRightOutput(axonsContext.getMatrixFactory(),
 				nestedActivation.getPostDropoutOutput(), leftNeuronsActivation.getExampleCount());
 
-		return new AxonsActivationImpl(this, null, () -> reformatted, new ImageNeuronsActivationImpl(output,
+		return new AxonsActivationImpl(this, nestedActivation.getDropoutMask(), () -> reformatted, new ImageNeuronsActivationImpl(output,
 				getRightNeurons(), NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET, false), leftNeurons,
 				rightNeurons);
 	}
@@ -148,10 +147,8 @@ public class DefaultConvolutionalAxonsImpl implements ConvolutionalAxons {
 		NeuronsActivation reformattedInput = reformatRightToLeftInput(axonsContext.getMatrixFactory(),
 				rightNeuronsActivation);
 
-		// TODO
-		AxonsActivation previousNestedActivation = null;
 		AxonsActivation axonsActivation = fullyConnectedAxons.pushRightToLeft(reformattedInput,
-				previousNestedActivation, axonsContext);
+				previousLeftToRightActivation, axonsContext);
 
 		NeuronsActivation reformattedOutput = reformatRightToLeftOutput(axonsContext.getMatrixFactory(),
 				axonsActivation.getPostDropoutOutput().getActivations(axonsContext.getMatrixFactory()),
@@ -179,7 +176,7 @@ public class DefaultConvolutionalAxonsImpl implements ConvolutionalAxons {
 		if (isEligableOneByOne(filterWidth, filterHeight)) {
 			EditableMatrix out = output.dup().asEditableMatrix();
 			out.reshape(leftNeurons.getNeuronCountExcludingBias(), exampleCount);
-			return new NeuronsActivationImpl(out, NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET);
+			return new ImageNeuronsActivationImpl(out, leftNeurons, NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET, false);
 		} else {
 
 			float[] data = new float[getLeftNeurons().getDepth() * getLeftNeurons().getWidth()

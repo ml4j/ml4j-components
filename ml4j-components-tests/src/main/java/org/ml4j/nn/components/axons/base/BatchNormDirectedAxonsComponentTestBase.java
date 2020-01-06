@@ -153,15 +153,17 @@ public abstract class BatchNormDirectedAxonsComponentTestBase extends TestBase {
 		BatchNormDirectedAxonsComponent<?, ?> directedAxonsComponent = createBatchNormDirectedAxonsComponent(leftNeurons, rightNeurons);
 		
 		Mockito.when(mockDirectedComponentsContext.getMatrixFactory()).thenReturn(matrixFactory);
+		
+		AxonsContext mockAxonsContext2 = Mockito.mock(AxonsContext.class);
+
+		Mockito.when(mockDirectedComponentsContext.getContext(Mockito.same(directedAxonsComponent), Mockito.any())).thenReturn(mockAxonsContext2);
+		
 
 		AxonsContext axonsContext = directedAxonsComponent.getContext(mockDirectedComponentsContext, 0);
 		Assert.assertNotNull(axonsContext);
 		Assert.assertNotSame(mockAxonsContext,axonsContext);
+		Assert.assertSame(mockAxonsContext2,axonsContext);
 
-		Assert.assertEquals(0,  axonsContext.getRegularisationLambda(), 0.0000000001);
-		Assert.assertEquals(1,  axonsContext.getLeftHandInputDropoutKeepProbability(), 0.0000000001);
-		Assert.assertNotNull(axonsContext.getMatrixFactory());
-		Assert.assertSame(matrixFactory, axonsContext.getMatrixFactory());
 
 	}
 

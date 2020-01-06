@@ -19,15 +19,21 @@ public abstract class AxonWeightsBase implements AxonWeights {
 	protected EditableMatrix leftToRightBiases;
 	protected EditableMatrix rightToLeftBiases;
 	protected EditableMatrix connectionWeights;
+	protected AxonWeightsType type;
 
 	public AxonWeightsBase(int inputNeuronCount, int outputNeuronCount, Matrix connectionWeights,
-			Matrix leftToRightBiases, Matrix rightToLeftBiases) {
+			Matrix leftToRightBiases, Matrix rightToLeftBiases, AxonWeightsType type) {
 		super();
 		this.inputNeuronCount = inputNeuronCount;
 		this.outputNeuronCount = outputNeuronCount;
 		this.leftToRightBiases = leftToRightBiases == null ? null : leftToRightBiases.asEditableMatrix();
 		this.rightToLeftBiases = rightToLeftBiases == null ? null : rightToLeftBiases.asEditableMatrix();
 		this.connectionWeights = connectionWeights.asEditableMatrix();
+		this.type = type;
+	}
+
+	public AxonWeightsType getType() {
+		return type;
 	}
 
 	@Override
