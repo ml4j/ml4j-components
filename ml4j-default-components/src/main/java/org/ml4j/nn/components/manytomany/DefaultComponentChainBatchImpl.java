@@ -29,6 +29,11 @@ import org.slf4j.LoggerFactory;
 
 import com.codepoetics.protonpack.StreamUtils;
 
+/**
+ * Default implementation of a batch DefaultDirectedComponentChain instances that can be activated in parallel.
+ * 
+ * @author Michael Lavelle
+ */
 public class DefaultComponentChainBatchImpl extends DefaultComponentChainBatchBase
 		implements DefaultDirectedComponentChainBatch {
 

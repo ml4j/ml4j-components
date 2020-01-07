@@ -22,7 +22,7 @@ import org.ml4j.nn.neurons.NeuronsActivation;
 import org.ml4j.nn.neurons.NeuronsActivationContext;
 
 /**
- * Default implementation of DifferentiableActivationFunctionComponent
+ * Default implementation of DifferentiableActivationFunctionComponent - a component adapter for a DifferentiableActivationFunction 
  * 
  * @author Michael Lavelle
  *

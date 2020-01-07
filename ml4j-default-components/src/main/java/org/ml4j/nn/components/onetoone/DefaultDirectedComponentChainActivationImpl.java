@@ -32,7 +32,7 @@ import org.ml4j.nn.neurons.NeuronsActivation;
 /**
  * Default implementation of DefaultDirectedComponentChainActivation,  provides logic to back propagate gradient through the activation.
  * 
- * Encapsulates the mock activations from a forward propagation through a DefaultDirectedComponentChain.
+ * Encapsulates the activations from a forward propagation through a DefaultDirectedComponentChain.
  * 
  * @author Michael Lavelle
  */

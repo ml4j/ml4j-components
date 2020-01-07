@@ -27,6 +27,13 @@ import org.ml4j.nn.neurons.NeuronsActivation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Default implementation for an activation from a DefaultBatchNormDirectedAxonsComponent.
+ *   
+ * @author Michael Lavelle
+ * 
+ * @param <A> The type of Axons within the batch norm DirectedAxonsComponent from which this activation originated
+ */
 public class DefaultBatchNormDirectedAxonsComponentActivationImpl<A extends Axons<?, ?, ?>> extends DirectedAxonsComponentActivationBase<A> implements DirectedAxonsComponentActivation {
 	
 	@SuppressWarnings("unused")

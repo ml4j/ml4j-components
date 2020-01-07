@@ -80,7 +80,7 @@ public class DummyConvolutionalAxonsImpl implements ConvolutionalAxons {
 
 	@Override
 	public boolean isTrainable(AxonsContext axonsContext) {
-		return true;
+		return false;
 	}
 
 	@Override

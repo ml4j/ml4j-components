@@ -32,6 +32,15 @@ import org.ml4j.nn.neurons.NeuronsActivation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Default implementation of DirectedAxonsComponentActivation.
+ * 
+ * Encapsulates the activations from a forward propagation through a DirectedAxonsComponent
+ * 
+ * @author Michael Lavelle
+ * 
+ * @param <A> The type of Axons within the DirectedAxonsComponent from which this activation originated
+ */
 public class DefaultDirectedAxonsComponentActivationImpl<A extends Axons<?, ?, ?>> extends DirectedAxonsComponentActivationBase<A> implements DirectedAxonsComponentActivation {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(DefaultDirectedAxonsComponentActivationImpl.class);

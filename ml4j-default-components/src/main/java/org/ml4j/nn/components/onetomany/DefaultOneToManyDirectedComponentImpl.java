@@ -29,7 +29,6 @@ import org.slf4j.LoggerFactory;
  * 
  * @author Michael Lavelle
  *
- * @param <A> The type of activation produced by this component on forward-propagation.
  */
 public class DefaultOneToManyDirectedComponentImpl extends OneToManyDirectedComponentBase<DefaultOneToManyDirectedComponentActivationImpl> implements OneToManyDirectedComponent<DefaultOneToManyDirectedComponentActivationImpl> {
 

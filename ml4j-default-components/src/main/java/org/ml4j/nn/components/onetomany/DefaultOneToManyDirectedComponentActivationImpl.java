@@ -14,7 +14,6 @@
 package org.ml4j.nn.components.onetomany;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.ml4j.MatrixFactory;
 import org.ml4j.nn.components.DirectedComponentGradient;

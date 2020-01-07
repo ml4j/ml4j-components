@@ -22,6 +22,15 @@ import org.ml4j.nn.neurons.NeuronsActivation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Default implementation of a DefaultChainableDirectedComponent adapter for an Axons instance.
+ * 
+ * @author Michael Lavelle
+ *
+ * @param <L> The type of Neurons on the LHS of this DirectedAxonsComponent.
+ * @param <R> The type of Neurons on the RHS of this DirectedAxonsComponent.
+ * @param <A> The specific type of Axons wrapped by this DirectedAxonsComponent.
+ */
 public class DefaultDirectedAxonsComponentImpl<L extends Neurons, R extends Neurons> extends DirectedAxonsComponentBase<L, R, Axons<? extends L, ? extends R, ?>> implements DirectedAxonsComponent<L, R, Axons<? extends L, ? extends R, ?>> {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(DefaultDirectedAxonsComponentImpl.class);
@@ -31,6 +40,9 @@ public class DefaultDirectedAxonsComponentImpl<L extends Neurons, R extends Neur
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	/**
+	 * @param axons The axons instance wrapped by this DirectedAxonsComponent.
+	 */
 	public DefaultDirectedAxonsComponentImpl(Axons<? extends L, ? extends R, ?> axons) {
 		super(axons);
 	}

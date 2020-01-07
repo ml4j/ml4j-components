@@ -30,6 +30,13 @@ import org.ml4j.nn.neurons.NeuronsActivationImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Default implementation of BatchNormDirectedAxonsComponent
+ * 
+ * @author Michael Lavelle
+ *
+ * @param <L> The type of Neurons on the left/right of this BatchNormDirectedAxonsComponent.
+ */
 public class DefaultBatchNormDirectedAxonsComponentImpl<L extends Neurons> extends DirectedAxonsComponentBase<L, L, Axons<L, L, ?>> 
 	implements BatchNormDirectedAxonsComponent<L, Axons<L, L, ?>> {
 

@@ -34,6 +34,16 @@ import org.ml4j.nn.neurons.NeuronsActivation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Default implementation of DefaultDirectedComponentBipoleGraph,  consisting of a parallel edges ( DefaultDirectedComponentChainBatch ), with
+ * the paths through those parallel edges all starting at the same point in the network and ending at the same point in the network.
+ * 
+ * The activations at the input of this graph are mapped to the DefaultDirectedComponentChainBatch activations via a OneToManyDirectedComponent,
+ * and the DefaultDirectedComponentChainBatch output activations are mapped to the output of this graph via a ManyToOneDirectedComponent, using
+ * a specified PathCombinationStrategy.
+ * 
+ * @author Michael Lavelle
+ */
 public class DefaultDirectedComponentChainBipoleGraphImpl extends DefaultDirectedComponentChainBipoleGraphBase implements DefaultDirectedComponentBipoleGraph {
 
 	/**
@@ -48,6 +58,15 @@ public class DefaultDirectedComponentChainBipoleGraphImpl extends DefaultDirecte
 	private ManyToOneDirectedComponent<?> manyToOneDirectedComponent;
 	private PathCombinationStrategy pathCombinationStrategy;
 	
+	/**
+	 * 
+	 * @param directedComponentFactory A DirectedComponentFactory instance, used to construct the nested OneToManyDirectedComponent and ManyToOneDirectedComponent.
+	 * @param inputNeurons The input neurons of this graph.
+	 * @param outputNeurons The output neurons of this graph.
+	 * @param parallelComponentChainsBatch The batch of parallel edges within this graph, connecting
+	 * @param pathCombinationStrategy The strategy specifying how the outputs of the parallel edges should be combined to
+	 * produce the output activations.
+	 */
 	public DefaultDirectedComponentChainBipoleGraphImpl(DirectedComponentFactory directedComponentFactory, Neurons inputNeurons, Neurons outputNeurons, 
 			DefaultDirectedComponentChainBatch parallelComponentChainsBatch, PathCombinationStrategy pathCombinationStrategy) {
 		super(inputNeurons, outputNeurons, parallelComponentChainsBatch);

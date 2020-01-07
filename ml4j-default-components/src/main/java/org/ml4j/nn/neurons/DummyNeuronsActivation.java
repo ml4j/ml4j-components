@@ -132,7 +132,7 @@ public class DummyNeuronsActivation implements NeuronsActivation {
 	}
 
 	@Override
-	public void setImmutable(boolean arg0) {
+	public void setImmutable(boolean immutable) {
 		throw new UnsupportedOperationException();
 	}
 }

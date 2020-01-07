@@ -46,7 +46,7 @@ import org.ml4j.nn.neurons.Neurons;
 import org.ml4j.nn.neurons.Neurons3D;
 
 /**
- * Mock implementation of DirectedComponentFactory
+ * Default implementation of DirectedComponentFactory
  * 
  * @author Michael Lavelle
  */
