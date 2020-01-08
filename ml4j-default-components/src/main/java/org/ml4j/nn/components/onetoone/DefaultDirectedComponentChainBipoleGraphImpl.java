@@ -77,7 +77,7 @@ public class DefaultDirectedComponentChainBipoleGraphImpl extends DefaultDirecte
 
 	@Override
 	public DefaultDirectedComponentChainBatch getEdges() {
-		throw new UnsupportedOperationException();
+		return parallelComponentChainsBatch;
 	}
 	
 	@Override
