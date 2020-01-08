@@ -77,6 +77,7 @@ public class ManyToOneFilterConcatDirectedComponentActivation extends DefaultMan
 				//subActivation = outerGradientOutputActivations.filterActivationsByFeatureIndexRange(boundaries[i - 1],
 				//		boundary);
 			}
+			subActivation.setImmutable(true);
 			outputs.add(subActivation);
 		}
 

@@ -95,7 +95,10 @@ public class PrototypeBatchNormDirectedAxonsComponentActivationImpl<N extends Ne
 			}
 		}
 		
-		Matrix xhat = leftToRightAxonsActivation.getPostDropoutInput().get().getActivations(axonsContext.getMatrixFactory());
+		
+		NeuronsActivation leftToRightPostDropoutInput = leftToRightAxonsActivation.getPostDropoutInput().get();
+		
+		Matrix xhat = leftToRightPostDropoutInput.getActivations(axonsContext.getMatrixFactory());
 		Matrix dout = outerGradient.getOutput().getActivations(axonsContext.getMatrixFactory());
 
 		/**
@@ -189,6 +192,9 @@ public class PrototypeBatchNormDirectedAxonsComponentActivationImpl<N extends Ne
 					NeuronsActivation dxn = new NeuronsActivationImpl(dx, outerGradient.getOutput().getFeatureOrientation());
 					
 					//outerGradient.getOutput().close();
+					
+					leftToRightPostDropoutInput.close();
+					xhat.close();
 					
 					return new DirectedComponentGradientImpl<>(outerGradient.getTotalTrainableAxonsGradients(),
 							() -> new AxonsGradientImpl(directedAxonsComponent.getAxons(), dgammaColumnVector, dbetaColumnVector), dxn);

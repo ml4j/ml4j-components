@@ -72,6 +72,11 @@ public abstract class WeightedAxonsBase<L extends Neurons, R extends Neurons, A 
 			outputActivation = new NeuronsActivationImpl(output, leftNeuronsActivation.getFeatureOrientation());
 		}
 
+		if (!axonsContext.isTrainingContext() && !leftNeuronsActivation.isImmutable()) {
+			leftNeuronsActivation.close();
+		} else {
+			leftNeuronsActivation.setImmutable(true);
+		}
 		
 		return new AxonsActivationImpl(this, axonsDropoutMask, () -> leftNeuronsActivation, outputActivation, leftNeurons,
 				rightNeurons);
@@ -90,6 +95,8 @@ public abstract class WeightedAxonsBase<L extends Neurons, R extends Neurons, A 
 			LOGGER.debug("Applying right to left output dropout mask");
 			output.asEditableMatrix().muli(previousLeftToRightActivation.getDropoutMask().getDropoutMask());
 		}
+		
+		rightNeuronsActivation.setImmutable(true);
 
 		return new AxonsActivationImpl(this, null, () -> rightNeuronsActivation,
 				new NeuronsActivationImpl(output, NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET),

@@ -71,6 +71,12 @@ public class DefaultDirectedComponentChainImpl extends DefaultDirectedComponentC
 			index++;
 		}
 		
+		for (DefaultChainableDirectedComponentActivation act : activations) {
+			if (!context.isTrainingContext() && act.getOutput() != inFlightActivation) {
+				act.getOutput().close();
+			}
+		}
+		
 		if (inFlightActivation.getFeatureCount() != getOutputNeurons().getNeuronCountExcludingBias()) {
 			throw new IllegalStateException();
 		}

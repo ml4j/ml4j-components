@@ -39,6 +39,7 @@ public class DefaultManyToOneDirectedComponentActivationImpl extends ManyToOneDi
 			DirectedComponentGradient<NeuronsActivation> gradient) {
 		LOGGER.debug("Back propagating single neurons activations into multiple back propagated neurons activations");
 		List<NeuronsActivation> activations = new ArrayList<>();
+		gradient.getOutput().setImmutable(true);
 		for (int i = 0; i < size; i++) {
 			activations.add(gradient.getOutput());
 		}

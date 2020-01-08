@@ -67,9 +67,10 @@ public class DefaultOneToManyDirectedComponentActivationImpl extends OneToManyDi
 		}
 		for (NeuronsActivation activation : gradients) {
 			totalActivation.addInline(matrixFactory, activation);
+			activation.close();
 		}
 		if (allImage) {
-			totalActivation = new ImageNeuronsActivationImpl(totalActivation.getActivations(matrixFactory), (Neurons3D)gradients.get(0).getNeurons(), gradients.get(0).getFeatureOrientation(), false);
+			totalActivation = totalActivation.asImageNeuronsActivation((Neurons3D)gradients.get(0).getNeurons());
 		} 
 		return new DirectedComponentGradientImpl<>(gradient.getTotalTrainableAxonsGradients(), totalActivation);
 	}

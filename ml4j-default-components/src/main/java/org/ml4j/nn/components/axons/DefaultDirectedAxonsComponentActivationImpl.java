@@ -82,13 +82,16 @@ public class DefaultDirectedAxonsComponentActivationImpl<A extends Axons<?, ?, ?
 			TrainableAxons<?, ?, ?> trainableAxons = (TrainableAxons<?, ?, ?>) directedAxonsComponent.getAxons();
 
 			LOGGER.debug("Calculating Axons Gradients");
+			NeuronsActivation rightToLeftPostDropoutInput = rightToLeftAxonsGradientActivatoin.getPostDropoutInput().get();
 			
-			Matrix first = rightToLeftAxonsGradientActivatoin.getPostDropoutInput().get().getActivations(axonsContext.getMatrixFactory());
+			Matrix first = rightToLeftPostDropoutInput.getActivations(axonsContext.getMatrixFactory());
 
 			EditableMatrix totalTrainableAxonsGradientMatrixNonBias = null;
 			Matrix totalTrainableAxonsGradientMatrixBias = null;
 			
-			try (InterrimMatrix second1 = leftToRightAxonsActivation.getPostDropoutInput().get().getActivations(axonsContext.getMatrixFactory()).asInterrimMatrix()) {
+			NeuronsActivation leftToRightPostDropoutInputActivation = leftToRightAxonsActivation.getPostDropoutInput().get();
+			
+			try (InterrimMatrix second1 = leftToRightPostDropoutInputActivation.getActivations(axonsContext.getMatrixFactory()).asInterrimMatrix()) {
 			try (InterrimMatrix second = second1.transpose().asInterrimMatrix()) {
 				
 				totalTrainableAxonsGradientMatrixNonBias = first.mmul(second).asEditableMatrix();
@@ -112,6 +115,10 @@ public class DefaultDirectedAxonsComponentActivationImpl<A extends Axons<?, ?, ?
 						
 				}
 			}
+			
+			rightToLeftPostDropoutInput.close();
+			leftToRightPostDropoutInputActivation.close();
+			
 			return Optional.of(new AxonsGradientImpl((TrainableAxons<?, ?, ?>) directedAxonsComponent.getAxons(),
 					totalTrainableAxonsGradientMatrixNonBias, totalTrainableAxonsGradientMatrixBias));
 			

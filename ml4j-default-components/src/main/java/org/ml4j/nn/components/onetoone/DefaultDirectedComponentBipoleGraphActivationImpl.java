@@ -100,7 +100,10 @@ public class DefaultDirectedComponentBipoleGraphActivationImpl extends DefaultDi
 		} else {
 			DirectedComponentGradient<List<NeuronsActivation>> manyToOneActivation = manyToOneDirectedComponentActivation.backPropagate(outerGradient);
 			DirectedComponentGradient<List<NeuronsActivation>> edgesGradients = parallelChainsActivation.backPropagate(manyToOneActivation);
-			return oneToManyDirectedComponentActivation.backPropagate(edgesGradients);
+			DirectedComponentGradient<NeuronsActivation> result =  oneToManyDirectedComponentActivation.backPropagate(edgesGradients);
+			edgesGradients.getOutput().forEach(a -> a.close());
+			manyToOneActivation.getOutput().forEach(a -> a.close());
+			return result;
 		}
 	}
 

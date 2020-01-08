@@ -73,6 +73,13 @@ public class DefaultDirectedComponentChainActivationImpl extends DefaultDirected
 		      finalTotalTrainableAxonsGradients = synapsesGradient.getTotalTrainableAxonsGradients();
 		      finalGrad = synapsesGradient;
 		    }
+		    for (DirectedComponentGradient<NeuronsActivation> grad : componentGradients) {
+		    	if (grad != finalGrad && !grad.getOutput().isImmutable()) {
+		    		grad.getOutput().close();
+		    	}
+		    }
+		    
+		    
 		    return new DirectedComponentGradientImpl<>(finalTotalTrainableAxonsGradients, finalGrad.getOutput());
 		  }
 

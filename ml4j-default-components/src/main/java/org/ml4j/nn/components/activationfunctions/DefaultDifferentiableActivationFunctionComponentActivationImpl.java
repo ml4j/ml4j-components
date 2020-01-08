@@ -57,10 +57,18 @@ public class DefaultDifferentiableActivationFunctionComponentActivationImpl exte
 		LOGGER.debug("Back propagating gradient through DifferentiableActivationFunctionComponentActivation");
 		NeuronsActivation backPropagatedGradient = originatingComponent.getActivationFunction()
 				.activationGradient(activationFunctionActivation, activationContext);
-		return new DirectedComponentGradientImpl<NeuronsActivation>(gradient.getTotalTrainableAxonsGradients(), 
+		DirectedComponentGradient<NeuronsActivation> result = new DirectedComponentGradientImpl<NeuronsActivation>(gradient.getTotalTrainableAxonsGradients(), 
 				new NeuronsActivationImpl(backPropagatedGradient.getActivations(activationContext.getMatrixFactory()).asEditableMatrix()
 				.mul(gradient.getOutput().getActivations(activationContext.getMatrixFactory())), 
 				NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET));
+		
+		activationFunctionActivation.getInput().close();
+		
+		if (!gradient.getOutput().isImmutable()) {
+			gradient.getOutput().close();
+		}
+		
+		return result;
 	}
 
 	@Override

@@ -26,6 +26,7 @@ import org.ml4j.nn.neurons.ImageNeuronsActivationImpl;
 import org.ml4j.nn.neurons.Neurons;
 import org.ml4j.nn.neurons.Neurons3D;
 import org.ml4j.nn.neurons.NeuronsActivation;
+import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
 import org.ml4j.nn.neurons.NeuronsActivationImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -97,24 +98,27 @@ public class DefaultBatchNormDirectedAxonsComponentImpl<L extends Neurons> exten
 			throw new IllegalArgumentException(neuronsActivation.getFeatureCount() + ":" + getInputNeurons().getNeuronCountExcludingBias());
 		}
 		*/
-		
+		boolean imageActivation = input instanceof ImageNeuronsActivation;
+		NeuronsActivationFeatureOrientation featureOrientation = input.getFeatureOrientation();
 		Matrix activations = input.getActivations(axonsContext.getMatrixFactory());
-		
+
 		Matrix meanColumnVector = getMeanColumnVector(activations, axonsContext.getMatrixFactory(), axonsContext.isTrainingContext());
 
 		Matrix varianceColumnVector = getVarianceColumnVector(activations, axonsContext.getMatrixFactory(),
 				meanColumnVector, axonsContext.isTrainingContext());
 		Matrix xhat = activations.asEditableMatrix().subiColumnVector(meanColumnVector).diviColumnVector(getStdDevColumnVector(varianceColumnVector));
+		input.close();
 
 		NeuronsActivation xhatN = null;
-		if (input instanceof ImageNeuronsActivation) {
-			xhatN = new ImageNeuronsActivationImpl(xhat, (Neurons3D)this.getAxons().getRightNeurons(), input.getFeatureOrientation(), false);
+		if (imageActivation) {
+			xhatN = new ImageNeuronsActivationImpl(xhat, (Neurons3D)this.getAxons().getRightNeurons(),featureOrientation , false);
 		} else {
-			xhatN = new NeuronsActivationImpl(xhat, input.getFeatureOrientation());
+			xhatN = new NeuronsActivationImpl(xhat, featureOrientation);
 		}
 		
 		AxonsActivation axonsActivation =
 				axons.pushLeftToRight(xhatN, null, axonsContext);
+		
 		// TODO
 		return new PrototypeBatchNormDirectedAxonsComponentActivationImpl(this, (ScaleAndShiftAxons) this.axons, axonsActivation, meanColumnVector, varianceColumnVector, axonsContext);
 	}

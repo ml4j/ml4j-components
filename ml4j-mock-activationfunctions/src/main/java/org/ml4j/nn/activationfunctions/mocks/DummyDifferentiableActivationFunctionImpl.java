@@ -24,7 +24,7 @@ public class DummyDifferentiableActivationFunctionImpl implements Differentiable
 
 	@Override
 	public DifferentiableActivationFunctionActivation activate(NeuronsActivation activation, NeuronsActivationContext context) {
-		NeuronsActivation output = activation.dup();
+		NeuronsActivation output = activation;
 		float[] values = output.getActivations(context.getMatrixFactory()).getRowByRowArray();
 		if (setOutputToZeros) output.applyValueModifier(v -> v == values[0] ? -1 : 0);		
 		return new DummyDifferentiableActivationFunctionActivationImpl(this, activation, output);

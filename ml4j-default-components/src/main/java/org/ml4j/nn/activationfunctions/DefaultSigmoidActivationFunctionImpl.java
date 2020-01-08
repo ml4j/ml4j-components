@@ -40,10 +40,13 @@ public class DefaultSigmoidActivationFunctionImpl implements DifferentiableActiv
 			NeuronsActivationContext context) {
 		LOGGER.debug("Activating through SigmoidActivationFunction:" + input.getFeatureCount() + ":"
 				+ +input.getExampleCount() + ":" + input.getFeatureOrientation());
+		
 
 		Matrix sigmoidOfInputActivationsMatrix = input.getActivations(context.getMatrixFactory()).sigmoid();
-		return new DefaultDifferentiableActivationFunctionActivationImpl(this, input,
-				new NeuronsActivationImpl(sigmoidOfInputActivationsMatrix, input.getFeatureOrientation()));
+		NeuronsActivation output = new NeuronsActivationImpl(sigmoidOfInputActivationsMatrix, input.getFeatureOrientation());
+		//output.setImmutable(true);
+		return new DefaultDifferentiableActivationFunctionActivationImpl(this, input, output
+				);
 	}
 
 	@Override

@@ -77,7 +77,7 @@ public class DefaultDirectedComponentChainBipoleGraphImpl extends DefaultDirecte
 
 	@Override
 	public DefaultDirectedComponentChainBatch getEdges() {
-		throw new UnsupportedOperationException();
+		return parallelComponentChainsBatch;
 	}
 	
 	@Override
@@ -103,7 +103,9 @@ public class DefaultDirectedComponentChainBipoleGraphImpl extends DefaultDirecte
 			if (manyToOneDirectedComponentActivation.getOutput().getFeatureCount() != getOutputNeurons().getNeuronCountExcludingBias()) {
 				throw new IllegalArgumentException("Many to one activation feature count of:" + manyToOneDirectedComponentActivation.getOutput().getFeatureCount() + " does not match output neuron count of:" + getOutputNeurons().getNeuronCountExcludingBias() );
 			}
-				
+			// TODO
+			oneToManyDirectedComponentActivation.getOutput().forEach(a -> a.close());
+			parallelChainsActivation.getActivations().forEach(a -> a.getOutput().close());
 			return new DefaultDirectedComponentBipoleGraphActivationImpl(this, oneToManyDirectedComponentActivation, parallelChainsActivation, manyToOneDirectedComponentActivation);
 			
 		}
