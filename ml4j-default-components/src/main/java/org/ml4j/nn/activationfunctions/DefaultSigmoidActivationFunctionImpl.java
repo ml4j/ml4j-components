@@ -44,7 +44,7 @@ public class DefaultSigmoidActivationFunctionImpl implements DifferentiableActiv
 
 		Matrix sigmoidOfInputActivationsMatrix = input.getActivations(context.getMatrixFactory()).sigmoid();
 		NeuronsActivation output = new NeuronsActivationImpl(sigmoidOfInputActivationsMatrix, input.getFeatureOrientation());
-		//output.setImmutable(true);
+		output.setImmutable(true);
 		return new DefaultDifferentiableActivationFunctionActivationImpl(this, input, output
 				);
 	}
@@ -63,10 +63,10 @@ public class DefaultSigmoidActivationFunctionImpl implements DifferentiableActiv
 					.asInterrimMatrix()) {
 
 				Matrix gradientAtActivationInput = sigmoidOfActivationInput.sub(sigmoidOfActivationInputSquared);
-
 				return new NeuronsActivationImpl(gradientAtActivationInput,
 						activationFunctionActivation.getInput().getFeatureOrientation());
 			}
+			
 
 		} else {
 

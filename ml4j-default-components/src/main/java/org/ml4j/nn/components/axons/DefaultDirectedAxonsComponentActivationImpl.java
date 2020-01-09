@@ -26,6 +26,7 @@ import org.ml4j.nn.axons.AxonsContext;
 import org.ml4j.nn.axons.AxonsGradient;
 import org.ml4j.nn.axons.AxonsGradientImpl;
 import org.ml4j.nn.axons.TrainableAxons;
+import org.ml4j.nn.components.DirectedComponentActivationLifecycle;
 import org.ml4j.nn.components.DirectedComponentGradientImpl;
 import org.ml4j.nn.components.axons.base.DirectedAxonsComponentActivationBase;
 import org.ml4j.nn.neurons.NeuronsActivation;
@@ -91,12 +92,15 @@ public class DefaultDirectedAxonsComponentActivationImpl<A extends Axons<?, ?, ?
 			
 			NeuronsActivation leftToRightPostDropoutInputActivation = leftToRightAxonsActivation.getPostDropoutInput().get();
 			
-			try (InterrimMatrix second1 = leftToRightPostDropoutInputActivation.getActivations(axonsContext.getMatrixFactory()).asInterrimMatrix()) {
-			try (InterrimMatrix second = second1.transpose().asInterrimMatrix()) {
-				
-				totalTrainableAxonsGradientMatrixNonBias = first.mmul(second).asEditableMatrix();
+			try (InterrimMatrix leftToRightPostDropoutInputActivationMatrix = leftToRightPostDropoutInputActivation
+					.getActivations(axonsContext.getMatrixFactory()).asInterrimMatrix()) {
+				try (InterrimMatrix second = leftToRightPostDropoutInputActivationMatrix.transpose()
+						.asInterrimMatrix()) {
+					totalTrainableAxonsGradientMatrixNonBias = first.mmul(second).asEditableMatrix();
+					leftToRightPostDropoutInputActivation.close();
+				}
 			}
-			}
+
 
 			if (directedAxonsComponent.getAxons().getLeftNeurons().hasBiasUnit()) {
 				totalTrainableAxonsGradientMatrixBias = first.rowSums();
@@ -117,13 +121,35 @@ public class DefaultDirectedAxonsComponentActivationImpl<A extends Axons<?, ?, ?
 			}
 			
 			rightToLeftPostDropoutInput.close();
-			leftToRightPostDropoutInputActivation.close();
-			
+					
 			return Optional.of(new AxonsGradientImpl((TrainableAxons<?, ?, ?>) directedAxonsComponent.getAxons(),
 					totalTrainableAxonsGradientMatrixNonBias, totalTrainableAxonsGradientMatrixBias));
 			
 		} else {
+			NeuronsActivation postDropoutInput = rightToLeftAxonsGradientActivatoin.getPostDropoutInput().get();
+			NeuronsActivation leftToRightPostDropoutInputActivation = leftToRightAxonsActivation.getPostDropoutInput().get();
+			if (postDropoutInput != null) {
+				postDropoutInput.close();
+			}
+			if (leftToRightPostDropoutInputActivation != null) {
+				postDropoutInput.close();
+			}
+			postDropoutInput.close();
 			return Optional.empty();
 		}
+	}
+	
+	private void close(NeuronsActivation activation) {
+		if (!activation.isImmutable()) {
+			activation.close();
+		}
+	}
+
+	@Override
+	public void close(DirectedComponentActivationLifecycle completedLifeCycleStage) {
+		if (completedLifeCycleStage == DirectedComponentActivationLifecycle.FORWARD_PROPAGATION) {
+			close(getOutput());
+			close(leftToRightAxonsActivation.getPostDropoutOutput());
+		}	
 	}
 }

@@ -65,11 +65,16 @@ public class DefaultMaxPoolingAxonsImpl implements MaxPoolingAxons {
 
 		int filterHeight = inputHeightWithPadding + (1 - outputHeight) * (config.getStrideHeight());
 
+		ImageNeuronsActivation act = leftNeuronsActivation.asImageNeuronsActivation(leftNeurons);
+		
 		NeuronsActivation reformatted = new NeuronsActivationImpl(
-				leftNeuronsActivation.asImageNeuronsActivation(leftNeurons).im2ColPool(matrixFactory, filterHeight,
+				act.im2ColPool(matrixFactory, filterHeight,
 						filterWidth, config.getStrideHeight(), config.getStrideWidth(), config.getPaddingHeight(),
 						config.getPaddingWidth()),
 				NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET);
+		if (!act.isImmutable()) {
+			act.close();
+		}
 
 		if (scaleOutputs) {
 			int outputDim = (int) (this.getRightNeurons().getNeuronCountIncludingBias()
@@ -86,21 +91,8 @@ public class DefaultMaxPoolingAxonsImpl implements MaxPoolingAxons {
 	}
 	
 	public NeuronsActivation reformatLeftToRightOutput(MatrixFactory matrixFactory, NeuronsActivation output, int exampleCount) {
-		if (output instanceof ImageNeuronsActivation) {
-			Matrix reformattedOutput = output.getActivations(matrixFactory);
-			reformattedOutput.asEditableMatrix().reshape(rightNeurons.getNeuronCountExcludingBias(), exampleCount);
-			output.close();
-			return new ImageNeuronsActivationImpl(reformattedOutput,
-					getRightNeurons(), NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET, false);
-			
-		} else {
-			Matrix reformattedOutput = output.getActivations(matrixFactory);
-			reformattedOutput.asEditableMatrix().reshape(rightNeurons.getNeuronCountExcludingBias(), exampleCount);
-			return output.asImageNeuronsActivation(getRightNeurons());
-			//return new ImageNeuronsActivationImpl(reformattedOutput,
-			//		getRightNeurons(), NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET, false);
-		}
-
+		output.reshape(rightNeurons.getNeuronCountExcludingBias(), exampleCount);
+		return output.asImageNeuronsActivation(getRightNeurons());
 	}
 
 	@Override
@@ -129,6 +121,7 @@ public class DefaultMaxPoolingAxonsImpl implements MaxPoolingAxons {
 			}
 		}
 
+
 		NeuronsActivation preFormattedOutput = new NeuronsActivationImpl(origOutput,
 				NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET);
 
@@ -138,17 +131,15 @@ public class DefaultMaxPoolingAxonsImpl implements MaxPoolingAxons {
 				exampleCount);
 		
 		//if (!axonsContext.isTrainingContext()) {
-			reformattedActivation.close();
 		//}
 		
 		if (!leftNeuronsActivation.isImmutable()) {
 			leftNeuronsActivation.close();
 		}
-		
-		
+		reformattedActivation.close();
 		
 		return new AxonsActivationImpl(
-				this, maxesDropoutMask, () -> reformattedActivation, output,
+				this, maxesDropoutMask, () -> null, output,
 				leftNeurons, rightNeurons);
 
 	}

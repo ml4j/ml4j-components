@@ -107,7 +107,9 @@ public class DefaultBatchNormDirectedAxonsComponentImpl<L extends Neurons> exten
 		Matrix varianceColumnVector = getVarianceColumnVector(activations, axonsContext.getMatrixFactory(),
 				meanColumnVector, axonsContext.isTrainingContext());
 		Matrix xhat = activations.asEditableMatrix().subiColumnVector(meanColumnVector).diviColumnVector(getStdDevColumnVector(varianceColumnVector));
+		if (!input.isImmutable()) {
 		input.close();
+		}
 
 		NeuronsActivation xhatN = null;
 		if (imageActivation) {

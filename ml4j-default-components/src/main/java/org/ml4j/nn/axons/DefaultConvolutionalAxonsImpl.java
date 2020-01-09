@@ -123,20 +123,8 @@ public class DefaultConvolutionalAxonsImpl implements ConvolutionalAxons {
 	}
 
 	public NeuronsActivation reformatLeftToRightOutput(MatrixFactory matrixFactory, NeuronsActivation output, int exampleCount) {
-		if (output instanceof ImageNeuronsActivation) {
-			Matrix reformattedOutput = output.getActivations(matrixFactory);
-			reformattedOutput.asEditableMatrix().reshape(rightNeurons.getNeuronCountExcludingBias(), exampleCount);
-			output.close();
-			return new ImageNeuronsActivationImpl(reformattedOutput,
-					getRightNeurons(), NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET, false);
-			
-		} else {
-			Matrix reformattedOutput = output.getActivations(matrixFactory);
-			reformattedOutput.asEditableMatrix().reshape(rightNeurons.getNeuronCountExcludingBias(), exampleCount);
-			return output.asImageNeuronsActivation(getRightNeurons());
-			//return new ImageNeuronsActivationImpl(reformattedOutput,
-			//		getRightNeurons(), NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET, false);
-		}
+		output.reshape(rightNeurons.getNeuronCountExcludingBias(), exampleCount);
+		return output.asImageNeuronsActivation(getRightNeurons());
 
 	}
 
@@ -157,12 +145,13 @@ public class DefaultConvolutionalAxonsImpl implements ConvolutionalAxons {
 
 		if (!axonsContext.isTrainingContext()) {
 			reformatted.close();
+		} else {
+			reformatted.setImmutable(true);
 		}
 		
 		if (!leftNeuronsActivation.isImmutable()) {
 			leftNeuronsActivation.close();
-		}
-	
+		}	
 		
 		return new AxonsActivationImpl(this, nestedActivation.getDropoutMask(), () -> reformatted, output, leftNeurons,
 				rightNeurons);
@@ -181,7 +170,7 @@ public class DefaultConvolutionalAxonsImpl implements ConvolutionalAxons {
 				previousLeftToRightActivation, axonsContext);
 
 		NeuronsActivation reformattedOutput = reformatRightToLeftOutput(axonsContext.getMatrixFactory(),
-				axonsActivation.getPostDropoutOutput().getActivations(axonsContext.getMatrixFactory()),
+				axonsActivation.getPostDropoutOutput(),
 				exampleCount);
 		
 		// TODO
@@ -192,7 +181,7 @@ public class DefaultConvolutionalAxonsImpl implements ConvolutionalAxons {
 				rightNeurons);
 	}
 
-	private NeuronsActivation reformatRightToLeftOutput(MatrixFactory matrixFactory, Matrix output, int exampleCount) {
+	private NeuronsActivation reformatRightToLeftOutput(MatrixFactory matrixFactory, NeuronsActivation output, int exampleCount) {
 
 		int inputWidth = leftNeurons.getWidth();
 		int inputHeight = leftNeurons.getHeight();
@@ -208,9 +197,11 @@ public class DefaultConvolutionalAxonsImpl implements ConvolutionalAxons {
 		int filterHeight = inputHeightWithPadding + (1 - outputHeight) * (config.getStrideHeight());
 
 		if (isEligableOneByOne(filterWidth, filterHeight)) {
-			EditableMatrix out = output.dup().asEditableMatrix();
-			out.reshape(leftNeurons.getNeuronCountExcludingBias(), exampleCount);
-			return new ImageNeuronsActivationImpl(out, leftNeurons, NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET, false);
+			output.reshape(leftNeurons.getNeuronCountExcludingBias(), exampleCount);
+			//EditableMatrix out = output.dup().asEditableMatrix();
+			//out.reshape(leftNeurons.getNeuronCountExcludingBias(), exampleCount);
+			return output.asImageNeuronsActivation(leftNeurons);
+			//return new ImageNeuronsActivationImpl(out, leftNeurons, NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET, false);
 		} else {
 
 			float[] data = new float[getLeftNeurons().getDepth() * getLeftNeurons().getWidth()
@@ -219,7 +210,7 @@ public class DefaultConvolutionalAxonsImpl implements ConvolutionalAxons {
 			Images images = new MultiChannelImages(data, getLeftNeurons().getDepth(), getLeftNeurons().getHeight(),
 					getLeftNeurons().getWidth(), config.getPaddingHeight(), config.getPaddingWidth(), exampleCount);
 
-			images.im2colConvImport(matrixFactory, output, filterHeight, filterWidth, config.getStrideHeight(),
+			images.im2colConvImport(matrixFactory, output.getActivations(matrixFactory), filterHeight, filterWidth, config.getStrideHeight(),
 					config.getStrideWidth());
 
 			return new ImageNeuronsActivationImpl(getLeftNeurons(), images, false);
@@ -227,42 +218,15 @@ public class DefaultConvolutionalAxonsImpl implements ConvolutionalAxons {
 		}
 	}
 	
-	/*
 	public NeuronsActivation reformatRightToLeftInput(MatrixFactory matrixFactory, NeuronsActivation input) {
-		EditableMatrix m = input.getActivations(matrixFactory).asEditableMatrix();
-		m.reshape(rightNeurons.getDepth(),
-				rightNeurons.getWidth() * rightNeurons.getHeight() * input.getExampleCount());
-		return new NeuronsActivationImpl(m, input.getFeatureOrientation());
-	}
-	*/
-	
-	public NeuronsActivation reformatRightToLeftInput(MatrixFactory matrixFactory, NeuronsActivation input) {
-		if (input instanceof ImageNeuronsActivation) {
-			Matrix reformattedInput = input.getActivations(matrixFactory);
-			reformattedInput.asEditableMatrix().reshape(rightNeurons.getDepth(),
-					rightNeurons.getWidth() * rightNeurons.getHeight() * input.getExampleCount());
-			if (!input.isImmutable()) {
-			input.close();
-			}
-			return new NeuronsActivationImpl(reformattedInput, input.getFeatureOrientation());
-			
+		
+		if (input.isImmutable()) {
+			throw new UnsupportedOperationException();
 		} else {
-			if (input.isImmutable()) {
-			Matrix reformattedInput = input.getActivations(matrixFactory).dup();
-			reformattedInput.asEditableMatrix().reshape(rightNeurons.getDepth(),
+			input.reshape(rightNeurons.getDepth(),
 					rightNeurons.getWidth() * rightNeurons.getHeight() * input.getExampleCount());
-			
-			return new NeuronsActivationImpl(reformattedInput, input.getFeatureOrientation());
-			} else {
-				Matrix reformattedInput = input.getActivations(matrixFactory);
-				reformattedInput.asEditableMatrix().reshape(rightNeurons.getDepth(),
-						rightNeurons.getWidth() * rightNeurons.getHeight() * input.getExampleCount());
-				return input;
-			}
-			//return new ImageNeuronsActivationImpl(reformattedOutput,
-			//		getRightNeurons(), NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET, false);
+			return input;
 		}
-
 	}
 
 	@Override

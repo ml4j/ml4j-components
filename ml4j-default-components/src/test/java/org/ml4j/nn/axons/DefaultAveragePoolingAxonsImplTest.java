@@ -52,4 +52,9 @@ public class DefaultAveragePoolingAxonsImplTest extends Axons3DTestBase<AverageP
 	protected int getExpectedReformattedInputRows() {
 		return 11 * 11;
 	}
+	
+	@Override
+	protected boolean expectPostDropoutInputToBeSet() {
+		return false;
+	}
 }

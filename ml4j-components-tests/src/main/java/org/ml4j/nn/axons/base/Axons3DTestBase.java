@@ -12,6 +12,7 @@ import org.ml4j.nn.neurons.Neurons;
 import org.ml4j.nn.neurons.Neurons3D;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 public abstract class Axons3DTestBase<A extends Axons<?, ?, ?>> extends TestBase {
@@ -53,16 +54,24 @@ public abstract class Axons3DTestBase<A extends Axons<?, ?, ?>> extends TestBase
 		Assert.assertNotNull(leftNeurons);
 	}
 	
+	protected abstract boolean expectPostDropoutInputToBeSet();
+	
 	@Test
 	public void testPushLeftToRight() {
+
+		Mockito.when(mockAxonsContext.isTrainingContext()).thenReturn(true);
+		
+		Mockito.when(mockAxonsContext.isTrainingContext()).thenReturn(true);
 		
 		AxonsActivation leftToRightActivation = axons.pushLeftToRight(mockLeftToRightInputActivation, null, mockAxonsContext);
 		Assert.assertNotNull(leftToRightActivation);
-		NeuronsActivation postDropoutInput = leftToRightActivation.getPostDropoutInput().get();
-		Assert.assertNotNull(postDropoutInput);
-		Assert.assertEquals(getExpectedReformattedInputRows(), postDropoutInput.getFeatureCount());
-		Assert.assertEquals(getExpectedReformattedInputColumns(), postDropoutInput.getExampleCount());
-		Assert.assertEquals(mockLeftToRightInputActivation.getFeatureOrientation(), postDropoutInput.getFeatureOrientation());
+		if (expectPostDropoutInputToBeSet()) {
+			NeuronsActivation postDropoutInput = leftToRightActivation.getPostDropoutInput().get();
+			Assert.assertNotNull(postDropoutInput);
+			Assert.assertEquals(getExpectedReformattedInputRows(), postDropoutInput.getFeatureCount());
+			Assert.assertEquals(getExpectedReformattedInputColumns(), postDropoutInput.getExampleCount());
+			Assert.assertEquals(mockLeftToRightInputActivation.getFeatureOrientation(), postDropoutInput.getFeatureOrientation());
+		}
 
 		NeuronsActivation postDropoutOutput = leftToRightActivation.getPostDropoutOutput();
 		Assert.assertNotNull(postDropoutOutput);

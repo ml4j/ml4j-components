@@ -21,6 +21,7 @@ import org.ml4j.nn.axons.Axons;
 import org.ml4j.nn.axons.AxonsActivation;
 import org.ml4j.nn.axons.AxonsContext;
 import org.ml4j.nn.axons.AxonsGradient;
+import org.ml4j.nn.components.DirectedComponentActivationLifecycle;
 import org.ml4j.nn.components.DirectedComponentGradientImpl;
 import org.ml4j.nn.components.axons.base.DirectedAxonsComponentActivationBase;
 import org.ml4j.nn.neurons.NeuronsActivation;
@@ -64,6 +65,20 @@ public class DefaultBatchNormDirectedAxonsComponentActivationImpl<A extends Axon
 			
 		} else {
 			return Optional.empty();
+		}
+	}
+	
+	private void close(NeuronsActivation activation) {
+		if (!activation.isImmutable()) {
+			activation.close();
+		}
+	}
+
+	@Override
+	public void close(DirectedComponentActivationLifecycle completedLifeCycleStage) {
+		if (completedLifeCycleStage == DirectedComponentActivationLifecycle.FORWARD_PROPAGATION) {
+			close(output);
+			close(leftToRightAxonsActivation.getPostDropoutOutput());
 		}
 	}
 }

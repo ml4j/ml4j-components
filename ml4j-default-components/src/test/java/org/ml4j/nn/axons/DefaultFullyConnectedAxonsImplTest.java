@@ -8,6 +8,7 @@ import org.ml4j.nn.neurons.Neurons;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
 import org.ml4j.nn.neurons.NeuronsActivationImpl;
+import org.mockito.Mockito;
 
 public class DefaultFullyConnectedAxonsImplTest extends AxonsTestBase<FullyConnectedAxons> {
 
@@ -34,5 +35,13 @@ public class DefaultFullyConnectedAxonsImplTest extends AxonsTestBase<FullyConne
 	public NeuronsActivation createNeuronsActivation(int featureCount, int exampleCount) {
 		return new NeuronsActivationImpl(matrixFactory.createMatrix(featureCount, exampleCount), NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET);
 	}
+
+	@Override
+	public void testPushLeftToRight() {
+		Mockito.when(mockAxonsContext.getLeftHandInputDropoutKeepProbability()).thenReturn(0.5f);
+		super.testPushLeftToRight();
+	}
+	
+	
 
 }

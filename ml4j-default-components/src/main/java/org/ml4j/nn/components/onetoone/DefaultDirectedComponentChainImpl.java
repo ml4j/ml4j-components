@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.ml4j.nn.components.DirectedComponentActivationLifecycle;
 import org.ml4j.nn.components.DirectedComponentsContext;
 import org.ml4j.nn.components.onetone.DefaultChainableDirectedComponent;
 import org.ml4j.nn.components.onetone.DefaultChainableDirectedComponentActivation;
@@ -61,7 +62,6 @@ public class DefaultDirectedComponentChainImpl extends DefaultDirectedComponentC
 		if (inFlightActivation.getFeatureCount() != getInputNeurons().getNeuronCountExcludingBias()) {
 			throw new IllegalStateException();
 		}
-		
 		List<DefaultChainableDirectedComponentActivation> activations = new ArrayList<>();
 		int index = 0;
 		for (DefaultChainableDirectedComponent<?, ?> component : sequentialComponents) {
@@ -72,8 +72,8 @@ public class DefaultDirectedComponentChainImpl extends DefaultDirectedComponentC
 		}
 		
 		for (DefaultChainableDirectedComponentActivation act : activations) {
-			if (!context.isTrainingContext() && act.getOutput() != inFlightActivation) {
-				act.getOutput().close();
+			if (act.getOutput() != inFlightActivation) {
+					act.close(DirectedComponentActivationLifecycle.FORWARD_PROPAGATION);
 			}
 		}
 		

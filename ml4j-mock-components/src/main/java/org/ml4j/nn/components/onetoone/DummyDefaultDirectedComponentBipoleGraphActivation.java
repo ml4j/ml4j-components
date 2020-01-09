@@ -16,6 +16,7 @@ package org.ml4j.nn.components.onetoone;
 import java.util.Arrays;
 import java.util.List;
 
+import org.ml4j.nn.components.DirectedComponentActivationLifecycle;
 import org.ml4j.nn.components.DirectedComponentGradient;
 import org.ml4j.nn.components.DirectedComponentGradientImpl;
 import org.ml4j.nn.components.onetone.DefaultChainableDirectedComponentActivation;
@@ -42,6 +43,11 @@ public class DummyDefaultDirectedComponentBipoleGraphActivation extends DefaultD
 	@Override
 	public List<DefaultChainableDirectedComponentActivation> decompose() {
 		return Arrays.asList(this);
+	}
+	
+	@Override
+	public void close(DirectedComponentActivationLifecycle arg0) {
+		// No-op
 	}
 
 }

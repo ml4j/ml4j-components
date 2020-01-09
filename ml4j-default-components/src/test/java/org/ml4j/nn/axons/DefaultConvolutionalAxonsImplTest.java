@@ -80,4 +80,9 @@ public class DefaultConvolutionalAxonsImplTest extends Axons3DTestBase<Convoluti
 		return 81 * 3;
 	}
 
+	@Override
+	protected boolean expectPostDropoutInputToBeSet() {
+		return true;
+	}
+
 }

@@ -16,6 +16,7 @@ package org.ml4j.nn.components.manytomany;
 import java.util.List;
 
 import org.ml4j.nn.components.ChainableDirectedComponentActivation;
+import org.ml4j.nn.components.DirectedComponentActivationLifecycle;
 import org.ml4j.nn.components.DirectedComponentGradient;
 import org.ml4j.nn.components.manytomany.base.DirectedComponentChainBatchActivationBase;
 import org.ml4j.nn.components.onetone.DefaultDirectedComponentChainActivation;
@@ -38,5 +39,10 @@ public class DummyDirectedComponentChainBatchActivation extends DirectedComponen
 	public List<? extends ChainableDirectedComponentActivation<List<NeuronsActivation>>> decompose() {
 		// TODO ML
 		return null;
+	}
+	
+	@Override
+	public void close(DirectedComponentActivationLifecycle arg0) {
+		// No-op
 	}
 }

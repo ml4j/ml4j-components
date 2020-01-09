@@ -56,5 +56,10 @@ public class DummyMaxPoolingAxonsImplTest extends Axons3DTestBase<MaxPoolingAxon
 	protected int getExpectedReformattedInputRows() {
 		return 400 * 2;
 	}
+	
+	@Override
+	protected boolean expectPostDropoutInputToBeSet() {
+		return true;
+	}
 
 }

@@ -180,8 +180,8 @@ public abstract class WeightedAxonsBase<L extends Neurons, R extends Neurons, A 
 			LOGGER.debug("Creating left input dropout mask");
 
 			EditableMatrix dropoutMask = axonsContext.getMatrixFactory()
-					.createZeros(leftNeuronsActivation.getActivations(axonsContext.getMatrixFactory()).getRows(),
-							leftNeuronsActivation.getActivations(axonsContext.getMatrixFactory()).getColumns())
+					.createZeros(leftNeuronsActivation.getRows(),
+							leftNeuronsActivation.getColumns())
 					.asEditableMatrix();
 			for (int i = 0; i < dropoutMask.getRows(); i++) {
 				for (int j = 0; j < dropoutMask.getColumns(); j++) {

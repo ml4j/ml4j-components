@@ -16,6 +16,7 @@ package org.ml4j.nn.components.onetoone;
 import java.util.Arrays;
 import java.util.List;
 
+import org.ml4j.nn.components.DirectedComponentActivationLifecycle;
 import org.ml4j.nn.components.DirectedComponentGradient;
 import org.ml4j.nn.components.DirectedComponentGradientImpl;
 import org.ml4j.nn.components.manytomany.DefaultDirectedComponentChainBatchActivation;
@@ -45,6 +46,7 @@ public class DefaultDirectedComponentBipoleGraphActivationImpl extends DefaultDi
 	private OneToManyDirectedComponentActivation oneToManyDirectedComponentActivation;
 	private DefaultDirectedComponentChainBatchActivation parallelChainsActivation;
 	private ManyToOneDirectedComponentActivation manyToOneDirectedComponentActivation;
+	private boolean originalInputIsImmutable;
 	
 	/**
 	 * Constructor for a DefaultDirectedComponentBipoleGraphActivationImpl to be used when the originating DefaultDirectedComponentBipoleGraph
@@ -57,7 +59,7 @@ public class DefaultDirectedComponentBipoleGraphActivationImpl extends DefaultDi
 	public DefaultDirectedComponentBipoleGraphActivationImpl(
 			DefaultDirectedComponentBipoleGraph defaultDirectedComponentChainBipoleGraph,
 			DefaultDirectedComponentChainBatchActivation parallelChainsActivation, 
-			NeuronsActivation output) {
+			NeuronsActivation output, boolean originalInputIsImmutable) {
 		super(defaultDirectedComponentChainBipoleGraph, output);
 		if (defaultDirectedComponentChainBipoleGraph.getEdges().getComponents().size() != 1) {
 			throw new IllegalArgumentException("This constructor should only be used when the DefaultDirectedComponentChainBatchcontains a single edge");
@@ -66,6 +68,7 @@ public class DefaultDirectedComponentBipoleGraphActivationImpl extends DefaultDi
 			throw new IllegalArgumentException("This constructor should only be used when the DefaultDirectedComponentChainBatchActivation contains a single nested activation");
 		}
 		this.parallelChainsActivation = parallelChainsActivation;
+		this.originalInputIsImmutable = originalInputIsImmutable;
 	}
 	
 
@@ -76,16 +79,18 @@ public class DefaultDirectedComponentBipoleGraphActivationImpl extends DefaultDi
 	 * @param oneToManyDirectedComponentActivation The activation from the nested OneToManyDirectedComponent within the originating DefaultDirectedComponentBipoleGraph.
 	 * @param parallelChainsActivation The activation from the nested DefaultDirectedComponentChainBatch within the originating DefaultDirectedComponentBipoleGraph.
 	 * @param manyToOneDirectedComponentActivation The activation from the nested ManyToOneDirectedComponent within the originating DefaultDirectedComponentBipoleGraph.
+	 * @param originalInputIsImmutable 
 	 */
 	public DefaultDirectedComponentBipoleGraphActivationImpl(
 			DefaultDirectedComponentBipoleGraph defaultDirectedComponentChainBipoleGraph,
 			OneToManyDirectedComponentActivation oneToManyDirectedComponentActivation,
 			DefaultDirectedComponentChainBatchActivation parallelChainsActivation,
-			ManyToOneDirectedComponentActivation manyToOneDirectedComponentActivation) {
+			ManyToOneDirectedComponentActivation manyToOneDirectedComponentActivation, boolean originalInputIsImmutable) {
 		super(defaultDirectedComponentChainBipoleGraph, manyToOneDirectedComponentActivation.getOutput());
 		this.oneToManyDirectedComponentActivation = oneToManyDirectedComponentActivation;
 		this.manyToOneDirectedComponentActivation = manyToOneDirectedComponentActivation;
 		this.parallelChainsActivation = parallelChainsActivation;
+		this.originalInputIsImmutable = originalInputIsImmutable;
 	}
 
 	@Override
@@ -110,6 +115,24 @@ public class DefaultDirectedComponentBipoleGraphActivationImpl extends DefaultDi
 	@Override
 	public List<DefaultChainableDirectedComponentActivation> decompose() {
 		return Arrays.asList(this);
+	}
+
+
+	@Override
+	public void close(DirectedComponentActivationLifecycle completedLifeCycleStage) {
+		if (completedLifeCycleStage == DirectedComponentActivationLifecycle.FORWARD_PROPAGATION) {
+			if (!originalInputIsImmutable) {
+				if (oneToManyDirectedComponentActivation != null) {
+					//oneToManyDirectedComponentActivation.getOutput().forEach(a -> a.close());					
+				}
+			}
+			if (manyToOneDirectedComponentActivation != null) {
+				if (manyToOneDirectedComponentActivation.getOutput().isImmutable()) {
+					manyToOneDirectedComponentActivation.getOutput().close();
+				}
+			}
+		} 
+		parallelChainsActivation.close(completedLifeCycleStage);
 	}
 
 }

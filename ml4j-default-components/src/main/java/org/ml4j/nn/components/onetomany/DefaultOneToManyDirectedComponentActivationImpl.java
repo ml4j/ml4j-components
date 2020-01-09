@@ -20,7 +20,6 @@ import org.ml4j.nn.components.DirectedComponentGradient;
 import org.ml4j.nn.components.DirectedComponentGradientImpl;
 import org.ml4j.nn.components.onetomany.base.OneToManyDirectedComponentActivationBase;
 import org.ml4j.nn.neurons.ImageNeuronsActivation;
-import org.ml4j.nn.neurons.ImageNeuronsActivationImpl;
 import org.ml4j.nn.neurons.Neurons3D;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.ml4j.nn.neurons.NeuronsActivationImpl;
@@ -59,6 +58,7 @@ public class DefaultOneToManyDirectedComponentActivationImpl extends OneToManyDi
 		
 		NeuronsActivation totalActivation = null;
 		if (allImage) {
+			
 			totalActivation = new NeuronsActivationImpl(matrixFactory.createMatrix(gradients.get(0).getRows(), 
 					gradients.get(0).getColumns()), gradients.get(0).getFeatureOrientation(), false);
 		} else {
