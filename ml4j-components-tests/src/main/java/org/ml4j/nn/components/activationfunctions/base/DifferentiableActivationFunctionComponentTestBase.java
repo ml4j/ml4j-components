@@ -18,10 +18,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.ml4j.nn.activationfunctions.DifferentiableActivationFunction;
 import org.ml4j.nn.activationfunctions.DifferentiableActivationFunctionActivation;
-import org.ml4j.nn.activationfunctions.DifferentiableActivationFunctionComponentActivation;
-import org.ml4j.nn.components.DirectedComponentType;
 import org.ml4j.nn.components.DirectedComponentsContext;
+import org.ml4j.nn.components.NeuralComponentType;
 import org.ml4j.nn.components.activationfunctions.DifferentiableActivationFunctionComponent;
+import org.ml4j.nn.components.activationfunctions.DifferentiableActivationFunctionComponentActivation;
 import org.ml4j.nn.components.base.TestBase;
 import org.ml4j.nn.neurons.Neurons;
 import org.ml4j.nn.neurons.NeuronsActivation;
@@ -90,7 +90,7 @@ public abstract class DifferentiableActivationFunctionComponentTestBase extends 
 		Neurons neurons = new Neurons(100, false);
 		DifferentiableActivationFunctionComponent activationFunctionComponent = createDifferentiableActivationFunctionComponent(neurons, mockActivationFunction);
 		Assert.assertNotNull(activationFunctionComponent);
-		Assert.assertEquals(DirectedComponentType.ACTIVATION_FUNCTION, activationFunctionComponent.getComponentType());
+		Assert.assertEquals(NeuralComponentType.ACTIVATION_FUNCTION, activationFunctionComponent.getComponentType());
 	}
 	
 	@Test
@@ -142,7 +142,7 @@ public abstract class DifferentiableActivationFunctionComponentTestBase extends 
 		NeuronsActivation output = dupActivation.getOutput();
 		Assert.assertNotNull(output);
 		Assert.assertNotNull(dupComponent);
-		Assert.assertEquals(DirectedComponentType.ACTIVATION_FUNCTION, dupComponent.getComponentType());
+		Assert.assertEquals(NeuralComponentType.ACTIVATION_FUNCTION, dupComponent.getComponentType());
 	}
 	
 

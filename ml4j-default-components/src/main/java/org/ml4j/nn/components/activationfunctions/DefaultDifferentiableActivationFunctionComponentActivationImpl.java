@@ -15,7 +15,6 @@ package org.ml4j.nn.components.activationfunctions;
 
 import org.ml4j.InterrimMatrix;
 import org.ml4j.nn.activationfunctions.DifferentiableActivationFunctionActivation;
-import org.ml4j.nn.activationfunctions.DifferentiableActivationFunctionComponentActivation;
 import org.ml4j.nn.components.DirectedComponentActivationLifecycle;
 import org.ml4j.nn.components.DirectedComponentGradient;
 import org.ml4j.nn.components.DirectedComponentGradientImpl;

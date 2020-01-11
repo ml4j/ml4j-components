@@ -20,16 +20,16 @@ import org.ml4j.nn.components.DirectedComponentActivationLifecycle;
 import org.ml4j.nn.components.DirectedComponentGradient;
 import org.ml4j.nn.components.DirectedComponentGradientImpl;
 import org.ml4j.nn.components.onetone.DefaultChainableDirectedComponentActivation;
-import org.ml4j.nn.components.onetone.DefaultDirectedComponentBipoleGraph;
+import org.ml4j.nn.components.onetone.DefaultDirectedComponentChainBipoleGraph;
 import org.ml4j.nn.components.onetone.DefaultDirectedComponentChainBipoleGraphActivation;
-import org.ml4j.nn.components.onetoone.base.DefaultDirectedComponentBipoleGraphActivationBase;
+import org.ml4j.nn.components.onetoone.base.DefaultDirectedComponentChainBipoleGraphActivationBase;
 import org.ml4j.nn.neurons.DummyNeuronsActivation;
 import org.ml4j.nn.neurons.NeuronsActivation;
 
-public class DummyDefaultDirectedComponentBipoleGraphActivation extends DefaultDirectedComponentBipoleGraphActivationBase
+public class DummyDefaultDirectedComponentChainBipoleGraphActivation extends DefaultDirectedComponentChainBipoleGraphActivationBase
 		implements DefaultDirectedComponentChainBipoleGraphActivation {
 	
-	public DummyDefaultDirectedComponentBipoleGraphActivation(DefaultDirectedComponentBipoleGraph bipoleGraph, NeuronsActivation output) {
+	public DummyDefaultDirectedComponentChainBipoleGraphActivation(DefaultDirectedComponentChainBipoleGraph bipoleGraph, NeuronsActivation output) {
 		super(bipoleGraph, output);
 	}
 	

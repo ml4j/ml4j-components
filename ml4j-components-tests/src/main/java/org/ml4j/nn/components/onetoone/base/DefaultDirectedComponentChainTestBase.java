@@ -19,8 +19,8 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.ml4j.nn.components.DirectedComponentType;
 import org.ml4j.nn.components.DirectedComponentsContext;
+import org.ml4j.nn.components.NeuralComponentType;
 import org.ml4j.nn.components.base.TestBase;
 import org.ml4j.nn.components.onetone.DefaultChainableDirectedComponent;
 import org.ml4j.nn.components.onetone.DefaultChainableDirectedComponentActivation;
@@ -102,7 +102,7 @@ public abstract class DefaultDirectedComponentChainTestBase extends TestBase{
 		List<DefaultChainableDirectedComponent<?, ?>> mockComponents = Arrays.asList(mockComponent1, mockComponent2);
 		DefaultDirectedComponentChain componentChain = createDefaultDirectedComponentChain(mockComponents);
 		Assert.assertNotNull(componentChain);
-		Assert.assertEquals(DirectedComponentType.COMPONENT_CHAIN, componentChain.getComponentType());
+		Assert.assertEquals(NeuralComponentType.COMPONENT_CHAIN, componentChain.getComponentType());
 	}
 	
 	@Test

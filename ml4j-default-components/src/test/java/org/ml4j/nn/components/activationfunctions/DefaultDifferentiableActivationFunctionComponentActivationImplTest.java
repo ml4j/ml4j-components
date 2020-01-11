@@ -3,7 +3,6 @@ package org.ml4j.nn.components.activationfunctions;
 import org.ml4j.MatrixFactory;
 import org.ml4j.jblas.JBlasRowMajorMatrixFactory;
 import org.ml4j.nn.activationfunctions.DifferentiableActivationFunctionActivation;
-import org.ml4j.nn.activationfunctions.DifferentiableActivationFunctionComponentActivation;
 import org.ml4j.nn.components.activationfunctions.base.DifferentiableActivationFunctionComponentActivationTestBase;
 import org.ml4j.nn.components.mocks.MockTestData;
 import org.ml4j.nn.neurons.NeuronsActivation;

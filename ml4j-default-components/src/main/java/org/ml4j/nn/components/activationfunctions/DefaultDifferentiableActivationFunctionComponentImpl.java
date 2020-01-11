@@ -15,7 +15,6 @@ package org.ml4j.nn.components.activationfunctions;
 
 import org.ml4j.nn.activationfunctions.DifferentiableActivationFunction;
 import org.ml4j.nn.activationfunctions.DifferentiableActivationFunctionActivation;
-import org.ml4j.nn.activationfunctions.DifferentiableActivationFunctionComponentActivation;
 import org.ml4j.nn.components.activationfunctions.base.DifferentiableActivationFunctionComponentBase;
 import org.ml4j.nn.neurons.Neurons;
 import org.ml4j.nn.neurons.NeuronsActivation;
