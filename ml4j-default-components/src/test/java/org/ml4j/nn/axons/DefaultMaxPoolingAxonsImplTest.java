@@ -54,4 +54,9 @@ public class DefaultMaxPoolingAxonsImplTest extends Axons3DTestBase<MaxPoolingAx
 		return 11 * 11;
 	}
 
+	@Override
+	protected boolean expectPostDropoutInputToBeSet() {
+		return false;
+	}
+
 }

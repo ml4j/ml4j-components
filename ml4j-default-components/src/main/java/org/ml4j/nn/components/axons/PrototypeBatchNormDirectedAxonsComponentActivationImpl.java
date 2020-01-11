@@ -13,6 +13,7 @@ import org.ml4j.nn.axons.AxonsGradient;
 import org.ml4j.nn.axons.AxonsGradientImpl;
 import org.ml4j.nn.axons.ScaleAndShiftAxons;
 import org.ml4j.nn.axons.TrainableAxons;
+import org.ml4j.nn.components.DirectedComponentActivationLifecycle;
 import org.ml4j.nn.components.DirectedComponentGradient;
 import org.ml4j.nn.components.DirectedComponentGradientImpl;
 import org.ml4j.nn.components.axons.base.DirectedAxonsComponentActivationBase;
@@ -95,7 +96,10 @@ public class PrototypeBatchNormDirectedAxonsComponentActivationImpl<N extends Ne
 			}
 		}
 		
-		Matrix xhat = leftToRightAxonsActivation.getPostDropoutInput().get().getActivations(axonsContext.getMatrixFactory());
+		
+		NeuronsActivation leftToRightPostDropoutInput = leftToRightAxonsActivation.getPostDropoutInput().get();
+		
+		Matrix xhat = leftToRightPostDropoutInput.getActivations(axonsContext.getMatrixFactory());
 		Matrix dout = outerGradient.getOutput().getActivations(axonsContext.getMatrixFactory());
 
 		/**
@@ -190,6 +194,10 @@ public class PrototypeBatchNormDirectedAxonsComponentActivationImpl<N extends Ne
 					
 					//outerGradient.getOutput().close();
 					
+					leftToRightPostDropoutInput.close();
+					xhat.close();
+					
+					this.leftToRightAxonsActivation.getPostDropoutOutput().close();
 					return new DirectedComponentGradientImpl<>(outerGradient.getTotalTrainableAxonsGradients(),
 							() -> new AxonsGradientImpl(directedAxonsComponent.getAxons(), dgammaColumnVector, dbetaColumnVector), dxn);
 				}
@@ -371,5 +379,19 @@ public class PrototypeBatchNormDirectedAxonsComponentActivationImpl<N extends Ne
 	protected Optional<AxonsGradient> getCalculatedAxonsGradient(AxonsActivation rightToLeftAxonsActivation) {
 		throw new UnsupportedOperationException();
 		//return Optional.of(new AxonsGradientImpl(directedAxonsComponent.getAxons(), dgammaColumnVector, dbetaColumnVector));
+	}
+
+	@Override
+	public void close(DirectedComponentActivationLifecycle completedLifeCycleStage) {
+		if (completedLifeCycleStage == DirectedComponentActivationLifecycle.FORWARD_PROPAGATION) {
+			close(output);
+			close(leftToRightAxonsActivation.getPostDropoutOutput());
+		}
+	}
+	
+	private void close(NeuronsActivation activation) {
+		if (!activation.isImmutable()) {
+			activation.close();
+		}
 	}
 }

@@ -57,4 +57,9 @@ public class DummyAveragePoolingAxonsImplTest extends Axons3DTestBase<AveragePoo
 		return 400 * 2;
 	}
 
+	@Override
+	protected boolean expectPostDropoutInputToBeSet() {
+		return true;
+	}
+
 }

@@ -84,6 +84,8 @@ public class DefaultDirectedComponentChainBipoleGraphImpl extends DefaultDirecte
 	public DefaultDirectedComponentBipoleGraphActivation forwardPropagate(NeuronsActivation neuronsActivation,
 			DirectedComponentsContext context) {
 		
+		boolean originalInputIsImmutable = neuronsActivation.isImmutable();
+		
 		if (neuronsActivation.getFeatureCount() != getInputNeurons().getNeuronCountExcludingBias()) {
 			throw new IllegalStateException(neuronsActivation.getFeatureCount() + ":" + getInputNeurons().getNeuronCountExcludingBias());
 		}
@@ -91,7 +93,7 @@ public class DefaultDirectedComponentChainBipoleGraphImpl extends DefaultDirecte
 		
 		if (parallelComponentChainsBatch.getComponents().size() == 1) {
 			DefaultDirectedComponentChainBatchActivation parallelChainsActivation = parallelComponentChainsBatch.forwardPropagate(Arrays.asList(neuronsActivation), context);
-			return new DefaultDirectedComponentBipoleGraphActivationImpl(this, parallelChainsActivation, parallelChainsActivation.getOutput().get(0));
+			return new DefaultDirectedComponentBipoleGraphActivationImpl(this, parallelChainsActivation, parallelChainsActivation.getOutput().get(0), originalInputIsImmutable);
 
 		} else {
 	
@@ -103,8 +105,7 @@ public class DefaultDirectedComponentChainBipoleGraphImpl extends DefaultDirecte
 			if (manyToOneDirectedComponentActivation.getOutput().getFeatureCount() != getOutputNeurons().getNeuronCountExcludingBias()) {
 				throw new IllegalArgumentException("Many to one activation feature count of:" + manyToOneDirectedComponentActivation.getOutput().getFeatureCount() + " does not match output neuron count of:" + getOutputNeurons().getNeuronCountExcludingBias() );
 			}
-				
-			return new DefaultDirectedComponentBipoleGraphActivationImpl(this, oneToManyDirectedComponentActivation, parallelChainsActivation, manyToOneDirectedComponentActivation);
+			return new DefaultDirectedComponentBipoleGraphActivationImpl(this, oneToManyDirectedComponentActivation, parallelChainsActivation, manyToOneDirectedComponentActivation, originalInputIsImmutable);
 			
 		}
 	}

@@ -48,6 +48,10 @@ public class DefaultSoftmaxActivationFunctionImpl implements DifferentiableActiv
 		}
 
 		Matrix softmaxOfInputActivationsMatrix = softmax(input.getActivations(context.getMatrixFactory()));
+		
+		// TODO
+		//input.close();
+		
 		return new DefaultDifferentiableActivationFunctionActivationImpl(this, input,
 				new NeuronsActivationImpl(softmaxOfInputActivationsMatrix, input.getFeatureOrientation()));
 	}

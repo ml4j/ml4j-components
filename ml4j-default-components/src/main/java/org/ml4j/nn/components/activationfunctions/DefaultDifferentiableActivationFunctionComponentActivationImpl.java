@@ -13,8 +13,10 @@
  */
 package org.ml4j.nn.components.activationfunctions;
 
+import org.ml4j.InterrimMatrix;
 import org.ml4j.nn.activationfunctions.DifferentiableActivationFunctionActivation;
 import org.ml4j.nn.activationfunctions.DifferentiableActivationFunctionComponentActivation;
+import org.ml4j.nn.components.DirectedComponentActivationLifecycle;
 import org.ml4j.nn.components.DirectedComponentGradient;
 import org.ml4j.nn.components.DirectedComponentGradientImpl;
 import org.ml4j.nn.components.activationfunctions.base.DifferentiableActivationFunctionComponentActivationBase;
@@ -57,15 +59,35 @@ public class DefaultDifferentiableActivationFunctionComponentActivationImpl exte
 		LOGGER.debug("Back propagating gradient through DifferentiableActivationFunctionComponentActivation");
 		NeuronsActivation backPropagatedGradient = originatingComponent.getActivationFunction()
 				.activationGradient(activationFunctionActivation, activationContext);
-		return new DirectedComponentGradientImpl<NeuronsActivation>(gradient.getTotalTrainableAxonsGradients(), 
-				new NeuronsActivationImpl(backPropagatedGradient.getActivations(activationContext.getMatrixFactory()).asEditableMatrix()
+		try (InterrimMatrix backPropGradientMatrix = backPropagatedGradient.getActivations(activationContext.getMatrixFactory()).asInterrimMatrix()) {
+		DirectedComponentGradient<NeuronsActivation> result = new DirectedComponentGradientImpl<NeuronsActivation>(gradient.getTotalTrainableAxonsGradients(), 
+				new NeuronsActivationImpl(backPropGradientMatrix.asEditableMatrix()
 				.mul(gradient.getOutput().getActivations(activationContext.getMatrixFactory())), 
 				NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET));
+		
+		activationFunctionActivation.getInput().close();
+		
+		if (!gradient.getOutput().isImmutable()) {
+			gradient.getOutput().close();
+		}
+		
+		return result;
+		
+		}
 	}
 
 	@Override
 	public DirectedComponentGradient<NeuronsActivation> backPropagate(CostFunctionGradient costFunctionGradient) {
 		LOGGER.debug("Back propagating cost function gradient through DifferentiableActivationFunctionComponentActivation");
 		return costFunctionGradient.backPropagateThroughFinalActivationFunction(originatingComponent.getActivationFunction());
+	}
+
+	@Override
+	public void close(DirectedComponentActivationLifecycle completedLifeCycleStage) {
+		if (completedLifeCycleStage == DirectedComponentActivationLifecycle.FORWARD_PROPAGATION) {
+			if (!activationFunctionActivation.getOutput().isImmutable()) {
+				activationFunctionActivation.getOutput().close();
+			}
+		}
 	}
 }

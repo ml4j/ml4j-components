@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 
 import org.ml4j.nn.axons.AxonsGradient;
 import org.ml4j.nn.components.ChainableDirectedComponentActivation;
+import org.ml4j.nn.components.DirectedComponentActivationLifecycle;
 import org.ml4j.nn.components.DirectedComponentGradient;
 import org.ml4j.nn.components.DirectedComponentGradientImpl;
 import org.ml4j.nn.components.onetone.DefaultChainableDirectedComponentActivation;
@@ -73,12 +74,24 @@ public class DefaultDirectedComponentChainActivationImpl extends DefaultDirected
 		      finalTotalTrainableAxonsGradients = synapsesGradient.getTotalTrainableAxonsGradients();
 		      finalGrad = synapsesGradient;
 		    }
+		    for (DirectedComponentGradient<NeuronsActivation> grad : componentGradients) {
+		    	if (grad != finalGrad && !grad.getOutput().isImmutable()) {
+		    		grad.getOutput().close();
+		    	}
+		    }
+		    
+		    
 		    return new DirectedComponentGradientImpl<>(finalTotalTrainableAxonsGradients, finalGrad.getOutput());
 		  }
 
 	@Override
 	public List<DefaultChainableDirectedComponentActivation> decompose() {
 		return activations.stream().flatMap(a -> a.decompose().stream()).collect(Collectors.toList());
+	}
+
+	@Override
+	public void close(DirectedComponentActivationLifecycle completedLifeCycleStage) {
+			this.activations.forEach(a -> a.close(completedLifeCycleStage));
 	}
 
 }

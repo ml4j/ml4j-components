@@ -135,4 +135,10 @@ public class DummyNeuronsActivation implements NeuronsActivation {
 	public void setImmutable(boolean immutable) {
 		throw new UnsupportedOperationException();
 	}
+
+	@Override
+	public void reshape(int featureCount, int exampleCount) {
+		this.neurons = new Neurons(featureCount, neurons.hasBiasUnit());
+		this.examples = exampleCount;
+	}
 }

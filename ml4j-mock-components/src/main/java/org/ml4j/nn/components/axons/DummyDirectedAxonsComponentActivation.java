@@ -21,6 +21,7 @@ import org.ml4j.nn.axons.Axons;
 import org.ml4j.nn.axons.AxonsActivation;
 import org.ml4j.nn.axons.AxonsContext;
 import org.ml4j.nn.axons.AxonsGradient;
+import org.ml4j.nn.components.DirectedComponentActivationLifecycle;
 import org.ml4j.nn.components.DirectedComponentGradientImpl;
 import org.ml4j.nn.components.axons.base.DirectedAxonsComponentActivationBase;
 import org.ml4j.nn.neurons.NeuronsActivation;
@@ -59,5 +60,10 @@ public class DummyDirectedAxonsComponentActivation<A extends Axons<?, ?, ?>> ext
 		}
 		
 		
+	}
+	
+	@Override
+	public void close(DirectedComponentActivationLifecycle arg0) {
+		// No-op
 	}
 }

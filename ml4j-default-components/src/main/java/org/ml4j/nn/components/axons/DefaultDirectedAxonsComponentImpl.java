@@ -56,7 +56,6 @@ public class DefaultDirectedAxonsComponentImpl<L extends Neurons, R extends Neur
 		}
 		
 		AxonsActivation axonsActivation = axons.pushLeftToRight(neuronsActivation, null, context);
-		
 		NeuronsActivation output = axonsActivation.getPostDropoutOutput();
 	
 		if (output.getFeatureCount() != getOutputNeurons().getNeuronCountExcludingBias()) {

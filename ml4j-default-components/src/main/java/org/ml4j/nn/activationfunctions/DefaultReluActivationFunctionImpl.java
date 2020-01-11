@@ -30,15 +30,16 @@ public class DefaultReluActivationFunctionImpl implements DifferentiableActivati
 
 	@Override
 	public DifferentiableActivationFunctionActivation activate(NeuronsActivation activation, NeuronsActivationContext context) {
-		NeuronsActivation output = activation.dup();
+		NeuronsActivation input = context.isTrainingContext() ? activation.dup() : activation;
+		NeuronsActivation output = activation;
 	    output.applyValueModifier(v -> v < 0, v -> 0);
-		return new DefaultDifferentiableActivationFunctionActivationImpl(this, activation, output);
+		return new DefaultDifferentiableActivationFunctionActivationImpl(this, input, output);
 	}
 	
 	@Override
 	public NeuronsActivation activationGradient(DifferentiableActivationFunctionActivation activation,
 			NeuronsActivationContext context) {
-		NeuronsActivation output = activation.getInput().dup();
+		NeuronsActivation output = activation.getInput();
 	    output.applyValueModifier(v -> true, v -> v <= 0 ? 0 : 1);
 		return output;
 	}

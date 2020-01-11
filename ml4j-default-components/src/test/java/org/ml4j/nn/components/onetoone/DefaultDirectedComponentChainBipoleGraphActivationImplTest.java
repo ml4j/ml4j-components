@@ -33,7 +33,7 @@ public class DefaultDirectedComponentChainBipoleGraphActivationImplTest extends 
 		Mockito.when(mockOutputLinkActivation.getOutput()).thenReturn(output);
 		
 		return new DefaultDirectedComponentBipoleGraphActivationImpl(bipoleGraph, mockInputLinkActivation, mockEdgesActivation, 
-				mockOutputLinkActivation);
+				mockOutputLinkActivation, false);
 	}
 
 	@Override

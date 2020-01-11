@@ -14,6 +14,7 @@
 package org.ml4j.nn.components.activationfunctions;
 
 import org.ml4j.nn.activationfunctions.DifferentiableActivationFunctionComponentActivation;
+import org.ml4j.nn.components.DirectedComponentActivationLifecycle;
 import org.ml4j.nn.components.DirectedComponentGradient;
 import org.ml4j.nn.components.DirectedComponentGradientImpl;
 import org.ml4j.nn.components.activationfunctions.base.DifferentiableActivationFunctionComponentActivationBase;
@@ -52,5 +53,10 @@ public class DummyDifferentiableActivationFunctionComponentActivation extends Di
 	public DirectedComponentGradient<NeuronsActivation> backPropagate(CostFunctionGradient costFunctionGradient) {
 		LOGGER.debug("Mock back propagating cost function gradient through DummyDifferentiableActivationFunctionComponentActivation");
 		return new DirectedComponentGradientImpl<>(input);
+	}
+
+	@Override
+	public void close(DirectedComponentActivationLifecycle arg0) {
+		// No-op
 	}
 }

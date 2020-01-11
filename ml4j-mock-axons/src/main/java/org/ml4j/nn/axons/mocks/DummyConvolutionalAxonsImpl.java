@@ -54,10 +54,17 @@ public class DummyConvolutionalAxonsImpl implements ConvolutionalAxons {
 	@Override
 	public AxonsActivation pushLeftToRight(NeuronsActivation leftNeuronsActivation,
 			AxonsActivation previousRightToLeftActivation, AxonsContext axonsContext) {
+		
+		int exampleCount = leftNeuronsActivation.getExampleCount();
+		
+		if (!axonsContext.isTrainingContext() && !leftNeuronsActivation.isImmutable()) {
+			leftNeuronsActivation.close();
+		}
+		
 		return new AxonsActivationImpl(this, null, () -> leftNeuronsActivation,
 				new ImageNeuronsActivationImpl(
 						matrixFactory.createMatrix(rightNeurons.getNeuronCountExcludingBias(),
-								leftNeuronsActivation.getExampleCount()),
+								exampleCount),
 						getRightNeurons(), NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET, false),
 				leftNeurons, rightNeurons);
 	}

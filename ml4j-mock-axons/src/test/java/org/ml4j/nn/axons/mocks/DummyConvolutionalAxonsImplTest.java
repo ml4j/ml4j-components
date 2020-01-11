@@ -55,4 +55,8 @@ public class DummyConvolutionalAxonsImplTest extends Axons3DTestBase<Convolution
 		return 784 * 3;
 	}
 
+	@Override
+	protected boolean expectPostDropoutInputToBeSet() {
+		return true;
+	}
 }

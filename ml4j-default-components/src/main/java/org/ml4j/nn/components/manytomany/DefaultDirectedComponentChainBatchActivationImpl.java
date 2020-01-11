@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 
 import org.ml4j.nn.axons.AxonsGradient;
 import org.ml4j.nn.components.ChainableDirectedComponentActivation;
+import org.ml4j.nn.components.DirectedComponentActivationLifecycle;
 import org.ml4j.nn.components.DirectedComponentGradient;
 import org.ml4j.nn.components.DirectedComponentGradientImpl;
 import org.ml4j.nn.components.manytomany.base.DirectedComponentChainBatchActivationBase;
@@ -119,5 +120,10 @@ public class DefaultDirectedComponentChainBatchActivationImpl extends DirectedCo
 		public DirectedComponentGradient<NeuronsActivation> getGradient() {
 			return gradient;
 		}
+	}
+
+	@Override
+	public void close(DirectedComponentActivationLifecycle completedLifeCycleStage) {
+		this.activations.forEach(a -> a.close(completedLifeCycleStage));
 	}
 }

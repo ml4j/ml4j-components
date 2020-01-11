@@ -45,10 +45,17 @@ public class DummyFullyConnectedAxonsImpl implements FullyConnectedAxons {
 	@Override
 	public AxonsActivation pushLeftToRight(NeuronsActivation leftNeuronsActivation,
 			AxonsActivation previousRightToLeftActivation, AxonsContext axonsContext) {
+		
+		int exampleCount = leftNeuronsActivation.getExampleCount();
+		
+		if (!axonsContext.isTrainingContext() && !leftNeuronsActivation.isImmutable()) {
+			leftNeuronsActivation.close();
+		}
+		
 		return new AxonsActivationImpl(this, null, () -> leftNeuronsActivation,
 				new NeuronsActivationImpl(
-						matrixFactory.createMatrix(rightNeurons.getNeuronCountExcludingBias(),
-								leftNeuronsActivation.getExampleCount()),
+						matrixFactory.createMatrix(rightNeurons.getNeuronCountExcludingBias(),exampleCount
+								),
 						NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET),
 				leftNeurons, rightNeurons);
 	}

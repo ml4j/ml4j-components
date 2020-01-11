@@ -55,18 +55,32 @@ public class DummyScaleAndShiftAxonsImpl<N extends Neurons> implements ScaleAndS
 	public AxonsActivation pushLeftToRight(NeuronsActivation leftNeuronsActivation,
 			AxonsActivation previousRightToLeftActivation, AxonsContext axonsContext) {
 		if (leftNeuronsActivation instanceof ImageNeuronsActivation) {
+			
+			int exampleCount = leftNeuronsActivation.getExampleCount();
+			
+			if (!axonsContext.isTrainingContext() && !leftNeuronsActivation.isImmutable()) {
+				leftNeuronsActivation.close();
+			}
+			
 			return new AxonsActivationImpl(this, null, () -> leftNeuronsActivation,
 					new ImageNeuronsActivationImpl(
 							matrixFactory.createMatrix(rightNeurons.getNeuronCountExcludingBias(),
-									leftNeuronsActivation.getExampleCount()),
+									exampleCount),
 							(Neurons3D) getRightNeurons(), NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET,
 							false),
 					leftNeurons, rightNeurons);
 		} else {
+			
+			int exampleCount = leftNeuronsActivation.getExampleCount();
+			
+			if (!axonsContext.isTrainingContext()) {
+				leftNeuronsActivation.close();
+			}
+			
 			return new AxonsActivationImpl(this, null, () -> leftNeuronsActivation,
 					new NeuronsActivationImpl(
 							matrixFactory.createMatrix(rightNeurons.getNeuronCountExcludingBias(),
-									leftNeuronsActivation.getExampleCount()),
+									exampleCount),
 							NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET),
 					leftNeurons, rightNeurons);
 		}

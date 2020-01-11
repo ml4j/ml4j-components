@@ -26,6 +26,7 @@ import org.ml4j.nn.axons.AxonsContext;
 import org.ml4j.nn.axons.AxonsGradient;
 import org.ml4j.nn.axons.AxonsGradientImpl;
 import org.ml4j.nn.axons.TrainableAxons;
+import org.ml4j.nn.components.DirectedComponentActivationLifecycle;
 import org.ml4j.nn.components.DirectedComponentGradientImpl;
 import org.ml4j.nn.components.axons.base.DirectedAxonsComponentActivationBase;
 import org.ml4j.nn.neurons.NeuronsActivation;
@@ -82,18 +83,24 @@ public class DefaultDirectedAxonsComponentActivationImpl<A extends Axons<?, ?, ?
 			TrainableAxons<?, ?, ?> trainableAxons = (TrainableAxons<?, ?, ?>) directedAxonsComponent.getAxons();
 
 			LOGGER.debug("Calculating Axons Gradients");
+			NeuronsActivation rightToLeftPostDropoutInput = rightToLeftAxonsGradientActivatoin.getPostDropoutInput().get();
 			
-			Matrix first = rightToLeftAxonsGradientActivatoin.getPostDropoutInput().get().getActivations(axonsContext.getMatrixFactory());
+			Matrix first = rightToLeftPostDropoutInput.getActivations(axonsContext.getMatrixFactory());
 
 			EditableMatrix totalTrainableAxonsGradientMatrixNonBias = null;
 			Matrix totalTrainableAxonsGradientMatrixBias = null;
 			
-			try (InterrimMatrix second1 = leftToRightAxonsActivation.getPostDropoutInput().get().getActivations(axonsContext.getMatrixFactory()).asInterrimMatrix()) {
-			try (InterrimMatrix second = second1.transpose().asInterrimMatrix()) {
-				
-				totalTrainableAxonsGradientMatrixNonBias = first.mmul(second).asEditableMatrix();
+			NeuronsActivation leftToRightPostDropoutInputActivation = leftToRightAxonsActivation.getPostDropoutInput().get();
+			
+			try (InterrimMatrix leftToRightPostDropoutInputActivationMatrix = leftToRightPostDropoutInputActivation
+					.getActivations(axonsContext.getMatrixFactory()).asInterrimMatrix()) {
+				try (InterrimMatrix second = leftToRightPostDropoutInputActivationMatrix.transpose()
+						.asInterrimMatrix()) {
+					totalTrainableAxonsGradientMatrixNonBias = first.mmul(second).asEditableMatrix();
+					leftToRightPostDropoutInputActivation.close();
+				}
 			}
-			}
+
 
 			if (directedAxonsComponent.getAxons().getLeftNeurons().hasBiasUnit()) {
 				totalTrainableAxonsGradientMatrixBias = first.rowSums();
@@ -112,11 +119,37 @@ public class DefaultDirectedAxonsComponentActivationImpl<A extends Axons<?, ?, ?
 						
 				}
 			}
+			
+			rightToLeftPostDropoutInput.close();
+					
 			return Optional.of(new AxonsGradientImpl((TrainableAxons<?, ?, ?>) directedAxonsComponent.getAxons(),
 					totalTrainableAxonsGradientMatrixNonBias, totalTrainableAxonsGradientMatrixBias));
 			
 		} else {
+			NeuronsActivation postDropoutInput = rightToLeftAxonsGradientActivatoin.getPostDropoutInput().get();
+			NeuronsActivation leftToRightPostDropoutInputActivation = leftToRightAxonsActivation.getPostDropoutInput().get();
+			if (postDropoutInput != null) {
+				postDropoutInput.close();
+			}
+			if (leftToRightPostDropoutInputActivation != null) {
+				postDropoutInput.close();
+			}
+			postDropoutInput.close();
 			return Optional.empty();
 		}
+	}
+	
+	private void close(NeuronsActivation activation) {
+		if (!activation.isImmutable()) {
+			activation.close();
+		}
+	}
+
+	@Override
+	public void close(DirectedComponentActivationLifecycle completedLifeCycleStage) {
+		if (completedLifeCycleStage == DirectedComponentActivationLifecycle.FORWARD_PROPAGATION) {
+			close(getOutput());
+			close(leftToRightAxonsActivation.getPostDropoutOutput());
+		}	
 	}
 }
