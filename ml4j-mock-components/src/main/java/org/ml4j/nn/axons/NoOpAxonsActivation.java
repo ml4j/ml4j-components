@@ -1,7 +1,8 @@
 package org.ml4j.nn.axons;
 
-import org.ml4j.nn.neurons.NeuronsActivation;
 import java.util.function.Supplier;
+
+import org.ml4j.nn.neurons.NeuronsActivation;
 
 public class NoOpAxonsActivation implements AxonsActivation {
 	

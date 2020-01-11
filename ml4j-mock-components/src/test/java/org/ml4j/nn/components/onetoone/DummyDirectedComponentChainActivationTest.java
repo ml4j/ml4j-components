@@ -16,7 +16,7 @@ public class DummyDirectedComponentChainActivationTest extends DefaultDirectedCo
 	@Override
 	protected DefaultDirectedComponentChainActivation createDefaultDirectedComponentChainActivationUnderTest(
 			DefaultDirectedComponentChain componentChain, List<DefaultChainableDirectedComponentActivation> activations) {
-		return new DummyDefaultDirectedComponentChainActivation(componentChain, activations);
+		return new DummyDefaultDirectedComponentActivation(componentChain, activations);
 	}
 	
 	@Override

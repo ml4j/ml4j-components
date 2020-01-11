@@ -26,7 +26,7 @@ import org.ml4j.nn.components.factories.DirectedComponentFactory;
 import org.ml4j.nn.components.manytoone.PathCombinationStrategy;
 import org.ml4j.nn.components.onetone.DefaultChainableDirectedComponent;
 import org.ml4j.nn.components.onetone.DefaultChainableDirectedComponentActivation;
-import org.ml4j.nn.components.onetone.DefaultDirectedComponentBipoleGraphActivation;
+import org.ml4j.nn.components.onetone.DefaultDirectedComponentChainBipoleGraphActivation;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -109,7 +109,7 @@ public abstract class DefaultDirectedComponentChainBipoleGraphTestBase extends T
 		List<DefaultChainableDirectedComponent<?, ?>> mockComponents = Arrays.asList(mockComponent1, mockComponent2);
 		DefaultDirectedComponentChainBipoleGraphBase graph = createDefaultDirectedComponentChainBipoleGraph(mockDirectedComponentFactory, mockComponents, PathCombinationStrategy.ADDITION);
 		Assert.assertNotNull(graph);
-		Assert.assertEquals(DirectedComponentType.COMPONENT_CHAIN_GRAPH, graph.getComponentType());
+		Assert.assertEquals(DirectedComponentType.COMPONENT_CHAIN_BIPOLE_GRAPH, graph.getComponentType());
 	}
 	
 	@Test
@@ -119,7 +119,7 @@ public abstract class DefaultDirectedComponentChainBipoleGraphTestBase extends T
 		DefaultDirectedComponentChainBipoleGraphBase graph = createDefaultDirectedComponentChainBipoleGraph(mockDirectedComponentFactory, mockComponents, PathCombinationStrategy.ADDITION);
 		Assert.assertNotNull(graph);
 		
-		DefaultDirectedComponentBipoleGraphActivation graphActivation =  graph.forwardPropagate(mockInputActivation, mockDirectedComponentsContext);
+		DefaultDirectedComponentChainBipoleGraphActivation graphActivation =  graph.forwardPropagate(mockInputActivation, mockDirectedComponentsContext);
 		Assert.assertNotNull(graphActivation);
 		NeuronsActivation output = graphActivation.getOutput();
 		Assert.assertNotNull(output);

@@ -30,8 +30,8 @@ import org.ml4j.nn.components.axons.DefaultBatchNormDirectedAxonsComponentImpl;
 import org.ml4j.nn.components.axons.DefaultDirectedAxonsComponentImpl;
 import org.ml4j.nn.components.axons.DirectedAxonsComponent;
 import org.ml4j.nn.components.factories.DirectedComponentFactory;
-import org.ml4j.nn.components.manytomany.DefaultComponentChainBatchImpl;
-import org.ml4j.nn.components.manytomany.DefaultDirectedComponentChainBatch;
+import org.ml4j.nn.components.manytomany.DefaultComponentBatchImpl;
+import org.ml4j.nn.components.manytomany.DefaultDirectedComponentBatch;
 import org.ml4j.nn.components.manytoone.DefaultManyToOneFilterConcatDirectedComponentLegacy;
 import org.ml4j.nn.components.manytoone.ManyToOneDirectedComponent;
 import org.ml4j.nn.components.manytoone.PathCombinationStrategy;
@@ -40,7 +40,7 @@ import org.ml4j.nn.components.onetomany.OneToManyDirectedComponent;
 import org.ml4j.nn.components.onetone.DefaultChainableDirectedComponent;
 import org.ml4j.nn.components.onetone.DefaultDirectedComponentBipoleGraph;
 import org.ml4j.nn.components.onetone.DefaultDirectedComponentChain;
-import org.ml4j.nn.components.onetoone.DefaultDirectedComponentChainBipoleGraphImpl;
+import org.ml4j.nn.components.onetoone.DefaultDirectedComponentBipoleGraphImpl;
 import org.ml4j.nn.components.onetoone.DefaultDirectedComponentChainImpl;
 import org.ml4j.nn.neurons.Neurons;
 import org.ml4j.nn.neurons.Neurons3D;
@@ -165,9 +165,9 @@ public class DefaultDirectedComponentFactoryImpl implements DirectedComponentFac
 
 	@Override
 	public DefaultDirectedComponentBipoleGraph createDirectedComponentBipoleGraph(Neurons leftNeurons, Neurons rightNeurons,
-			DefaultDirectedComponentChainBatch parallelComponentChainsBatch,
+			List<DefaultChainableDirectedComponent<?, ?>> parallelComponentChainsBatch,
 			PathCombinationStrategy pathCombinationStrategy) {
-		return new DefaultDirectedComponentChainBipoleGraphImpl(directedComponentFactory, leftNeurons, rightNeurons, parallelComponentChainsBatch, pathCombinationStrategy);
+		return new DefaultDirectedComponentBipoleGraphImpl(directedComponentFactory, leftNeurons, rightNeurons, createDirectedComponentBatch(parallelComponentChainsBatch), pathCombinationStrategy);
 	}
 
 	@Override
@@ -176,9 +176,16 @@ public class DefaultDirectedComponentFactoryImpl implements DirectedComponentFac
 		return new DefaultDirectedComponentChainImpl(sequentialComponents);
 	}
 
-	@Override
+	//@Override
+	public DefaultDirectedComponentBatch createDirectedComponentBatch(
+			List<DefaultChainableDirectedComponent<?, ?>> parallelComponents) {
+		return new DefaultComponentBatchImpl(parallelComponents);
+	}
+	/*
 	public DefaultDirectedComponentChainBatch createDirectedComponentChainBatch(
 			List<DefaultDirectedComponentChain> parallelComponents) {
 		return new DefaultComponentChainBatchImpl(parallelComponents);
 	}
+	*/
+
 }

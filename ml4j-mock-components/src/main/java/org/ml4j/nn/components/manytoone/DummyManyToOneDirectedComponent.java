@@ -18,8 +18,8 @@ import java.util.List;
 import org.ml4j.nn.components.DirectedComponentsContext;
 import org.ml4j.nn.components.manytoone.base.ManyToOneDirectedComponentBase;
 import org.ml4j.nn.neurons.DummyNeuronsActivation;
-import org.ml4j.nn.neurons.NeuronsActivation;
 import org.ml4j.nn.neurons.Neurons;
+import org.ml4j.nn.neurons.NeuronsActivation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

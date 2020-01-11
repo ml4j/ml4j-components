@@ -17,38 +17,38 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.ml4j.nn.components.DirectedComponentsContext;
-import org.ml4j.nn.components.manytomany.DefaultDirectedComponentChainBatch;
+import org.ml4j.nn.components.manytomany.DefaultDirectedComponentBatch;
 import org.ml4j.nn.components.onetone.DefaultChainableDirectedComponent;
-import org.ml4j.nn.components.onetone.DefaultDirectedComponentChainBipoleGraph;
-import org.ml4j.nn.components.onetone.DefaultDirectedComponentChainBipoleGraphActivation;
-import org.ml4j.nn.components.onetoone.base.DefaultDirectedComponentChainBipoleGraphBase;
+import org.ml4j.nn.components.onetone.DefaultDirectedComponentBipoleGraph;
+import org.ml4j.nn.components.onetone.DefaultDirectedComponentBipoleGraphActivation;
+import org.ml4j.nn.components.onetoone.base.DefaultDirectedComponentBipoleGraphBase;
 import org.ml4j.nn.neurons.DummyNeuronsActivation;
 import org.ml4j.nn.neurons.Neurons;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class DummyDefaultDirectedComponentChainBipoleGraph extends DefaultDirectedComponentChainBipoleGraphBase implements DefaultDirectedComponentChainBipoleGraph {
+public class DummyDefaultDirectedComponentBipoleGraph extends DefaultDirectedComponentBipoleGraphBase implements DefaultDirectedComponentBipoleGraph {
 
 	/**
 	 * Default serialization id.
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private static final Logger LOGGER = LoggerFactory.getLogger(DummyDefaultDirectedComponentChainBipoleGraph.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(DummyDefaultDirectedComponentBipoleGraph.class);
 
-	public DummyDefaultDirectedComponentChainBipoleGraph(Neurons inputNeurons, Neurons outputNeurons,
-			DefaultDirectedComponentChainBatch parallelComponentChainsBatch) {
+	public DummyDefaultDirectedComponentBipoleGraph(Neurons inputNeurons, Neurons outputNeurons,
+			DefaultDirectedComponentBatch parallelComponentChainsBatch) {
 		super(inputNeurons, outputNeurons, parallelComponentChainsBatch);
 	}
 
 	@Override
-	public DefaultDirectedComponentChainBatch getEdges() {
+	public DefaultDirectedComponentBatch getEdges() {
 		throw new UnsupportedOperationException();
 	}
 	
 	@Override
-	public DefaultDirectedComponentChainBipoleGraphActivation forwardPropagate(NeuronsActivation neuronsActivation,
+	public DefaultDirectedComponentBipoleGraphActivation forwardPropagate(NeuronsActivation neuronsActivation,
 			DirectedComponentsContext context) {
 		
 		if (neuronsActivation.getFeatureCount() != getInputNeurons().getNeuronCountExcludingBias()) {
@@ -56,7 +56,7 @@ public class DummyDefaultDirectedComponentChainBipoleGraph extends DefaultDirect
 		}
 		LOGGER.debug("Mock forward propagating through DummyDefaultDirectedComponentChainBipoleGraph");
 
-		return new DummyDefaultDirectedComponentChainBipoleGraphActivation(this, new DummyNeuronsActivation(getOutputNeurons(),
+		return new DummyDefaultDirectedComponentBipoleGraphActivation(this, new DummyNeuronsActivation(getOutputNeurons(),
 				neuronsActivation.getFeatureOrientation(), neuronsActivation.getExampleCount()));
 	}
 
@@ -66,8 +66,8 @@ public class DummyDefaultDirectedComponentChainBipoleGraph extends DefaultDirect
 	}
 
 	@Override
-	public DefaultDirectedComponentChainBipoleGraph dup() {
-		return new DummyDefaultDirectedComponentChainBipoleGraph(inputNeurons, outputNeurons, parallelComponentChainsBatch.dup());
+	public DefaultDirectedComponentBipoleGraph dup() {
+		return new DummyDefaultDirectedComponentBipoleGraph(inputNeurons, outputNeurons, parallelComponentBatch.dup());
 	}
 
 }

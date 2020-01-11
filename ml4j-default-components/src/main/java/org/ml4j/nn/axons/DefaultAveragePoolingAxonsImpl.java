@@ -24,6 +24,7 @@ public class DefaultAveragePoolingAxonsImpl implements AveragePoolingAxons {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(DefaultAveragePoolingAxonsImpl.class);
 
+	@SuppressWarnings("unused")
 	private MatrixFactory matrixFactory;
 	private Axons3DConfig config;
 

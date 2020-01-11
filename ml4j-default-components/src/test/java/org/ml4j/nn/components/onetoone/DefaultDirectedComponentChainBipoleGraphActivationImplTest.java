@@ -8,8 +8,8 @@ import org.ml4j.nn.components.manytomany.DefaultDirectedComponentChainBatchActiv
 import org.ml4j.nn.components.manytoone.ManyToOneDirectedComponentActivation;
 import org.ml4j.nn.components.mocks.MockTestData;
 import org.ml4j.nn.components.onetomany.OneToManyDirectedComponentActivation;
-import org.ml4j.nn.components.onetone.DefaultDirectedComponentBipoleGraph;
-import org.ml4j.nn.components.onetone.DefaultDirectedComponentBipoleGraphActivation;
+import org.ml4j.nn.components.onetone.DefaultDirectedComponentChainBipoleGraph;
+import org.ml4j.nn.components.onetone.DefaultDirectedComponentChainBipoleGraphActivation;
 import org.ml4j.nn.components.onetoone.base.DefaultDirectedComponentChainBipoleGraphActivationTestBase;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.mockito.Mock;
@@ -27,12 +27,12 @@ public class DefaultDirectedComponentChainBipoleGraphActivationImplTest extends 
 	protected DefaultDirectedComponentChainBatchActivation mockEdgesActivation;
 	
 	@Override
-	protected DefaultDirectedComponentBipoleGraphActivation createDefaultDirectedComponentChainBipoleGraphActivationUnderTest(
-			DefaultDirectedComponentBipoleGraph bipoleGraph, NeuronsActivation output) {
+	protected DefaultDirectedComponentChainBipoleGraphActivation createDefaultDirectedComponentChainBipoleGraphActivationUnderTest(
+			DefaultDirectedComponentChainBipoleGraph bipoleGraph, NeuronsActivation output) {
 		
 		Mockito.when(mockOutputLinkActivation.getOutput()).thenReturn(output);
 		
-		return new DefaultDirectedComponentBipoleGraphActivationImpl(bipoleGraph, mockInputLinkActivation, mockEdgesActivation, 
+		return new DefaultDirectedComponentChainBipoleGraphActivationImpl(bipoleGraph, mockInputLinkActivation, mockEdgesActivation, 
 				mockOutputLinkActivation, false);
 	}
 
