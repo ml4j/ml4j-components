@@ -22,8 +22,8 @@ import org.ml4j.MatrixFactory;
 import org.ml4j.nn.axons.Axons;
 import org.ml4j.nn.axons.AxonsContext;
 import org.ml4j.nn.axons.ScaleAndShiftAxons;
-import org.ml4j.nn.components.DirectedComponentType;
 import org.ml4j.nn.components.DirectedComponentsContext;
+import org.ml4j.nn.components.NeuralComponentType;
 import org.ml4j.nn.components.axons.BatchNormDirectedAxonsComponent;
 import org.ml4j.nn.components.axons.DirectedAxonsComponent;
 import org.ml4j.nn.components.axons.DirectedAxonsComponentActivation;
@@ -83,7 +83,7 @@ public abstract class BatchNormDirectedAxonsComponentTestBase extends TestBase {
 		Neurons rightNeurons = new Neurons(120, false);
 
 		BatchNormDirectedAxonsComponent<?, ?> directedAxonsComponent = createBatchNormDirectedAxonsComponent(leftNeurons, rightNeurons);
-		Assert.assertEquals(DirectedComponentType.AXONS, directedAxonsComponent.getComponentType());
+		Assert.assertEquals(NeuralComponentType.AXONS, directedAxonsComponent.getComponentType());
 	}
 	
 	@Test

@@ -20,8 +20,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.ml4j.nn.axons.Axons;
 import org.ml4j.nn.axons.AxonsContext;
-import org.ml4j.nn.components.DirectedComponentType;
 import org.ml4j.nn.components.DirectedComponentsContext;
+import org.ml4j.nn.components.NeuralComponentType;
 import org.ml4j.nn.components.axons.DirectedAxonsComponent;
 import org.ml4j.nn.components.axons.DirectedAxonsComponentActivation;
 import org.ml4j.nn.components.base.TestBase;
@@ -81,7 +81,7 @@ public abstract class DirectedAxonsComponentTestBase extends TestBase {
 		Neurons rightNeurons = new Neurons(120, false);
 
 		DirectedAxonsComponent<?, ?, ?> directedAxonsComponent = createDirectedAxonsComponent(leftNeurons, rightNeurons);
-		Assert.assertEquals(DirectedComponentType.AXONS, directedAxonsComponent.getComponentType());
+		Assert.assertEquals(NeuralComponentType.AXONS, directedAxonsComponent.getComponentType());
 	}
 	
 	@Test

@@ -19,8 +19,8 @@ import java.util.function.IntSupplier;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.ml4j.nn.components.DirectedComponentType;
 import org.ml4j.nn.components.DirectedComponentsContext;
+import org.ml4j.nn.components.NeuralComponentType;
 import org.ml4j.nn.components.base.TestBase;
 import org.ml4j.nn.components.mocks.MockTestData;
 import org.ml4j.nn.components.onetomany.OneToManyDirectedComponent;
@@ -63,7 +63,7 @@ public abstract class OneToManyDirectedComponentTestBase extends TestBase{
 	@Test
 	public void testGetComponentType() {	
 		OneToManyDirectedComponent<?> oneToManyDirectedComponent = createOneToManyDirectedAxonsComponent(() -> 3);
-		Assert.assertEquals(DirectedComponentType.ONE_TO_MANY, oneToManyDirectedComponent.getComponentType());
+		Assert.assertEquals(NeuralComponentType.ONE_TO_MANY, oneToManyDirectedComponent.getComponentType());
 	}
 	
 	@Test
@@ -107,7 +107,7 @@ public abstract class OneToManyDirectedComponentTestBase extends TestBase{
 		Assert.assertNotNull(outputs);
 		Assert.assertEquals(targetComponentCount, outputs.size());
 		Assert.assertNotNull(dupComponent);
-		Assert.assertEquals(DirectedComponentType.ONE_TO_MANY, oneToManyDirectedComponent.getComponentType());
+		Assert.assertEquals(NeuralComponentType.ONE_TO_MANY, oneToManyDirectedComponent.getComponentType());
 	}
 	
 
