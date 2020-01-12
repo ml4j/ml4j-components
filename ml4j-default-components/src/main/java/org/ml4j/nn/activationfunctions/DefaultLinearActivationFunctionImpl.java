@@ -45,6 +45,6 @@ public class DefaultLinearActivationFunctionImpl implements DifferentiableActiva
 
 	@Override
 	public ActivationFunctionType getActivationFunctionType() {
-		return ActivationFunctionType.RELU;
+		return ActivationFunctionType.getBaseType(ActivationFunctionBaseType.LINEAR);
 	}
 }

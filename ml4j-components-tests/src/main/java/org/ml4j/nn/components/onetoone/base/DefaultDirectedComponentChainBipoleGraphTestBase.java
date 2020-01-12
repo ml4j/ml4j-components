@@ -20,7 +20,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.ml4j.nn.components.DirectedComponentsContext;
-import org.ml4j.nn.components.NeuralComponentType;
+import org.ml4j.nn.components.NeuralComponentBaseType;
 import org.ml4j.nn.components.base.TestBase;
 import org.ml4j.nn.components.factories.DirectedComponentFactory;
 import org.ml4j.nn.components.manytoone.PathCombinationStrategy;
@@ -109,7 +109,7 @@ public abstract class DefaultDirectedComponentChainBipoleGraphTestBase extends T
 		List<DefaultChainableDirectedComponent<?, ?>> mockComponents = Arrays.asList(mockComponent1, mockComponent2);
 		DefaultDirectedComponentChainBipoleGraphBase graph = createDefaultDirectedComponentChainBipoleGraph(mockDirectedComponentFactory, mockComponents, PathCombinationStrategy.ADDITION);
 		Assert.assertNotNull(graph);
-		Assert.assertEquals(NeuralComponentType.COMPONENT_CHAIN_BIPOLE_GRAPH, graph.getComponentType());
+		Assert.assertEquals(NeuralComponentBaseType.COMPONENT_CHAIN_BIPOLE_GRAPH, graph.getComponentType().getBaseType());
 	}
 	
 	@Test

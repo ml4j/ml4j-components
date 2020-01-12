@@ -89,6 +89,6 @@ public class DefaultSigmoidActivationFunctionImpl implements DifferentiableActiv
 
 	@Override
 	public ActivationFunctionType getActivationFunctionType() {
-		return ActivationFunctionType.SIGMOID;
+		return ActivationFunctionType.getBaseType(ActivationFunctionBaseType.SIGMOID);
 	}
 }

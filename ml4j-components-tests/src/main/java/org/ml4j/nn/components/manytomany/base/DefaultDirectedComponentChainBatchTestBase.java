@@ -20,7 +20,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.ml4j.nn.components.DirectedComponentsContext;
-import org.ml4j.nn.components.NeuralComponentType;
+import org.ml4j.nn.components.NeuralComponentBaseType;
 import org.ml4j.nn.components.base.TestBase;
 import org.ml4j.nn.components.manytomany.DefaultDirectedComponentChainBatch;
 import org.ml4j.nn.components.manytomany.DefaultDirectedComponentChainBatchActivation;
@@ -107,7 +107,7 @@ public abstract class DefaultDirectedComponentChainBatchTestBase extends TestBas
 		List<DefaultChainableDirectedComponent<?, ?>> mockComponents = Arrays.asList(mockComponent1, mockComponent2);
 		DefaultDirectedComponentChainBatch chainBatch = createDefaultDirectedComponentChainBatch(mockComponents);
 		Assert.assertNotNull(chainBatch);
-		Assert.assertEquals(NeuralComponentType.COMPONENT_CHAIN_BATCH, chainBatch.getComponentType());
+		Assert.assertEquals(NeuralComponentBaseType.COMPONENT_CHAIN_BATCH, chainBatch.getComponentType().getBaseType());
 	}
 	
 	@Test

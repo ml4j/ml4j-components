@@ -13,6 +13,8 @@
  */
 package org.ml4j.nn.factories;
 
+import org.ml4j.nn.activationfunctions.ActivationFunctionBaseType;
+import org.ml4j.nn.activationfunctions.ActivationFunctionType;
 import org.ml4j.nn.activationfunctions.DefaultLinearActivationFunctionImpl;
 import org.ml4j.nn.activationfunctions.DefaultReluActivationFunctionImpl;
 import org.ml4j.nn.activationfunctions.DefaultSigmoidActivationFunctionImpl;
@@ -46,6 +48,21 @@ public class DefaultDifferentiableActivationFunctionFactory implements Different
 	@Override
 	public DifferentiableActivationFunction createLinearActivationFunction() {
 		return new DefaultLinearActivationFunctionImpl();
+	}
+
+	@Override
+	public DifferentiableActivationFunction createActivationFunction(ActivationFunctionType activationFunctionType) {
+		if (ActivationFunctionBaseType.LINEAR.equals(activationFunctionType.getBaseType())) {
+			return createLinearActivationFunction();
+		} else if (ActivationFunctionBaseType.RELU.equals(activationFunctionType.getBaseType())) {
+			return createReluActivationFunction();
+		} else if (ActivationFunctionBaseType.SIGMOID.equals(activationFunctionType.getBaseType())) {
+			return createSigmoidActivationFunction();
+		} else if (ActivationFunctionBaseType.SOFTMAX.equals(activationFunctionType.getBaseType())) {
+			return createSoftmaxActivationFunction();
+		} else {
+			throw new IllegalArgumentException("Unsupported activation function type:" + activationFunctionType);
+		}
 	}
 
 }
