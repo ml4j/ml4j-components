@@ -18,7 +18,9 @@ import java.util.function.IntSupplier;
 
 import org.ml4j.Matrix;
 import org.ml4j.MatrixFactory;
+import org.ml4j.nn.activationfunctions.ActivationFunctionType;
 import org.ml4j.nn.activationfunctions.DifferentiableActivationFunction;
+import org.ml4j.nn.activationfunctions.factories.DifferentiableActivationFunctionFactory;
 import org.ml4j.nn.axons.Axons;
 import org.ml4j.nn.axons.Axons3DConfig;
 import org.ml4j.nn.axons.PassThroughAxonsImpl;
@@ -54,12 +56,14 @@ public class DefaultDirectedComponentFactoryImpl implements DirectedComponentFac
 
 	private MatrixFactory matrixFactory;
 	private AxonsFactory axonsFactory;
+	private DifferentiableActivationFunctionFactory activationFunctionFactory;
 	private DirectedComponentFactory directedComponentFactory;
 	
-	public DefaultDirectedComponentFactoryImpl(MatrixFactory matrixFactory, AxonsFactory axonsFactory) {
+	public DefaultDirectedComponentFactoryImpl(MatrixFactory matrixFactory, AxonsFactory axonsFactory, DifferentiableActivationFunctionFactory activationFunctionFactory) {
 		this.matrixFactory = matrixFactory;
 		this.axonsFactory = axonsFactory;
 		this.directedComponentFactory = this;
+		this.activationFunctionFactory = activationFunctionFactory;
 	}
 
 	public void setDirectedComponentFactory(DirectedComponentFactory directedComponentFactory) {
@@ -160,6 +164,13 @@ public class DefaultDirectedComponentFactoryImpl implements DirectedComponentFac
 	@Override
 	public DifferentiableActivationFunctionComponent createDifferentiableActivationFunctionComponent(Neurons neurons, 
 			DifferentiableActivationFunction differentiableActivationFunction) {
+		return new DefaultDifferentiableActivationFunctionComponentImpl(neurons, differentiableActivationFunction);
+	}
+	
+	@Override
+	public DifferentiableActivationFunctionComponent createDifferentiableActivationFunctionComponent(Neurons neurons, 
+			ActivationFunctionType activationFunctionType) {
+		DifferentiableActivationFunction differentiableActivationFunction = activationFunctionFactory.createActivationFunction(activationFunctionType);
 		return new DefaultDifferentiableActivationFunctionComponentImpl(neurons, differentiableActivationFunction);
 	}
 

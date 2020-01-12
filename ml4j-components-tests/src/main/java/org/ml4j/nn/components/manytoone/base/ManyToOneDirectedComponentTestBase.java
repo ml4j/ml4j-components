@@ -20,7 +20,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.ml4j.nn.components.DirectedComponentsContext;
-import org.ml4j.nn.components.NeuralComponentType;
+import org.ml4j.nn.components.NeuralComponentBaseType;
 import org.ml4j.nn.components.base.TestBase;
 import org.ml4j.nn.components.manytoone.ManyToOneDirectedComponent;
 import org.ml4j.nn.components.manytoone.ManyToOneDirectedComponentActivation;
@@ -63,7 +63,7 @@ public abstract class ManyToOneDirectedComponentTestBase extends TestBase {
 	public void testGetComponentType() {	
 		ManyToOneDirectedComponent<?> manyToOneDirectedComponent = createManyToOneDirectedAxonsComponent(PathCombinationStrategy.FILTER_CONCAT);
 		Assert.assertNotNull(manyToOneDirectedComponent);
-		Assert.assertEquals(NeuralComponentType.MANY_TO_ONE, manyToOneDirectedComponent.getComponentType());
+		Assert.assertEquals(NeuralComponentBaseType.MANY_TO_ONE, manyToOneDirectedComponent.getComponentType().getBaseType());
 	}
 		
 	@Test
@@ -97,7 +97,7 @@ public abstract class ManyToOneDirectedComponentTestBase extends TestBase {
 		ManyToOneDirectedComponent<?> dupComponent = oneToManyDirectedComponent.dup();
 		
 		Assert.assertNotNull(dupComponent);
-		Assert.assertEquals(NeuralComponentType.MANY_TO_ONE, oneToManyDirectedComponent.getComponentType());
+		Assert.assertEquals(NeuralComponentBaseType.MANY_TO_ONE, oneToManyDirectedComponent.getComponentType().getBaseType());
 		
 		NeuronsActivation inputActivation1 = MockTestData.mockNeuronsActivation(100, 32);
 		NeuronsActivation inputActivation2 = MockTestData.mockNeuronsActivation(100, 32);

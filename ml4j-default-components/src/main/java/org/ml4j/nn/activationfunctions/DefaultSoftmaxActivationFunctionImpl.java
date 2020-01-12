@@ -77,6 +77,6 @@ public class DefaultSoftmaxActivationFunctionImpl implements DifferentiableActiv
 
 	@Override
 	public ActivationFunctionType getActivationFunctionType() {
-		return ActivationFunctionType.SOFTMAX;
+		return ActivationFunctionType.getBaseType(ActivationFunctionBaseType.SOFTMAX);
 	}
 }

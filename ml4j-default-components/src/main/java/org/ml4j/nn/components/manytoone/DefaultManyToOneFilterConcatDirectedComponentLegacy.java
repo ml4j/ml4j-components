@@ -10,6 +10,7 @@ import org.ml4j.images.Images;
 import org.ml4j.images.MultiChannelImages;
 import org.ml4j.images.SingleChannelImages;
 import org.ml4j.nn.components.DirectedComponentsContext;
+import org.ml4j.nn.components.NeuralComponentBaseType;
 import org.ml4j.nn.components.NeuralComponentType;
 import org.ml4j.nn.components.manytoone.base.ManyToOneDirectedComponentBase;
 import org.ml4j.nn.neurons.ImageNeuronsActivation;
@@ -131,7 +132,7 @@ public class DefaultManyToOneFilterConcatDirectedComponentLegacy extends ManyToO
 
 	@Override
 	public NeuralComponentType getComponentType() {
-		return NeuralComponentType.MANY_TO_ONE;
+		return NeuralComponentType.getBaseType(NeuralComponentBaseType.MANY_TO_ONE);
 	}
 
 	@Override

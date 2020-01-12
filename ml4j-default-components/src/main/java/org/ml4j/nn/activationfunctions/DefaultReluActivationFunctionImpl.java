@@ -46,6 +46,6 @@ public class DefaultReluActivationFunctionImpl implements DifferentiableActivati
 
 	@Override
 	public ActivationFunctionType getActivationFunctionType() {
-		return ActivationFunctionType.RELU;
+		return ActivationFunctionType.getBaseType(ActivationFunctionBaseType.LINEAR);
 	}
 }

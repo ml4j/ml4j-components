@@ -17,7 +17,9 @@ import java.util.List;
 import java.util.function.IntSupplier;
 
 import org.ml4j.Matrix;
+import org.ml4j.nn.activationfunctions.ActivationFunctionType;
 import org.ml4j.nn.activationfunctions.DifferentiableActivationFunction;
+import org.ml4j.nn.activationfunctions.NoOpDifferentiableActivationFunction;
 import org.ml4j.nn.axons.Axons;
 import org.ml4j.nn.axons.Axons3DConfig;
 import org.ml4j.nn.axons.NoOpAxons;
@@ -132,6 +134,13 @@ public class DummyDirectedComponentFactoryImpl implements DirectedComponentFacto
 	public DifferentiableActivationFunctionComponent createDifferentiableActivationFunctionComponent(Neurons neurons, 
 			DifferentiableActivationFunction differentiableActivationFunction) {
 		return new DummyDifferentiableActivationFunctionComponent(neurons, differentiableActivationFunction);
+	}
+	
+	@Override
+	public DifferentiableActivationFunctionComponent createDifferentiableActivationFunctionComponent(Neurons neurons, 
+			ActivationFunctionType activationFunctionType) {
+		return new DummyDifferentiableActivationFunctionComponent(neurons, 
+				new NoOpDifferentiableActivationFunction(activationFunctionType));
 	}
 
 	@Override
