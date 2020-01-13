@@ -131,7 +131,7 @@ public class DefaultManyToOneFilterConcatDirectedComponentLegacy extends ManyToO
 	}
 
 	@Override
-	public NeuralComponentType getComponentType() {
+	public NeuralComponentType<?> getComponentType() {
 		return NeuralComponentType.getBaseType(NeuralComponentBaseType.MANY_TO_ONE);
 	}
 
