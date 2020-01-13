@@ -193,11 +193,13 @@ public class DefaultDirectedComponentFactoryImpl implements DirectedComponentFac
 			List<DefaultChainableDirectedComponent<?, ?>> parallelComponents) {
 		return new DefaultComponentBatchImpl(parallelComponents);
 	}
-	
+
 	@Override
-	public DefaultChainableDirectedComponent<?, ?> createComponent(Neurons inputNeurons, Neurons outputNeurons,
-			NeuralComponentType<DefaultChainableDirectedComponent<?, ?>> neuralComponentType) {
+	public <S extends DefaultChainableDirectedComponent<?, ?>> DefaultChainableDirectedComponent<?, ?> createComponent(
+			Neurons leftNeurons, Neurons rightNeurons, NeuralComponentType<S> neuralComponentType) {
 		throw new UnsupportedOperationException("Creation of component by component type not yet implemented");
 	}
 
+	
+	
 }
