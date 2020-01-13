@@ -25,6 +25,7 @@ import org.ml4j.nn.axons.Axons;
 import org.ml4j.nn.axons.Axons3DConfig;
 import org.ml4j.nn.axons.PassThroughAxonsImpl;
 import org.ml4j.nn.axons.factories.AxonsFactory;
+import org.ml4j.nn.components.NeuralComponentType;
 import org.ml4j.nn.components.activationfunctions.DefaultDifferentiableActivationFunctionComponentImpl;
 import org.ml4j.nn.components.activationfunctions.DifferentiableActivationFunctionComponent;
 import org.ml4j.nn.components.axons.BatchNormDirectedAxonsComponent;
@@ -192,11 +193,11 @@ public class DefaultDirectedComponentFactoryImpl implements DirectedComponentFac
 			List<DefaultChainableDirectedComponent<?, ?>> parallelComponents) {
 		return new DefaultComponentBatchImpl(parallelComponents);
 	}
-	/*
-	public DefaultDirectedComponentChainBatch createDirectedComponentChainBatch(
-			List<DefaultDirectedComponentChain> parallelComponents) {
-		return new DefaultComponentChainBatchImpl(parallelComponents);
+	
+	@Override
+	public DefaultChainableDirectedComponent<?, ?> createComponent(Neurons inputNeurons, Neurons outputNeurons,
+			NeuralComponentType<DefaultChainableDirectedComponent<?, ?>> neuralComponentType) {
+		throw new UnsupportedOperationException("Creation of component by component type not yet implemented");
 	}
-	*/
 
 }
