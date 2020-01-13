@@ -23,6 +23,7 @@ import org.ml4j.nn.activationfunctions.NoOpDifferentiableActivationFunction;
 import org.ml4j.nn.axons.Axons;
 import org.ml4j.nn.axons.Axons3DConfig;
 import org.ml4j.nn.axons.NoOpAxons;
+import org.ml4j.nn.components.DummyGenericComponent;
 import org.ml4j.nn.components.NeuralComponentType;
 import org.ml4j.nn.components.activationfunctions.DifferentiableActivationFunctionComponent;
 import org.ml4j.nn.components.activationfunctions.DummyDifferentiableActivationFunctionComponent;
@@ -166,9 +167,8 @@ public class DummyDirectedComponentFactoryImpl implements DirectedComponentFacto
 	}
 
 	@Override
-	public DefaultChainableDirectedComponent<?, ?> createComponent(Neurons inputNeurons, Neurons outputNeurons,
-			NeuralComponentType<DefaultChainableDirectedComponent<?, ?>> neuralComponentType) {
-		throw new UnsupportedOperationException("Creation of component by component type not yet implemented");
+	public <S extends DefaultChainableDirectedComponent<?, ?>> DefaultChainableDirectedComponent<?, ?> createComponent(
+			Neurons leftNeurons, Neurons rightNeurons, NeuralComponentType<S> neuralComponentType) {
+		return new DummyGenericComponent(leftNeurons, rightNeurons, neuralComponentType);
 	}
-
 }
