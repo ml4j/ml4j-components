@@ -1,10 +1,15 @@
 package org.ml4j.nn.activationfunctions.mocks;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+
 import org.ml4j.nn.activationfunctions.ActivationFunctionType;
 import org.ml4j.nn.activationfunctions.DifferentiableActivationFunction;
 import org.ml4j.nn.activationfunctions.DifferentiableActivationFunctionActivation;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.ml4j.nn.neurons.NeuronsActivationContext;
+import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
 
 public class DummyDifferentiableActivationFunctionImpl implements DifferentiableActivationFunction {
 
@@ -39,6 +44,16 @@ public class DummyDifferentiableActivationFunctionImpl implements Differentiable
 	public NeuronsActivation activationGradient(DifferentiableActivationFunctionActivation activation,
 			NeuronsActivationContext context) {
 		return activation.getInput().dup();
+	}
+
+	@Override
+	public Optional<NeuronsActivationFeatureOrientation> optimisedFor() {
+		return Optional.empty();
+	}
+
+	@Override
+	public List<NeuronsActivationFeatureOrientation> supports() {
+		return Arrays.asList(NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET);
 	}
 
 }

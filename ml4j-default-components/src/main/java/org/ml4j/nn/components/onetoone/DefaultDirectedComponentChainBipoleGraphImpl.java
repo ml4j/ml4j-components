@@ -15,6 +15,7 @@ package org.ml4j.nn.components.onetoone;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import org.ml4j.nn.components.DirectedComponentsContext;
 import org.ml4j.nn.components.factories.DirectedComponentFactory;
@@ -31,6 +32,7 @@ import org.ml4j.nn.components.onetone.DefaultDirectedComponentChainBipoleGraphAc
 import org.ml4j.nn.components.onetoone.base.DefaultDirectedComponentChainBipoleGraphBase;
 import org.ml4j.nn.neurons.Neurons;
 import org.ml4j.nn.neurons.NeuronsActivation;
+import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -119,6 +121,16 @@ public class DefaultDirectedComponentChainBipoleGraphImpl extends DefaultDirecte
 	public DefaultDirectedComponentChainBipoleGraph dup() {
 		return new DefaultDirectedComponentChainBipoleGraphImpl(directedComponentFactory, inputNeurons, outputNeurons, parallelComponentChainsBatch.dup(),
 				pathCombinationStrategy);
+	}
+	
+	@Override
+	public List<NeuronsActivationFeatureOrientation> supports() {
+		return NeuronsActivationFeatureOrientation.intersectLists(Arrays.asList(oneToManyDirectedComponent.supports(), parallelComponentChainsBatch.supports(), manyToOneDirectedComponent.supports()));
+	}
+
+	@Override
+	public Optional<NeuronsActivationFeatureOrientation> optimisedFor() {
+		return NeuronsActivationFeatureOrientation.intersectOptionals(Arrays.asList(oneToManyDirectedComponent.optimisedFor(), parallelComponentChainsBatch.optimisedFor(), manyToOneDirectedComponent.optimisedFor()));
 	}
 
 }

@@ -13,9 +13,14 @@
  */
 package org.ml4j.nn.axons;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+
 import org.ml4j.nn.axons.base.AxonsBase;
 import org.ml4j.nn.neurons.Neurons;
 import org.ml4j.nn.neurons.NeuronsActivation;
+import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
 
 /**
  * Mock implementation of Axons provided for component construction purposes but not intended to be interacted with.
@@ -54,6 +59,16 @@ public class NoOpAxons<L extends Neurons, R extends Neurons> extends AxonsBase<L
 	@Override
 	public AxonsActivation pushRightToLeft(NeuronsActivation arg0, AxonsActivation arg1, AxonsContext arg2) {
 		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public Optional<NeuronsActivationFeatureOrientation> optimisedFor() {
+		return Optional.empty();
+	}
+
+	@Override
+	public List<NeuronsActivationFeatureOrientation> supports() {
+		return Arrays.asList(NeuronsActivationFeatureOrientation.values());
 	}
 
 }

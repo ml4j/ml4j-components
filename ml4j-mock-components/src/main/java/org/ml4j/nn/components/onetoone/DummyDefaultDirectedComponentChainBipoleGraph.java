@@ -15,6 +15,7 @@ package org.ml4j.nn.components.onetoone;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import org.ml4j.nn.components.DirectedComponentsContext;
 import org.ml4j.nn.components.manytomany.DefaultDirectedComponentChainBatch;
@@ -25,6 +26,7 @@ import org.ml4j.nn.components.onetoone.base.DefaultDirectedComponentChainBipoleG
 import org.ml4j.nn.neurons.DummyNeuronsActivation;
 import org.ml4j.nn.neurons.Neurons;
 import org.ml4j.nn.neurons.NeuronsActivation;
+import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -68,6 +70,18 @@ public class DummyDefaultDirectedComponentChainBipoleGraph extends DefaultDirect
 	@Override
 	public DefaultDirectedComponentChainBipoleGraph dup() {
 		return new DummyDefaultDirectedComponentChainBipoleGraph(inputNeurons, outputNeurons, parallelComponentChainsBatch.dup());
+	}
+	
+	@Override
+	public Optional<NeuronsActivationFeatureOrientation> optimisedFor() {
+		// TODO THUR
+		return Optional.empty();
+	}
+
+	@Override
+	public List<NeuronsActivationFeatureOrientation> supports() {
+		// TODO THUR
+		return Arrays.asList(NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET);
 	}
 
 }

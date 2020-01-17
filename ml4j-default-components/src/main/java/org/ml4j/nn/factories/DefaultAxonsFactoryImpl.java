@@ -50,7 +50,7 @@ public class DefaultAxonsFactoryImpl implements AxonsFactory {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private MatrixFactory matrixFactory;
+	protected MatrixFactory matrixFactory;
 
 	/**
 	 * @param matrixFactory The MatrixFactory used to construct matrices used by the generated Axons implementations.

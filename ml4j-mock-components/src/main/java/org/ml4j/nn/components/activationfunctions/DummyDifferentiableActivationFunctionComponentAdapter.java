@@ -17,8 +17,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import org.ml4j.nn.activationfunctions.ActivationFunctionType;
-import org.ml4j.nn.components.activationfunctions.base.DifferentiableActivationFunctionComponentBase;
+import org.ml4j.nn.activationfunctions.DifferentiableActivationFunction;
+import org.ml4j.nn.components.activationfunctions.base.DifferentiableActivationFunctionComponentAdapterBase;
 import org.ml4j.nn.neurons.Neurons;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.ml4j.nn.neurons.NeuronsActivationContext;
@@ -30,15 +30,15 @@ import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
  * @author Michael Lavelle
  *
  */
-public class DummyDifferentiableActivationFunctionComponent extends DifferentiableActivationFunctionComponentBase implements DifferentiableActivationFunctionComponent {
+public class DummyDifferentiableActivationFunctionComponentAdapter extends DifferentiableActivationFunctionComponentAdapterBase implements DifferentiableActivationFunctionComponent {
 
 	/**
 	 * Generated serialization id.
 	 */
 	private static final long serialVersionUID = -6033017517698579773L;
 	
-	public DummyDifferentiableActivationFunctionComponent(Neurons neurons, ActivationFunctionType activationFunctionType){
-		super(neurons, activationFunctionType);
+	public DummyDifferentiableActivationFunctionComponentAdapter(Neurons neurons, DifferentiableActivationFunction activationFunction){
+		super(neurons, activationFunction);
 	}
 
 	@Override
@@ -49,8 +49,8 @@ public class DummyDifferentiableActivationFunctionComponent extends Differentiab
 	}
 
 	@Override
-	public DifferentiableActivationFunctionComponent dup() {
-		return new DummyDifferentiableActivationFunctionComponent(neurons, activationFunctionType);
+	public DifferentiableActivationFunctionComponentAdapter dup() {
+		return new DummyDifferentiableActivationFunctionComponentAdapter(neurons, activationFunction);
 	}
 
 	@Override

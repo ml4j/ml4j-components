@@ -1,5 +1,9 @@
 package org.ml4j.nn.axons.mocks;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+
 import org.ml4j.MatrixFactory;
 import org.ml4j.nn.axons.AveragePoolingAxons;
 import org.ml4j.nn.axons.Axons3DConfig;
@@ -85,6 +89,16 @@ public class DummyAveragePoolingAxonsImpl implements AveragePoolingAxons {
 	@Override
 	public Axons3DConfig getConfig() {
 		return config;
+	}
+	
+	@Override
+	public Optional<NeuronsActivationFeatureOrientation> optimisedFor() {
+		return Optional.empty();
+	}
+
+	@Override
+	public List<NeuronsActivationFeatureOrientation> supports() {
+		return Arrays.asList(NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET);
 	}
 
 }

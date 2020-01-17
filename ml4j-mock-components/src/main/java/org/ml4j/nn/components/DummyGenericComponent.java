@@ -2,12 +2,14 @@ package org.ml4j.nn.components;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import org.ml4j.nn.components.onetone.DefaultChainableDirectedComponent;
 import org.ml4j.nn.components.onetone.DefaultChainableDirectedComponentActivation;
 import org.ml4j.nn.neurons.DummyNeuronsActivation;
 import org.ml4j.nn.neurons.Neurons;
 import org.ml4j.nn.neurons.NeuronsActivation;
+import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
 
 public class DummyGenericComponent implements DefaultChainableDirectedComponent<DefaultChainableDirectedComponentActivation, Object> {
 
@@ -68,4 +70,15 @@ public class DummyGenericComponent implements DefaultChainableDirectedComponent<
 		return neuralComponentType;
 	}
 
+	@Override
+	public Optional<NeuronsActivationFeatureOrientation> optimisedFor() {
+		// TODO THUR
+		return Optional.empty();
+	}
+
+	@Override
+	public List<NeuronsActivationFeatureOrientation> supports() {
+		// TODO THUR
+		return Arrays.asList(NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET);
+	}
 }

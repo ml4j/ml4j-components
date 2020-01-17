@@ -1,5 +1,9 @@
 package org.ml4j.nn.axons;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+
 import org.ml4j.EditableMatrix;
 import org.ml4j.InterrimMatrix;
 import org.ml4j.Matrix;
@@ -222,6 +226,16 @@ public class DefaultAveragePoolingAxonsImpl implements AveragePoolingAxons {
 	@Override
 	public Axons3DConfig getConfig() {
 		return config;
+	}
+	
+	@Override
+	public Optional<NeuronsActivationFeatureOrientation> optimisedFor() {
+		return Optional.empty();
+	}
+
+	@Override
+	public List<NeuronsActivationFeatureOrientation> supports() {
+		return Arrays.asList(NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET);
 	}
 
 }

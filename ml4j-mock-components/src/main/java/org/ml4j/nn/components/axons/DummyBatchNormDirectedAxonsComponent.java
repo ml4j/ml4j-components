@@ -13,6 +13,10 @@
  */
 package org.ml4j.nn.components.axons;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+
 import org.ml4j.Matrix;
 import org.ml4j.nn.axons.Axons;
 import org.ml4j.nn.axons.AxonsActivation;
@@ -22,6 +26,7 @@ import org.ml4j.nn.components.axons.base.DirectedAxonsComponentBase;
 import org.ml4j.nn.neurons.DummyNeuronsActivation;
 import org.ml4j.nn.neurons.Neurons;
 import org.ml4j.nn.neurons.NeuronsActivation;
+import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -85,6 +90,18 @@ public class DummyBatchNormDirectedAxonsComponent<L extends Neurons> extends Dir
 		AxonsActivation dummyAxonsActivation = new NoOpAxonsActivation(axons, () -> neuronsActivation, dummyOutput);
 	
 		return new DummyDirectedAxonsComponentActivation<>(this, dummyAxonsActivation, axonsContext);
+	}
+	
+	@Override
+	public Optional<NeuronsActivationFeatureOrientation> optimisedFor() {
+		// TODO THUR
+		return Optional.empty();
+	}
+
+	@Override
+	public List<NeuronsActivationFeatureOrientation> supports() {
+		// TODO THUR
+		return Arrays.asList(NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET);
 	}
 
 }

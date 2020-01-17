@@ -1,5 +1,9 @@
 package org.ml4j.nn.axons;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+
 import org.ml4j.EditableMatrix;
 import org.ml4j.Matrix;
 import org.ml4j.nn.neurons.ImageNeuronsActivation;
@@ -196,5 +200,15 @@ public abstract class WeightedAxonsBase<L extends Neurons, R extends Neurons, A 
 	}
 
 	protected abstract boolean isLeftInputDropoutSupported();
+	
+	@Override
+	public Optional<NeuronsActivationFeatureOrientation> optimisedFor() {
+		return Optional.empty();
+	}
+
+	@Override
+	public List<NeuronsActivationFeatureOrientation> supports() {
+		return Arrays.asList(NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET);
+	}
 
 }

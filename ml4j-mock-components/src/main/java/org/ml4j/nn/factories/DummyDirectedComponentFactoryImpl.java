@@ -19,7 +19,6 @@ import java.util.function.IntSupplier;
 import org.ml4j.Matrix;
 import org.ml4j.nn.activationfunctions.ActivationFunctionType;
 import org.ml4j.nn.activationfunctions.DifferentiableActivationFunction;
-import org.ml4j.nn.activationfunctions.NoOpDifferentiableActivationFunction;
 import org.ml4j.nn.axons.Axons;
 import org.ml4j.nn.axons.Axons3DConfig;
 import org.ml4j.nn.axons.NoOpAxons;
@@ -27,6 +26,7 @@ import org.ml4j.nn.components.DummyGenericComponent;
 import org.ml4j.nn.components.NeuralComponentType;
 import org.ml4j.nn.components.activationfunctions.DifferentiableActivationFunctionComponent;
 import org.ml4j.nn.components.activationfunctions.DummyDifferentiableActivationFunctionComponent;
+import org.ml4j.nn.components.activationfunctions.DummyDifferentiableActivationFunctionComponentAdapter;
 import org.ml4j.nn.components.axons.BatchNormDirectedAxonsComponent;
 import org.ml4j.nn.components.axons.DirectedAxonsComponent;
 import org.ml4j.nn.components.axons.DummyBatchNormDirectedAxonsComponent;
@@ -135,14 +135,13 @@ public class DummyDirectedComponentFactoryImpl implements DirectedComponentFacto
 	@Override
 	public DifferentiableActivationFunctionComponent createDifferentiableActivationFunctionComponent(Neurons neurons, 
 			DifferentiableActivationFunction differentiableActivationFunction) {
-		return new DummyDifferentiableActivationFunctionComponent(neurons, differentiableActivationFunction);
+		return new DummyDifferentiableActivationFunctionComponentAdapter(neurons, differentiableActivationFunction);
 	}
 	
 	@Override
 	public DifferentiableActivationFunctionComponent createDifferentiableActivationFunctionComponent(Neurons neurons, 
 			ActivationFunctionType activationFunctionType) {
-		return new DummyDifferentiableActivationFunctionComponent(neurons, 
-				new NoOpDifferentiableActivationFunction(activationFunctionType));
+		return new DummyDifferentiableActivationFunctionComponent(neurons, activationFunctionType);
 	}
 
 	@Override

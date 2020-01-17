@@ -1,5 +1,9 @@
 package org.ml4j.nn.axons.mocks;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+
 import org.ml4j.Matrix;
 import org.ml4j.MatrixFactory;
 import org.ml4j.nn.axons.Axons;
@@ -7,6 +11,7 @@ import org.ml4j.nn.axons.AxonsActivation;
 import org.ml4j.nn.axons.AxonsContext;
 import org.ml4j.nn.neurons.Neurons;
 import org.ml4j.nn.neurons.NeuronsActivation;
+import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
 import org.ml4j.nn.neurons.NeuronsActivationImpl;
 
 public class DummyAxons<L extends Neurons, R extends Neurons, A extends Axons<L, R, A>> implements Axons<L, R, A> {
@@ -60,6 +65,16 @@ public class DummyAxons<L extends Neurons, R extends Neurons, A extends Axons<L,
 	@Override
 	public boolean isTrainable(AxonsContext axonsContext) {
 		return true;
+	}
+
+	@Override
+	public Optional<NeuronsActivationFeatureOrientation> optimisedFor() {
+		return Optional.empty();
+	}
+
+	@Override
+	public List<NeuronsActivationFeatureOrientation> supports() {
+		return Arrays.asList(NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET);
 	}
 
 }

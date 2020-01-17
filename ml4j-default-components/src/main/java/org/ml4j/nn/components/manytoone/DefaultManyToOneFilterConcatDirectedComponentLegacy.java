@@ -1,7 +1,9 @@
 package org.ml4j.nn.components.manytoone;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
@@ -143,6 +145,14 @@ public class DefaultManyToOneFilterConcatDirectedComponentLegacy extends ManyToO
 		
 		return new  ManyToOneFilterConcatDirectedComponentActivation(input.size(), b.getRight(), b.getLeft());
 	}
-
 	
+	@Override
+	public Optional<NeuronsActivationFeatureOrientation> optimisedFor() {
+		return Optional.empty();
+	}
+
+	@Override
+	public List<NeuronsActivationFeatureOrientation> supports() {
+		return Arrays.asList(NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET);
+	}
 }

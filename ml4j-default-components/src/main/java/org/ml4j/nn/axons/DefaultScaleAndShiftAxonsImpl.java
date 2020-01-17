@@ -38,6 +38,4 @@ public class DefaultScaleAndShiftAxonsImpl<N extends Neurons> extends WeightedAx
 	protected boolean isLeftInputDropoutSupported() {
 		return false;
 	}
-	
-	
 }

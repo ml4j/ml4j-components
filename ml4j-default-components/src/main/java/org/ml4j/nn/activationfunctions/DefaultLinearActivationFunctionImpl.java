@@ -13,8 +13,13 @@
  */
 package org.ml4j.nn.activationfunctions;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.ml4j.nn.neurons.NeuronsActivationContext;
+import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
 import org.ml4j.nn.neurons.NeuronsActivationImpl;
 
 /**
@@ -46,5 +51,15 @@ public class DefaultLinearActivationFunctionImpl implements DifferentiableActiva
 	@Override
 	public ActivationFunctionType getActivationFunctionType() {
 		return ActivationFunctionType.getBaseType(ActivationFunctionBaseType.LINEAR);
+	}
+
+	@Override
+	public Optional<NeuronsActivationFeatureOrientation> optimisedFor() {
+		return Optional.empty();
+	}
+
+	@Override
+	public List<NeuronsActivationFeatureOrientation> supports() {
+		return Arrays.asList(NeuronsActivationFeatureOrientation.values());
 	}
 }
