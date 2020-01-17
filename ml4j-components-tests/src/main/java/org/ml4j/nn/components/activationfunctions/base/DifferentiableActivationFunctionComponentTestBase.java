@@ -16,8 +16,8 @@ package org.ml4j.nn.components.activationfunctions.base;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.ml4j.nn.activationfunctions.ActivationFunctionBaseType;
 import org.ml4j.nn.activationfunctions.ActivationFunctionType;
-import org.ml4j.nn.activationfunctions.DifferentiableActivationFunction;
 import org.ml4j.nn.activationfunctions.DifferentiableActivationFunctionActivation;
 import org.ml4j.nn.components.DirectedComponentsContext;
 import org.ml4j.nn.components.NeuralComponentBaseType;
@@ -38,14 +38,13 @@ import org.mockito.MockitoAnnotations;
  * @author Michael Lavelle
  *
  */
-public abstract class DifferentiableActivationFunctionComponentTestBase extends TestBase {
+public abstract class DifferentiableActivationFunctionComponentTestBase<L extends DifferentiableActivationFunctionComponent> extends TestBase {
 
 	@Mock
-	private NeuronsActivation mockNeuronsActivation;
+	protected NeuronsActivation mockNeuronsActivation;
 	
-	@Mock
-	protected DifferentiableActivationFunction mockActivationFunction;
-	
+	//@Mock
+	//protected DifferentiableActivationFunction mockActivationFunction;
 	
 	@Mock
 	protected DifferentiableActivationFunctionActivation mockActivationFunctionActivation;
@@ -58,7 +57,7 @@ public abstract class DifferentiableActivationFunctionComponentTestBase extends 
 	
 	
 	@Mock
-	private NeuronsActivationContext mockNeuronsActivationContext;
+	protected NeuronsActivationContext mockNeuronsActivationContext;
 	
 	@Before
 	public void setup() {
@@ -73,16 +72,19 @@ public abstract class DifferentiableActivationFunctionComponentTestBase extends 
 
 	}
 
-	private DifferentiableActivationFunctionComponent createDifferentiableActivationFunctionComponent(Neurons neurons, DifferentiableActivationFunction activationFunction) {
-		return createDifferentiableActivationFunctionComponentUnderTest(neurons, activationFunction);
+	private L createDifferentiableActivationFunctionComponent(Neurons neurons, ActivationFunctionType activationFunctionType) {
+		return createDifferentiableActivationFunctionComponentUnderTest(neurons, activationFunctionType);
 	}
 		
-	protected abstract DifferentiableActivationFunctionComponent createDifferentiableActivationFunctionComponentUnderTest(Neurons neurons, DifferentiableActivationFunction activationFunction);
+	protected abstract L createDifferentiableActivationFunctionComponentUnderTest(Neurons neurons, ActivationFunctionType activationFunctionType);
 
 	@Test
 	public void testConstruction() {	
+		
+		ActivationFunctionType activationFunctionType = ActivationFunctionType.getBaseType(ActivationFunctionBaseType.RELU);
+		
 		Neurons neurons = new Neurons(100, false);
-		DifferentiableActivationFunctionComponent activationFunctionComponent = createDifferentiableActivationFunctionComponent(neurons, mockActivationFunction);
+		DifferentiableActivationFunctionComponent activationFunctionComponent = createDifferentiableActivationFunctionComponent(neurons, activationFunctionType);
 		Assert.assertNotNull(activationFunctionComponent);
 	}
 	
@@ -90,9 +92,12 @@ public abstract class DifferentiableActivationFunctionComponentTestBase extends 
 	public void testGetComponentType() {	
 		Neurons neurons = new Neurons(100, false);
 		
-		Mockito.when(mockActivationFunction.getActivationFunctionType()).thenReturn(ActivationFunctionType.createCustomBaseType("DUMMY"));
+		ActivationFunctionType activationFunctionType = ActivationFunctionType.getBaseType(ActivationFunctionBaseType.RELU);
+
+		// TODO THUR
+		//Mockito.when(mockActivationFunction.getActivationFunctionType()).thenReturn(ActivationFunctionType.createCustomBaseType("DUMMY"));
 		
-		DifferentiableActivationFunctionComponent activationFunctionComponent = createDifferentiableActivationFunctionComponent(neurons, mockActivationFunction);
+		DifferentiableActivationFunctionComponent activationFunctionComponent = createDifferentiableActivationFunctionComponent(neurons, activationFunctionType);
 		Assert.assertNotNull(activationFunctionComponent);
 		Assert.assertEquals(NeuralComponentBaseType.ACTIVATION_FUNCTION, activationFunctionComponent.getComponentType().getBaseType());
 	}
@@ -100,16 +105,20 @@ public abstract class DifferentiableActivationFunctionComponentTestBase extends 
 	@Test
 	public void testForwardPropagate() {	
 		
+		ActivationFunctionType activationFunctionType = ActivationFunctionType.getBaseType(ActivationFunctionBaseType.RELU);
+
+		
 		Mockito.when(mockOutput.getExampleCount()).thenReturn(32);
 		Mockito.when(mockOutput.getFeatureCount()).thenReturn(110);
 		Mockito.when(mockOutput.getFeatureOrientation()).thenReturn(NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET);
 
 		Mockito.when(mockActivationFunctionActivation.getOutput()).thenReturn(mockOutput);
-				
-		Mockito.when(mockActivationFunction.activate(mockNeuronsActivation, mockNeuronsActivationContext)).thenReturn(mockActivationFunctionActivation);
+		
+		// TODO THUR
+		//Mockito.when(mockActivationFunction.activate(mockNeuronsActivation, mockNeuronsActivationContext)).thenReturn(mockActivationFunctionActivation);
 		
 		Neurons neurons = new Neurons(110, false);
-		DifferentiableActivationFunctionComponent activationFunctionComponent = createDifferentiableActivationFunctionComponent(neurons, mockActivationFunction);
+		DifferentiableActivationFunctionComponent activationFunctionComponent = createDifferentiableActivationFunctionComponent(neurons, activationFunctionType);
 		Assert.assertNotNull(activationFunctionComponent);
 		DifferentiableActivationFunctionComponentActivation activation =  activationFunctionComponent.forwardPropagate(mockNeuronsActivation, mockNeuronsActivationContext);
 		Assert.assertNotNull(activation);
@@ -129,20 +138,24 @@ public abstract class DifferentiableActivationFunctionComponentTestBase extends 
 	@Test
 	public void testDup() {
 		
+		ActivationFunctionType activationFunctionType = ActivationFunctionType.getBaseType(ActivationFunctionBaseType.RELU);
+		
 		Mockito.when(mockOutput.getExampleCount()).thenReturn(32);
 		Mockito.when(mockOutput.getFeatureCount()).thenReturn(110);
 		Mockito.when(mockOutput.getFeatureOrientation()).thenReturn(NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET);
 
 		Mockito.when(mockActivationFunctionActivation.getOutput()).thenReturn(mockOutput);
 		
-		Mockito.when(mockActivationFunction.getActivationFunctionType()).thenReturn(ActivationFunctionType.createCustomBaseType("DUMMY"));
+		// TODO THUR
+
+		//Mockito.when(mockActivationFunction.getActivationFunctionType()).thenReturn(ActivationFunctionType.createCustomBaseType("DUMMY"));
 
 		
-		Mockito.when(mockActivationFunction.activate(mockNeuronsActivation, mockNeuronsActivationContext)).thenReturn(mockActivationFunctionActivation);
+		//Mockito.when(mockActivationFunction.activate(mockNeuronsActivation, mockNeuronsActivationContext)).thenReturn(mockActivationFunctionActivation);
 	
 		
 		Neurons neurons = new Neurons(110, false);
-		DifferentiableActivationFunctionComponent activationFunctionComponent = createDifferentiableActivationFunctionComponent(neurons, mockActivationFunction);
+		DifferentiableActivationFunctionComponent activationFunctionComponent = createDifferentiableActivationFunctionComponent(neurons, activationFunctionType);
 		DifferentiableActivationFunctionComponent dupComponent = activationFunctionComponent.dup();
 		
 		DifferentiableActivationFunctionComponentActivation dupActivation =  dupComponent.forwardPropagate(mockNeuronsActivation, mockNeuronsActivationContext);

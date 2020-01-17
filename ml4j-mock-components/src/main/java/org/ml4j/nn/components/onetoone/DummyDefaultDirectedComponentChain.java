@@ -82,4 +82,6 @@ public class DummyDefaultDirectedComponentChain extends DefaultDirectedComponent
 	public DefaultDirectedComponentChain dup() {
 		return new DummyDefaultDirectedComponentChain(sequentialComponents.stream().map(c -> c.dup()).collect(Collectors.toList()));
 	}
+	
+	
 }

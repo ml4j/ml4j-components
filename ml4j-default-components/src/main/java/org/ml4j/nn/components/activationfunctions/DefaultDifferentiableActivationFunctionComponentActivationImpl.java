@@ -33,7 +33,7 @@ import org.slf4j.LoggerFactory;
  * 
  * @author Michael Lavelle
  */
-public class DefaultDifferentiableActivationFunctionComponentActivationImpl extends DifferentiableActivationFunctionComponentActivationBase implements DifferentiableActivationFunctionComponentActivation {
+public class DefaultDifferentiableActivationFunctionComponentActivationImpl extends DifferentiableActivationFunctionComponentActivationBase<DifferentiableActivationFunctionComponentAdapter> implements DifferentiableActivationFunctionComponentActivation {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(DefaultDifferentiableActivationFunctionComponentActivationImpl.class);
 
@@ -45,7 +45,7 @@ public class DefaultDifferentiableActivationFunctionComponentActivationImpl exte
 	 * @param activationFunctionActivation The activation from the underlying DifferentiableActivationFunction.
 	 * @param activationContext The activation context.
 	 */
-	public DefaultDifferentiableActivationFunctionComponentActivationImpl(DifferentiableActivationFunctionComponent activationFunctionComponent, 
+	public DefaultDifferentiableActivationFunctionComponentActivationImpl(DifferentiableActivationFunctionComponentAdapter activationFunctionComponent, 
 			DifferentiableActivationFunctionActivation activationFunctionActivation, NeuronsActivationContext activationContext) {
 		super(activationFunctionComponent, activationFunctionActivation.getInput(), activationFunctionActivation.getOutput());
 		this.activationFunctionActivation = activationFunctionActivation;
@@ -78,7 +78,7 @@ public class DefaultDifferentiableActivationFunctionComponentActivationImpl exte
 	@Override
 	public DirectedComponentGradient<NeuronsActivation> backPropagate(CostFunctionGradient costFunctionGradient) {
 		LOGGER.debug("Back propagating cost function gradient through DifferentiableActivationFunctionComponentActivation");
-		return costFunctionGradient.backPropagateThroughFinalActivationFunction(originatingComponent.getActivationFunction());
+		return costFunctionGradient.backPropagateThroughFinalActivationFunction(originatingComponent.getActivationFunction().getActivationFunctionType());
 	}
 
 	@Override

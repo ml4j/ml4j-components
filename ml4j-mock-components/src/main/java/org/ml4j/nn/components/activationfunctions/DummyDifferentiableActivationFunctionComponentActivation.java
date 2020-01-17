@@ -28,7 +28,7 @@ import org.slf4j.LoggerFactory;
  * 
  * @author Michael Lavelle
  */
-public class DummyDifferentiableActivationFunctionComponentActivation extends DifferentiableActivationFunctionComponentActivationBase implements DifferentiableActivationFunctionComponentActivation {
+public class DummyDifferentiableActivationFunctionComponentActivation extends DifferentiableActivationFunctionComponentActivationBase<DifferentiableActivationFunctionComponent> implements DifferentiableActivationFunctionComponentActivation {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(DummyDifferentiableActivationFunctionComponentActivation.class);
 		

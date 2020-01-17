@@ -1,5 +1,9 @@
 package org.ml4j.nn.axons;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+
 import org.ml4j.EditableMatrix;
 import org.ml4j.Matrix;
 import org.ml4j.MatrixFactory;
@@ -250,4 +254,14 @@ public class DefaultConvolutionalAxonsImpl implements ConvolutionalAxons {
 		return config;
 	}
 
+	@Override
+	public Optional<NeuronsActivationFeatureOrientation> optimisedFor() {
+		return fullyConnectedAxons.optimisedFor();
+	}
+
+	@Override
+	public List<NeuronsActivationFeatureOrientation> supports() {
+		return NeuronsActivationFeatureOrientation.intersectLists(fullyConnectedAxons.supports(), 
+				Arrays.asList(NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET));
+	}
 }

@@ -13,10 +13,15 @@
  */
 package org.ml4j.nn.activationfunctions;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+
 import org.ml4j.InterrimMatrix;
 import org.ml4j.Matrix;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.ml4j.nn.neurons.NeuronsActivationContext;
+import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
 import org.ml4j.nn.neurons.NeuronsActivationImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -90,5 +95,15 @@ public class DefaultSigmoidActivationFunctionImpl implements DifferentiableActiv
 	@Override
 	public ActivationFunctionType getActivationFunctionType() {
 		return ActivationFunctionType.getBaseType(ActivationFunctionBaseType.SIGMOID);
+	}
+
+	@Override
+	public Optional<NeuronsActivationFeatureOrientation> optimisedFor() {
+		return Optional.empty();
+	}
+
+	@Override
+	public List<NeuronsActivationFeatureOrientation> supports() {
+		return Arrays.asList(NeuronsActivationFeatureOrientation.values());
 	}
 }

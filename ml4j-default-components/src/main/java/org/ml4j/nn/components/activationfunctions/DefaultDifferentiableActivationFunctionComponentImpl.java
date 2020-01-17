@@ -13,12 +13,16 @@
  */
 package org.ml4j.nn.components.activationfunctions;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.ml4j.nn.activationfunctions.DifferentiableActivationFunction;
 import org.ml4j.nn.activationfunctions.DifferentiableActivationFunctionActivation;
-import org.ml4j.nn.components.activationfunctions.base.DifferentiableActivationFunctionComponentBase;
+import org.ml4j.nn.components.activationfunctions.base.DifferentiableActivationFunctionComponentAdapterBase;
 import org.ml4j.nn.neurons.Neurons;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.ml4j.nn.neurons.NeuronsActivationContext;
+import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
 
 /**
  * Default implementation of DifferentiableActivationFunctionComponent - a component adapter for a DifferentiableActivationFunction 
@@ -26,7 +30,7 @@ import org.ml4j.nn.neurons.NeuronsActivationContext;
  * @author Michael Lavelle
  *
  */
-public class DefaultDifferentiableActivationFunctionComponentImpl extends DifferentiableActivationFunctionComponentBase implements DifferentiableActivationFunctionComponent {
+public class DefaultDifferentiableActivationFunctionComponentImpl extends DifferentiableActivationFunctionComponentAdapterBase implements DifferentiableActivationFunctionComponent {
 
 	/**
 	 * Generated serialization id.
@@ -51,7 +55,17 @@ public class DefaultDifferentiableActivationFunctionComponentImpl extends Differ
 	}
 
 	@Override
-	public DifferentiableActivationFunctionComponent dup() {
+	public DifferentiableActivationFunctionComponentAdapter dup() {
 		return new DefaultDifferentiableActivationFunctionComponentImpl(neurons, activationFunction);
+	}
+
+	@Override
+	public Optional<NeuronsActivationFeatureOrientation> optimisedFor() {
+		return activationFunction.optimisedFor();
+	}
+
+	@Override
+	public List<NeuronsActivationFeatureOrientation> supports() {
+		return activationFunction.supports();
 	}
 }

@@ -13,13 +13,16 @@
  */
 package org.ml4j.nn.components.manytoone;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import org.ml4j.nn.components.DirectedComponentsContext;
 import org.ml4j.nn.components.manytoone.base.ManyToOneDirectedComponentBase;
 import org.ml4j.nn.neurons.DummyNeuronsActivation;
 import org.ml4j.nn.neurons.Neurons;
 import org.ml4j.nn.neurons.NeuronsActivation;
+import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,5 +60,15 @@ public class DefaultManyToOneFilterConcatDirectedComponentImpl extends ManyToOne
 	@Override
 	public ManyToOneDirectedComponent<DefaultManyToOneDirectedComponentActivationImpl> dup() {
 		return new DefaultManyToOneFilterConcatDirectedComponentImpl(pathCombinationStrategy);
+	}
+	
+	@Override
+	public Optional<NeuronsActivationFeatureOrientation> optimisedFor() {
+		return Optional.empty();
+	}
+
+	@Override
+	public List<NeuronsActivationFeatureOrientation> supports() {
+		return Arrays.asList(NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET);
 	}
 }

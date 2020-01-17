@@ -13,6 +13,10 @@
  */
 package org.ml4j.nn.activationfunctions;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+
 import org.ml4j.EditableMatrix;
 import org.ml4j.InterrimMatrix;
 import org.ml4j.Matrix;
@@ -78,5 +82,15 @@ public class DefaultSoftmaxActivationFunctionImpl implements DifferentiableActiv
 	@Override
 	public ActivationFunctionType getActivationFunctionType() {
 		return ActivationFunctionType.getBaseType(ActivationFunctionBaseType.SOFTMAX);
+	}
+	
+	@Override
+	public Optional<NeuronsActivationFeatureOrientation> optimisedFor() {
+		return Optional.empty();
+	}
+
+	@Override
+	public List<NeuronsActivationFeatureOrientation> supports() {
+		return Arrays.asList(NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET);
 	}
 }

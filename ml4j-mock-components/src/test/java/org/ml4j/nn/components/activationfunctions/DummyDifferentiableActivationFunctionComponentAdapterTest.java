@@ -10,7 +10,7 @@ import org.ml4j.nn.neurons.NeuronsActivation;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 
-public class DefaultDifferentiableActivationFunctionComponentImplTest extends DifferentiableActivationFunctionComponentTestBase<DifferentiableActivationFunctionComponentAdapter> {
+public class DummyDifferentiableActivationFunctionComponentAdapterTest extends DifferentiableActivationFunctionComponentTestBase<DifferentiableActivationFunctionComponentAdapter> {
 
 	@Mock
 	protected DifferentiableActivationFunction mockActivationFunction;
@@ -24,7 +24,8 @@ public class DefaultDifferentiableActivationFunctionComponentImplTest extends Di
 		
 		Mockito.when(mockActivationFunction.activate(mockNeuronsActivation, mockNeuronsActivationContext)).thenReturn(mockActivationFunctionActivation);
 	
-		return new DefaultDifferentiableActivationFunctionComponentImpl(neurons, mockActivationFunction);
+		
+		return new DummyDifferentiableActivationFunctionComponentAdapter(neurons, mockActivationFunction);
 	}
 	
 	@Override
