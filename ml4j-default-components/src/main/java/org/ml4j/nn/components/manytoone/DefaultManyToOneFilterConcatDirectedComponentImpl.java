@@ -70,7 +70,13 @@ public class DefaultManyToOneFilterConcatDirectedComponentImpl extends ManyToOne
 
 		int[] channelBoundaries = new int[inputs.size()];
 		StreamUtils.zipWithIndex(inputs.stream().map(i -> getInputNeurons3D(i.getNeurons()).getDepth()))
-				.forEach(e -> channelBoundaries[(int) e.getIndex()] = e.getValue());
+				.forEach(e -> { 
+					if (e.getIndex() == 0) { 
+						channelBoundaries[(int) e.getIndex()] = e.getValue(); 
+					} else { 
+						channelBoundaries[(int) e.getIndex()] = channelBoundaries[(int) e.getIndex() - 1] + e.getValue(); 
+					}
+				});
 
 		LOGGER.debug("End Combining input for many to one junction:" + result.getChannels());
 

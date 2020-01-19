@@ -158,6 +158,8 @@ public class DefaultMaxPoolingAxonsImpl implements MaxPoolingAxons {
 				rightNeuronsActivation);
 
 		Matrix reformatted = reformattedInput.getActivations(axonsContext.getMatrixFactory());
+		
+		int exampleCount = previousLeftToRightActivation.getPostDropoutOutput().getExampleCount();
 
 		// TODO
 
@@ -178,7 +180,7 @@ public class DefaultMaxPoolingAxonsImpl implements MaxPoolingAxons {
 			Matrix preFormattedOutput = outputMatrix;
 
 			NeuronsActivation reformattedOutput = reformatRightToLeftOutput(axonsContext.getMatrixFactory(),
-					preFormattedOutput, rightNeuronsActivation.getFeatureOrientation(), previousLeftToRightActivation.getPostDropoutOutput().getExampleCount());
+					preFormattedOutput, rightNeuronsActivation.getFeatureOrientation(), exampleCount);
 
 			reformatted2.close();
 			if (!rightNeuronsActivation.isImmutable()) {
