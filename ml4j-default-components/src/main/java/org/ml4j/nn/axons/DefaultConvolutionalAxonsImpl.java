@@ -12,7 +12,7 @@ import org.ml4j.images.MultiChannelImages;
 import org.ml4j.nn.axons.factories.AxonsFactory;
 import org.ml4j.nn.neurons.ImageNeuronsActivation;
 import org.ml4j.nn.neurons.ImageNeuronsActivationImpl;
-import org.ml4j.nn.neurons.Neurons;
+import org.ml4j.nn.neurons.Neurons1D;
 import org.ml4j.nn.neurons.Neurons3D;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
@@ -57,8 +57,8 @@ public class DefaultConvolutionalAxonsImpl implements ConvolutionalAxons {
 
 		int filterHeight = inputHeightWithPadding + (1 - outputHeight) * (config.getStrideHeight());
 		this.fullyConnectedAxons = axonsFactory.createFullyConnectedAxons(
-				new Neurons(filterWidth * filterHeight * leftNeurons.getDepth(), leftNeurons.hasBiasUnit()),
-				new Neurons(rightNeurons.getDepth(), rightNeurons.hasBiasUnit()), connectionWeights, biases);
+				new Neurons1D(filterWidth * filterHeight * leftNeurons.getDepth(), leftNeurons.hasBiasUnit()),
+				new Neurons1D(rightNeurons.getDepth(), rightNeurons.hasBiasUnit()), connectionWeights, biases);
 	}
 
 	@Override
@@ -100,19 +100,18 @@ public class DefaultConvolutionalAxonsImpl implements ConvolutionalAxons {
 
 		final NeuronsActivation reformatted;
 		if (isEligableOneByOne(filterWidth, filterHeight)) {
-			reformatted = new NeuronsActivationImpl(
+			reformatted = new NeuronsActivationImpl(new Neurons1D(leftNeurons.getDepth(), leftNeurons.hasBiasUnit()),
 					reformatLeftToRightInputOneByOne(matrixFactory, leftNeuronsActivation),
 					NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET);
 		} else {
 			ImageNeuronsActivation imageAct = leftNeuronsActivation.asImageNeuronsActivation(leftNeurons);
-			reformatted = new NeuronsActivationImpl(
+			reformatted = new NeuronsActivationImpl(new Neurons1D(leftNeurons.getDepth() * filterWidth * filterHeight, leftNeurons.hasBiasUnit()),
 					imageAct.im2ColConv(matrixFactory, filterHeight,
 							filterWidth, config.getStrideHeight(), config.getStrideWidth(), config.getPaddingHeight(),
 							config.getPaddingWidth()),
 					NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET);
 			if (!imageAct.isImmutable()) {
 				imageAct.close();
-
 			}
 
 		}
@@ -140,8 +139,8 @@ public class DefaultConvolutionalAxonsImpl implements ConvolutionalAxons {
 		
 		NeuronsActivation reformatted = reformatLeftToRightInput(axonsContext.getMatrixFactory(),
 				leftNeuronsActivation);
-
 		reformatted.setImmutable(true);
+		
 		AxonsActivation nestedActivation = fullyConnectedAxons.pushLeftToRight(reformatted, previousRightToLeftActivation, axonsContext);
 
 		NeuronsActivation output = reformatLeftToRightOutput(axonsContext.getMatrixFactory(),
@@ -177,8 +176,6 @@ public class DefaultConvolutionalAxonsImpl implements ConvolutionalAxons {
 				axonsActivation.getPostDropoutOutput(),
 				exampleCount);
 		
-		// TODO
-		//reformattedInput.close();
 		axonsActivation.getPostDropoutOutput().close();
 
 		return new AxonsActivationImpl(this, null, () -> rightNeuronsActivation, reformattedOutput, leftNeurons,
@@ -202,10 +199,7 @@ public class DefaultConvolutionalAxonsImpl implements ConvolutionalAxons {
 
 		if (isEligableOneByOne(filterWidth, filterHeight)) {
 			output.reshape(leftNeurons.getNeuronCountExcludingBias(), exampleCount);
-			//EditableMatrix out = output.dup().asEditableMatrix();
-			//out.reshape(leftNeurons.getNeuronCountExcludingBias(), exampleCount);
 			return output.asImageNeuronsActivation(leftNeurons);
-			//return new ImageNeuronsActivationImpl(out, leftNeurons, NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET, false);
 		} else {
 
 			float[] data = new float[getLeftNeurons().getDepth() * getLeftNeurons().getWidth()
@@ -217,7 +211,7 @@ public class DefaultConvolutionalAxonsImpl implements ConvolutionalAxons {
 			images.im2colConvImport(matrixFactory, output.getActivations(matrixFactory), filterHeight, filterWidth, config.getStrideHeight(),
 					config.getStrideWidth());
 
-			return new ImageNeuronsActivationImpl(getLeftNeurons(), images, false);
+			return new ImageNeuronsActivationImpl(getLeftNeurons(), images, output.getFeatureOrientation(), false);
 
 		}
 	}

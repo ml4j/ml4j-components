@@ -16,6 +16,7 @@ package org.ml4j.nn.components.manytoone;
 import org.ml4j.MatrixFactory;
 import org.ml4j.nn.components.manytoone.base.ManyToOneDirectedComponentTestBase;
 import org.ml4j.nn.components.mocks.MockTestData;
+import org.ml4j.nn.neurons.Neurons;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.mockito.Mockito;
 
@@ -30,7 +31,7 @@ public class DummyManyToOneDirectedComponentTest extends ManyToOneDirectedCompon
 	
 	@Override
 	protected ManyToOneDirectedComponent<?> createManyToOneDirectedComponentUnderTest(
-			PathCombinationStrategy pathCombinationStrategy) {
+			PathCombinationStrategy pathCombinationStrategy, Neurons outputNeurons) {
 		return new DummyManyToOneDirectedComponent(pathCombinationStrategy);
 	}
 

@@ -45,6 +45,7 @@ import org.ml4j.nn.components.onetone.DefaultDirectedComponentChain;
 import org.ml4j.nn.components.onetoone.DummyDefaultDirectedComponentBipoleGraph;
 import org.ml4j.nn.components.onetoone.DummyDefaultDirectedComponentChain;
 import org.ml4j.nn.neurons.Neurons;
+import org.ml4j.nn.neurons.Neurons1D;
 import org.ml4j.nn.neurons.Neurons3D;
 
 /**
@@ -127,7 +128,13 @@ public class DummyDirectedComponentFactoryImpl implements DirectedComponentFacto
 	}
 
 	@Override
-	public ManyToOneDirectedComponent<?> createManyToOneDirectedComponent(
+	public ManyToOneDirectedComponent<?> createManyToOneDirectedComponent(Neurons3D outputNeurons,
+			PathCombinationStrategy pathCombinationStrategy) {
+		return new DummyManyToOneDirectedComponent(pathCombinationStrategy);
+	}
+	
+	@Override
+	public ManyToOneDirectedComponent<?> createManyToOneDirectedComponent(Neurons1D outputNeurons,
 			PathCombinationStrategy pathCombinationStrategy) {
 		return new DummyManyToOneDirectedComponent(pathCombinationStrategy);
 	}

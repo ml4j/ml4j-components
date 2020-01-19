@@ -23,7 +23,7 @@ import org.ml4j.nn.components.base.TestBase;
 import org.ml4j.nn.components.mocks.MockTestData;
 import org.ml4j.nn.components.onetone.DefaultDirectedComponentChainBipoleGraph;
 import org.ml4j.nn.components.onetone.DefaultDirectedComponentChainBipoleGraphActivation;
-import org.ml4j.nn.neurons.Neurons;
+import org.ml4j.nn.neurons.Neurons1D;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -79,8 +79,8 @@ public abstract class DefaultDirectedComponentChainBipoleGraphActivationTestBase
 		
 		NeuronsActivation mockOutputActivation = MockTestData.mockNeuronsActivation(110, 32);
 			
-		Mockito.when(mockBipoleGraph.getInputNeurons()).thenReturn(new Neurons(100, false));
-		Mockito.when(mockBipoleGraph.getOutputNeurons()).thenReturn(new Neurons(110, false));
+		Mockito.when(mockBipoleGraph.getInputNeurons()).thenReturn(new Neurons1D(100, false));
+		Mockito.when(mockBipoleGraph.getOutputNeurons()).thenReturn(new Neurons1D(110, false));
 	
 		DefaultDirectedComponentChainBipoleGraphActivation bipoleGraphActivation = createDefaultDirectedComponentChainBipoleGraphActivation(mockBipoleGraph, mockOutputActivation);
 		

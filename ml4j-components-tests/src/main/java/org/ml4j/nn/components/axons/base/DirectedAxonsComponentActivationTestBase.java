@@ -26,6 +26,7 @@ import org.ml4j.nn.components.axons.DirectedAxonsComponentActivation;
 import org.ml4j.nn.components.base.TestBase;
 import org.ml4j.nn.components.mocks.MockTestData;
 import org.ml4j.nn.neurons.Neurons;
+import org.ml4j.nn.neurons.Neurons1D;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -108,8 +109,8 @@ public abstract class DirectedAxonsComponentActivationTestBase extends TestBase 
 		
 		DirectedComponentGradient<NeuronsActivation> mockInboundGradient = MockTestData.mockComponentGradient(110, 32, this);
 		
-		Mockito.when(mockAxons.getLeftNeurons()).thenReturn(new Neurons(100, false));
-		Mockito.when(mockAxons.getRightNeurons()).thenReturn(new Neurons(110, false));
+		Mockito.when(mockAxons.getLeftNeurons()).thenReturn(new Neurons1D(100, false));
+		Mockito.when(mockAxons.getRightNeurons()).thenReturn(new Neurons1D(110, false));
 
 		Mockito.when(mockAxonsActivation.getPostDropoutOutput()).thenReturn(mockOutputActivation);
 		Mockito.when(mockAxonsActivation.getPostDropoutInput()).thenReturn(() -> mockInputActivation);

@@ -28,7 +28,7 @@ import org.ml4j.nn.components.mocks.MockTestData;
 import org.ml4j.nn.components.onetone.DefaultChainableDirectedComponentActivation;
 import org.ml4j.nn.components.onetone.DefaultDirectedComponentChain;
 import org.ml4j.nn.components.onetone.DefaultDirectedComponentChainActivation;
-import org.ml4j.nn.neurons.Neurons;
+import org.ml4j.nn.neurons.Neurons1D;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -55,8 +55,8 @@ public abstract class DefaultDirectedComponentChainActivationTestBase extends Te
 	    MockitoAnnotations.initMocks(this);
 	    
 		// Create the mock chain, with 100 input neurons and 110 output neurons.
-		Mockito.when(mockComponentChain.getInputNeurons()).thenReturn(new Neurons(100, false));
-		Mockito.when(mockComponentChain.getOutputNeurons()).thenReturn(new Neurons(110, false));
+		Mockito.when(mockComponentChain.getInputNeurons()).thenReturn(new Neurons1D(100, false));
+		Mockito.when(mockComponentChain.getOutputNeurons()).thenReturn(new Neurons1D(110, false));
 		
 	    Mockito.when(mockDirectedComponentsContext.getMatrixFactory()).thenReturn(matrixFactory);
 

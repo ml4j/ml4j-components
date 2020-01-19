@@ -25,10 +25,7 @@ import org.ml4j.nn.axons.AxonsActivation;
 import org.ml4j.nn.axons.AxonsContext;
 import org.ml4j.nn.axons.ScaleAndShiftAxons;
 import org.ml4j.nn.components.axons.base.DirectedAxonsComponentBase;
-import org.ml4j.nn.neurons.ImageNeuronsActivation;
-import org.ml4j.nn.neurons.ImageNeuronsActivationImpl;
 import org.ml4j.nn.neurons.Neurons;
-import org.ml4j.nn.neurons.Neurons3D;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
 import org.ml4j.nn.neurons.NeuronsActivationImpl;
@@ -102,7 +99,6 @@ public class DefaultBatchNormDirectedAxonsComponentImpl<L extends Neurons> exten
 			throw new IllegalArgumentException(neuronsActivation.getFeatureCount() + ":" + getInputNeurons().getNeuronCountExcludingBias());
 		}
 		*/
-		boolean imageActivation = input instanceof ImageNeuronsActivation;
 		NeuronsActivationFeatureOrientation featureOrientation = input.getFeatureOrientation();
 		Matrix activations = input.getActivations(axonsContext.getMatrixFactory());
 
@@ -115,12 +111,7 @@ public class DefaultBatchNormDirectedAxonsComponentImpl<L extends Neurons> exten
 		input.close();
 		}
 
-		NeuronsActivation xhatN = null;
-		if (imageActivation) {
-			xhatN = new ImageNeuronsActivationImpl(xhat, (Neurons3D)this.getAxons().getRightNeurons(),featureOrientation , false);
-		} else {
-			xhatN = new NeuronsActivationImpl(xhat, featureOrientation);
-		}
+		NeuronsActivation xhatN = new NeuronsActivationImpl(this.getAxons().getRightNeurons(), xhat, featureOrientation);
 		
 		AxonsActivation axonsActivation =
 				axons.pushLeftToRight(xhatN, null, axonsContext);

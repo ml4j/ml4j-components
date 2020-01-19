@@ -6,10 +6,7 @@ import java.util.Optional;
 
 import org.ml4j.EditableMatrix;
 import org.ml4j.Matrix;
-import org.ml4j.nn.neurons.ImageNeuronsActivation;
-import org.ml4j.nn.neurons.ImageNeuronsActivationImpl;
 import org.ml4j.nn.neurons.Neurons;
-import org.ml4j.nn.neurons.Neurons3D;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
 import org.ml4j.nn.neurons.NeuronsActivationImpl;
@@ -68,13 +65,8 @@ public abstract class WeightedAxonsBase<L extends Neurons, R extends Neurons, A 
 			throw new UnsupportedOperationException("Left to right output dropout not yet supported");
 		}
 		
-		NeuronsActivation outputActivation = null;
-		if (leftNeuronsActivation instanceof ImageNeuronsActivation && rightNeurons instanceof Neurons3D) {
-			outputActivation = new ImageNeuronsActivationImpl(output, (Neurons3D) this.rightNeurons,
-					leftNeuronsActivation.getFeatureOrientation(), false);
-		} else {
-			outputActivation = new NeuronsActivationImpl(output, leftNeuronsActivation.getFeatureOrientation());
-		}
+		NeuronsActivation outputActivation = new NeuronsActivationImpl(rightNeurons, output, leftNeuronsActivation.getFeatureOrientation());
+		
 
 		if (!axonsContext.isTrainingContext() && !leftNeuronsActivation.isImmutable()) {
 			leftNeuronsActivation.close();
@@ -103,7 +95,7 @@ public abstract class WeightedAxonsBase<L extends Neurons, R extends Neurons, A 
 		rightNeuronsActivation.setImmutable(true);
 
 		return new AxonsActivationImpl(this, null, () -> rightNeuronsActivation,
-				new NeuronsActivationImpl(output, NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET),
+				new NeuronsActivationImpl(leftNeurons, output, NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET),
 				leftNeurons, rightNeurons);
 	}
 

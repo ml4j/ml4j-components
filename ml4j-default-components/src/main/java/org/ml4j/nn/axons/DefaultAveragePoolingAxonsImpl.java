@@ -12,6 +12,8 @@ import org.ml4j.images.Images;
 import org.ml4j.images.MultiChannelImages;
 import org.ml4j.nn.neurons.ImageNeuronsActivation;
 import org.ml4j.nn.neurons.ImageNeuronsActivationImpl;
+import org.ml4j.nn.neurons.Neurons;
+import org.ml4j.nn.neurons.Neurons1D;
 import org.ml4j.nn.neurons.Neurons3D;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
@@ -120,9 +122,11 @@ public class DefaultAveragePoolingAxonsImpl implements AveragePoolingAxons {
 		}
 		onesActivation.close();
 		reformattedOnes.close();
+		
+		Neurons averageNeurons = new Neurons1D(1, false); 
 
 		// Obtain pooled feature averages
-		NeuronsActivation preFormattedOutput = new NeuronsActivationImpl(reformatted.columnSums().asEditableMatrix().diviRowVector(counts),
+		NeuronsActivation preFormattedOutput = new NeuronsActivationImpl(averageNeurons, reformatted.columnSums().asEditableMatrix().diviRowVector(counts),
 				NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET);
 		reformatted.close();
 		
@@ -172,7 +176,7 @@ public class DefaultAveragePoolingAxonsImpl implements AveragePoolingAxons {
 					Matrix preFormattedOutput = reformattedAvgMatrix;
 
 					NeuronsActivation reformattedOutput = reformatRightToLeftOutput(axonsContext.getMatrixFactory(),
-							preFormattedOutput, previousLeftToRightActivation.getPostDropoutOutput().getExampleCount());
+							rightNeuronsActivation.getFeatureOrientation(), preFormattedOutput, previousLeftToRightActivation.getPostDropoutOutput().getExampleCount());
 
 					if (!rightNeuronsActivation.isImmutable()) {
 						rightNeuronsActivation.close();
@@ -186,7 +190,7 @@ public class DefaultAveragePoolingAxonsImpl implements AveragePoolingAxons {
 		}
 	}
 
-	private NeuronsActivation reformatRightToLeftOutput(MatrixFactory matrixFactory, Matrix output, int exampleCount) {
+	private NeuronsActivation reformatRightToLeftOutput(MatrixFactory matrixFactory, NeuronsActivationFeatureOrientation featureOrientation, Matrix output, int exampleCount) {
 
 		int inputWidth = leftNeurons.getWidth();
 		int inputHeight = leftNeurons.getHeight();
@@ -210,7 +214,7 @@ public class DefaultAveragePoolingAxonsImpl implements AveragePoolingAxons {
 		images.im2colPoolImport(matrixFactory, output, filterHeight, filterWidth, config.getStrideHeight(),
 				config.getStrideWidth());
 
-		return new ImageNeuronsActivationImpl(getLeftNeurons(), images, false);
+		return new ImageNeuronsActivationImpl(getLeftNeurons(), images, featureOrientation, false);
 	}
 
 	@Override

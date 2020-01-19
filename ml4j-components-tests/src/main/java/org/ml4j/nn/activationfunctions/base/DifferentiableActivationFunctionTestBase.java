@@ -7,6 +7,7 @@ import org.ml4j.nn.activationfunctions.DifferentiableActivationFunction;
 import org.ml4j.nn.activationfunctions.DifferentiableActivationFunctionActivation;
 import org.ml4j.nn.components.base.TestBase;
 import org.ml4j.nn.neurons.Neurons;
+import org.ml4j.nn.neurons.Neurons1D;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.ml4j.nn.neurons.NeuronsActivationContext;
 import org.mockito.Mock;
@@ -30,8 +31,8 @@ public abstract class DifferentiableActivationFunctionTestBase extends TestBase 
 	@Test
 	public void testConstruction() {
 		
-		Neurons leftNeurons = new Neurons(100, false);
-		Neurons rightNeurons = new Neurons(100, false);
+		Neurons leftNeurons = new Neurons1D(100, false);
+		Neurons rightNeurons = new Neurons1D(100, false);
 
 		DifferentiableActivationFunction activationFunction = 
 				createDifferentiableActivationFunctionUnderTest(leftNeurons, rightNeurons);
@@ -44,8 +45,8 @@ public abstract class DifferentiableActivationFunctionTestBase extends TestBase 
 	@Test
 	public void testActivation() {
 		
-		Neurons leftNeurons = new Neurons(100, false);
-		Neurons rightNeurons = new Neurons(100, false);
+		Neurons leftNeurons = new Neurons1D(100, false);
+		Neurons rightNeurons = new Neurons1D(100, false);
 
 		DifferentiableActivationFunction activationFunction = 
 				createDifferentiableActivationFunctionUnderTest(leftNeurons, rightNeurons);
@@ -74,8 +75,8 @@ public abstract class DifferentiableActivationFunctionTestBase extends TestBase 
 	@Test
 	public void testActivationGradient() {
 		
-		Neurons leftNeurons = new Neurons(100, false);
-		Neurons rightNeurons = new Neurons(100, false);
+		Neurons leftNeurons = new Neurons1D(100, false);
+		Neurons rightNeurons = new Neurons1D(100, false);
 
 		DifferentiableActivationFunction activationFunction = 
 				createDifferentiableActivationFunctionUnderTest(leftNeurons, rightNeurons);

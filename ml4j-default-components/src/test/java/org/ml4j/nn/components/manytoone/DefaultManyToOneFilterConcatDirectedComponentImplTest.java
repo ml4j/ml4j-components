@@ -16,6 +16,8 @@ package org.ml4j.nn.components.manytoone;
 import org.ml4j.MatrixFactory;
 import org.ml4j.nn.components.manytoone.base.ManyToOneDirectedComponentTestBase;
 import org.ml4j.nn.components.mocks.MockTestData;
+import org.ml4j.nn.neurons.Neurons;
+import org.ml4j.nn.neurons.Neurons3D;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.mockito.Mockito;
 
@@ -30,13 +32,17 @@ public class DefaultManyToOneFilterConcatDirectedComponentImplTest extends ManyT
 	
 	@Override
 	protected ManyToOneDirectedComponent<?> createManyToOneDirectedComponentUnderTest(
-			PathCombinationStrategy pathCombinationStrategy) {
-		return new DefaultManyToOneFilterConcatDirectedComponentImpl(pathCombinationStrategy);
+			PathCombinationStrategy pathCombinationStrategy, Neurons outputNeurons) {
+		if (pathCombinationStrategy == PathCombinationStrategy.FILTER_CONCAT && outputNeurons instanceof Neurons3D) {
+			return new DefaultManyToOneFilterConcatDirectedComponentImpl((Neurons3D)outputNeurons);
+		} else {
+			throw new IllegalArgumentException("Path combination strategy must be FILTER_CONCAT and output neurons must be 3D neurons for this test");
+		}
 	}
 
 	@Override
 	public NeuronsActivation createNeuronsActivation(int featureCount, int exampleCount) {
-		return MockTestData.mockNeuronsActivation(featureCount, exampleCount);
+		throw new UnsupportedOperationException();
 	}
 	
 	@Override

@@ -13,10 +13,7 @@ import org.ml4j.nn.axons.AxonsActivation;
 import org.ml4j.nn.axons.AxonsActivationImpl;
 import org.ml4j.nn.axons.AxonsContext;
 import org.ml4j.nn.axons.ScaleAndShiftAxons;
-import org.ml4j.nn.neurons.ImageNeuronsActivation;
-import org.ml4j.nn.neurons.ImageNeuronsActivationImpl;
 import org.ml4j.nn.neurons.Neurons;
-import org.ml4j.nn.neurons.Neurons3D;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
 import org.ml4j.nn.neurons.NeuronsActivationImpl;
@@ -58,22 +55,7 @@ public class DummyScaleAndShiftAxonsImpl<N extends Neurons> implements ScaleAndS
 	@Override
 	public AxonsActivation pushLeftToRight(NeuronsActivation leftNeuronsActivation,
 			AxonsActivation previousRightToLeftActivation, AxonsContext axonsContext) {
-		if (leftNeuronsActivation instanceof ImageNeuronsActivation) {
-			
-			int exampleCount = leftNeuronsActivation.getExampleCount();
-			
-			if (!axonsContext.isTrainingContext() && !leftNeuronsActivation.isImmutable()) {
-				leftNeuronsActivation.close();
-			}
-			
-			return new AxonsActivationImpl(this, null, () -> leftNeuronsActivation,
-					new ImageNeuronsActivationImpl(
-							matrixFactory.createMatrix(rightNeurons.getNeuronCountExcludingBias(),
-									exampleCount),
-							(Neurons3D) getRightNeurons(), NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET,
-							false),
-					leftNeurons, rightNeurons);
-		} else {
+
 			
 			int exampleCount = leftNeuronsActivation.getExampleCount();
 			
@@ -82,33 +64,23 @@ public class DummyScaleAndShiftAxonsImpl<N extends Neurons> implements ScaleAndS
 			}
 			
 			return new AxonsActivationImpl(this, null, () -> leftNeuronsActivation,
-					new NeuronsActivationImpl(
+					new NeuronsActivationImpl(getRightNeurons(),
 							matrixFactory.createMatrix(rightNeurons.getNeuronCountExcludingBias(),
 									exampleCount),
 							NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET),
 					leftNeurons, rightNeurons);
-		}
 	}
 
 	@Override
 	public AxonsActivation pushRightToLeft(NeuronsActivation rightNeuronsActivation,
 			AxonsActivation previousLeftToRightActivation, AxonsContext axonsContext) {
-		if (rightNeuronsActivation instanceof ImageNeuronsActivation) {
+
 			return new AxonsActivationImpl(this, null, () -> rightNeuronsActivation,
-					new ImageNeuronsActivationImpl(
-							matrixFactory.createMatrix(leftNeurons.getNeuronCountExcludingBias(),
-									rightNeuronsActivation.getExampleCount()),
-							(Neurons3D) getLeftNeurons(), NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET,
-							false),
-					leftNeurons, rightNeurons);
-		} else {
-			return new AxonsActivationImpl(this, null, () -> rightNeuronsActivation,
-					new NeuronsActivationImpl(
+					new NeuronsActivationImpl(getLeftNeurons(),
 							matrixFactory.createMatrix(leftNeurons.getNeuronCountExcludingBias(),
 									rightNeuronsActivation.getExampleCount()),
 							NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET),
 					leftNeurons, rightNeurons);
-		}
 	}
 
 	@Override
