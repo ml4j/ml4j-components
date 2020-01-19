@@ -35,7 +35,7 @@ import org.ml4j.nn.components.axons.DirectedAxonsComponent;
 import org.ml4j.nn.components.factories.DirectedComponentFactory;
 import org.ml4j.nn.components.manytomany.DefaultComponentBatchImpl;
 import org.ml4j.nn.components.manytomany.DefaultDirectedComponentBatch;
-import org.ml4j.nn.components.manytoone.DefaultManyToOneFilterConcatDirectedComponentLegacy;
+import org.ml4j.nn.components.manytoone.DefaultManyToOneFilterConcatDirectedComponentImpl;
 import org.ml4j.nn.components.manytoone.ManyToOneDirectedComponent;
 import org.ml4j.nn.components.manytoone.PathCombinationStrategy;
 import org.ml4j.nn.components.onetomany.DefaultOneToManyDirectedComponentImpl;
@@ -157,9 +157,21 @@ public class DefaultDirectedComponentFactoryImpl implements DirectedComponentFac
 	}
 
 	@Override
-	public ManyToOneDirectedComponent<?> createManyToOneDirectedComponent(
+	public ManyToOneDirectedComponent<?> createManyToOneDirectedComponent(Neurons outputNeurons, 
 			PathCombinationStrategy pathCombinationStrategy) {
-		return new DefaultManyToOneFilterConcatDirectedComponentLegacy(pathCombinationStrategy);
+		// TODO
+		throw new UnsupportedOperationException("Not yet implemented");
+	}
+	
+	@Override
+	public ManyToOneDirectedComponent<?> createManyToOneDirectedComponent3D(Neurons3D outputNeurons, 
+			PathCombinationStrategy pathCombinationStrategy) {
+		if (pathCombinationStrategy == PathCombinationStrategy.FILTER_CONCAT) {
+			return new DefaultManyToOneFilterConcatDirectedComponentImpl(outputNeurons);
+		} else {
+			// TODO
+			throw new UnsupportedOperationException("Not yet implemented");
+		}
 	}
 
 	@Override
@@ -174,14 +186,19 @@ public class DefaultDirectedComponentFactoryImpl implements DirectedComponentFac
 		DifferentiableActivationFunction differentiableActivationFunction = activationFunctionFactory.createActivationFunction(activationFunctionType);
 		return new DefaultDifferentiableActivationFunctionComponentImpl(neurons, differentiableActivationFunction);
 	}
-
+	
 	@Override
 	public DefaultDirectedComponentBipoleGraph createDirectedComponentBipoleGraph(Neurons leftNeurons, Neurons rightNeurons,
-			List<DefaultChainableDirectedComponent<?, ?>> parallelComponentChainsBatch,
+			List<DefaultChainableDirectedComponent<?, ?>> parallelComponentBatch,
 			PathCombinationStrategy pathCombinationStrategy) {
-		return new DefaultDirectedComponentBipoleGraphImpl(directedComponentFactory, leftNeurons, rightNeurons, createDirectedComponentBatch(parallelComponentChainsBatch), pathCombinationStrategy);
+		
+		if (rightNeurons instanceof Neurons3D) {
+			return new DefaultDirectedComponentBipoleGraphImpl(directedComponentFactory, leftNeurons, (Neurons3D)rightNeurons, createDirectedComponentBatch(parallelComponentBatch), pathCombinationStrategy);
+		} else {
+			return new DefaultDirectedComponentBipoleGraphImpl(directedComponentFactory, leftNeurons, rightNeurons, createDirectedComponentBatch(parallelComponentBatch), pathCombinationStrategy);
+		} 
 	}
-
+	
 	@Override
 	public DefaultDirectedComponentChain createDirectedComponentChain(
 			List<DefaultChainableDirectedComponent<?, ?>> sequentialComponents) {
@@ -199,7 +216,4 @@ public class DefaultDirectedComponentFactoryImpl implements DirectedComponentFac
 			Neurons leftNeurons, Neurons rightNeurons, NeuralComponentType<S> neuralComponentType) {
 		throw new UnsupportedOperationException("Creation of component by component type not yet implemented");
 	}
-
-	
-	
 }

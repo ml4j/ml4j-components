@@ -46,7 +46,7 @@ public class DummyAxons<L extends Neurons, R extends Neurons, A extends Axons<L,
 			AxonsActivation previousRightToLeftActivation, AxonsContext axonsContext) {
 		Matrix output = matrixFactory.createMatrix(rightNeurons.getNeuronCountExcludingBias(),
 				leftNeuronsActivation.getExampleCount());
-		NeuronsActivation outputActivation = new NeuronsActivationImpl(output,
+		NeuronsActivation outputActivation = new NeuronsActivationImpl(getRightNeurons(), output,
 				leftNeuronsActivation.getFeatureOrientation());
 		return new DummyAxonsActivation(this, () -> leftNeuronsActivation, outputActivation);
 	}

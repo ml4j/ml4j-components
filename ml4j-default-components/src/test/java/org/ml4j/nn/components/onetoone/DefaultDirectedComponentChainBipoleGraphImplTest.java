@@ -69,7 +69,7 @@ public class DefaultDirectedComponentChainBipoleGraphImplTest extends DefaultDir
 	public void setup() {
 		super.setup();
 		Mockito.when(mockDirectedComponentFactory.createOneToManyDirectedComponent(Mockito.any())).thenReturn(mockOneToManyDirectedComponent);
-		Mockito.when(mockDirectedComponentFactory.createManyToOneDirectedComponent(Mockito.any())).thenReturn(mockManyToOneDirectedComponent);
+		Mockito.when(mockDirectedComponentFactory.createManyToOneDirectedComponent((Neurons)Mockito.any(), Mockito.any())).thenReturn(mockManyToOneDirectedComponent);
 	}
 	
 	@SuppressWarnings("unchecked")

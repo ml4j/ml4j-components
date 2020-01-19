@@ -127,7 +127,13 @@ public class DummyDirectedComponentFactoryImpl implements DirectedComponentFacto
 	}
 
 	@Override
-	public ManyToOneDirectedComponent<?> createManyToOneDirectedComponent(
+	public ManyToOneDirectedComponent<?> createManyToOneDirectedComponent3D(Neurons3D outputNeurons,
+			PathCombinationStrategy pathCombinationStrategy) {
+		return new DummyManyToOneDirectedComponent(pathCombinationStrategy);
+	}
+	
+	@Override
+	public ManyToOneDirectedComponent<?> createManyToOneDirectedComponent(Neurons outputNeurons,
 			PathCombinationStrategy pathCombinationStrategy) {
 		return new DummyManyToOneDirectedComponent(pathCombinationStrategy);
 	}

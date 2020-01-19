@@ -128,7 +128,7 @@ public abstract class BatchNormDirectedAxonsComponentTestBase extends TestBase {
 
 		DirectedAxonsComponent<?, ?, ?> dupComponent = directedAxonsComponent.dup();
 		Assert.assertNotNull(dupComponent);
-		Assert.assertNotEquals(directedAxonsComponent, dupComponent);
+		Assert.assertNotSame(directedAxonsComponent, dupComponent);
 		
 	}
 	

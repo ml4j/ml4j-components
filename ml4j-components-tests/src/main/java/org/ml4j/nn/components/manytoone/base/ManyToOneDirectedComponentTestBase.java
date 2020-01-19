@@ -26,6 +26,8 @@ import org.ml4j.nn.components.manytoone.ManyToOneDirectedComponent;
 import org.ml4j.nn.components.manytoone.ManyToOneDirectedComponentActivation;
 import org.ml4j.nn.components.manytoone.PathCombinationStrategy;
 import org.ml4j.nn.components.mocks.MockTestData;
+import org.ml4j.nn.neurons.Neurons;
+import org.ml4j.nn.neurons.Neurons3D;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -47,21 +49,28 @@ public abstract class ManyToOneDirectedComponentTestBase extends TestBase {
 	    MockitoAnnotations.initMocks(this);	    
 	}
 
-	private ManyToOneDirectedComponent<?> createManyToOneDirectedAxonsComponent(PathCombinationStrategy pathCombinationStrategy) {
-		return createManyToOneDirectedComponentUnderTest(pathCombinationStrategy);
+	private ManyToOneDirectedComponent<?> createManyToOneDirectedAxonsComponent(PathCombinationStrategy pathCombinationStrategy, Neurons outputNeurons) {
+		return createManyToOneDirectedComponentUnderTest(pathCombinationStrategy, outputNeurons);
 	}
 		
-	protected abstract ManyToOneDirectedComponent<?> createManyToOneDirectedComponentUnderTest(PathCombinationStrategy pathCombinationStrategy);
+	protected abstract ManyToOneDirectedComponent<?> createManyToOneDirectedComponentUnderTest(
+			PathCombinationStrategy pathCombinationStrategy, Neurons outputNeurons);
 
 	@Test
 	public void testConstruction() {	
-		ManyToOneDirectedComponent<?> manyToOneDirectedComponent = createManyToOneDirectedAxonsComponent(PathCombinationStrategy.FILTER_CONCAT);
+		
+		Neurons3D outputNeurons = new Neurons3D(10, 10, 1, false);
+		
+		ManyToOneDirectedComponent<?> manyToOneDirectedComponent = createManyToOneDirectedAxonsComponent(PathCombinationStrategy.FILTER_CONCAT, outputNeurons);
 		Assert.assertNotNull(manyToOneDirectedComponent);
 	}
 	
 	@Test
 	public void testGetComponentType() {	
-		ManyToOneDirectedComponent<?> manyToOneDirectedComponent = createManyToOneDirectedAxonsComponent(PathCombinationStrategy.FILTER_CONCAT);
+		
+		Neurons3D outputNeurons = new Neurons3D(10, 10, 1, false);
+		
+		ManyToOneDirectedComponent<?> manyToOneDirectedComponent = createManyToOneDirectedAxonsComponent(PathCombinationStrategy.FILTER_CONCAT, outputNeurons);
 		Assert.assertNotNull(manyToOneDirectedComponent);
 		Assert.assertEquals(NeuralComponentBaseType.MANY_TO_ONE, manyToOneDirectedComponent.getComponentType().getBaseType());
 	}
@@ -69,10 +78,12 @@ public abstract class ManyToOneDirectedComponentTestBase extends TestBase {
 	@Test
 	public void testForwardPropagate() {	
 		
-		NeuronsActivation inputActivation1 = createNeuronsActivation(100, 32);
-		NeuronsActivation inputActivation2 = createNeuronsActivation(100, 32);
+		NeuronsActivation inputActivation1 = MockTestData.mockNeuronsActivationForImage(100, 10, 10, 1, 32);
+		NeuronsActivation inputActivation2 = MockTestData.mockNeuronsActivationForImage(100, 10, 10, 1, 32);
+		
+		Neurons3D outputNeurons = new Neurons3D(10, 10, 1, false);
 
-		ManyToOneDirectedComponent<?> manyToOneDirectedComponent = createManyToOneDirectedAxonsComponent(PathCombinationStrategy.FILTER_CONCAT);
+		ManyToOneDirectedComponent<?> manyToOneDirectedComponent = createManyToOneDirectedAxonsComponent(PathCombinationStrategy.FILTER_CONCAT, outputNeurons);
 		Assert.assertNotNull(manyToOneDirectedComponent);
 		
 		List<NeuronsActivation> mockNeuronActivations = Arrays.asList(inputActivation1, inputActivation2);
@@ -91,16 +102,18 @@ public abstract class ManyToOneDirectedComponentTestBase extends TestBase {
 	
 	@Test
 	public void testDup() {
+		
+		Neurons3D outputNeurons = new Neurons3D(10, 10, 1, false);
 				
-		ManyToOneDirectedComponent<?> oneToManyDirectedComponent = createManyToOneDirectedAxonsComponent(PathCombinationStrategy.FILTER_CONCAT);
+		ManyToOneDirectedComponent<?> oneToManyDirectedComponent = createManyToOneDirectedAxonsComponent(PathCombinationStrategy.FILTER_CONCAT, outputNeurons);
 
 		ManyToOneDirectedComponent<?> dupComponent = oneToManyDirectedComponent.dup();
 		
 		Assert.assertNotNull(dupComponent);
 		Assert.assertEquals(NeuralComponentBaseType.MANY_TO_ONE, oneToManyDirectedComponent.getComponentType().getBaseType());
 		
-		NeuronsActivation inputActivation1 = MockTestData.mockNeuronsActivation(100, 32);
-		NeuronsActivation inputActivation2 = MockTestData.mockNeuronsActivation(100, 32);
+		NeuronsActivation inputActivation1 = MockTestData.mockNeuronsActivationForImage(100, 10, 10, 1, 32);
+		NeuronsActivation inputActivation2 = MockTestData.mockNeuronsActivationForImage(100, 10, 10, 1, 32);
 		
 		List<NeuronsActivation> mockNeuronActivations = Arrays.asList(inputActivation1, inputActivation2);
 		ManyToOneDirectedComponentActivation activation =  oneToManyDirectedComponent.forwardPropagate(mockNeuronActivations, mockDirectedComponentsContext);

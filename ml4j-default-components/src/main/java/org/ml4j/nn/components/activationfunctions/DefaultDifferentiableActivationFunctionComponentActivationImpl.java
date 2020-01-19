@@ -60,7 +60,7 @@ public class DefaultDifferentiableActivationFunctionComponentActivationImpl exte
 				.activationGradient(activationFunctionActivation, activationContext);
 		try (InterrimMatrix backPropGradientMatrix = backPropagatedGradient.getActivations(activationContext.getMatrixFactory()).asInterrimMatrix()) {
 		DirectedComponentGradient<NeuronsActivation> result = new DirectedComponentGradientImpl<NeuronsActivation>(gradient.getTotalTrainableAxonsGradients(), 
-				new NeuronsActivationImpl(backPropGradientMatrix.asEditableMatrix()
+				new NeuronsActivationImpl(gradient.getOutput().getNeurons(), backPropGradientMatrix.asEditableMatrix()
 				.mul(gradient.getOutput().getActivations(activationContext.getMatrixFactory())), 
 				NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET));
 		

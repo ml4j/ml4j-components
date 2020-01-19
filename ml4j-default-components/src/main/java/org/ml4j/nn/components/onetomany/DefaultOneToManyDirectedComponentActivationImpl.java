@@ -19,8 +19,7 @@ import org.ml4j.MatrixFactory;
 import org.ml4j.nn.components.DirectedComponentGradient;
 import org.ml4j.nn.components.DirectedComponentGradientImpl;
 import org.ml4j.nn.components.onetomany.base.OneToManyDirectedComponentActivationBase;
-import org.ml4j.nn.neurons.ImageNeuronsActivation;
-import org.ml4j.nn.neurons.Neurons3D;
+import org.ml4j.nn.neurons.Neurons;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.ml4j.nn.neurons.NeuronsActivationImpl;
 import org.slf4j.Logger;
@@ -36,6 +35,7 @@ public class DefaultOneToManyDirectedComponentActivationImpl extends OneToManyDi
 	private static final Logger LOGGER = LoggerFactory.getLogger(DefaultOneToManyDirectedComponentActivationImpl.class);
 	
 	private MatrixFactory matrixFactory;
+	private Neurons inputNeurons;
 	
 	/**
 	 * DefaultOneToManyDirectedComponentActivationImpl constructor
@@ -47,6 +47,7 @@ public class DefaultOneToManyDirectedComponentActivationImpl extends OneToManyDi
 	public DefaultOneToManyDirectedComponentActivationImpl(MatrixFactory matrixFactory, NeuronsActivation input, int outputNeuronsActivationCount) {
 		super(input, outputNeuronsActivationCount);
 		this.matrixFactory = matrixFactory;
+		this.inputNeurons = input.getNeurons();
 	}
 	
 	@Override
@@ -54,24 +55,14 @@ public class DefaultOneToManyDirectedComponentActivationImpl extends OneToManyDi
 			DirectedComponentGradient<List<NeuronsActivation>> gradient) {
 		LOGGER.debug("Back propagating multiple gradient neurons activations into a single combined neurons activation");
 		List<NeuronsActivation> gradients = gradient.getOutput();
-		boolean allImage = gradients.stream().allMatch(g -> g instanceof ImageNeuronsActivation);
-		
-		NeuronsActivation totalActivation = null;
-		if (allImage) {
 			
-			totalActivation = new NeuronsActivationImpl(matrixFactory.createMatrix(gradients.get(0).getRows(), 
+		NeuronsActivation totalActivation = new NeuronsActivationImpl(inputNeurons, matrixFactory.createMatrix(gradients.get(0).getRows(), 
 					gradients.get(0).getColumns()), gradients.get(0).getFeatureOrientation(), false);
-		} else {
-			totalActivation = new NeuronsActivationImpl(matrixFactory.createMatrix(gradients.get(0).getRows(), 
-					gradients.get(0).getColumns()), gradients.get(0).getFeatureOrientation(), false);
-		}
+	
 		for (NeuronsActivation activation : gradients) {
 			totalActivation.addInline(matrixFactory, activation);
 			activation.close();
 		}
-		if (allImage) {
-			totalActivation = totalActivation.asImageNeuronsActivation((Neurons3D)gradients.get(0).getNeurons());
-		} 
 		return new DirectedComponentGradientImpl<>(gradient.getTotalTrainableAxonsGradients(), totalActivation);
 	}
 }

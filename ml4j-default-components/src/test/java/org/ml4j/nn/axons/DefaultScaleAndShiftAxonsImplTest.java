@@ -32,7 +32,7 @@ public class DefaultScaleAndShiftAxonsImplTest extends AxonsTestBase<ScaleAndShi
 
 	@Override
 	public NeuronsActivation createNeuronsActivation(int featureCount, int exampleCount) {
-		return new NeuronsActivationImpl(matrixFactory.createMatrix(featureCount, exampleCount), NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET);
+		return new NeuronsActivationImpl(new Neurons(featureCount, false), matrixFactory.createMatrix(featureCount, exampleCount), NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET);
 	}
 
 	@Override

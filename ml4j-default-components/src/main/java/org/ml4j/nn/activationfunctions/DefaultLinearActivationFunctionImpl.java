@@ -43,7 +43,7 @@ public class DefaultLinearActivationFunctionImpl implements DifferentiableActiva
 	@Override
 	public NeuronsActivation activationGradient(DifferentiableActivationFunctionActivation activation,
 			NeuronsActivationContext context) {
-		NeuronsActivation output = new NeuronsActivationImpl(context.getMatrixFactory().createOnes(activation.getInput().getFeatureCount(),
+		NeuronsActivation output = new NeuronsActivationImpl(activation.getOutput().getNeurons(), context.getMatrixFactory().createOnes(activation.getInput().getFeatureCount(),
 				activation.getInput().getExampleCount()), activation.getInput().getFeatureOrientation());
 		return output;
 	}

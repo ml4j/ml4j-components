@@ -57,7 +57,7 @@ public class DummyFullyConnectedAxonsImpl implements FullyConnectedAxons {
 		}
 		
 		return new AxonsActivationImpl(this, null, () -> leftNeuronsActivation,
-				new NeuronsActivationImpl(
+				new NeuronsActivationImpl(getRightNeurons(),
 						matrixFactory.createMatrix(rightNeurons.getNeuronCountExcludingBias(),exampleCount
 								),
 						NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET),
@@ -68,7 +68,7 @@ public class DummyFullyConnectedAxonsImpl implements FullyConnectedAxons {
 	public AxonsActivation pushRightToLeft(NeuronsActivation rightNeuronsActivation,
 			AxonsActivation previousLeftToRightActivation, AxonsContext axonsContext) {
 		return new AxonsActivationImpl(this, null, () -> rightNeuronsActivation,
-				new NeuronsActivationImpl(
+				new NeuronsActivationImpl(getLeftNeurons(),
 						matrixFactory.createMatrix(leftNeurons.getNeuronCountExcludingBias(),
 								rightNeuronsActivation.getExampleCount()),
 						NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET),
