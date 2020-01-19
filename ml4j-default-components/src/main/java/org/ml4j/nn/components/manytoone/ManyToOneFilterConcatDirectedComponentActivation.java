@@ -55,6 +55,8 @@ public class ManyToOneFilterConcatDirectedComponentActivation extends DefaultMan
 						channelImage, imagesActivation.getFeatureOrientation(), 
 						imagesActivation.isImmutable()))
 				.collect(Collectors.toList());
+		
+		outerGradientBackPropagatedImages.stream().forEach(i -> i.setImmutable(true));
 
 		LOGGER.debug("End splitting gradient for many to one filter");
 
