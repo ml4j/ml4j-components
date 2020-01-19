@@ -12,7 +12,7 @@ import org.ml4j.images.MultiChannelImages;
 import org.ml4j.nn.axons.factories.AxonsFactory;
 import org.ml4j.nn.neurons.ImageNeuronsActivation;
 import org.ml4j.nn.neurons.ImageNeuronsActivationImpl;
-import org.ml4j.nn.neurons.Neurons1D;
+import org.ml4j.nn.neurons.Neurons;
 import org.ml4j.nn.neurons.Neurons3D;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
@@ -57,8 +57,8 @@ public class DefaultConvolutionalAxonsImpl implements ConvolutionalAxons {
 
 		int filterHeight = inputHeightWithPadding + (1 - outputHeight) * (config.getStrideHeight());
 		this.fullyConnectedAxons = axonsFactory.createFullyConnectedAxons(
-				new Neurons1D(filterWidth * filterHeight * leftNeurons.getDepth(), leftNeurons.hasBiasUnit()),
-				new Neurons1D(rightNeurons.getDepth(), rightNeurons.hasBiasUnit()), connectionWeights, biases);
+				new Neurons(filterWidth * filterHeight * leftNeurons.getDepth(), leftNeurons.hasBiasUnit()),
+				new Neurons(rightNeurons.getDepth(), rightNeurons.hasBiasUnit()), connectionWeights, biases);
 	}
 
 	@Override
@@ -100,12 +100,12 @@ public class DefaultConvolutionalAxonsImpl implements ConvolutionalAxons {
 
 		final NeuronsActivation reformatted;
 		if (isEligableOneByOne(filterWidth, filterHeight)) {
-			reformatted = new NeuronsActivationImpl(new Neurons1D(leftNeurons.getDepth(), leftNeurons.hasBiasUnit()),
+			reformatted = new NeuronsActivationImpl(new Neurons(leftNeurons.getDepth(), leftNeurons.hasBiasUnit()),
 					reformatLeftToRightInputOneByOne(matrixFactory, leftNeuronsActivation),
 					NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET);
 		} else {
 			ImageNeuronsActivation imageAct = leftNeuronsActivation.asImageNeuronsActivation(leftNeurons);
-			reformatted = new NeuronsActivationImpl(new Neurons1D(leftNeurons.getDepth() * filterWidth * filterHeight, leftNeurons.hasBiasUnit()),
+			reformatted = new NeuronsActivationImpl(new Neurons(leftNeurons.getDepth() * filterWidth * filterHeight, leftNeurons.hasBiasUnit()),
 					imageAct.im2ColConv(matrixFactory, filterHeight,
 							filterWidth, config.getStrideHeight(), config.getStrideWidth(), config.getPaddingHeight(),
 							config.getPaddingWidth()),

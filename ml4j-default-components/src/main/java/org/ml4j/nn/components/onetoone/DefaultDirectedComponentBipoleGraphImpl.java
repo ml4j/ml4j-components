@@ -31,7 +31,6 @@ import org.ml4j.nn.components.onetone.DefaultDirectedComponentBipoleGraph;
 import org.ml4j.nn.components.onetone.DefaultDirectedComponentBipoleGraphActivation;
 import org.ml4j.nn.components.onetoone.base.DefaultDirectedComponentBipoleGraphBase;
 import org.ml4j.nn.neurons.Neurons;
-import org.ml4j.nn.neurons.Neurons1D;
 import org.ml4j.nn.neurons.Neurons3D;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
@@ -70,7 +69,7 @@ public class DefaultDirectedComponentBipoleGraphImpl extends DefaultDirectedComp
 	 * @param pathCombinationStrategy The strategy specifying how the outputs of the parallel edges should be combined to
 	 * produce the output activations.
 	 */
-	public DefaultDirectedComponentBipoleGraphImpl(DirectedComponentFactory directedComponentFactory, Neurons inputNeurons, Neurons1D outputNeurons, 
+	public DefaultDirectedComponentBipoleGraphImpl(DirectedComponentFactory directedComponentFactory, Neurons inputNeurons, Neurons outputNeurons, 
 			DefaultDirectedComponentBatch parallelComponentBatch, PathCombinationStrategy pathCombinationStrategy) {
 		this(inputNeurons, outputNeurons, parallelComponentBatch, 
 				parallelComponentBatch.getComponents().size() == 1 ? null : directedComponentFactory.createOneToManyDirectedComponent(() -> parallelComponentBatch.getComponents().size()), 
@@ -91,7 +90,7 @@ public class DefaultDirectedComponentBipoleGraphImpl extends DefaultDirectedComp
 			DefaultDirectedComponentBatch parallelComponentBatch, PathCombinationStrategy pathCombinationStrategy) {
 		this(inputNeurons, outputNeurons, parallelComponentBatch, 
 				parallelComponentBatch.getComponents().size() == 1 ? null : directedComponentFactory.createOneToManyDirectedComponent(() -> parallelComponentBatch.getComponents().size()), 
-				parallelComponentBatch.getComponents().size() == 1 ? null :  directedComponentFactory.createManyToOneDirectedComponent(outputNeurons, pathCombinationStrategy), pathCombinationStrategy);
+				parallelComponentBatch.getComponents().size() == 1 ? null :  directedComponentFactory.createManyToOneDirectedComponent3D(outputNeurons, pathCombinationStrategy), pathCombinationStrategy);
 		this.pathCombinationStrategy = pathCombinationStrategy;
 	}
 	

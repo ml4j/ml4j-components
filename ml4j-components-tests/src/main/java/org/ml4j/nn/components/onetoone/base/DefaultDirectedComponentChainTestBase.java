@@ -26,7 +26,7 @@ import org.ml4j.nn.components.onetone.DefaultChainableDirectedComponent;
 import org.ml4j.nn.components.onetone.DefaultChainableDirectedComponentActivation;
 import org.ml4j.nn.components.onetone.DefaultDirectedComponentChain;
 import org.ml4j.nn.components.onetone.DefaultDirectedComponentChainActivation;
-import org.ml4j.nn.neurons.Neurons1D;
+import org.ml4j.nn.neurons.Neurons;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -71,10 +71,10 @@ public abstract class DefaultDirectedComponentChainTestBase extends TestBase{
 	    
 	    Mockito.when(mockDirectedComponentsContext.getMatrixFactory()).thenReturn(matrixFactory);
 	      
-	    Mockito.when(mockComponent1.getInputNeurons()).thenReturn(new Neurons1D(100, false));
-	    Mockito.when(mockComponent2.getInputNeurons()).thenReturn(new Neurons1D(200, false));
-	    Mockito.when(mockComponent1.getOutputNeurons()).thenReturn(new Neurons1D(200, false));
-	    Mockito.when(mockComponent2.getOutputNeurons()).thenReturn(new Neurons1D(300, false));
+	    Mockito.when(mockComponent1.getInputNeurons()).thenReturn(new Neurons(100, false));
+	    Mockito.when(mockComponent2.getInputNeurons()).thenReturn(new Neurons(200, false));
+	    Mockito.when(mockComponent1.getOutputNeurons()).thenReturn(new Neurons(200, false));
+	    Mockito.when(mockComponent2.getOutputNeurons()).thenReturn(new Neurons(300, false));
 	    
 		Mockito.when(mockComponent1.forwardPropagate(Mockito.eq(mockNeuronsActivation1), Mockito.any())).thenReturn(mockComponent1Activation);
 		Mockito.when(mockComponent2.forwardPropagate(Mockito.eq(mockNeuronsActivation2), Mockito.any())).thenReturn(mockComponent2Activation);

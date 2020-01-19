@@ -31,7 +31,6 @@ import org.ml4j.nn.components.onetone.DefaultChainableDirectedComponent;
 import org.ml4j.nn.components.onetoone.base.DefaultDirectedComponentChainBipoleGraphBase;
 import org.ml4j.nn.components.onetoone.base.DefaultDirectedComponentChainBipoleGraphTestBase;
 import org.ml4j.nn.neurons.Neurons;
-import org.ml4j.nn.neurons.Neurons1D;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -70,7 +69,7 @@ public class DefaultDirectedComponentChainBipoleGraphImplTest extends DefaultDir
 	public void setup() {
 		super.setup();
 		Mockito.when(mockDirectedComponentFactory.createOneToManyDirectedComponent(Mockito.any())).thenReturn(mockOneToManyDirectedComponent);
-		Mockito.when(mockDirectedComponentFactory.createManyToOneDirectedComponent((Neurons1D)Mockito.any(), Mockito.any())).thenReturn(mockManyToOneDirectedComponent);
+		Mockito.when(mockDirectedComponentFactory.createManyToOneDirectedComponent((Neurons)Mockito.any(), Mockito.any())).thenReturn(mockManyToOneDirectedComponent);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -91,7 +90,7 @@ public class DefaultDirectedComponentChainBipoleGraphImplTest extends DefaultDir
 		Mockito.when(mockComponentChainBatch.forwardPropagate(Arrays.asList(mockNeuronsActivation1, mockNeuronsActivation2), mockDirectedComponentsContext))
 		.thenReturn(mockComponentChainBatchActivation);
 		Mockito.when(mockComponentChainBatchActivation.getOutput()).thenReturn(Arrays.asList(mockNeuronsActivation3, mockNeuronsActivation4));
-		return new DefaultDirectedComponentChainBipoleGraphImpl(factory, new Neurons1D(10, false), new Neurons1D(100, false), mockComponentChainBatch, pathCombinationStrategy);
+		return new DefaultDirectedComponentChainBipoleGraphImpl(factory, new Neurons(10, false), new Neurons(100, false), mockComponentChainBatch, pathCombinationStrategy);
 	}
 
 	

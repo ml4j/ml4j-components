@@ -138,7 +138,7 @@ public class DummyNeuronsActivation implements NeuronsActivation {
 
 	@Override
 	public void reshape(int featureCount, int exampleCount) {
-		this.neurons = new Neurons1D(featureCount, neurons.hasBiasUnit());
+		this.neurons = new Neurons(featureCount, neurons.hasBiasUnit());
 		this.examples = exampleCount;
 	}
 }

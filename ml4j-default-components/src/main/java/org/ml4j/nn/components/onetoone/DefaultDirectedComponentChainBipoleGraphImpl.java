@@ -31,7 +31,6 @@ import org.ml4j.nn.components.onetone.DefaultDirectedComponentChainBipoleGraph;
 import org.ml4j.nn.components.onetone.DefaultDirectedComponentChainBipoleGraphActivation;
 import org.ml4j.nn.components.onetoone.base.DefaultDirectedComponentChainBipoleGraphBase;
 import org.ml4j.nn.neurons.Neurons;
-import org.ml4j.nn.neurons.Neurons1D;
 import org.ml4j.nn.neurons.Neurons3D;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
@@ -71,12 +70,11 @@ public class DefaultDirectedComponentChainBipoleGraphImpl extends DefaultDirecte
 	 * @param pathCombinationStrategy The strategy specifying how the outputs of the parallel edges should be combined to
 	 * produce the output activations.
 	 */
-	public DefaultDirectedComponentChainBipoleGraphImpl(DirectedComponentFactory directedComponentFactory, Neurons inputNeurons, Neurons1D outputNeurons, 
+	public DefaultDirectedComponentChainBipoleGraphImpl(DirectedComponentFactory directedComponentFactory, Neurons inputNeurons, Neurons outputNeurons, 
 			DefaultDirectedComponentChainBatch parallelComponentChainsBatch, PathCombinationStrategy pathCombinationStrategy) {
-		this(inputNeurons, outputNeurons, parallelComponentChainsBatch, directedComponentFactory.createOneToManyDirectedComponent(() -> parallelComponentChainsBatch.getComponents().size()), 
-				directedComponentFactory.createManyToOneDirectedComponent(outputNeurons, pathCombinationStrategy), pathCombinationStrategy);
-		this.oneToManyDirectedComponent = directedComponentFactory.createOneToManyDirectedComponent(() -> parallelComponentChainsBatch.getComponents().size());
-		this.manyToOneDirectedComponent = directedComponentFactory.createManyToOneDirectedComponent(outputNeurons, pathCombinationStrategy);
+		this(inputNeurons, outputNeurons, parallelComponentChainsBatch, 
+				parallelComponentChainsBatch.getComponents().size() == 1 ? null : directedComponentFactory.createOneToManyDirectedComponent(() -> parallelComponentChainsBatch.getComponents().size()), 
+				parallelComponentChainsBatch.getComponents().size() == 1 ? null : directedComponentFactory.createManyToOneDirectedComponent(outputNeurons, pathCombinationStrategy), pathCombinationStrategy);
 		this.pathCombinationStrategy = pathCombinationStrategy;
 	}
 
@@ -91,10 +89,9 @@ public class DefaultDirectedComponentChainBipoleGraphImpl extends DefaultDirecte
 	 */
 	public DefaultDirectedComponentChainBipoleGraphImpl(DirectedComponentFactory directedComponentFactory, Neurons inputNeurons, Neurons3D outputNeurons, 
 			DefaultDirectedComponentChainBatch parallelComponentChainsBatch, PathCombinationStrategy pathCombinationStrategy) {
-		this(inputNeurons, outputNeurons, parallelComponentChainsBatch, directedComponentFactory.createOneToManyDirectedComponent(() -> parallelComponentChainsBatch.getComponents().size()), 
-				directedComponentFactory.createManyToOneDirectedComponent(outputNeurons, pathCombinationStrategy), pathCombinationStrategy);
-		this.oneToManyDirectedComponent = directedComponentFactory.createOneToManyDirectedComponent(() -> parallelComponentChainsBatch.getComponents().size());
-		this.manyToOneDirectedComponent = directedComponentFactory.createManyToOneDirectedComponent(outputNeurons, pathCombinationStrategy);
+		this(inputNeurons, outputNeurons, parallelComponentChainsBatch, 
+				parallelComponentChainsBatch.getComponents().size() == 1 ? null : directedComponentFactory.createOneToManyDirectedComponent(() -> parallelComponentChainsBatch.getComponents().size()), 
+				parallelComponentChainsBatch.getComponents().size() == 1 ? null : directedComponentFactory.createManyToOneDirectedComponent3D(outputNeurons, pathCombinationStrategy), pathCombinationStrategy);
 		this.pathCombinationStrategy = pathCombinationStrategy;
 	}
 	

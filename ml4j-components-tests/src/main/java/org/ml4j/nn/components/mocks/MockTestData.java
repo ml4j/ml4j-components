@@ -10,7 +10,7 @@ import org.ml4j.nn.components.DirectedComponentGradient;
 import org.ml4j.nn.components.base.TestBase;
 import org.ml4j.nn.components.onetone.DefaultChainableDirectedComponentActivation;
 import org.ml4j.nn.neurons.ImageNeuronsActivation;
-import org.ml4j.nn.neurons.Neurons1D;
+import org.ml4j.nn.neurons.Neurons;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
 import org.mockito.Mockito;
@@ -22,7 +22,7 @@ public class MockTestData {
 		Mockito.when(neuronsActivation.getFeatureCount()).thenReturn(featureCount);
 		Mockito.when(neuronsActivation.getRows()).thenReturn(featureCount);
 		Mockito.when(neuronsActivation.getColumns()).thenReturn(exampleCount);
-		Mockito.when(neuronsActivation.getNeurons()).thenReturn(new Neurons1D(featureCount, false));
+		Mockito.when(neuronsActivation.getNeurons()).thenReturn(new Neurons(featureCount, false));
 		Mockito.when(neuronsActivation.getExampleCount()).thenReturn(exampleCount);
 		Mockito.when(neuronsActivation.getFeatureOrientation()).thenReturn(NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET);
 		Matrix mockMatrix = matrixFactory.createMatrix(featureCount, exampleCount);
@@ -61,7 +61,7 @@ public class MockTestData {
 		Mockito.when(neuronsActivation.getFeatureCount()).thenReturn(featureCount);
 		Mockito.when(neuronsActivation.getRows()).thenReturn(featureCount);
 		Mockito.when(neuronsActivation.getColumns()).thenReturn(exampleCount);
-		Mockito.when(neuronsActivation.getNeurons()).thenReturn(new Neurons1D(featureCount, false));
+		Mockito.when(neuronsActivation.getNeurons()).thenReturn(new Neurons(featureCount, false));
 		Mockito.when(neuronsActivation.getExampleCount()).thenReturn(exampleCount);
 		Mockito.when(neuronsActivation.getFeatureOrientation()).thenReturn(NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET);
 		Mockito.when(neuronsActivation.getActivations(Mockito.any())).thenReturn(matrix);

@@ -15,7 +15,6 @@ package org.ml4j.nn.components.manytoone;
 
 import org.ml4j.MatrixFactory;
 import org.ml4j.nn.components.manytoone.base.ManyToOneDirectedComponentTestBase;
-import org.ml4j.nn.components.mocks.MockTestData;
 import org.ml4j.nn.neurons.Neurons;
 import org.ml4j.nn.neurons.Neurons3D;
 import org.ml4j.nn.neurons.NeuronsActivation;

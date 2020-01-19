@@ -13,7 +13,6 @@ import org.ml4j.images.MultiChannelImages;
 import org.ml4j.nn.neurons.ImageNeuronsActivation;
 import org.ml4j.nn.neurons.ImageNeuronsActivationImpl;
 import org.ml4j.nn.neurons.Neurons;
-import org.ml4j.nn.neurons.Neurons1D;
 import org.ml4j.nn.neurons.Neurons3D;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
@@ -73,7 +72,7 @@ public class DefaultMaxPoolingAxonsImpl implements MaxPoolingAxons {
 
 		ImageNeuronsActivation act = leftNeuronsActivation.asImageNeuronsActivation(leftNeurons);
 		
-		NeuronsActivation reformatted = new NeuronsActivationImpl(new Neurons1D(filterWidth * filterHeight, leftNeurons.hasBiasUnit()),
+		NeuronsActivation reformatted = new NeuronsActivationImpl(new Neurons(filterWidth * filterHeight, leftNeurons.hasBiasUnit()),
 				act.im2ColPool(matrixFactory, filterHeight,
 						filterWidth, config.getStrideHeight(), config.getStrideWidth(), config.getPaddingHeight(),
 						config.getPaddingWidth()),
@@ -126,7 +125,7 @@ public class DefaultMaxPoolingAxonsImpl implements MaxPoolingAxons {
 				origOutput.put(0, c, reformatted.get(maxInts[c], c));
 			}
 		}
-		Neurons reformattedNeurons = new Neurons1D(origOutput.getRows(), this.leftNeurons.hasBiasUnit()); 
+		Neurons reformattedNeurons = new Neurons(origOutput.getRows(), this.leftNeurons.hasBiasUnit()); 
 
 
 		NeuronsActivation preFormattedOutput = new NeuronsActivationImpl(reformattedNeurons, origOutput,

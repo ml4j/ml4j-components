@@ -6,7 +6,6 @@ import org.ml4j.jblas.JBlasRowMajorMatrixFactory;
 import org.ml4j.nn.axons.base.Axons3DTestBase;
 import org.ml4j.nn.axons.factories.AxonsFactory;
 import org.ml4j.nn.neurons.Neurons;
-import org.ml4j.nn.neurons.Neurons1D;
 import org.ml4j.nn.neurons.Neurons3D;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
@@ -68,7 +67,7 @@ public class DefaultConvolutionalAxonsImplTest extends Axons3DTestBase<Convoluti
 
 	@Override
 	public NeuronsActivation createNeuronsActivation(int featureCount, int exampleCount) {
-		return new NeuronsActivationImpl(new Neurons1D(featureCount, false),matrixFactory.createMatrix(featureCount, exampleCount),
+		return new NeuronsActivationImpl(new Neurons(featureCount, false),matrixFactory.createMatrix(featureCount, exampleCount),
 				NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET);
 	}
 

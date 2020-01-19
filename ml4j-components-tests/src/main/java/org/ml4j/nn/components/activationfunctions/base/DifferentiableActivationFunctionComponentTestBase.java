@@ -25,7 +25,6 @@ import org.ml4j.nn.components.activationfunctions.DifferentiableActivationFuncti
 import org.ml4j.nn.components.activationfunctions.DifferentiableActivationFunctionComponentActivation;
 import org.ml4j.nn.components.base.TestBase;
 import org.ml4j.nn.neurons.Neurons;
-import org.ml4j.nn.neurons.Neurons1D;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.ml4j.nn.neurons.NeuronsActivationContext;
 import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
@@ -84,14 +83,14 @@ public abstract class DifferentiableActivationFunctionComponentTestBase<L extend
 		
 		ActivationFunctionType activationFunctionType = ActivationFunctionType.getBaseType(ActivationFunctionBaseType.RELU);
 		
-		Neurons neurons = new Neurons1D(100, false);
+		Neurons neurons = new Neurons(100, false);
 		DifferentiableActivationFunctionComponent activationFunctionComponent = createDifferentiableActivationFunctionComponent(neurons, activationFunctionType);
 		Assert.assertNotNull(activationFunctionComponent);
 	}
 	
 	@Test
 	public void testGetComponentType() {	
-		Neurons neurons = new Neurons1D(100, false);
+		Neurons neurons = new Neurons(100, false);
 		
 		ActivationFunctionType activationFunctionType = ActivationFunctionType.getBaseType(ActivationFunctionBaseType.RELU);
 
@@ -118,7 +117,7 @@ public abstract class DifferentiableActivationFunctionComponentTestBase<L extend
 		// TODO THUR
 		//Mockito.when(mockActivationFunction.activate(mockNeuronsActivation, mockNeuronsActivationContext)).thenReturn(mockActivationFunctionActivation);
 		
-		Neurons neurons = new Neurons1D(110, false);
+		Neurons neurons = new Neurons(110, false);
 		DifferentiableActivationFunctionComponent activationFunctionComponent = createDifferentiableActivationFunctionComponent(neurons, activationFunctionType);
 		Assert.assertNotNull(activationFunctionComponent);
 		DifferentiableActivationFunctionComponentActivation activation =  activationFunctionComponent.forwardPropagate(mockNeuronsActivation, mockNeuronsActivationContext);
@@ -155,7 +154,7 @@ public abstract class DifferentiableActivationFunctionComponentTestBase<L extend
 		//Mockito.when(mockActivationFunction.activate(mockNeuronsActivation, mockNeuronsActivationContext)).thenReturn(mockActivationFunctionActivation);
 	
 		
-		Neurons neurons = new Neurons1D(110, false);
+		Neurons neurons = new Neurons(110, false);
 		DifferentiableActivationFunctionComponent activationFunctionComponent = createDifferentiableActivationFunctionComponent(neurons, activationFunctionType);
 		DifferentiableActivationFunctionComponent dupComponent = activationFunctionComponent.dup();
 		

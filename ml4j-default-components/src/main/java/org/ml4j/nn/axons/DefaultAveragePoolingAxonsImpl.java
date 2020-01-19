@@ -13,7 +13,6 @@ import org.ml4j.images.MultiChannelImages;
 import org.ml4j.nn.neurons.ImageNeuronsActivation;
 import org.ml4j.nn.neurons.ImageNeuronsActivationImpl;
 import org.ml4j.nn.neurons.Neurons;
-import org.ml4j.nn.neurons.Neurons1D;
 import org.ml4j.nn.neurons.Neurons3D;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
@@ -123,7 +122,7 @@ public class DefaultAveragePoolingAxonsImpl implements AveragePoolingAxons {
 		onesActivation.close();
 		reformattedOnes.close();
 		
-		Neurons averageNeurons = new Neurons1D(1, false); 
+		Neurons averageNeurons = new Neurons(1, false); 
 
 		// Obtain pooled feature averages
 		NeuronsActivation preFormattedOutput = new NeuronsActivationImpl(averageNeurons, reformatted.columnSums().asEditableMatrix().diviRowVector(counts),

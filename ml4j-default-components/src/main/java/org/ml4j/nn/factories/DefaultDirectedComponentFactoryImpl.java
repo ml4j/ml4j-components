@@ -46,7 +46,6 @@ import org.ml4j.nn.components.onetone.DefaultDirectedComponentChain;
 import org.ml4j.nn.components.onetoone.DefaultDirectedComponentBipoleGraphImpl;
 import org.ml4j.nn.components.onetoone.DefaultDirectedComponentChainImpl;
 import org.ml4j.nn.neurons.Neurons;
-import org.ml4j.nn.neurons.Neurons1D;
 import org.ml4j.nn.neurons.Neurons3D;
 
 /**
@@ -158,14 +157,14 @@ public class DefaultDirectedComponentFactoryImpl implements DirectedComponentFac
 	}
 
 	@Override
-	public ManyToOneDirectedComponent<?> createManyToOneDirectedComponent(Neurons1D outputNeurons, 
+	public ManyToOneDirectedComponent<?> createManyToOneDirectedComponent(Neurons outputNeurons, 
 			PathCombinationStrategy pathCombinationStrategy) {
 		// TODO
 		throw new UnsupportedOperationException("Not yet implemented");
 	}
 	
 	@Override
-	public ManyToOneDirectedComponent<?> createManyToOneDirectedComponent(Neurons3D outputNeurons, 
+	public ManyToOneDirectedComponent<?> createManyToOneDirectedComponent3D(Neurons3D outputNeurons, 
 			PathCombinationStrategy pathCombinationStrategy) {
 		if (pathCombinationStrategy == PathCombinationStrategy.FILTER_CONCAT) {
 			return new DefaultManyToOneFilterConcatDirectedComponentImpl(outputNeurons);
@@ -195,11 +194,9 @@ public class DefaultDirectedComponentFactoryImpl implements DirectedComponentFac
 		
 		if (rightNeurons instanceof Neurons3D) {
 			return new DefaultDirectedComponentBipoleGraphImpl(directedComponentFactory, leftNeurons, (Neurons3D)rightNeurons, createDirectedComponentBatch(parallelComponentBatch), pathCombinationStrategy);
-		} else if (rightNeurons instanceof Neurons1D){
-			return new DefaultDirectedComponentBipoleGraphImpl(directedComponentFactory, leftNeurons, (Neurons1D)rightNeurons, createDirectedComponentBatch(parallelComponentBatch), pathCombinationStrategy);
 		} else {
-			throw new IllegalArgumentException("Unsupported form of output neurons for DefaultDirectedComponentBipoleGraph of:" + rightNeurons.getClass());
-		}
+			return new DefaultDirectedComponentBipoleGraphImpl(directedComponentFactory, leftNeurons, rightNeurons, createDirectedComponentBatch(parallelComponentBatch), pathCombinationStrategy);
+		} 
 	}
 	
 	@Override

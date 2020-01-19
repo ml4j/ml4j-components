@@ -21,7 +21,6 @@ import org.ml4j.nn.components.DirectedComponentsContext;
 import org.ml4j.nn.components.manytoone.base.ManyToOneDirectedComponentBase;
 import org.ml4j.nn.neurons.DummyNeuronsActivation;
 import org.ml4j.nn.neurons.Neurons;
-import org.ml4j.nn.neurons.Neurons1D;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
 import org.slf4j.Logger;
@@ -52,7 +51,7 @@ public class DummyManyToOneDirectedComponent extends ManyToOneDirectedComponentB
 		} else {
 			throw new UnsupportedOperationException("Path combination strategy of:" + pathCombinationStrategy + " not supported");
 		}
-		Neurons mockOutputNeurons = new Neurons1D(outputNeuronCount, false);
+		Neurons mockOutputNeurons = new Neurons(outputNeuronCount, false);
 		NeuronsActivation mockOutput = new DummyNeuronsActivation(mockOutputNeurons, neuronActivations.get(0).getFeatureOrientation(), 
 				neuronActivations.get(0).getExampleCount());
 		return new DummyManyToOneDirectedComponentActivation(neuronActivations.size(), mockOutput);
