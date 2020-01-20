@@ -15,7 +15,7 @@ public class DummyDirectedAxonsComponentTest extends DirectedAxonsComponentTestB
 			Axons<L, R, ?> axons) {
 		return new DummyDirectedAxonsComponent<>(axons);
 	}
-	
+
 	@Override
 	protected MatrixFactory createMatrixFactory() {
 		return Mockito.mock(MatrixFactory.class);

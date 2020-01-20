@@ -30,13 +30,14 @@ import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class DummyDefaultDirectedComponentBipoleGraph extends DefaultDirectedComponentBipoleGraphBase implements DefaultDirectedComponentBipoleGraph {
+public class DummyDefaultDirectedComponentBipoleGraph extends DefaultDirectedComponentBipoleGraphBase
+		implements DefaultDirectedComponentBipoleGraph {
 
 	/**
 	 * Default serialization id.
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(DummyDefaultDirectedComponentBipoleGraph.class);
 
 	public DummyDefaultDirectedComponentBipoleGraph(Neurons inputNeurons, Neurons outputNeurons,
@@ -48,18 +49,19 @@ public class DummyDefaultDirectedComponentBipoleGraph extends DefaultDirectedCom
 	public DefaultDirectedComponentBatch getEdges() {
 		throw new UnsupportedOperationException();
 	}
-	
+
 	@Override
 	public DefaultDirectedComponentBipoleGraphActivation forwardPropagate(NeuronsActivation neuronsActivation,
 			DirectedComponentsContext context) {
-		
+
 		if (neuronsActivation.getFeatureCount() != getInputNeurons().getNeuronCountExcludingBias()) {
-			throw new IllegalStateException(neuronsActivation.getFeatureCount() + ":" + getInputNeurons().getNeuronCountExcludingBias());
+			throw new IllegalStateException(
+					neuronsActivation.getFeatureCount() + ":" + getInputNeurons().getNeuronCountExcludingBias());
 		}
 		LOGGER.debug("Mock forward propagating through DummyDefaultDirectedComponentChainBipoleGraph");
 
-		return new DummyDefaultDirectedComponentBipoleGraphActivation(this, new DummyNeuronsActivation(getOutputNeurons(),
-				neuronsActivation.getFeatureOrientation(), neuronsActivation.getExampleCount()));
+		return new DummyDefaultDirectedComponentBipoleGraphActivation(this, new DummyNeuronsActivation(
+				getOutputNeurons(), neuronsActivation.getFeatureOrientation(), neuronsActivation.getExampleCount()));
 	}
 
 	@Override
@@ -71,7 +73,7 @@ public class DummyDefaultDirectedComponentBipoleGraph extends DefaultDirectedCom
 	public DefaultDirectedComponentBipoleGraph dup() {
 		return new DummyDefaultDirectedComponentBipoleGraph(inputNeurons, outputNeurons, parallelComponentBatch.dup());
 	}
-	
+
 	@Override
 	public Optional<NeuronsActivationFeatureOrientation> optimisedFor() {
 		// TODO THUR

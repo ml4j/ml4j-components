@@ -22,9 +22,9 @@ import org.ml4j.nn.components.manytomany.base.DirectedComponentChainBatchActivat
 import org.ml4j.nn.components.onetone.DefaultDirectedComponentChainActivation;
 import org.ml4j.nn.neurons.NeuronsActivation;
 
-public class DummyDirectedComponentChainBatchActivation extends DirectedComponentChainBatchActivationBase implements DefaultDirectedComponentChainBatchActivation{
+public class DummyDirectedComponentChainBatchActivation extends DirectedComponentChainBatchActivationBase
+		implements DefaultDirectedComponentChainBatchActivation {
 
-	
 	public DummyDirectedComponentChainBatchActivation(List<DefaultDirectedComponentChainActivation> activations) {
 		super(activations);
 	}
@@ -40,7 +40,7 @@ public class DummyDirectedComponentChainBatchActivation extends DirectedComponen
 		// TODO ML
 		return null;
 	}
-	
+
 	@Override
 	public void close(DirectedComponentActivationLifecycle arg0) {
 		// No-op

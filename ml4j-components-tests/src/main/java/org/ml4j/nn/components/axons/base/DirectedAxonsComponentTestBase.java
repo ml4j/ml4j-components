@@ -36,134 +36,143 @@ import org.mockito.MockitoAnnotations;
 public abstract class DirectedAxonsComponentTestBase extends TestBase {
 
 	protected NeuronsActivation mockInputActivation;
-	
+
 	protected NeuronsActivation mockOutputActivation;
-	
+
 	@Mock
 	protected AxonsContext mockAxonsContext;
-	
+
 	@Mock
 	protected Axons<Neurons, Neurons, ?> mockAxons;
-	
+
 	@Mock
 	protected DirectedComponentsContext mockDirectedComponentsContext;
-	
+
 	@Before
 	public void setup() {
-	    MockitoAnnotations.initMocks(this);
-	    Mockito.when(mockDirectedComponentsContext.getMatrixFactory()).thenReturn(matrixFactory);
-	    this.mockInputActivation = createNeuronsActivation(100, 32);
-	    this.mockOutputActivation = createNeuronsActivation(120, 32);
+		MockitoAnnotations.initMocks(this);
+		Mockito.when(mockDirectedComponentsContext.getMatrixFactory()).thenReturn(matrixFactory);
+		this.mockInputActivation = createNeuronsActivation(100, 32);
+		this.mockOutputActivation = createNeuronsActivation(120, 32);
 
 	}
 
 	@SuppressWarnings("unchecked")
-	private <L extends Neurons, R extends Neurons> DirectedAxonsComponent<L, R, ?> createDirectedAxonsComponent(L leftNeurons, R rightNeurons) {
+	private <L extends Neurons, R extends Neurons> DirectedAxonsComponent<L, R, ?> createDirectedAxonsComponent(
+			L leftNeurons, R rightNeurons) {
 		Mockito.when(mockAxons.getLeftNeurons()).thenReturn(leftNeurons);
 		Mockito.when(mockAxons.getRightNeurons()).thenReturn(rightNeurons);
-		return createDirectedAxonsComponentUnderTest((Axons<L, R, ?>)mockAxons);
+		return createDirectedAxonsComponentUnderTest((Axons<L, R, ?>) mockAxons);
 	}
-		
-	protected abstract <L extends Neurons, R extends Neurons> DirectedAxonsComponent<L, R, ?> createDirectedAxonsComponentUnderTest(Axons<L, R, ?> axons);
+
+	protected abstract <L extends Neurons, R extends Neurons> DirectedAxonsComponent<L, R, ?> createDirectedAxonsComponentUnderTest(
+			Axons<L, R, ?> axons);
 
 	@Test
 	public void testConstruction() {
 		Neurons leftNeurons = new Neurons(100, false);
 		Neurons rightNeurons = new Neurons(120, false);
 
-		DirectedAxonsComponent<?, ?, ?> directedAxonsComponent = createDirectedAxonsComponent(leftNeurons, rightNeurons);
+		DirectedAxonsComponent<?, ?, ?> directedAxonsComponent = createDirectedAxonsComponent(leftNeurons,
+				rightNeurons);
 		Assert.assertNotNull(directedAxonsComponent);
 	}
-	
+
 	@Test
 	public void testGetComponentType() {
 		Neurons leftNeurons = new Neurons(100, false);
 		Neurons rightNeurons = new Neurons(120, false);
 
-		DirectedAxonsComponent<?, ?, ?> directedAxonsComponent = createDirectedAxonsComponent(leftNeurons, rightNeurons);
+		DirectedAxonsComponent<?, ?, ?> directedAxonsComponent = createDirectedAxonsComponent(leftNeurons,
+				rightNeurons);
 		Assert.assertEquals(NeuralComponentBaseType.AXONS, directedAxonsComponent.getComponentType().getBaseType());
 	}
-	
+
 	@Test
 	public void testDecompose() {
 		Neurons leftNeurons = new Neurons(100, false);
 		Neurons rightNeurons = new Neurons(120, false);
 
-		DirectedAxonsComponent<?, ?, ?> directedAxonsComponent = createDirectedAxonsComponent(leftNeurons, rightNeurons);
-		
+		DirectedAxonsComponent<?, ?, ?> directedAxonsComponent = createDirectedAxonsComponent(leftNeurons,
+				rightNeurons);
+
 		List<DefaultChainableDirectedComponent<?, ?>> components = directedAxonsComponent.decompose();
 		Assert.assertNotNull(components);
 		Assert.assertEquals(1, components.size());
 		Assert.assertNotNull(components.get(0));
 		Assert.assertEquals(directedAxonsComponent, components.get(0));
 	}
-	
+
 	@Test
 	public void testForwardPropagate() {
 		Neurons leftNeurons = new Neurons(100, false);
 		Neurons rightNeurons = new Neurons(120, false);
-		
+
 		Mockito.when(mockInputActivation.getFeatureCount()).thenReturn(leftNeurons.getNeuronCountExcludingBias());
 		Mockito.when(mockInputActivation.getExampleCount()).thenReturn(32);
-		Mockito.when(mockInputActivation.getFeatureOrientation()).thenReturn(NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET);
-		
-		DirectedAxonsComponent<?, ?, ?> directedAxonsComponent = createDirectedAxonsComponent(leftNeurons, rightNeurons);
+		Mockito.when(mockInputActivation.getFeatureOrientation())
+				.thenReturn(NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET);
 
-		DirectedAxonsComponentActivation activation = directedAxonsComponent.forwardPropagate(mockInputActivation, mockAxonsContext);
+		DirectedAxonsComponent<?, ?, ?> directedAxonsComponent = createDirectedAxonsComponent(leftNeurons,
+				rightNeurons);
+
+		DirectedAxonsComponentActivation activation = directedAxonsComponent.forwardPropagate(mockInputActivation,
+				mockAxonsContext);
 		Assert.assertNotNull(activation);
 		Assert.assertNotNull(activation.getOutput());
 		Assert.assertEquals(rightNeurons.getNeuronCountExcludingBias(), activation.getOutput().getFeatureCount());
 		Assert.assertEquals(32, activation.getOutput().getExampleCount());
-		Assert.assertEquals(NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET, activation.getOutput().getFeatureOrientation());
-
+		Assert.assertEquals(NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET,
+				activation.getOutput().getFeatureOrientation());
 
 	}
-	
+
 	@Test
 	public void testDup() {
 		Neurons leftNeurons = new Neurons(100, false);
 		Neurons rightNeurons = new Neurons(120, false);
 
-		DirectedAxonsComponent<?, ?, ?> directedAxonsComponent = createDirectedAxonsComponent(leftNeurons, rightNeurons);
+		DirectedAxonsComponent<?, ?, ?> directedAxonsComponent = createDirectedAxonsComponent(leftNeurons,
+				rightNeurons);
 
 		DirectedAxonsComponent<?, ?, ?> dupComponent = directedAxonsComponent.dup();
 		Assert.assertNotNull(dupComponent);
 		Assert.assertNotSame(directedAxonsComponent, dupComponent);
-		
+
 	}
-	
+
 	@Test
 	public void testGetAxons() {
 		Neurons leftNeurons = new Neurons(100, false);
 		Neurons rightNeurons = new Neurons(120, false);
 
-		DirectedAxonsComponent<?, ?, ?> directedAxonsComponent = createDirectedAxonsComponent(leftNeurons, rightNeurons);
+		DirectedAxonsComponent<?, ?, ?> directedAxonsComponent = createDirectedAxonsComponent(leftNeurons,
+				rightNeurons);
 
 		Axons<?, ?, ?> axons = directedAxonsComponent.getAxons();
 		Assert.assertNotNull(axons);
 	}
-	
+
 	@Test
 	public void testGetContext() {
-		
-		
+
 		Neurons leftNeurons = new Neurons(100, false);
 		Neurons rightNeurons = new Neurons(120, false);
 
-		DirectedAxonsComponent<?, ?, ?> directedAxonsComponent = createDirectedAxonsComponent(leftNeurons, rightNeurons);
+		DirectedAxonsComponent<?, ?, ?> directedAxonsComponent = createDirectedAxonsComponent(leftNeurons,
+				rightNeurons);
 
-		
 		Mockito.when(mockDirectedComponentsContext.getMatrixFactory()).thenReturn(matrixFactory);
-		
+
 		AxonsContext mockAxonsContext2 = Mockito.mock(AxonsContext.class);
 
-		Mockito.when(mockDirectedComponentsContext.getContext(Mockito.same(directedAxonsComponent), Mockito.any())).thenReturn(mockAxonsContext2);
-		
-		
+		Mockito.when(mockDirectedComponentsContext.getContext(Mockito.same(directedAxonsComponent), Mockito.any()))
+				.thenReturn(mockAxonsContext2);
+
 		AxonsContext axonsContext = directedAxonsComponent.getContext(mockDirectedComponentsContext, 0);
 		Assert.assertNotNull(axonsContext);
-		Assert.assertNotSame(mockAxonsContext,axonsContext);
-		Assert.assertSame(mockAxonsContext2,axonsContext);
+		Assert.assertNotSame(mockAxonsContext, axonsContext);
+		Assert.assertSame(mockAxonsContext2, axonsContext);
 
 	}
 

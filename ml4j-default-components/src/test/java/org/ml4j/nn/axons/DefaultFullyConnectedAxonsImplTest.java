@@ -20,9 +20,11 @@ public class DefaultFullyConnectedAxonsImplTest extends AxonsTestBase<FullyConne
 
 	@Override
 	protected FullyConnectedAxons createAxonsUnderTest(Neurons leftNeurons, Neurons rightNeurons) {
-		AxonWeights axonWeights = new FullyConnectedAxonWeightsImpl(leftNeurons.getNeuronCountExcludingBias(), rightNeurons.getNeuronCountExcludingBias(), matrixFactory.createMatrix(rightNeurons.getNeuronCountExcludingBias(), 
-				leftNeurons.getNeuronCountExcludingBias()), matrixFactory.createMatrix(rightNeurons.getNeuronCountExcludingBias(),1 
-						), null);
+		AxonWeights axonWeights = new FullyConnectedAxonWeightsImpl(leftNeurons.getNeuronCountExcludingBias(),
+				rightNeurons.getNeuronCountExcludingBias(),
+				matrixFactory.createMatrix(rightNeurons.getNeuronCountExcludingBias(),
+						leftNeurons.getNeuronCountExcludingBias()),
+				matrixFactory.createMatrix(rightNeurons.getNeuronCountExcludingBias(), 1), null);
 		return new DefaultFullyConnectedAxonsImpl(leftNeurons, rightNeurons, axonWeights);
 	}
 
@@ -33,7 +35,9 @@ public class DefaultFullyConnectedAxonsImplTest extends AxonsTestBase<FullyConne
 
 	@Override
 	public NeuronsActivation createNeuronsActivation(int featureCount, int exampleCount) {
-		return new NeuronsActivationImpl(new Neurons(featureCount, false), matrixFactory.createMatrix(featureCount, exampleCount), NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET);
+		return new NeuronsActivationImpl(new Neurons(featureCount, false),
+				matrixFactory.createMatrix(featureCount, exampleCount),
+				NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET);
 	}
 
 	@Override
@@ -41,7 +45,5 @@ public class DefaultFullyConnectedAxonsImplTest extends AxonsTestBase<FullyConne
 		Mockito.when(mockAxonsContext.getLeftHandInputDropoutKeepProbability()).thenReturn(0.5f);
 		super.testPushLeftToRight();
 	}
-	
-	
 
 }

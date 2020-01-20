@@ -32,7 +32,7 @@ public class DefaultManyToOneDirectedComponentActivationImplTest extends ManyToO
 			NeuronsActivation output, int inputCount, PathCombinationStrategy pathCombinationStrategy) {
 		return new DefaultManyToOneDirectedComponentActivationImpl(inputCount, output);
 	}
-	
+
 	@Override
 	protected MatrixFactory createMatrixFactory() {
 		return Mockito.mock(MatrixFactory.class);

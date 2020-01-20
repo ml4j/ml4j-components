@@ -26,39 +26,47 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Default implementation of OneToManyDirectedComponentActivation - encapsulating the activation from a DefaultOneToManyDirectedComponent.
+ * Default implementation of OneToManyDirectedComponentActivation -
+ * encapsulating the activation from a DefaultOneToManyDirectedComponent.
  * 
  * @author Michael Lavelle
  */
-public class DefaultOneToManyDirectedComponentActivationImpl extends OneToManyDirectedComponentActivationBase implements OneToManyDirectedComponentActivation {
+public class DefaultOneToManyDirectedComponentActivationImpl extends OneToManyDirectedComponentActivationBase
+		implements OneToManyDirectedComponentActivation {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(DefaultOneToManyDirectedComponentActivationImpl.class);
-	
+
 	private MatrixFactory matrixFactory;
 	private Neurons inputNeurons;
-	
+
 	/**
 	 * DefaultOneToManyDirectedComponentActivationImpl constructor
 	 * 
-	 * @param input The neurons activation input to the one to many component.
-	 * @param outputNeuronsActivationCount The desired number of instances of output neuron activations, one for each of the components
-	 * on the RHS of the OneToManyDirectedComponentActivation.
+	 * @param input                        The neurons activation input to the one
+	 *                                     to many component.
+	 * @param outputNeuronsActivationCount The desired number of instances of output
+	 *                                     neuron activations, one for each of the
+	 *                                     components on the RHS of the
+	 *                                     OneToManyDirectedComponentActivation.
 	 */
-	public DefaultOneToManyDirectedComponentActivationImpl(MatrixFactory matrixFactory, NeuronsActivation input, int outputNeuronsActivationCount) {
+	public DefaultOneToManyDirectedComponentActivationImpl(MatrixFactory matrixFactory, NeuronsActivation input,
+			int outputNeuronsActivationCount) {
 		super(input, outputNeuronsActivationCount);
 		this.matrixFactory = matrixFactory;
 		this.inputNeurons = input.getNeurons();
 	}
-	
+
 	@Override
 	public DirectedComponentGradient<NeuronsActivation> backPropagate(
 			DirectedComponentGradient<List<NeuronsActivation>> gradient) {
-		LOGGER.debug("Back propagating multiple gradient neurons activations into a single combined neurons activation");
+		LOGGER.debug(
+				"Back propagating multiple gradient neurons activations into a single combined neurons activation");
 		List<NeuronsActivation> gradients = gradient.getOutput();
-			
-		NeuronsActivation totalActivation = new NeuronsActivationImpl(inputNeurons, matrixFactory.createMatrix(gradients.get(0).getRows(), 
-					gradients.get(0).getColumns()), gradients.get(0).getFeatureOrientation(), false);
-	
+
+		NeuronsActivation totalActivation = new NeuronsActivationImpl(inputNeurons,
+				matrixFactory.createMatrix(gradients.get(0).getRows(), gradients.get(0).getColumns()),
+				gradients.get(0).getFeatureOrientation(), false);
+
 		for (NeuronsActivation activation : gradients) {
 			totalActivation.addInline(matrixFactory, activation);
 			activation.close();

@@ -30,7 +30,8 @@ import org.slf4j.LoggerFactory;
 import com.codepoetics.protonpack.StreamUtils;
 
 /**
- * Default implementation of a batch DefaultDirectedComponentChain instances that can be activated in parallel.
+ * Default implementation of a batch DefaultDirectedComponentChain instances
+ * that can be activated in parallel.
  * 
  * @author Michael Lavelle
  */
@@ -53,12 +54,12 @@ public class DefaultComponentChainBatchImpl extends DefaultComponentChainBatchBa
 			DirectedComponentsContext context) {
 
 		LOGGER.debug("Forward propagating through DefaultComponentChainBatchImpl");
-		
+
 		List<DefaultDirectedComponentChainActivation> chainActivations = StreamUtils
 				.zipWithIndex(neuronActivations.parallelStream())
 				.map(a -> parallelComponents.get((int) a.getIndex()).forwardPropagate(a.getValue(), context))
 				.collect(Collectors.toList());
-		
+
 		return new DefaultDirectedComponentChainBatchActivationImpl(chainActivations);
 	}
 

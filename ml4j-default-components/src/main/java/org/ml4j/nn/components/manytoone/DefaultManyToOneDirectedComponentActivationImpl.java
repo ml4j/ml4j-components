@@ -23,17 +23,18 @@ import org.ml4j.nn.neurons.NeuronsActivation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class DefaultManyToOneDirectedComponentActivationImpl extends ManyToOneDirectedComponentActivationBase implements ManyToOneDirectedComponentActivation {
+public class DefaultManyToOneDirectedComponentActivationImpl extends ManyToOneDirectedComponentActivationBase
+		implements ManyToOneDirectedComponentActivation {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(DefaultManyToOneDirectedComponentActivationImpl.class);
-	
+
 	private int size;
-	
+
 	public DefaultManyToOneDirectedComponentActivationImpl(int size, NeuronsActivation output) {
 		super(output);
 		this.size = size;
 	}
-	
+
 	@Override
 	public DirectedComponentGradient<List<NeuronsActivation>> backPropagate(
 			DirectedComponentGradient<NeuronsActivation> gradient) {

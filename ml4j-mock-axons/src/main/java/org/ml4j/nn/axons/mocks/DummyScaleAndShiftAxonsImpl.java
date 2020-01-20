@@ -56,31 +56,29 @@ public class DummyScaleAndShiftAxonsImpl<N extends Neurons> implements ScaleAndS
 	public AxonsActivation pushLeftToRight(NeuronsActivation leftNeuronsActivation,
 			AxonsActivation previousRightToLeftActivation, AxonsContext axonsContext) {
 
-			
-			int exampleCount = leftNeuronsActivation.getExampleCount();
-			
-			if (!axonsContext.isTrainingContext()) {
-				leftNeuronsActivation.close();
-			}
-			
-			return new AxonsActivationImpl(this, null, () -> leftNeuronsActivation,
-					new NeuronsActivationImpl(getRightNeurons(),
-							matrixFactory.createMatrix(rightNeurons.getNeuronCountExcludingBias(),
-									exampleCount),
-							NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET),
-					leftNeurons, rightNeurons);
+		int exampleCount = leftNeuronsActivation.getExampleCount();
+
+		if (!axonsContext.isTrainingContext()) {
+			leftNeuronsActivation.close();
+		}
+
+		return new AxonsActivationImpl(this, null, () -> leftNeuronsActivation,
+				new NeuronsActivationImpl(getRightNeurons(),
+						matrixFactory.createMatrix(rightNeurons.getNeuronCountExcludingBias(), exampleCount),
+						NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET),
+				leftNeurons, rightNeurons);
 	}
 
 	@Override
 	public AxonsActivation pushRightToLeft(NeuronsActivation rightNeuronsActivation,
 			AxonsActivation previousLeftToRightActivation, AxonsContext axonsContext) {
 
-			return new AxonsActivationImpl(this, null, () -> rightNeuronsActivation,
-					new NeuronsActivationImpl(getLeftNeurons(),
-							matrixFactory.createMatrix(leftNeurons.getNeuronCountExcludingBias(),
-									rightNeuronsActivation.getExampleCount()),
-							NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET),
-					leftNeurons, rightNeurons);
+		return new AxonsActivationImpl(this, null, () -> rightNeuronsActivation,
+				new NeuronsActivationImpl(getLeftNeurons(),
+						matrixFactory.createMatrix(leftNeurons.getNeuronCountExcludingBias(),
+								rightNeuronsActivation.getExampleCount()),
+						NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET),
+				leftNeurons, rightNeurons);
 	}
 
 	@Override
@@ -113,7 +111,7 @@ public class DummyScaleAndShiftAxonsImpl<N extends Neurons> implements ScaleAndS
 	public AxonWeights getDetachedAxonWeights() {
 		throw new UnsupportedOperationException();
 	}
-	
+
 	@Override
 	public Optional<NeuronsActivationFeatureOrientation> optimisedFor() {
 		return Optional.empty();

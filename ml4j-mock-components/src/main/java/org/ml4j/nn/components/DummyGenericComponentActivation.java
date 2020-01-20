@@ -10,11 +10,12 @@ public class DummyGenericComponentActivation implements DefaultChainableDirected
 
 	private NeuronsActivation input;
 	private NeuronsActivation output;
-	
+
 	public DummyGenericComponentActivation(NeuronsActivation input, NeuronsActivation output) {
 		this.input = input;
 		this.output = output;
 	}
+
 	@Override
 	public void close(DirectedComponentActivationLifecycle completedLifeCycleStage) {
 		// No-op

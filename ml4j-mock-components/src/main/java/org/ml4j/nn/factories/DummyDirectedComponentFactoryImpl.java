@@ -73,15 +73,13 @@ public class DummyDirectedComponentFactoryImpl implements DirectedComponentFacto
 
 	@Override
 	public DirectedAxonsComponent<Neurons3D, Neurons3D, ?> createConvolutionalAxonsComponent(Neurons3D leftNeurons,
-			Neurons3D rightNeurons, Axons3DConfig config,
-			Matrix connectionWeights, Matrix biases) {
+			Neurons3D rightNeurons, Axons3DConfig config, Matrix connectionWeights, Matrix biases) {
 		return createDirectedAxonsComponent(leftNeurons, rightNeurons);
 	}
 
 	@Override
 	public DirectedAxonsComponent<Neurons3D, Neurons3D, ?> createMaxPoolingAxonsComponent(Neurons3D leftNeurons,
-			Neurons3D rightNeurons, Axons3DConfig config,
-			boolean scaleOutputs) {
+			Neurons3D rightNeurons, Axons3DConfig config, boolean scaleOutputs) {
 		return createDirectedAxonsComponent(leftNeurons, rightNeurons);
 	}
 
@@ -131,7 +129,7 @@ public class DummyDirectedComponentFactoryImpl implements DirectedComponentFacto
 			PathCombinationStrategy pathCombinationStrategy) {
 		return new DummyManyToOneDirectedComponent(pathCombinationStrategy);
 	}
-	
+
 	@Override
 	public ManyToOneDirectedComponent<?> createManyToOneDirectedComponent(Neurons outputNeurons,
 			PathCombinationStrategy pathCombinationStrategy) {
@@ -139,13 +137,13 @@ public class DummyDirectedComponentFactoryImpl implements DirectedComponentFacto
 	}
 
 	@Override
-	public DifferentiableActivationFunctionComponent createDifferentiableActivationFunctionComponent(Neurons neurons, 
+	public DifferentiableActivationFunctionComponent createDifferentiableActivationFunctionComponent(Neurons neurons,
 			DifferentiableActivationFunction differentiableActivationFunction) {
 		return new DummyDifferentiableActivationFunctionComponentAdapter(neurons, differentiableActivationFunction);
 	}
-	
+
 	@Override
-	public DifferentiableActivationFunctionComponent createDifferentiableActivationFunctionComponent(Neurons neurons, 
+	public DifferentiableActivationFunctionComponent createDifferentiableActivationFunctionComponent(Neurons neurons,
 			ActivationFunctionType activationFunctionType) {
 		return new DummyDifferentiableActivationFunctionComponent(neurons, activationFunctionType);
 	}
@@ -166,9 +164,11 @@ public class DummyDirectedComponentFactoryImpl implements DirectedComponentFacto
 	}
 
 	@Override
-	public DefaultDirectedComponentBipoleGraph createDirectedComponentBipoleGraph(Neurons leftNeurons, Neurons rightNeurons,
-			List<DefaultChainableDirectedComponent<?, ?>> parallelComponentChainsBatch, PathCombinationStrategy arg3) {
-		return new DummyDefaultDirectedComponentBipoleGraph(leftNeurons, rightNeurons, createDirectedComponentBatch(parallelComponentChainsBatch));
+	public DefaultDirectedComponentBipoleGraph createDirectedComponentBipoleGraph(Neurons leftNeurons,
+			Neurons rightNeurons, List<DefaultChainableDirectedComponent<?, ?>> parallelComponentChainsBatch,
+			PathCombinationStrategy arg3) {
+		return new DummyDefaultDirectedComponentBipoleGraph(leftNeurons, rightNeurons,
+				createDirectedComponentBatch(parallelComponentChainsBatch));
 	}
 
 	@Override

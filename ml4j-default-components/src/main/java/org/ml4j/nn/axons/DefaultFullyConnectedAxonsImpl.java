@@ -2,8 +2,9 @@ package org.ml4j.nn.axons;
 
 import org.ml4j.nn.neurons.Neurons;
 
-public class DefaultFullyConnectedAxonsImpl extends WeightedAxonsBase<Neurons, Neurons, FullyConnectedAxons> implements FullyConnectedAxons {
-	
+public class DefaultFullyConnectedAxonsImpl extends WeightedAxonsBase<Neurons, Neurons, FullyConnectedAxons>
+		implements FullyConnectedAxons {
+
 	/**
 	 * Default serialization id.
 	 */

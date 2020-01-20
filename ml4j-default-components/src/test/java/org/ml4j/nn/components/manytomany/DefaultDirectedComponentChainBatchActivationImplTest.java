@@ -28,14 +28,15 @@ import org.mockito.Mockito;
  * @author Michael Lavelle
  *
  */
-public class DefaultDirectedComponentChainBatchActivationImplTest extends DefaultDirectedComponentChainBatchActivationTestBase {
-	
+public class DefaultDirectedComponentChainBatchActivationImplTest
+		extends DefaultDirectedComponentChainBatchActivationTestBase {
+
 	@Override
 	protected DefaultDirectedComponentChainBatchActivation createDefaultDirectedComponentChainBatchActivationUnderTest(
 			List<DefaultDirectedComponentChainActivation> activations) {
 		return new DefaultDirectedComponentChainBatchActivationImpl(activations);
 	}
-	
+
 	@Override
 	protected MatrixFactory createMatrixFactory() {
 		return Mockito.mock(MatrixFactory.class);

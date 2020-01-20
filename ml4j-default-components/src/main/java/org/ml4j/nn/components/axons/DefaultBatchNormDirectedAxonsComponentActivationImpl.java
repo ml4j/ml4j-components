@@ -29,18 +29,23 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Default implementation for an activation from a DefaultBatchNormDirectedAxonsComponent.
- *   
+ * Default implementation for an activation from a
+ * DefaultBatchNormDirectedAxonsComponent.
+ * 
  * @author Michael Lavelle
  * 
- * @param <A> The type of Axons within the batch norm DirectedAxonsComponent from which this activation originated
+ * @param <A> The type of Axons within the batch norm DirectedAxonsComponent
+ *            from which this activation originated
  */
-public class DefaultBatchNormDirectedAxonsComponentActivationImpl<A extends Axons<?, ?, ?>> extends DirectedAxonsComponentActivationBase<A> implements DirectedAxonsComponentActivation {
-	
-	@SuppressWarnings("unused")
-	private static final Logger LOGGER = LoggerFactory.getLogger(DefaultBatchNormDirectedAxonsComponentActivationImpl.class);
+public class DefaultBatchNormDirectedAxonsComponentActivationImpl<A extends Axons<?, ?, ?>>
+		extends DirectedAxonsComponentActivationBase<A> implements DirectedAxonsComponentActivation {
 
-	public DefaultBatchNormDirectedAxonsComponentActivationImpl(DirectedAxonsComponent<?, ?, A> axonsComponent, AxonsActivation axonsActivation, AxonsContext axonsContext) {
+	@SuppressWarnings("unused")
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(DefaultBatchNormDirectedAxonsComponentActivationImpl.class);
+
+	public DefaultBatchNormDirectedAxonsComponentActivationImpl(DirectedAxonsComponent<?, ?, A> axonsComponent,
+			AxonsActivation axonsActivation, AxonsContext axonsContext) {
 		super(axonsComponent, axonsActivation, axonsContext);
 	}
 
@@ -51,23 +56,25 @@ public class DefaultBatchNormDirectedAxonsComponentActivationImpl<A extends Axon
 	}
 
 	@Override
-	protected DirectedComponentGradientImpl<NeuronsActivation> createBackPropagatedGradient(AxonsActivation axonsActivation,
-			List<Supplier<AxonsGradient>> previousAxonsGradients, Supplier<AxonsGradient> thisAxonsGradient) {
-		return new DirectedComponentGradientImpl<>(previousAxonsGradients, thisAxonsGradient, axonsActivation.getPostDropoutOutput());
+	protected DirectedComponentGradientImpl<NeuronsActivation> createBackPropagatedGradient(
+			AxonsActivation axonsActivation, List<Supplier<AxonsGradient>> previousAxonsGradients,
+			Supplier<AxonsGradient> thisAxonsGradient) {
+		return new DirectedComponentGradientImpl<>(previousAxonsGradients, thisAxonsGradient,
+				axonsActivation.getPostDropoutOutput());
 	}
 
 	@Override
 	protected Optional<AxonsGradient> getCalculatedAxonsGradient(AxonsActivation rightToLeftAxonsGradientActivatoin) {
-		
+
 		if (directedAxonsComponent.getAxons().isTrainable(axonsContext)) {
 			// TODO
 			throw new UnsupportedOperationException("Not implemented yet");
-			
+
 		} else {
 			return Optional.empty();
 		}
 	}
-	
+
 	private void close(NeuronsActivation activation) {
 		if (!activation.isImmutable()) {
 			activation.close();

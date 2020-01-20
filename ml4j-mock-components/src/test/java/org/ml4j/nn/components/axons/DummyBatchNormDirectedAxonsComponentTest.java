@@ -9,7 +9,7 @@ import org.ml4j.nn.neurons.NeuronsActivation;
 import org.mockito.Mockito;
 
 public class DummyBatchNormDirectedAxonsComponentTest extends BatchNormDirectedAxonsComponentTestBase {
-	
+
 	@Override
 	protected <N extends Neurons> BatchNormDirectedAxonsComponent<N, ?> createBatchNormDirectedAxonsComponentUnderTest(
 			ScaleAndShiftAxons<N> axons) {

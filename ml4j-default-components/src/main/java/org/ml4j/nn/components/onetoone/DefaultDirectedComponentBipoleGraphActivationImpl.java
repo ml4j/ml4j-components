@@ -29,63 +29,89 @@ import org.ml4j.nn.components.onetoone.base.DefaultDirectedComponentBipoleGraphA
 import org.ml4j.nn.neurons.NeuronsActivation;
 
 /**
- * Default implementation for an activation from a DefaultDirectedComponentBipoleGraphImpl.
+ * Default implementation for an activation from a
+ * DefaultDirectedComponentBipoleGraphImpl.
  * 
- * Encapsulates the activations from a forward propagation through a DefaultDirectedComponentActivationImpl including the
- * output NeuronsActivation from the RHS of the DefaultDirectedComponentChainActivationImpl.
+ * Encapsulates the activations from a forward propagation through a
+ * DefaultDirectedComponentActivationImpl including the output NeuronsActivation
+ * from the RHS of the DefaultDirectedComponentChainActivationImpl.
  * 
- * Also included are the activations from the components within the DefaultDirectedComponentChainActivationImpl - from the
- * one to many, many to one, and batch components.
+ * Also included are the activations from the components within the
+ * DefaultDirectedComponentChainActivationImpl - from the one to many, many to
+ * one, and batch components.
  * 
  * @author Michael Lavelle
  *
  */
 public class DefaultDirectedComponentBipoleGraphActivationImpl extends DefaultDirectedComponentBipoleGraphActivationBase
 		implements DefaultDirectedComponentBipoleGraphActivation {
-	
+
 	private OneToManyDirectedComponentActivation oneToManyDirectedComponentActivation;
 	private DefaultDirectedComponentBatchActivation parallelBatchActivation;
 	private ManyToOneDirectedComponentActivation manyToOneDirectedComponentActivation;
 	private boolean originalInputIsImmutable;
-	
+
 	/**
-	 * Constructor for a DefaultDirectedComponentBipoleGraphActivationImpl to be used when the originating DefaultDirectedComponentBipoleGraph
-	 * contains a single edge only, for optimal efficiency.
+	 * Constructor for a DefaultDirectedComponentBipoleGraphActivationImpl to be
+	 * used when the originating DefaultDirectedComponentBipoleGraph contains a
+	 * single edge only, for optimal efficiency.
 	 * 
-	 * @param defaultDirectedComponentChainBipoleGraph The originating DefaultDirectedComponentBipoleGraph.
-	 * @param parallelChainsActivation The activation from the nested DefaultDirectedComponentChainBatch within the originating DefaultDirectedComponentBipoleGraph.
-	 * @param output The output from the originating DefaultDirectedComponentBipoleGraph.
+	 * @param defaultDirectedComponentChainBipoleGraph The originating
+	 *                                                 DefaultDirectedComponentBipoleGraph.
+	 * @param parallelChainsActivation                 The activation from the
+	 *                                                 nested
+	 *                                                 DefaultDirectedComponentChainBatch
+	 *                                                 within the originating
+	 *                                                 DefaultDirectedComponentBipoleGraph.
+	 * @param output                                   The output from the
+	 *                                                 originating
+	 *                                                 DefaultDirectedComponentBipoleGraph.
 	 */
 	public DefaultDirectedComponentBipoleGraphActivationImpl(
 			DefaultDirectedComponentBipoleGraph defaultDirectedComponentChainBipoleGraph,
-			DefaultDirectedComponentBatchActivation parallelBatchActivation, 
-			NeuronsActivation output, boolean originalInputIsImmutable) {
+			DefaultDirectedComponentBatchActivation parallelBatchActivation, NeuronsActivation output,
+			boolean originalInputIsImmutable) {
 		super(defaultDirectedComponentChainBipoleGraph, output);
 		if (defaultDirectedComponentChainBipoleGraph.getEdges().getComponents().size() != 1) {
-			throw new IllegalArgumentException("This constructor should only be used when the DefaultDirectedComponentChainBatchcontains a single edge");
+			throw new IllegalArgumentException(
+					"This constructor should only be used when the DefaultDirectedComponentChainBatchcontains a single edge");
 		}
 		if (parallelBatchActivation.getActivations().size() != 1) {
-			throw new IllegalArgumentException("This constructor should only be used when the DefaultDirectedComponentChainBatchActivation contains a single nested activation");
+			throw new IllegalArgumentException(
+					"This constructor should only be used when the DefaultDirectedComponentChainBatchActivation contains a single nested activation");
 		}
 		this.parallelBatchActivation = parallelBatchActivation;
 		this.originalInputIsImmutable = originalInputIsImmutable;
 	}
-	
 
 	/**
 	 * Constructor for a DefaultDirectedComponentBipoleGraphActivationImpl
 	 * 
-	 * @param defaultDirectedComponentChainBipoleGraph The originating DefaultDirectedComponentBipoleGraph.
-	 * @param oneToManyDirectedComponentActivation The activation from the nested OneToManyDirectedComponent within the originating DefaultDirectedComponentBipoleGraph.
-	 * @param parallelChainsActivation The activation from the nested DefaultDirectedComponentChainBatch within the originating DefaultDirectedComponentBipoleGraph.
-	 * @param manyToOneDirectedComponentActivation The activation from the nested ManyToOneDirectedComponent within the originating DefaultDirectedComponentBipoleGraph.
-	 * @param originalInputIsImmutable 
+	 * @param defaultDirectedComponentChainBipoleGraph The originating
+	 *                                                 DefaultDirectedComponentBipoleGraph.
+	 * @param oneToManyDirectedComponentActivation     The activation from the
+	 *                                                 nested
+	 *                                                 OneToManyDirectedComponent
+	 *                                                 within the originating
+	 *                                                 DefaultDirectedComponentBipoleGraph.
+	 * @param parallelChainsActivation                 The activation from the
+	 *                                                 nested
+	 *                                                 DefaultDirectedComponentChainBatch
+	 *                                                 within the originating
+	 *                                                 DefaultDirectedComponentBipoleGraph.
+	 * @param manyToOneDirectedComponentActivation     The activation from the
+	 *                                                 nested
+	 *                                                 ManyToOneDirectedComponent
+	 *                                                 within the originating
+	 *                                                 DefaultDirectedComponentBipoleGraph.
+	 * @param originalInputIsImmutable
 	 */
 	public DefaultDirectedComponentBipoleGraphActivationImpl(
 			DefaultDirectedComponentBipoleGraph defaultDirectedComponentChainBipoleGraph,
 			OneToManyDirectedComponentActivation oneToManyDirectedComponentActivation,
 			DefaultDirectedComponentBatchActivation parallelBatchActivation,
-			ManyToOneDirectedComponentActivation manyToOneDirectedComponentActivation, boolean originalInputIsImmutable) {
+			ManyToOneDirectedComponentActivation manyToOneDirectedComponentActivation,
+			boolean originalInputIsImmutable) {
 		super(defaultDirectedComponentChainBipoleGraph, manyToOneDirectedComponentActivation.getOutput());
 		this.oneToManyDirectedComponentActivation = oneToManyDirectedComponentActivation;
 		this.manyToOneDirectedComponentActivation = manyToOneDirectedComponentActivation;
@@ -96,16 +122,22 @@ public class DefaultDirectedComponentBipoleGraphActivationImpl extends DefaultDi
 	@Override
 	public DirectedComponentGradient<NeuronsActivation> backPropagate(
 			DirectedComponentGradient<NeuronsActivation> outerGradient) {
-		
-		if (parallelBatchActivation.getActivations().size() == 1) {	
-			DirectedComponentGradient<List<NeuronsActivation>> gradient = new DirectedComponentGradientImpl<>(outerGradient.getTotalTrainableAxonsGradients(), Arrays.asList(outerGradient.getOutput()));
-			DirectedComponentGradient<List<NeuronsActivation>> edgesGradients = parallelBatchActivation.backPropagate(gradient);
-			return new DirectedComponentGradientImpl<>(edgesGradients.getTotalTrainableAxonsGradients(), edgesGradients.getOutput().get(0));
-			
+
+		if (parallelBatchActivation.getActivations().size() == 1) {
+			DirectedComponentGradient<List<NeuronsActivation>> gradient = new DirectedComponentGradientImpl<>(
+					outerGradient.getTotalTrainableAxonsGradients(), Arrays.asList(outerGradient.getOutput()));
+			DirectedComponentGradient<List<NeuronsActivation>> edgesGradients = parallelBatchActivation
+					.backPropagate(gradient);
+			return new DirectedComponentGradientImpl<>(edgesGradients.getTotalTrainableAxonsGradients(),
+					edgesGradients.getOutput().get(0));
+
 		} else {
-			DirectedComponentGradient<List<NeuronsActivation>> manyToOneActivation = manyToOneDirectedComponentActivation.backPropagate(outerGradient);
-			DirectedComponentGradient<List<NeuronsActivation>> edgesGradients = parallelBatchActivation.backPropagate(manyToOneActivation);
-			DirectedComponentGradient<NeuronsActivation> result =  oneToManyDirectedComponentActivation.backPropagate(edgesGradients);
+			DirectedComponentGradient<List<NeuronsActivation>> manyToOneActivation = manyToOneDirectedComponentActivation
+					.backPropagate(outerGradient);
+			DirectedComponentGradient<List<NeuronsActivation>> edgesGradients = parallelBatchActivation
+					.backPropagate(manyToOneActivation);
+			DirectedComponentGradient<NeuronsActivation> result = oneToManyDirectedComponentActivation
+					.backPropagate(edgesGradients);
 			edgesGradients.getOutput().forEach(a -> a.close());
 			manyToOneActivation.getOutput().forEach(a -> a.close());
 			return result;
@@ -117,13 +149,12 @@ public class DefaultDirectedComponentBipoleGraphActivationImpl extends DefaultDi
 		return Arrays.asList(this);
 	}
 
-
 	@Override
 	public void close(DirectedComponentActivationLifecycle completedLifeCycleStage) {
 		if (completedLifeCycleStage == DirectedComponentActivationLifecycle.FORWARD_PROPAGATION) {
 			if (!originalInputIsImmutable) {
 				if (oneToManyDirectedComponentActivation != null) {
-					//oneToManyDirectedComponentActivation.getOutput().forEach(a -> a.close());					
+					// oneToManyDirectedComponentActivation.getOutput().forEach(a -> a.close());
 				}
 			}
 			if (manyToOneDirectedComponentActivation != null) {
@@ -131,7 +162,7 @@ public class DefaultDirectedComponentBipoleGraphActivationImpl extends DefaultDi
 					manyToOneDirectedComponentActivation.getOutput().close();
 				}
 			}
-		} 
+		}
 		parallelBatchActivation.close(completedLifeCycleStage);
 	}
 

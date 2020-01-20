@@ -14,13 +14,13 @@ public class DefaultDirectedAxonsComponentImplTest extends DirectedAxonsComponen
 
 	@Mock
 	private AxonsActivation mockAxonsActivation;
-	
+
 	@Override
 	protected <L extends Neurons, R extends Neurons> DirectedAxonsComponent<L, R, ?> createDirectedAxonsComponentUnderTest(
 			Axons<L, R, ?> axons) {
 		return new DefaultDirectedAxonsComponentImpl<>(axons);
 	}
-	
+
 	@Override
 	protected MatrixFactory createMatrixFactory() {
 		return Mockito.mock(MatrixFactory.class);
@@ -34,7 +34,8 @@ public class DefaultDirectedAxonsComponentImplTest extends DirectedAxonsComponen
 	@Override
 	public void testForwardPropagate() {
 		Mockito.when(mockAxonsActivation.getPostDropoutOutput()).thenReturn(mockOutputActivation);
-		Mockito.when(mockAxons.pushLeftToRight(mockInputActivation, null, mockAxonsContext)).thenReturn(mockAxonsActivation);
+		Mockito.when(mockAxons.pushLeftToRight(mockInputActivation, null, mockAxonsContext))
+				.thenReturn(mockAxonsActivation);
 		super.testForwardPropagate();
 	}
 }

@@ -17,35 +17,39 @@ import org.mockito.Mockito;
 
 public class MockTestData {
 
-	public static NeuronsActivation mockNeuronsActivation(int featureCount, int exampleCount, MatrixFactory matrixFactory) {
+	public static NeuronsActivation mockNeuronsActivation(int featureCount, int exampleCount,
+			MatrixFactory matrixFactory) {
 		NeuronsActivation neuronsActivation = Mockito.mock(NeuronsActivation.class);
 		Mockito.when(neuronsActivation.getFeatureCount()).thenReturn(featureCount);
 		Mockito.when(neuronsActivation.getRows()).thenReturn(featureCount);
 		Mockito.when(neuronsActivation.getColumns()).thenReturn(exampleCount);
 		Mockito.when(neuronsActivation.getNeurons()).thenReturn(new Neurons(featureCount, false));
 		Mockito.when(neuronsActivation.getExampleCount()).thenReturn(exampleCount);
-		Mockito.when(neuronsActivation.getFeatureOrientation()).thenReturn(NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET);
+		Mockito.when(neuronsActivation.getFeatureOrientation())
+				.thenReturn(NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET);
 		Matrix mockMatrix = matrixFactory.createMatrix(featureCount, exampleCount);
 		Mockito.when(neuronsActivation.getActivations(Mockito.any())).thenReturn(mockMatrix);
 		Mockito.when(neuronsActivation.dup()).thenReturn(neuronsActivation);
 		return neuronsActivation;
 	}
-	
+
 	public static NeuronsActivation mockNeuronsActivation(int featureCount, int exampleCount) {
 		Matrix mockMatrix = Mockito.mock(Matrix.class);
 		Mockito.when(mockMatrix.getRows()).thenReturn(featureCount);
 		Mockito.when(mockMatrix.getColumns()).thenReturn(exampleCount);
 		return mockNeuronsActivation(featureCount, 1, 1, featureCount, exampleCount, mockMatrix);
 	}
-	
-	public static NeuronsActivation mockNeuronsActivationForImage(int featureCount, int width, int height, int depth, int exampleCount) {
+
+	public static NeuronsActivation mockNeuronsActivationForImage(int featureCount, int width, int height, int depth,
+			int exampleCount) {
 		Matrix mockMatrix = Mockito.mock(Matrix.class);
 		Mockito.when(mockMatrix.getRows()).thenReturn(featureCount);
 		Mockito.when(mockMatrix.getColumns()).thenReturn(exampleCount);
 		return mockNeuronsActivation(featureCount, width, height, depth, exampleCount, mockMatrix);
 	}
-	
-	public static NeuronsActivation mockNeuronsActivation(int featureCount, int width, int height, int depth, int exampleCount, Matrix matrix) {
+
+	public static NeuronsActivation mockNeuronsActivation(int featureCount, int width, int height, int depth,
+			int exampleCount, Matrix matrix) {
 		NeuronsActivation neuronsActivation = Mockito.mock(NeuronsActivation.class);
 		Images mockImages = Mockito.mock(Images.class);
 		Mockito.when(mockImages.getChannels()).thenReturn(depth);
@@ -63,23 +67,26 @@ public class MockTestData {
 		Mockito.when(neuronsActivation.getColumns()).thenReturn(exampleCount);
 		Mockito.when(neuronsActivation.getNeurons()).thenReturn(new Neurons(featureCount, false));
 		Mockito.when(neuronsActivation.getExampleCount()).thenReturn(exampleCount);
-		Mockito.when(neuronsActivation.getFeatureOrientation()).thenReturn(NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET);
+		Mockito.when(neuronsActivation.getFeatureOrientation())
+				.thenReturn(NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET);
 		Mockito.when(neuronsActivation.getActivations(Mockito.any())).thenReturn(matrix);
 		Mockito.when(neuronsActivation.dup()).thenReturn(neuronsActivation);
 		return neuronsActivation;
 	}
-	
-	public static DirectedComponentGradient<NeuronsActivation> mockComponentGradient(int featureCount, int exampleCount, TestBase testInstance) {
-		
+
+	public static DirectedComponentGradient<NeuronsActivation> mockComponentGradient(int featureCount, int exampleCount,
+			TestBase testInstance) {
+
 		@SuppressWarnings("unchecked")
 		DirectedComponentGradient<NeuronsActivation> gradient = Mockito.mock(DirectedComponentGradient.class);
 		NeuronsActivation mockNeuronsActivation = testInstance.createNeuronsActivation(featureCount, exampleCount);
 		Mockito.when(gradient.getOutput()).thenReturn(mockNeuronsActivation);
 		return gradient;
 	}
-	
-	public static DirectedComponentGradient<List<NeuronsActivation>> mockBatchComponentGradient(int featureCount, int exampleCount, int batchSize) {
-		
+
+	public static DirectedComponentGradient<List<NeuronsActivation>> mockBatchComponentGradient(int featureCount,
+			int exampleCount, int batchSize) {
+
 		@SuppressWarnings("unchecked")
 		DirectedComponentGradient<List<NeuronsActivation>> gradient = Mockito.mock(DirectedComponentGradient.class);
 		List<NeuronsActivation> outputs = new ArrayList<>();
@@ -90,9 +97,10 @@ public class MockTestData {
 		Mockito.when(gradient.getOutput()).thenReturn(outputs);
 		return gradient;
 	}
-	
-	public static DirectedComponentGradient<List<NeuronsActivation>> mockBatchComponentGradient(int featureCount, int exampleCount, int batchSize, MatrixFactory matrixFactory) {
-		
+
+	public static DirectedComponentGradient<List<NeuronsActivation>> mockBatchComponentGradient(int featureCount,
+			int exampleCount, int batchSize, MatrixFactory matrixFactory) {
+
 		@SuppressWarnings("unchecked")
 		DirectedComponentGradient<List<NeuronsActivation>> gradient = Mockito.mock(DirectedComponentGradient.class);
 		List<NeuronsActivation> outputs = new ArrayList<>();
@@ -103,17 +111,20 @@ public class MockTestData {
 		Mockito.when(gradient.getOutput()).thenReturn(outputs);
 		return gradient;
 	}
-	
+
 	@SuppressWarnings("unchecked")
-	public static DefaultChainableDirectedComponentActivation mockComponentActivation(int inputFeatureCount, int outputFeatureCount, int exampleCount, TestBase testInstance) {
-		DefaultChainableDirectedComponentActivation mockActivation = Mockito.mock(DefaultChainableDirectedComponentActivation.class);
-		NeuronsActivation mockOutput = mockNeuronsActivation(outputFeatureCount, exampleCount);		
+	public static DefaultChainableDirectedComponentActivation mockComponentActivation(int inputFeatureCount,
+			int outputFeatureCount, int exampleCount, TestBase testInstance) {
+		DefaultChainableDirectedComponentActivation mockActivation = Mockito
+				.mock(DefaultChainableDirectedComponentActivation.class);
+		NeuronsActivation mockOutput = mockNeuronsActivation(outputFeatureCount, exampleCount);
 		Mockito.when(mockActivation.getOutput()).thenReturn(mockOutput);
 		@SuppressWarnings("rawtypes")
 		List decomposed = new ArrayList<>();
 		decomposed.add(mockActivation);
 		Mockito.when(mockActivation.decompose()).thenReturn(decomposed);
-		DirectedComponentGradient<NeuronsActivation> mockGradient = mockComponentGradient(inputFeatureCount, exampleCount, testInstance);
+		DirectedComponentGradient<NeuronsActivation> mockGradient = mockComponentGradient(inputFeatureCount,
+				exampleCount, testInstance);
 		Mockito.when(mockActivation.backPropagate(Mockito.any())).thenReturn(mockGradient);
 		return mockActivation;
 	}

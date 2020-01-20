@@ -20,15 +20,14 @@ import org.ml4j.nn.neurons.Neurons;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.mockito.Mockito;
 
-
 /**
  * Unit test for DummyManyToOneDirectedComponent.
  * 
  * @author Michael Lavelle
  *
  */
-public class DummyManyToOneDirectedComponentTest extends ManyToOneDirectedComponentTestBase {	
-	
+public class DummyManyToOneDirectedComponentTest extends ManyToOneDirectedComponentTestBase {
+
 	@Override
 	protected ManyToOneDirectedComponent<?> createManyToOneDirectedComponentUnderTest(
 			PathCombinationStrategy pathCombinationStrategy, Neurons outputNeurons) {
@@ -39,7 +38,7 @@ public class DummyManyToOneDirectedComponentTest extends ManyToOneDirectedCompon
 	public NeuronsActivation createNeuronsActivation(int featureCount, int exampleCount) {
 		return MockTestData.mockNeuronsActivation(featureCount, exampleCount);
 	}
-	
+
 	@Override
 	protected MatrixFactory createMatrixFactory() {
 		return Mockito.mock(MatrixFactory.class);

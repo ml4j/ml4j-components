@@ -59,8 +59,9 @@ public class DefaultDirectedComponentFactoryImpl implements DirectedComponentFac
 	private AxonsFactory axonsFactory;
 	private DifferentiableActivationFunctionFactory activationFunctionFactory;
 	private DirectedComponentFactory directedComponentFactory;
-	
-	public DefaultDirectedComponentFactoryImpl(MatrixFactory matrixFactory, AxonsFactory axonsFactory, DifferentiableActivationFunctionFactory activationFunctionFactory) {
+
+	public DefaultDirectedComponentFactoryImpl(MatrixFactory matrixFactory, AxonsFactory axonsFactory,
+			DifferentiableActivationFunctionFactory activationFunctionFactory) {
 		this.matrixFactory = matrixFactory;
 		this.axonsFactory = axonsFactory;
 		this.directedComponentFactory = this;
@@ -74,7 +75,8 @@ public class DefaultDirectedComponentFactoryImpl implements DirectedComponentFac
 	@Override
 	public DirectedAxonsComponent<Neurons, Neurons, ?> createFullyConnectedAxonsComponent(Neurons leftNeurons,
 			Neurons rightNeurons, Matrix connectionWeights, Matrix biases) {
-		return createDirectedAxonsComponent(axonsFactory.createFullyConnectedAxons(leftNeurons, rightNeurons, connectionWeights, biases));
+		return createDirectedAxonsComponent(
+				axonsFactory.createFullyConnectedAxons(leftNeurons, rightNeurons, connectionWeights, biases));
 	}
 
 	@Override
@@ -85,23 +87,22 @@ public class DefaultDirectedComponentFactoryImpl implements DirectedComponentFac
 
 	@Override
 	public DirectedAxonsComponent<Neurons3D, Neurons3D, ?> createConvolutionalAxonsComponent(Neurons3D leftNeurons,
-			Neurons3D rightNeurons, Axons3DConfig config,
-			Matrix connectionWeights, Matrix biases) {
-		return createDirectedAxonsComponent(axonsFactory.createConvolutionalAxons(leftNeurons, rightNeurons, config, connectionWeights, biases));
+			Neurons3D rightNeurons, Axons3DConfig config, Matrix connectionWeights, Matrix biases) {
+		return createDirectedAxonsComponent(
+				axonsFactory.createConvolutionalAxons(leftNeurons, rightNeurons, config, connectionWeights, biases));
 	}
 
 	@Override
 	public DirectedAxonsComponent<Neurons3D, Neurons3D, ?> createMaxPoolingAxonsComponent(Neurons3D leftNeurons,
-			Neurons3D rightNeurons, Axons3DConfig config,
-			boolean scaleOutputs) {
-		return createDirectedAxonsComponent(axonsFactory.createMaxPoolingAxons(leftNeurons, rightNeurons, scaleOutputs, config));
+			Neurons3D rightNeurons, Axons3DConfig config, boolean scaleOutputs) {
+		return createDirectedAxonsComponent(
+				axonsFactory.createMaxPoolingAxons(leftNeurons, rightNeurons, scaleOutputs, config));
 	}
 
 	@Override
 	public DirectedAxonsComponent<Neurons3D, Neurons3D, ?> createAveragePoolingAxonsComponent(Neurons3D leftNeurons,
 			Neurons3D rightNeurons, Axons3DConfig config) {
-		return createDirectedAxonsComponent(axonsFactory.createAveragePoolingAxons(leftNeurons, rightNeurons, 
-				config));
+		return createDirectedAxonsComponent(axonsFactory.createAveragePoolingAxons(leftNeurons, rightNeurons, config));
 	}
 
 	@Override
@@ -119,26 +120,30 @@ public class DefaultDirectedComponentFactoryImpl implements DirectedComponentFac
 	@Override
 	public BatchNormDirectedAxonsComponent<Neurons3D, ?> createConvolutionalBatchNormAxonsComponent(
 			Neurons3D leftNeurons, Neurons3D rightNeurons) {
-		return new DefaultBatchNormDirectedAxonsComponentImpl<>(axonsFactory.createScaleAndShiftAxons(leftNeurons, 
-				rightNeurons, null, null), null, null);
+		return new DefaultBatchNormDirectedAxonsComponentImpl<>(
+				axonsFactory.createScaleAndShiftAxons(leftNeurons, rightNeurons, null, null), null, null);
 	}
 
 	@Override
 	public BatchNormDirectedAxonsComponent<Neurons3D, ?> createConvolutionalBatchNormAxonsComponent(
 			Neurons3D leftNeurons, Neurons3D rightNeurons, Matrix gamma, Matrix beta, Matrix mean, Matrix stddev) {
-		return new DefaultBatchNormDirectedAxonsComponentImpl<>(axonsFactory.createScaleAndShiftAxons(leftNeurons, rightNeurons, 
-				expandChannelValuesToFeatureValues(matrixFactory, rightNeurons, gamma), 
-				expandChannelValuesToFeatureValues(matrixFactory, rightNeurons, beta)), expandChannelValuesToFeatureValues(matrixFactory, rightNeurons, mean), 
+		return new DefaultBatchNormDirectedAxonsComponentImpl<>(
+				axonsFactory.createScaleAndShiftAxons(leftNeurons, rightNeurons,
+						expandChannelValuesToFeatureValues(matrixFactory, rightNeurons, gamma),
+						expandChannelValuesToFeatureValues(matrixFactory, rightNeurons, beta)),
+				expandChannelValuesToFeatureValues(matrixFactory, rightNeurons, mean),
 				expandChannelValuesToFeatureValues(matrixFactory, rightNeurons, stddev));
 	}
-	
-	public static Matrix expandChannelValuesToFeatureValues(MatrixFactory matrixFactory, Neurons3D rightNeurons, Matrix channelValues) {
-		if (channelValues == null) return null;
+
+	public static Matrix expandChannelValuesToFeatureValues(MatrixFactory matrixFactory, Neurons3D rightNeurons,
+			Matrix channelValues) {
+		if (channelValues == null)
+			return null;
 		float[] channelValuesArray = channelValues.getRowByRowArray();
 		float[] channelValuesExpanded = new float[rightNeurons.getNeuronCountExcludingBias()];
 		int index = 0;
 		for (int channel = 0; channel < channelValuesArray.length; channel++) {
-			for (int i = 0;  i < rightNeurons.getWidth() * rightNeurons.getHeight(); i++) {
+			for (int i = 0; i < rightNeurons.getWidth() * rightNeurons.getHeight(); i++) {
 				channelValuesExpanded[index++] = channelValuesArray[channel];
 			}
 		}
@@ -157,14 +162,14 @@ public class DefaultDirectedComponentFactoryImpl implements DirectedComponentFac
 	}
 
 	@Override
-	public ManyToOneDirectedComponent<?> createManyToOneDirectedComponent(Neurons outputNeurons, 
+	public ManyToOneDirectedComponent<?> createManyToOneDirectedComponent(Neurons outputNeurons,
 			PathCombinationStrategy pathCombinationStrategy) {
 		// TODO
 		throw new UnsupportedOperationException("Not yet implemented");
 	}
-	
+
 	@Override
-	public ManyToOneDirectedComponent<?> createManyToOneDirectedComponent3D(Neurons3D outputNeurons, 
+	public ManyToOneDirectedComponent<?> createManyToOneDirectedComponent3D(Neurons3D outputNeurons,
 			PathCombinationStrategy pathCombinationStrategy) {
 		if (pathCombinationStrategy == PathCombinationStrategy.FILTER_CONCAT) {
 			return new DefaultManyToOneFilterConcatDirectedComponentImpl(outputNeurons);
@@ -175,37 +180,41 @@ public class DefaultDirectedComponentFactoryImpl implements DirectedComponentFac
 	}
 
 	@Override
-	public DifferentiableActivationFunctionComponent createDifferentiableActivationFunctionComponent(Neurons neurons, 
+	public DifferentiableActivationFunctionComponent createDifferentiableActivationFunctionComponent(Neurons neurons,
 			DifferentiableActivationFunction differentiableActivationFunction) {
 		return new DefaultDifferentiableActivationFunctionComponentImpl(neurons, differentiableActivationFunction);
 	}
-	
+
 	@Override
-	public DifferentiableActivationFunctionComponent createDifferentiableActivationFunctionComponent(Neurons neurons, 
+	public DifferentiableActivationFunctionComponent createDifferentiableActivationFunctionComponent(Neurons neurons,
 			ActivationFunctionType activationFunctionType) {
-		DifferentiableActivationFunction differentiableActivationFunction = activationFunctionFactory.createActivationFunction(activationFunctionType);
+		DifferentiableActivationFunction differentiableActivationFunction = activationFunctionFactory
+				.createActivationFunction(activationFunctionType);
 		return new DefaultDifferentiableActivationFunctionComponentImpl(neurons, differentiableActivationFunction);
 	}
-	
+
 	@Override
-	public DefaultDirectedComponentBipoleGraph createDirectedComponentBipoleGraph(Neurons leftNeurons, Neurons rightNeurons,
-			List<DefaultChainableDirectedComponent<?, ?>> parallelComponentBatch,
+	public DefaultDirectedComponentBipoleGraph createDirectedComponentBipoleGraph(Neurons leftNeurons,
+			Neurons rightNeurons, List<DefaultChainableDirectedComponent<?, ?>> parallelComponentBatch,
 			PathCombinationStrategy pathCombinationStrategy) {
-		
+
 		if (rightNeurons instanceof Neurons3D) {
-			return new DefaultDirectedComponentBipoleGraphImpl(directedComponentFactory, leftNeurons, (Neurons3D)rightNeurons, createDirectedComponentBatch(parallelComponentBatch), pathCombinationStrategy);
+			return new DefaultDirectedComponentBipoleGraphImpl(directedComponentFactory, leftNeurons,
+					(Neurons3D) rightNeurons, createDirectedComponentBatch(parallelComponentBatch),
+					pathCombinationStrategy);
 		} else {
-			return new DefaultDirectedComponentBipoleGraphImpl(directedComponentFactory, leftNeurons, rightNeurons, createDirectedComponentBatch(parallelComponentBatch), pathCombinationStrategy);
-		} 
+			return new DefaultDirectedComponentBipoleGraphImpl(directedComponentFactory, leftNeurons, rightNeurons,
+					createDirectedComponentBatch(parallelComponentBatch), pathCombinationStrategy);
+		}
 	}
-	
+
 	@Override
 	public DefaultDirectedComponentChain createDirectedComponentChain(
 			List<DefaultChainableDirectedComponent<?, ?>> sequentialComponents) {
 		return new DefaultDirectedComponentChainImpl(sequentialComponents);
 	}
 
-	//@Override
+	// @Override
 	public DefaultDirectedComponentBatch createDirectedComponentBatch(
 			List<DefaultChainableDirectedComponent<?, ?>> parallelComponents) {
 		return new DefaultComponentBatchImpl(parallelComponents);

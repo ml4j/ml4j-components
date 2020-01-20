@@ -10,24 +10,28 @@ public class DummyDifferentiableActivationFunctionFactory implements Differentia
 
 	@Override
 	public DifferentiableActivationFunction createReluActivationFunction() {
-		return new DummyDifferentiableActivationFunctionImpl(ActivationFunctionType.getBaseType(ActivationFunctionBaseType.RELU), false);
+		return new DummyDifferentiableActivationFunctionImpl(
+				ActivationFunctionType.getBaseType(ActivationFunctionBaseType.RELU), false);
 	}
 
 	@Override
 	public DifferentiableActivationFunction createSigmoidActivationFunction() {
-		return new DummyDifferentiableActivationFunctionImpl(ActivationFunctionType.getBaseType(ActivationFunctionBaseType.SIGMOID), false);
+		return new DummyDifferentiableActivationFunctionImpl(
+				ActivationFunctionType.getBaseType(ActivationFunctionBaseType.SIGMOID), false);
 	}
 
 	@Override
 	public DifferentiableActivationFunction createSoftmaxActivationFunction() {
-		return new DummyDifferentiableActivationFunctionImpl(ActivationFunctionType.getBaseType(ActivationFunctionBaseType.SOFTMAX), true);
+		return new DummyDifferentiableActivationFunctionImpl(
+				ActivationFunctionType.getBaseType(ActivationFunctionBaseType.SOFTMAX), true);
 	}
 
 	@Override
 	public DifferentiableActivationFunction createLinearActivationFunction() {
-		return new DummyDifferentiableActivationFunctionImpl(ActivationFunctionType.getBaseType(ActivationFunctionBaseType.LINEAR), true);
+		return new DummyDifferentiableActivationFunctionImpl(
+				ActivationFunctionType.getBaseType(ActivationFunctionBaseType.LINEAR), true);
 	}
-	
+
 	@Override
 	public DifferentiableActivationFunction createActivationFunction(ActivationFunctionType activationFunctionType) {
 		if (ActivationFunctionBaseType.LINEAR.equals(activationFunctionType.getBaseType())) {

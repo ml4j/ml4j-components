@@ -5,11 +5,11 @@ import java.util.function.Supplier;
 import org.ml4j.nn.neurons.NeuronsActivation;
 
 public class NoOpAxonsActivation implements AxonsActivation {
-	
+
 	private Axons<?, ?, ?> axons;
 	private Supplier<NeuronsActivation> input;
 	private NeuronsActivation output;
-	
+
 	public NoOpAxonsActivation(Axons<?, ?, ?> axons, Supplier<NeuronsActivation> input, NeuronsActivation output) {
 		this.axons = axons;
 		this.input = input;

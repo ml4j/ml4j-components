@@ -17,7 +17,8 @@ public class DefaultSigmoidActivationFunctionImplTest extends DifferentiableActi
 
 	@Override
 	public NeuronsActivation createNeuronsActivation(int featureCount, int exampleCount) {
-		return new NeuronsActivationImpl(new Neurons(featureCount, false), matrixFactory.createMatrix(featureCount, exampleCount),
+		return new NeuronsActivationImpl(new Neurons(featureCount, false),
+				matrixFactory.createMatrix(featureCount, exampleCount),
 				NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET);
 	}
 

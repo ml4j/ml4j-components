@@ -28,12 +28,14 @@ import org.ml4j.nn.neurons.NeuronsActivation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class DummyDirectedAxonsComponentActivation<A extends Axons<?, ?, ?>> extends DirectedAxonsComponentActivationBase<A> implements DirectedAxonsComponentActivation {
-	
+public class DummyDirectedAxonsComponentActivation<A extends Axons<?, ?, ?>>
+		extends DirectedAxonsComponentActivationBase<A> implements DirectedAxonsComponentActivation {
+
 	@SuppressWarnings("unused")
 	private static final Logger LOGGER = LoggerFactory.getLogger(DummyDirectedAxonsComponentActivation.class);
 
-	public DummyDirectedAxonsComponentActivation(DirectedAxonsComponent<?, ?, A> axonsComponent, AxonsActivation axonsActivation, AxonsContext axonsContext) {
+	public DummyDirectedAxonsComponentActivation(DirectedAxonsComponent<?, ?, A> axonsComponent,
+			AxonsActivation axonsActivation, AxonsContext axonsContext) {
 		super(axonsComponent, axonsActivation, axonsContext);
 	}
 
@@ -44,24 +46,25 @@ public class DummyDirectedAxonsComponentActivation<A extends Axons<?, ?, ?>> ext
 	}
 
 	@Override
-	protected DirectedComponentGradientImpl<NeuronsActivation> createBackPropagatedGradient(AxonsActivation axonsActivation,
-			List<Supplier<AxonsGradient>> previousAxonsGradients, Supplier<AxonsGradient> thisAxonsGradient) {
-		return new DirectedComponentGradientImpl<>(previousAxonsGradients, thisAxonsGradient, axonsActivation.getPostDropoutOutput());
+	protected DirectedComponentGradientImpl<NeuronsActivation> createBackPropagatedGradient(
+			AxonsActivation axonsActivation, List<Supplier<AxonsGradient>> previousAxonsGradients,
+			Supplier<AxonsGradient> thisAxonsGradient) {
+		return new DirectedComponentGradientImpl<>(previousAxonsGradients, thisAxonsGradient,
+				axonsActivation.getPostDropoutOutput());
 	}
 
 	@Override
 	protected Optional<AxonsGradient> getCalculatedAxonsGradient(AxonsActivation rightToLeftAxonsGradientActivatoin) {
-		
+
 		if (directedAxonsComponent.getAxons().isTrainable(axonsContext)) {
 			// Return no gradient for this mock by default
 			return Optional.empty();
 		} else {
 			return Optional.empty();
 		}
-		
-		
+
 	}
-	
+
 	@Override
 	public void close(DirectedComponentActivationLifecycle arg0) {
 		// No-op

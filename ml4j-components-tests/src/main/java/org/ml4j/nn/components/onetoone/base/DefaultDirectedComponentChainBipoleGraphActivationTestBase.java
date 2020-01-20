@@ -30,74 +30,81 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 public abstract class DefaultDirectedComponentChainBipoleGraphActivationTestBase extends TestBase {
-	
+
 	@Mock
 	protected AxonsContext mockAxonsContext;
-	
+
 	@Mock
 	protected DirectedComponentsContext mockDirectedComponentsContext;
-	
+
 	@Mock
 	protected DefaultDirectedComponentChainBipoleGraph mockBipoleGraph;
-	
+
 	protected DirectedComponentGradient<NeuronsActivation> mockInboundGradient;
 
 	@Before
 	public void setup() {
-	    MockitoAnnotations.initMocks(this);
-	    Mockito.when(mockDirectedComponentsContext.getMatrixFactory()).thenReturn(matrixFactory);
-	    this.mockInboundGradient = MockTestData.mockComponentGradient(110, 32, this);
+		MockitoAnnotations.initMocks(this);
+		Mockito.when(mockDirectedComponentsContext.getMatrixFactory()).thenReturn(matrixFactory);
+		this.mockInboundGradient = MockTestData.mockComponentGradient(110, 32, this);
 
 	}
 
-	private DefaultDirectedComponentChainBipoleGraphActivation createDefaultDirectedComponentChainBipoleGraphActivation(DefaultDirectedComponentChainBipoleGraph bipoleGraph, NeuronsActivation output) {
+	private DefaultDirectedComponentChainBipoleGraphActivation createDefaultDirectedComponentChainBipoleGraphActivation(
+			DefaultDirectedComponentChainBipoleGraph bipoleGraph, NeuronsActivation output) {
 		return createDefaultDirectedComponentChainBipoleGraphActivationUnderTest(bipoleGraph, output);
 	}
-		
-	protected abstract DefaultDirectedComponentChainBipoleGraphActivation createDefaultDirectedComponentChainBipoleGraphActivationUnderTest(DefaultDirectedComponentChainBipoleGraph bipoleGraph, NeuronsActivation output);
+
+	protected abstract DefaultDirectedComponentChainBipoleGraphActivation createDefaultDirectedComponentChainBipoleGraphActivationUnderTest(
+			DefaultDirectedComponentChainBipoleGraph bipoleGraph, NeuronsActivation output);
+
 	@Test
 	public void testConstruction() {
 		NeuronsActivation mockOutputActivation = MockTestData.mockNeuronsActivation(110, 32);
 
-		DefaultDirectedComponentChainBipoleGraphActivation bipoleGraphActivation = createDefaultDirectedComponentChainBipoleGraphActivation(mockBipoleGraph, mockOutputActivation);
+		DefaultDirectedComponentChainBipoleGraphActivation bipoleGraphActivation = createDefaultDirectedComponentChainBipoleGraphActivation(
+				mockBipoleGraph, mockOutputActivation);
 		Assert.assertNotNull(bipoleGraphActivation);
 	}
-	
+
 	@Test
 	public void testGetOutput() {
-		
+
 		NeuronsActivation mockOutputActivation = MockTestData.mockNeuronsActivation(110, 32);
-				
-		DefaultDirectedComponentChainBipoleGraphActivation bipoleGraphActivation = createDefaultDirectedComponentChainBipoleGraphActivation(mockBipoleGraph, mockOutputActivation);
+
+		DefaultDirectedComponentChainBipoleGraphActivation bipoleGraphActivation = createDefaultDirectedComponentChainBipoleGraphActivation(
+				mockBipoleGraph, mockOutputActivation);
 		Assert.assertNotNull(bipoleGraphActivation);
 		Assert.assertNotNull(bipoleGraphActivation.getOutput());
 		Assert.assertSame(mockOutputActivation, bipoleGraphActivation.getOutput());
 	}
-	
+
 	@Test
 	public void testBackPropagate() {
-		
+
 		NeuronsActivation mockOutputActivation = MockTestData.mockNeuronsActivation(110, 32);
-			
+
 		Mockito.when(mockBipoleGraph.getInputNeurons()).thenReturn(new Neurons(100, false));
 		Mockito.when(mockBipoleGraph.getOutputNeurons()).thenReturn(new Neurons(110, false));
-	
-		DefaultDirectedComponentChainBipoleGraphActivation bipoleGraphActivation = createDefaultDirectedComponentChainBipoleGraphActivation(mockBipoleGraph, mockOutputActivation);
-		
+
+		DefaultDirectedComponentChainBipoleGraphActivation bipoleGraphActivation = createDefaultDirectedComponentChainBipoleGraphActivation(
+				mockBipoleGraph, mockOutputActivation);
+
 		Assert.assertNotNull(bipoleGraphActivation);
-		
-		DirectedComponentGradient<NeuronsActivation> backPropagatedGradient = bipoleGraphActivation.backPropagate(mockInboundGradient);
-		
+
+		DirectedComponentGradient<NeuronsActivation> backPropagatedGradient = bipoleGraphActivation
+				.backPropagate(mockInboundGradient);
+
 		Assert.assertNotNull(backPropagatedGradient);
 		Assert.assertNotNull(backPropagatedGradient.getOutput());
 
 		Assert.assertFalse(backPropagatedGradient.getOutput().getFeatureCount() == 0);
 		Assert.assertFalse(backPropagatedGradient.getOutput().getExampleCount() == 0);
 
-		Assert.assertSame(mockBipoleGraph.getInputNeurons().getNeuronCountExcludingBias(), backPropagatedGradient.getOutput().getFeatureCount());
+		Assert.assertSame(mockBipoleGraph.getInputNeurons().getNeuronCountExcludingBias(),
+				backPropagatedGradient.getOutput().getFeatureCount());
 		Assert.assertSame(mockOutputActivation.getExampleCount(), backPropagatedGradient.getOutput().getExampleCount());
 
 	}
-
 
 }

@@ -14,13 +14,13 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 
 public class DefaultBatchNormDirectedAxonsComponentImplTest extends BatchNormDirectedAxonsComponentTestBase {
-	
+
 	@Mock
 	protected AxonsActivation mockAxonsActivation;
-	
+
 	@Mock
 	protected NeuronsActivation mockOutputActivation;
-	
+
 	@Override
 	protected <N extends Neurons> BatchNormDirectedAxonsComponent<N, ?> createBatchNormDirectedAxonsComponentUnderTest(
 			ScaleAndShiftAxons<N> axons) {
@@ -36,23 +36,26 @@ public class DefaultBatchNormDirectedAxonsComponentImplTest extends BatchNormDir
 
 	@Override
 	public NeuronsActivation createNeuronsActivation(int featureCount, int exampleCount) {
-		return new NeuronsActivationImpl(new Neurons(featureCount, false), matrixFactory.createMatrix(featureCount, exampleCount), 
+		return new NeuronsActivationImpl(new Neurons(featureCount, false),
+				matrixFactory.createMatrix(featureCount, exampleCount),
 				NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET);
 	}
-	
+
 	@Override
 	public void testForwardPropagate() {
 		Mockito.when(mockOutputActivation.getFeatureCount()).thenReturn(120);
 		Mockito.when(mockOutputActivation.getExampleCount()).thenReturn(32);
-		Mockito.when(mockOutputActivation.getFeatureOrientation()).thenReturn(NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET);
+		Mockito.when(mockOutputActivation.getFeatureOrientation())
+				.thenReturn(NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET);
 
 		Mockito.when(mockAxonsActivation.getPostDropoutOutput()).thenReturn(mockOutputActivation);
-				
+
 		// TODO verify
-		Mockito.when(mockAxons.pushLeftToRight(Mockito.any(), Mockito.isNull(AxonsActivation.class), Mockito.eq(mockAxonsContext))).thenReturn(mockAxonsActivation);
-		
+		Mockito.when(mockAxons.pushLeftToRight(Mockito.any(), Mockito.isNull(AxonsActivation.class),
+				Mockito.eq(mockAxonsContext))).thenReturn(mockAxonsActivation);
+
 		Mockito.when(mockAxonsContext.getMatrixFactory()).thenReturn(matrixFactory);
-		
+
 		super.testForwardPropagate();
 	}
 }

@@ -37,23 +37,23 @@ import org.slf4j.LoggerFactory;
  * 
  * @author Michael Lavelle
  *
- * @param <L> The type of Neurons on the left/right of this BatchNormDirectedAxonsComponent.
+ * @param <L> The type of Neurons on the left/right of this
+ *            BatchNormDirectedAxonsComponent.
  */
-public class DefaultBatchNormDirectedAxonsComponentImpl<L extends Neurons> extends DirectedAxonsComponentBase<L, L, Axons<L, L, ?>> 
-	implements BatchNormDirectedAxonsComponent<L, Axons<L, L, ?>> {
+public class DefaultBatchNormDirectedAxonsComponentImpl<L extends Neurons> extends
+		DirectedAxonsComponentBase<L, L, Axons<L, L, ?>> implements BatchNormDirectedAxonsComponent<L, Axons<L, L, ?>> {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(DefaultDirectedAxonsComponentImpl.class);
 	/**
 	 * Defaut serialization id;
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	private Matrix exponentiallyWeightedAverageInputFeatureMeans;
 	private Matrix exponentiallyWeightedAverageInputFeatureVariances;
 	// TODO
 	private float betaForExponentiallyWeightedAverages = 0.99f;
 
-	
 	public DefaultBatchNormDirectedAxonsComponentImpl(Axons<L, L, ?> axons, Matrix mean, Matrix stddev) {
 		super(axons);
 		this.exponentiallyWeightedAverageInputFeatureMeans = mean;
@@ -77,17 +77,22 @@ public class DefaultBatchNormDirectedAxonsComponentImpl<L extends Neurons> exten
 
 	@Override
 	public void setExponentiallyWeightedAverageInputFeatureMeans(Matrix exponentiallyWeightedAverageInputFeatureMeans) {
-		this.exponentiallyWeightedAverageInputFeatureMeans = exponentiallyWeightedAverageInputFeatureMeans;	
+		this.exponentiallyWeightedAverageInputFeatureMeans = exponentiallyWeightedAverageInputFeatureMeans;
 	}
 
 	@Override
-	public void setExponentiallyWeightedAverageInputFeatureVariances(Matrix exponentiallyWeightedAverageInputFeatureVariances) {
+	public void setExponentiallyWeightedAverageInputFeatureVariances(
+			Matrix exponentiallyWeightedAverageInputFeatureVariances) {
 		this.exponentiallyWeightedAverageInputFeatureVariances = exponentiallyWeightedAverageInputFeatureVariances;
 	}
 
 	@Override
 	public BatchNormDirectedAxonsComponent<L, Axons<L, L, ?>> dup() {
-		return new DefaultBatchNormDirectedAxonsComponentImpl<>(axons.dup(), exponentiallyWeightedAverageInputFeatureMeans == null ? null : exponentiallyWeightedAverageInputFeatureMeans.dup(), exponentiallyWeightedAverageInputFeatureVariances == null ? null : exponentiallyWeightedAverageInputFeatureVariances.dup());
+		return new DefaultBatchNormDirectedAxonsComponentImpl<>(axons.dup(),
+				exponentiallyWeightedAverageInputFeatureMeans == null ? null
+						: exponentiallyWeightedAverageInputFeatureMeans.dup(),
+				exponentiallyWeightedAverageInputFeatureVariances == null ? null
+						: exponentiallyWeightedAverageInputFeatureVariances.dup());
 	}
 
 	@Override
@@ -95,46 +100,46 @@ public class DefaultBatchNormDirectedAxonsComponentImpl<L extends Neurons> exten
 		LOGGER.debug("Forward propagating through DefaultBatchNormDirectedAxonsComponentImpl");
 		// TODO
 		/*
-		if (neuronsActivation.getFeatureCount() != getInputNeurons().getNeuronCountExcludingBias()) {
-			throw new IllegalArgumentException(neuronsActivation.getFeatureCount() + ":" + getInputNeurons().getNeuronCountExcludingBias());
-		}
-		*/
+		 * if (neuronsActivation.getFeatureCount() !=
+		 * getInputNeurons().getNeuronCountExcludingBias()) { throw new
+		 * IllegalArgumentException(neuronsActivation.getFeatureCount() + ":" +
+		 * getInputNeurons().getNeuronCountExcludingBias()); }
+		 */
 		NeuronsActivationFeatureOrientation featureOrientation = input.getFeatureOrientation();
 		Matrix activations = input.getActivations(axonsContext.getMatrixFactory());
 
-		Matrix meanColumnVector = getMeanColumnVector(activations, axonsContext.getMatrixFactory(), axonsContext.isTrainingContext());
+		Matrix meanColumnVector = getMeanColumnVector(activations, axonsContext.getMatrixFactory(),
+				axonsContext.isTrainingContext());
 
 		Matrix varianceColumnVector = getVarianceColumnVector(activations, axonsContext.getMatrixFactory(),
 				meanColumnVector, axonsContext.isTrainingContext());
-		Matrix xhat = activations.asEditableMatrix().subiColumnVector(meanColumnVector).diviColumnVector(getStdDevColumnVector(varianceColumnVector));
+		Matrix xhat = activations.asEditableMatrix().subiColumnVector(meanColumnVector)
+				.diviColumnVector(getStdDevColumnVector(varianceColumnVector));
 		if (!input.isImmutable()) {
-		input.close();
+			input.close();
 		}
 
-		NeuronsActivation xhatN = new NeuronsActivationImpl(this.getAxons().getRightNeurons(), xhat, featureOrientation);
-		
-		AxonsActivation axonsActivation =
-				axons.pushLeftToRight(xhatN, null, axonsContext);
-		
+		NeuronsActivation xhatN = new NeuronsActivationImpl(this.getAxons().getRightNeurons(), xhat,
+				featureOrientation);
+
+		AxonsActivation axonsActivation = axons.pushLeftToRight(xhatN, null, axonsContext);
+
 		// TODO
-		return new PrototypeBatchNormDirectedAxonsComponentActivationImpl(this, (ScaleAndShiftAxons) this.axons, axonsActivation, meanColumnVector, varianceColumnVector, axonsContext);
+		return new PrototypeBatchNormDirectedAxonsComponentActivationImpl(this, (ScaleAndShiftAxons) this.axons,
+				axonsActivation, meanColumnVector, varianceColumnVector, axonsContext);
 	}
-	
-	
 
 	/**
 	 * Naive implementation to construct a variance row vector with an entry for
 	 * each feature.
 	 * 
-	 * @param matrix
-	 *            The input matrix
-	 * @param matrixFactory
-	 *            The matrix factory.
-	 * @param meanRowVector
-	 *            The mean row vector.
+	 * @param matrix        The input matrix
+	 * @param matrixFactory The matrix factory.
+	 * @param meanRowVector The mean row vector.
 	 * @return A row vector the the variances.
 	 */
-	protected Matrix getVarianceColumnVector(Matrix matrix, MatrixFactory matrixFactory, Matrix meanColumnVector, boolean isTraining) {
+	protected Matrix getVarianceColumnVector(Matrix matrix, MatrixFactory matrixFactory, Matrix meanColumnVector,
+			boolean isTraining) {
 
 		if (isTraining) {
 			if (matrix.getColumns() == 1) {
@@ -153,8 +158,8 @@ public class DefaultBatchNormDirectedAxonsComponentImpl<L extends Neurons> exten
 						+ "norm when not in training - rolling variance not supplied");
 			}
 		}
-		
-		EditableMatrix columnVector = (EditableMatrix)matrixFactory.createMatrix(matrix.getRows(), 1);
+
+		EditableMatrix columnVector = (EditableMatrix) matrixFactory.createMatrix(matrix.getRows(), 1);
 		for (int r = 0; r < matrix.getRows(); r++) {
 			float total = 0f;
 			float count = 0;
@@ -182,20 +187,20 @@ public class DefaultBatchNormDirectedAxonsComponentImpl<L extends Neurons> exten
 			if (exponentiallyWeightedAverageInputFeatureMeans != null) {
 				return exponentiallyWeightedAverageInputFeatureMeans;
 			} else {
-				throw new IllegalStateException("Unable to obtain mean for batch "
-						+ "norm when not in training - rolling mean not supplied");
+				throw new IllegalStateException(
+						"Unable to obtain mean for batch " + "norm when not in training - rolling mean not supplied");
 			}
 		}
-		
+
 		return matrix.rowSums().asEditableMatrix().divi(matrix.getColumns());
 	}
-	
+
 	private Matrix getStdDevColumnVector(Matrix varianceColumnVector) {
 		EditableMatrix stdDev = varianceColumnVector.dup().asEditableMatrix();
 		float epsilion = 0.001f;
 		for (int i = 0; i < stdDev.getLength(); i++) {
 			float variance = stdDev.get(i);
-			float stdDevValue = (float)Math.sqrt(variance + epsilion);
+			float stdDevValue = (float) Math.sqrt(variance + epsilion);
 			stdDev.put(i, stdDevValue);
 		}
 		return stdDev;
@@ -208,7 +213,7 @@ public class DefaultBatchNormDirectedAxonsComponentImpl<L extends Neurons> exten
 
 	@Override
 	public List<NeuronsActivationFeatureOrientation> supports() {
-		return NeuronsActivationFeatureOrientation.intersectLists(axons.supports(), 
+		return NeuronsActivationFeatureOrientation.intersectLists(axons.supports(),
 				Arrays.asList(NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET));
 	}
 

@@ -19,11 +19,13 @@ import org.ml4j.nn.neurons.NeuronsActivation;
 /**
  * Default implementation of a DifferentiableActivationFunctionActivation.
  * 
- * Encapsulates the activations from an activation through a DifferentiableActivationFunctionComponent
+ * Encapsulates the activations from an activation through a
+ * DifferentiableActivationFunctionComponent
  * 
  * @author Michael Lavelle
  */
-public class DefaultDifferentiableActivationFunctionActivationImpl extends DifferentiableActivationFunctionActivationBase implements DifferentiableActivationFunctionActivation {
+public class DefaultDifferentiableActivationFunctionActivationImpl
+		extends DifferentiableActivationFunctionActivationBase implements DifferentiableActivationFunctionActivation {
 
 	public DefaultDifferentiableActivationFunctionActivationImpl(DifferentiableActivationFunction activationFunction,
 			NeuronsActivation input, NeuronsActivation output) {

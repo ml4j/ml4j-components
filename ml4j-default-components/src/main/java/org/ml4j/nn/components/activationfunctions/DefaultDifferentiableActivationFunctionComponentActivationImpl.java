@@ -28,26 +28,38 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Default implementation of DifferentiableActivationFunctionComponentActivation, encapsulating the activations from a DifferentiableActivationFunctionComponent
- * and providing the logic required in order to back propagate gradients back through the activations.
+ * Default implementation of
+ * DifferentiableActivationFunctionComponentActivation, encapsulating the
+ * activations from a DifferentiableActivationFunctionComponent and providing
+ * the logic required in order to back propagate gradients back through the
+ * activations.
  * 
  * @author Michael Lavelle
  */
-public class DefaultDifferentiableActivationFunctionComponentActivationImpl extends DifferentiableActivationFunctionComponentActivationBase<DifferentiableActivationFunctionComponentAdapter> implements DifferentiableActivationFunctionComponentActivation {
+public class DefaultDifferentiableActivationFunctionComponentActivationImpl extends
+		DifferentiableActivationFunctionComponentActivationBase<DifferentiableActivationFunctionComponentAdapter>
+		implements DifferentiableActivationFunctionComponentActivation {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(DefaultDifferentiableActivationFunctionComponentActivationImpl.class);
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(DefaultDifferentiableActivationFunctionComponentActivationImpl.class);
 
 	private DifferentiableActivationFunctionActivation activationFunctionActivation;
 	private NeuronsActivationContext activationContext;
 
 	/**
-	 * @param activationFunctionComponent The DifferentiableActivationFunctionComponent that generated this activation.
-	 * @param activationFunctionActivation The activation from the underlying DifferentiableActivationFunction.
-	 * @param activationContext The activation context.
+	 * @param activationFunctionComponent  The
+	 *                                     DifferentiableActivationFunctionComponent
+	 *                                     that generated this activation.
+	 * @param activationFunctionActivation The activation from the underlying
+	 *                                     DifferentiableActivationFunction.
+	 * @param activationContext            The activation context.
 	 */
-	public DefaultDifferentiableActivationFunctionComponentActivationImpl(DifferentiableActivationFunctionComponentAdapter activationFunctionComponent, 
-			DifferentiableActivationFunctionActivation activationFunctionActivation, NeuronsActivationContext activationContext) {
-		super(activationFunctionComponent, activationFunctionActivation.getInput(), activationFunctionActivation.getOutput());
+	public DefaultDifferentiableActivationFunctionComponentActivationImpl(
+			DifferentiableActivationFunctionComponentAdapter activationFunctionComponent,
+			DifferentiableActivationFunctionActivation activationFunctionActivation,
+			NeuronsActivationContext activationContext) {
+		super(activationFunctionComponent, activationFunctionActivation.getInput(),
+				activationFunctionActivation.getOutput());
 		this.activationFunctionActivation = activationFunctionActivation;
 		this.activationContext = activationContext;
 	}
@@ -58,27 +70,32 @@ public class DefaultDifferentiableActivationFunctionComponentActivationImpl exte
 		LOGGER.debug("Back propagating gradient through DifferentiableActivationFunctionComponentActivation");
 		NeuronsActivation backPropagatedGradient = originatingComponent.getActivationFunction()
 				.activationGradient(activationFunctionActivation, activationContext);
-		try (InterrimMatrix backPropGradientMatrix = backPropagatedGradient.getActivations(activationContext.getMatrixFactory()).asInterrimMatrix()) {
-		DirectedComponentGradient<NeuronsActivation> result = new DirectedComponentGradientImpl<NeuronsActivation>(gradient.getTotalTrainableAxonsGradients(), 
-				new NeuronsActivationImpl(gradient.getOutput().getNeurons(), backPropGradientMatrix.asEditableMatrix()
-				.mul(gradient.getOutput().getActivations(activationContext.getMatrixFactory())), 
-				NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET));
-		
-		activationFunctionActivation.getInput().close();
-		
-		if (!gradient.getOutput().isImmutable()) {
-			gradient.getOutput().close();
-		}
-		
-		return result;
-		
+		try (InterrimMatrix backPropGradientMatrix = backPropagatedGradient
+				.getActivations(activationContext.getMatrixFactory()).asInterrimMatrix()) {
+			DirectedComponentGradient<NeuronsActivation> result = new DirectedComponentGradientImpl<NeuronsActivation>(
+					gradient.getTotalTrainableAxonsGradients(),
+					new NeuronsActivationImpl(gradient.getOutput().getNeurons(),
+							backPropGradientMatrix.asEditableMatrix()
+									.mul(gradient.getOutput().getActivations(activationContext.getMatrixFactory())),
+							NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET));
+
+			activationFunctionActivation.getInput().close();
+
+			if (!gradient.getOutput().isImmutable()) {
+				gradient.getOutput().close();
+			}
+
+			return result;
+
 		}
 	}
 
 	@Override
 	public DirectedComponentGradient<NeuronsActivation> backPropagate(CostFunctionGradient costFunctionGradient) {
-		LOGGER.debug("Back propagating cost function gradient through DifferentiableActivationFunctionComponentActivation");
-		return costFunctionGradient.backPropagateThroughFinalActivationFunction(originatingComponent.getActivationFunction().getActivationFunctionType());
+		LOGGER.debug(
+				"Back propagating cost function gradient through DifferentiableActivationFunctionComponentActivation");
+		return costFunctionGradient.backPropagateThroughFinalActivationFunction(
+				originatingComponent.getActivationFunction().getActivationFunctionType());
 	}
 
 	@Override

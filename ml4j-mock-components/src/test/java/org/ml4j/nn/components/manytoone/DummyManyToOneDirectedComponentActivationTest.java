@@ -32,7 +32,7 @@ public class DummyManyToOneDirectedComponentActivationTest extends ManyToOneDire
 			NeuronsActivation output, int inputCount, PathCombinationStrategy pathCombinationStrategy) {
 		return new DummyManyToOneDirectedComponentActivation(inputCount, output);
 	}
-	
+
 	@Override
 	protected MatrixFactory createMatrixFactory() {
 		return Mockito.mock(MatrixFactory.class);

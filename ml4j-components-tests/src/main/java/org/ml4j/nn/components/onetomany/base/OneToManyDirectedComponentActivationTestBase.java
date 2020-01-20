@@ -32,45 +32,48 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 public abstract class OneToManyDirectedComponentActivationTestBase extends TestBase {
-	
-	
+
 	@Mock
 	protected AxonsContext mockAxonsContext;
-	
+
 	@Mock
 	protected DirectedComponentsContext mockDirectedComponentsContext;
 
 	@Mock
 	protected OneToManyDirectedComponent<?> mockOneToManyDirectedComponent;
-	
-	
+
 	@Before
 	public void setup() {
-	    MockitoAnnotations.initMocks(this);
-	    Mockito.when(mockDirectedComponentsContext.getMatrixFactory()).thenReturn(matrixFactory);
+		MockitoAnnotations.initMocks(this);
+		Mockito.when(mockDirectedComponentsContext.getMatrixFactory()).thenReturn(matrixFactory);
 
 	}
 
-	private OneToManyDirectedComponentActivation createOneToManyDirectedComponentActivation(MatrixFactory matrixFactory, NeuronsActivation input, int outputCount) {
+	private OneToManyDirectedComponentActivation createOneToManyDirectedComponentActivation(MatrixFactory matrixFactory,
+			NeuronsActivation input, int outputCount) {
 		return createOneToManyDirectedComponentActivationUnderTest(matrixFactory, input, outputCount);
 	}
-		
-	protected abstract OneToManyDirectedComponentActivation createOneToManyDirectedComponentActivationUnderTest(MatrixFactory matrixFactory, NeuronsActivation input, int outputCount);
+
+	protected abstract OneToManyDirectedComponentActivation createOneToManyDirectedComponentActivationUnderTest(
+			MatrixFactory matrixFactory, NeuronsActivation input, int outputCount);
+
 	@Test
 	public void testConstruction() {
-		
+
 		NeuronsActivation mockInputActivation = MockTestData.mockNeuronsActivation(100, 32);
-		
-		OneToManyDirectedComponentActivation oneToManyDirectedComponentActivation = createOneToManyDirectedComponentActivation(matrixFactory, mockInputActivation, 2);
+
+		OneToManyDirectedComponentActivation oneToManyDirectedComponentActivation = createOneToManyDirectedComponentActivation(
+				matrixFactory, mockInputActivation, 2);
 		Assert.assertNotNull(oneToManyDirectedComponentActivation);
 	}
-	
+
 	@Test
 	public void testGetOutput() {
-		
+
 		NeuronsActivation mockInputActivation = MockTestData.mockNeuronsActivation(100, 32);
-				
-		OneToManyDirectedComponentActivation oneToManyDirectedComponentActivation = createOneToManyDirectedComponentActivation(matrixFactory, mockInputActivation, 2);
+
+		OneToManyDirectedComponentActivation oneToManyDirectedComponentActivation = createOneToManyDirectedComponentActivation(
+				matrixFactory, mockInputActivation, 2);
 		Assert.assertNotNull(oneToManyDirectedComponentActivation);
 		Assert.assertNotNull(oneToManyDirectedComponentActivation.getOutput());
 		Assert.assertEquals(2, oneToManyDirectedComponentActivation.getOutput().size());
@@ -79,20 +82,23 @@ public abstract class OneToManyDirectedComponentActivationTestBase extends TestB
 		Assert.assertSame(mockInputActivation, oneToManyDirectedComponentActivation.getOutput().get(1));
 
 	}
-	
+
 	@Test
 	public void testBackPropagate() {
-		
+
 		NeuronsActivation mockInputActivation = MockTestData.mockNeuronsActivation(100, 32, matrixFactory);
-		
-		DirectedComponentGradient<List<NeuronsActivation>> mockInboundGradient = MockTestData.mockBatchComponentGradient(100, 32, 2, matrixFactory);
-		
-		OneToManyDirectedComponentActivation oneToManyDirectedComponentActivation = createOneToManyDirectedComponentActivation(matrixFactory, mockInputActivation, 2);
-		
+
+		DirectedComponentGradient<List<NeuronsActivation>> mockInboundGradient = MockTestData
+				.mockBatchComponentGradient(100, 32, 2, matrixFactory);
+
+		OneToManyDirectedComponentActivation oneToManyDirectedComponentActivation = createOneToManyDirectedComponentActivation(
+				matrixFactory, mockInputActivation, 2);
+
 		Assert.assertNotNull(oneToManyDirectedComponentActivation);
-		
-		DirectedComponentGradient<NeuronsActivation> backPropagatedGradient = oneToManyDirectedComponentActivation.backPropagate(mockInboundGradient);
-		
+
+		DirectedComponentGradient<NeuronsActivation> backPropagatedGradient = oneToManyDirectedComponentActivation
+				.backPropagate(mockInboundGradient);
+
 		Assert.assertNotNull(backPropagatedGradient);
 		Assert.assertNotNull(backPropagatedGradient.getOutput());
 
@@ -101,8 +107,7 @@ public abstract class OneToManyDirectedComponentActivationTestBase extends TestB
 
 		Assert.assertEquals(100, backPropagatedGradient.getOutput().getFeatureCount());
 		Assert.assertEquals(32, backPropagatedGradient.getOutput().getExampleCount());
-	
-	}
 
+	}
 
 }

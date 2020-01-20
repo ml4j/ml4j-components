@@ -27,7 +27,8 @@ import org.ml4j.nn.neurons.NeuronsActivation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class DummyDefaultComponentChainBatch extends DefaultComponentChainBatchBase implements DefaultDirectedComponentChainBatch {
+public class DummyDefaultComponentChainBatch extends DefaultComponentChainBatchBase
+		implements DefaultDirectedComponentChainBatch {
 
 	/**
 	 * Default serialization id.
@@ -36,14 +37,13 @@ public class DummyDefaultComponentChainBatch extends DefaultComponentChainBatchB
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(DummyDefaultComponentChainBatch.class);
 
-	
 	public DummyDefaultComponentChainBatch(List<DefaultDirectedComponentChain> parallelComponents) {
 		super(parallelComponents);
 	}
-	
+
 	@Override
-	public DefaultDirectedComponentChainBatchActivation forwardPropagate(
-			List<NeuronsActivation> neuronActivations, DirectedComponentsContext context) {
+	public DefaultDirectedComponentChainBatchActivation forwardPropagate(List<NeuronsActivation> neuronActivations,
+			DirectedComponentsContext context) {
 		// TODO
 		int index = 0;
 		List<DefaultDirectedComponentChainActivation> chainActivations = new ArrayList<>();
@@ -55,10 +55,9 @@ public class DummyDefaultComponentChainBatch extends DefaultComponentChainBatchB
 		}
 		LOGGER.debug("Mock forward propagating through DummyDefaultComponentChainBatch");
 
-		
 		return new DummyDirectedComponentChainBatchActivation(chainActivations);
 	}
-	
+
 	@Override
 	public DefaultDirectedComponentChainBatch dup() {
 		return new DummyDefaultComponentChainBatch(parallelComponents);

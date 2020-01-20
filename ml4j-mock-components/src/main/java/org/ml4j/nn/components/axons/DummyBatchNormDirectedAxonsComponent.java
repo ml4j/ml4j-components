@@ -30,8 +30,8 @@ import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class DummyBatchNormDirectedAxonsComponent<L extends Neurons> extends DirectedAxonsComponentBase<L, L, Axons<L, L, ?>> 
-	implements BatchNormDirectedAxonsComponent<L, Axons<L, L, ?>> {
+public class DummyBatchNormDirectedAxonsComponent<L extends Neurons> extends
+		DirectedAxonsComponentBase<L, L, Axons<L, L, ?>> implements BatchNormDirectedAxonsComponent<L, Axons<L, L, ?>> {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(DummyDirectedAxonsComponent.class);
 	/**
@@ -39,7 +39,6 @@ public class DummyBatchNormDirectedAxonsComponent<L extends Neurons> extends Dir
 	 */
 	private static final long serialVersionUID = 1L;
 
-	
 	public DummyBatchNormDirectedAxonsComponent(Axons<L, L, ?> axons) {
 		super(axons);
 	}
@@ -61,12 +60,12 @@ public class DummyBatchNormDirectedAxonsComponent<L extends Neurons> extends Dir
 
 	@Override
 	public void setExponentiallyWeightedAverageInputFeatureMeans(Matrix arg0) {
-		throw new UnsupportedOperationException();		
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public void setExponentiallyWeightedAverageInputFeatureVariances(Matrix arg0) {
-		throw new UnsupportedOperationException();		
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
@@ -75,23 +74,24 @@ public class DummyBatchNormDirectedAxonsComponent<L extends Neurons> extends Dir
 	}
 
 	@Override
-	public DirectedAxonsComponentActivation forwardPropagate(NeuronsActivation neuronsActivation, AxonsContext axonsContext) {
+	public DirectedAxonsComponentActivation forwardPropagate(NeuronsActivation neuronsActivation,
+			AxonsContext axonsContext) {
 		LOGGER.debug("Forward propagating through DummyDirectedAxonsComponent");
-		
+
 		if (neuronsActivation.getFeatureCount() != getInputNeurons().getNeuronCountExcludingBias()) {
 			throw new IllegalArgumentException();
 		}
-		
-		NeuronsActivation dummyOutput = new DummyNeuronsActivation(axons.getRightNeurons(), 
+
+		NeuronsActivation dummyOutput = new DummyNeuronsActivation(axons.getRightNeurons(),
 				neuronsActivation.getFeatureOrientation(), neuronsActivation.getExampleCount());
 		if (dummyOutput.getFeatureCount() != getOutputNeurons().getNeuronCountExcludingBias()) {
 			throw new IllegalArgumentException();
 		}
 		AxonsActivation dummyAxonsActivation = new NoOpAxonsActivation(axons, () -> neuronsActivation, dummyOutput);
-	
+
 		return new DummyDirectedAxonsComponentActivation<>(this, dummyAxonsActivation, axonsContext);
 	}
-	
+
 	@Override
 	public Optional<NeuronsActivationFeatureOrientation> optimisedFor() {
 		// TODO THUR

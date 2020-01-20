@@ -18,18 +18,17 @@ import org.mockito.MockitoAnnotations;
 public abstract class AxonsTestBase<A extends Axons<?, ?, ?>> extends TestBase {
 
 	private A axons;
-	
+
 	@Mock
 	protected Neurons leftNeurons;
-	
+
 	@Mock
 	protected Neurons rightNeurons;
-	
+
 	@Mock
 	protected AxonsContext mockAxonsContext;
-	
+
 	protected MatrixFactory matrixFactory;
-	
 
 	@Before
 	public void setUp() {
@@ -40,41 +39,41 @@ public abstract class AxonsTestBase<A extends Axons<?, ?, ?>> extends TestBase {
 		Mockito.when(mockAxonsContext.getMatrixFactory()).thenReturn(matrixFactory);
 		axons = createAxonsUnderTest(leftNeurons, rightNeurons);
 	}
-	
+
 	protected abstract A createAxonsUnderTest(Neurons leftNeurons, Neurons rightNeurons);
-	
+
 	@Test
 	public void testGetLeftNeurons() {
 		Neurons leftNeurons = axons.getLeftNeurons();
 		Assert.assertNotNull(leftNeurons);
 	}
-	
+
 	@Test
 	public void testGetRightNeurons() {
 		Neurons leftNeurons = axons.getRightNeurons();
 		Assert.assertNotNull(leftNeurons);
 	}
-	
+
 	@Test
 	public void testPushLeftToRight() {
-		
-		
+
 		NeuronsActivation mockLeftToRightInputActivation = createNeuronsActivation(100, 32);
-		
+
 		Mockito.when(mockAxonsContext.isTrainingContext()).thenReturn(true);
-			
-		AxonsActivation leftToRightActivation = axons.pushLeftToRight(mockLeftToRightInputActivation, null, mockAxonsContext);
+
+		AxonsActivation leftToRightActivation = axons.pushLeftToRight(mockLeftToRightInputActivation, null,
+				mockAxonsContext);
 		Assert.assertNotNull(leftToRightActivation);
 		NeuronsActivation postDropoutInput = leftToRightActivation.getPostDropoutInput().get();
 		Assert.assertNotNull(postDropoutInput);
 		Assert.assertEquals(100, postDropoutInput.getFeatureCount());
 		Assert.assertEquals(32, postDropoutInput.getExampleCount());
-		Assert.assertEquals(NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET, postDropoutInput.getFeatureOrientation());
+		Assert.assertEquals(NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET,
+				postDropoutInput.getFeatureOrientation());
 
 		NeuronsActivation postDropoutOutput = leftToRightActivation.getPostDropoutOutput();
 		Assert.assertNotNull(postDropoutOutput);
 
-		
 	}
-	
+
 }

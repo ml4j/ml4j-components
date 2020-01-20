@@ -36,33 +36,33 @@ public class DummyDefaultComponentBatch extends DefaultComponentBatchBase implem
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(DummyDefaultComponentBatch.class);
 
-	
 	public DummyDefaultComponentBatch(List<DefaultChainableDirectedComponent<?, ?>> parallelComponents) {
 		super(parallelComponents);
 	}
-	
+
 	@Override
-	public DefaultDirectedComponentBatchActivation forwardPropagate(
-			List<NeuronsActivation> neuronActivations, DirectedComponentsContext context) {
+	public DefaultDirectedComponentBatchActivation forwardPropagate(List<NeuronsActivation> neuronActivations,
+			DirectedComponentsContext context) {
 		// TODO
 		int index = 0;
 		List<DefaultChainableDirectedComponentActivation> chainActivations = new ArrayList<>();
 		for (NeuronsActivation neuronActivation : neuronActivations) {
-			DefaultChainableDirectedComponentActivation chainActivation = forwardPropagate(neuronActivation, parallelComponents.get(index), index, context);
+			DefaultChainableDirectedComponentActivation chainActivation = forwardPropagate(neuronActivation,
+					parallelComponents.get(index), index, context);
 			chainActivations.add(chainActivation);
 			index++;
 		}
 		LOGGER.debug("Mock forward propagating through DummyDefaultComponentChainBatch");
 
-		
 		return new DummyDirectedComponentBatchActivation(chainActivations);
 	}
-	
 
-	protected <X, Y> Y forwardPropagate(NeuronsActivation input, DefaultChainableDirectedComponent<? extends Y, X> component, int componentIndex, DirectedComponentsContext context) {
+	protected <X, Y> Y forwardPropagate(NeuronsActivation input,
+			DefaultChainableDirectedComponent<? extends Y, X> component, int componentIndex,
+			DirectedComponentsContext context) {
 		return component.forwardPropagate(input, component.getContext(context, componentIndex));
 	}
-	
+
 	@Override
 	public DefaultDirectedComponentBatch dup() {
 		return new DummyDefaultComponentBatch(parallelComponents);

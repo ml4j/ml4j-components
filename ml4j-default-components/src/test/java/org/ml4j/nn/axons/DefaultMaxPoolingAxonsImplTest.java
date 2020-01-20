@@ -30,7 +30,8 @@ public class DefaultMaxPoolingAxonsImplTest extends Axons3DTestBase<MaxPoolingAx
 	}
 
 	@Override
-	protected MaxPoolingAxons createAxonsUnderTest(Neurons3D leftNeurons, Neurons3D rightNeurons, Axons3DConfig config) {
+	protected MaxPoolingAxons createAxonsUnderTest(Neurons3D leftNeurons, Neurons3D rightNeurons,
+			Axons3DConfig config) {
 		return new DefaultMaxPoolingAxonsImpl(matrixFactory, leftNeurons, rightNeurons, config, false);
 	}
 
@@ -41,7 +42,8 @@ public class DefaultMaxPoolingAxonsImplTest extends Axons3DTestBase<MaxPoolingAx
 
 	@Override
 	public NeuronsActivation createNeuronsActivation(int featureCount, int exampleCount) {
-		return new NeuronsActivationImpl(new Neurons(featureCount, false), matrixFactory.createMatrix(featureCount, exampleCount), 
+		return new NeuronsActivationImpl(new Neurons(featureCount, false),
+				matrixFactory.createMatrix(featureCount, exampleCount),
 				NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET);
 	}
 

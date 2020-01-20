@@ -33,7 +33,8 @@ public class DummyMaxPoolingAxonsImplTest extends Axons3DTestBase<MaxPoolingAxon
 	}
 
 	@Override
-	protected MaxPoolingAxons createAxonsUnderTest(Neurons3D leftNeurons, Neurons3D rightNeurons, Axons3DConfig config) {
+	protected MaxPoolingAxons createAxonsUnderTest(Neurons3D leftNeurons, Neurons3D rightNeurons,
+			Axons3DConfig config) {
 		return new DummyMaxPoolingAxonsImpl(matrixFactory, leftNeurons, rightNeurons, config);
 	}
 
@@ -46,7 +47,7 @@ public class DummyMaxPoolingAxonsImplTest extends Axons3DTestBase<MaxPoolingAxon
 	public NeuronsActivation createNeuronsActivation(int featureCount, int exampleCount) {
 		return MockTestData.mockNeuronsActivation(featureCount, exampleCount);
 	}
-	
+
 	@Override
 	protected int getExpectedReformattedInputColumns() {
 		return 32;
@@ -56,7 +57,7 @@ public class DummyMaxPoolingAxonsImplTest extends Axons3DTestBase<MaxPoolingAxon
 	protected int getExpectedReformattedInputRows() {
 		return 400 * 2;
 	}
-	
+
 	@Override
 	protected boolean expectPostDropoutInputToBeSet() {
 		return true;

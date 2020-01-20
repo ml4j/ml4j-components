@@ -36,17 +36,21 @@ import org.slf4j.LoggerFactory;
 /**
  * Default implementation of DirectedAxonsComponentActivation.
  * 
- * Encapsulates the activations from a forward propagation through a DirectedAxonsComponent
+ * Encapsulates the activations from a forward propagation through a
+ * DirectedAxonsComponent
  * 
  * @author Michael Lavelle
  * 
- * @param <A> The type of Axons within the DirectedAxonsComponent from which this activation originated
+ * @param <A> The type of Axons within the DirectedAxonsComponent from which
+ *            this activation originated
  */
-public class DefaultDirectedAxonsComponentActivationImpl<A extends Axons<?, ?, ?>> extends DirectedAxonsComponentActivationBase<A> implements DirectedAxonsComponentActivation {
-	
+public class DefaultDirectedAxonsComponentActivationImpl<A extends Axons<?, ?, ?>>
+		extends DirectedAxonsComponentActivationBase<A> implements DirectedAxonsComponentActivation {
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(DefaultDirectedAxonsComponentActivationImpl.class);
 
-	public DefaultDirectedAxonsComponentActivationImpl(DirectedAxonsComponent<?, ?, A> axonsComponent, AxonsActivation axonsActivation, AxonsContext axonsContext) {
+	public DefaultDirectedAxonsComponentActivationImpl(DirectedAxonsComponent<?, ?, A> axonsComponent,
+			AxonsActivation axonsActivation, AxonsContext axonsContext) {
 		super(axonsComponent, axonsActivation, axonsContext);
 	}
 
@@ -59,8 +63,10 @@ public class DefaultDirectedAxonsComponentActivationImpl<A extends Axons<?, ?, ?
 
 			if (directedAxonsComponent.getAxons() instanceof TrainableAxons) {
 
-				try (InterrimMatrix weightsWithoutBiases = ((TrainableAxons<?, ?, ?>) directedAxonsComponent.getAxons()).getDetachedAxonWeights().getConnectionWeights().asInterrimMatrix()) {
-					float regularisationMatrix = weightsWithoutBiases.asEditableMatrix().muli(weightsWithoutBiases).sum();
+				try (InterrimMatrix weightsWithoutBiases = ((TrainableAxons<?, ?, ?>) directedAxonsComponent.getAxons())
+						.getDetachedAxonWeights().getConnectionWeights().asInterrimMatrix()) {
+					float regularisationMatrix = weightsWithoutBiases.asEditableMatrix().muli(weightsWithoutBiases)
+							.sum();
 					totalRegularisationCost = totalRegularisationCost
 							+ ((axonsContext.getRegularisationLambda()) * regularisationMatrix) / 2;
 				}
@@ -70,28 +76,32 @@ public class DefaultDirectedAxonsComponentActivationImpl<A extends Axons<?, ?, ?
 	}
 
 	@Override
-	protected DirectedComponentGradientImpl<NeuronsActivation> createBackPropagatedGradient(AxonsActivation axonsActivation,
-			List<Supplier<AxonsGradient>> previousAxonsGradients, Supplier<AxonsGradient> thisAxonsGradient) {
-		return new DirectedComponentGradientImpl<>(previousAxonsGradients, thisAxonsGradient, axonsActivation.getPostDropoutOutput());
+	protected DirectedComponentGradientImpl<NeuronsActivation> createBackPropagatedGradient(
+			AxonsActivation axonsActivation, List<Supplier<AxonsGradient>> previousAxonsGradients,
+			Supplier<AxonsGradient> thisAxonsGradient) {
+		return new DirectedComponentGradientImpl<>(previousAxonsGradients, thisAxonsGradient,
+				axonsActivation.getPostDropoutOutput());
 	}
 
 	@Override
 	protected Optional<AxonsGradient> getCalculatedAxonsGradient(AxonsActivation rightToLeftAxonsGradientActivatoin) {
-		
+
 		if (directedAxonsComponent.getAxons().isTrainable(axonsContext)) {
-			
+
 			TrainableAxons<?, ?, ?> trainableAxons = (TrainableAxons<?, ?, ?>) directedAxonsComponent.getAxons();
 
 			LOGGER.debug("Calculating Axons Gradients");
-			NeuronsActivation rightToLeftPostDropoutInput = rightToLeftAxonsGradientActivatoin.getPostDropoutInput().get();
-			
+			NeuronsActivation rightToLeftPostDropoutInput = rightToLeftAxonsGradientActivatoin.getPostDropoutInput()
+					.get();
+
 			Matrix first = rightToLeftPostDropoutInput.getActivations(axonsContext.getMatrixFactory());
 
 			EditableMatrix totalTrainableAxonsGradientMatrixNonBias = null;
 			Matrix totalTrainableAxonsGradientMatrixBias = null;
-			
-			NeuronsActivation leftToRightPostDropoutInputActivation = leftToRightAxonsActivation.getPostDropoutInput().get();
-			
+
+			NeuronsActivation leftToRightPostDropoutInputActivation = leftToRightAxonsActivation.getPostDropoutInput()
+					.get();
+
 			try (InterrimMatrix leftToRightPostDropoutInputActivationMatrix = leftToRightPostDropoutInputActivation
 					.getActivations(axonsContext.getMatrixFactory()).asInterrimMatrix()) {
 				try (InterrimMatrix second = leftToRightPostDropoutInputActivationMatrix.transpose()
@@ -101,7 +111,6 @@ public class DefaultDirectedAxonsComponentActivationImpl<A extends Axons<?, ?, ?
 				}
 			}
 
-
 			if (directedAxonsComponent.getAxons().getLeftNeurons().hasBiasUnit()) {
 				totalTrainableAxonsGradientMatrixBias = first.rowSums();
 			}
@@ -110,24 +119,26 @@ public class DefaultDirectedAxonsComponentActivationImpl<A extends Axons<?, ?, ?
 
 				LOGGER.debug("Calculating total regularisation Gradients");
 
-				try (InterrimMatrix connectionWeightsCopy = trainableAxons.getDetachedAxonWeights().getConnectionWeights().asInterrimMatrix()) {
-					
-					Matrix regularisationAddition = connectionWeightsCopy.asEditableMatrix().muli(axonsContext.getRegularisationLambda());
-					
-					totalTrainableAxonsGradientMatrixNonBias
-							.addi(regularisationAddition);
-						
+				try (InterrimMatrix connectionWeightsCopy = trainableAxons.getDetachedAxonWeights()
+						.getConnectionWeights().asInterrimMatrix()) {
+
+					Matrix regularisationAddition = connectionWeightsCopy.asEditableMatrix()
+							.muli(axonsContext.getRegularisationLambda());
+
+					totalTrainableAxonsGradientMatrixNonBias.addi(regularisationAddition);
+
 				}
 			}
-			
+
 			rightToLeftPostDropoutInput.close();
-					
+
 			return Optional.of(new AxonsGradientImpl((TrainableAxons<?, ?, ?>) directedAxonsComponent.getAxons(),
 					totalTrainableAxonsGradientMatrixNonBias, totalTrainableAxonsGradientMatrixBias));
-			
+
 		} else {
 			NeuronsActivation postDropoutInput = rightToLeftAxonsGradientActivatoin.getPostDropoutInput().get();
-			NeuronsActivation leftToRightPostDropoutInputActivation = leftToRightAxonsActivation.getPostDropoutInput().get();
+			NeuronsActivation leftToRightPostDropoutInputActivation = leftToRightAxonsActivation.getPostDropoutInput()
+					.get();
 			if (postDropoutInput != null) {
 				postDropoutInput.close();
 			}
@@ -138,7 +149,7 @@ public class DefaultDirectedAxonsComponentActivationImpl<A extends Axons<?, ?, ?
 			return Optional.empty();
 		}
 	}
-	
+
 	private void close(NeuronsActivation activation) {
 		if (!activation.isImmutable()) {
 			activation.close();
@@ -150,6 +161,6 @@ public class DefaultDirectedAxonsComponentActivationImpl<A extends Axons<?, ?, ?
 		if (completedLifeCycleStage == DirectedComponentActivationLifecycle.FORWARD_PROPAGATION) {
 			close(getOutput());
 			close(leftToRightAxonsActivation.getPostDropoutOutput());
-		}	
+		}
 	}
 }

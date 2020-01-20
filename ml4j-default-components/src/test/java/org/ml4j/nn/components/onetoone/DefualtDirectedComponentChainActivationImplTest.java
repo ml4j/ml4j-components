@@ -15,10 +15,11 @@ public class DefualtDirectedComponentChainActivationImplTest extends DefaultDire
 
 	@Override
 	protected DefaultDirectedComponentChainActivation createDefaultDirectedComponentChainActivationUnderTest(
-			DefaultDirectedComponentChain componentChain, List<DefaultChainableDirectedComponentActivation> activations) {
+			DefaultDirectedComponentChain componentChain,
+			List<DefaultChainableDirectedComponentActivation> activations) {
 		return new DefaultDirectedComponentChainActivationImpl(componentChain, activations);
 	}
-	
+
 	@Override
 	protected MatrixFactory createMatrixFactory() {
 		return Mockito.mock(MatrixFactory.class);

@@ -52,12 +52,12 @@ public class DefaultSoftmaxActivationFunctionImpl implements DifferentiableActiv
 		}
 
 		Matrix softmaxOfInputActivationsMatrix = softmax(input.getActivations(context.getMatrixFactory()));
-		
+
 		// TODO
-		//input.close();
-		
-		return new DefaultDifferentiableActivationFunctionActivationImpl(this, input,
-				new NeuronsActivationImpl(input.getNeurons(), softmaxOfInputActivationsMatrix, input.getFeatureOrientation()));
+		// input.close();
+
+		return new DefaultDifferentiableActivationFunctionActivationImpl(this, input, new NeuronsActivationImpl(
+				input.getNeurons(), softmaxOfInputActivationsMatrix, input.getFeatureOrientation()));
 	}
 
 	/**
@@ -83,7 +83,7 @@ public class DefaultSoftmaxActivationFunctionImpl implements DifferentiableActiv
 	public ActivationFunctionType getActivationFunctionType() {
 		return ActivationFunctionType.getBaseType(ActivationFunctionBaseType.SOFTMAX);
 	}
-	
+
 	@Override
 	public Optional<NeuronsActivationFeatureOrientation> optimisedFor() {
 		return Optional.empty();
