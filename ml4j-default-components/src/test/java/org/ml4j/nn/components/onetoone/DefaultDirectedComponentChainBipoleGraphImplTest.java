@@ -45,55 +45,65 @@ public class DefaultDirectedComponentChainBipoleGraphImplTest extends DefaultDir
 
 	@Mock
 	private DefaultDirectedComponentChainBatch mockComponentChainBatch;
-	
+
 	@Mock
 	private DefaultDirectedComponentChainBatchActivation mockComponentChainBatchActivation;
-	
+
 	@SuppressWarnings("rawtypes")
 	@Mock
 	private OneToManyDirectedComponent mockOneToManyDirectedComponent;
-	
+
 	@SuppressWarnings("rawtypes")
 	@Mock
 	private ManyToOneDirectedComponent mockManyToOneDirectedComponent;
-	
+
 	@Mock
 	private OneToManyDirectedComponentActivation mockOneToManyDirectedComponentActivation;
-	
+
 	@Mock
 	private ManyToOneDirectedComponentActivation mockManyToOneDirectedComponentActivation;
-	
+
 	@SuppressWarnings("unchecked")
 	@Before
 	@Override
 	public void setup() {
 		super.setup();
-		Mockito.when(mockDirectedComponentFactory.createOneToManyDirectedComponent(Mockito.any())).thenReturn(mockOneToManyDirectedComponent);
-		Mockito.when(mockDirectedComponentFactory.createManyToOneDirectedComponent((Neurons)Mockito.any(), Mockito.any())).thenReturn(mockManyToOneDirectedComponent);
+		Mockito.when(mockDirectedComponentFactory.createOneToManyDirectedComponent(Mockito.any()))
+				.thenReturn(mockOneToManyDirectedComponent);
+		Mockito.when(
+				mockDirectedComponentFactory.createManyToOneDirectedComponent((Neurons) Mockito.any(), Mockito.any()))
+				.thenReturn(mockManyToOneDirectedComponent);
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	protected DefaultDirectedComponentChainBipoleGraphBase createDefaultDirectedComponentChainBipoleGraphUnderTest(
 			DirectedComponentFactory factory, List<DefaultChainableDirectedComponent<?, ?>> components,
 			PathCombinationStrategy pathCombinationStrategy) {
-				
-		Mockito.when(mockOneToManyDirectedComponent.forwardPropagate(mockInputActivation, mockDirectedComponentsContext)).thenReturn(mockOneToManyDirectedComponentActivation);
-		Mockito.when(mockManyToOneDirectedComponent.forwardPropagate(Arrays.asList(mockNeuronsActivation3, mockNeuronsActivation4), mockDirectedComponentsContext)).thenReturn(mockManyToOneDirectedComponentActivation);
-		
-		Mockito.when(mockOneToManyDirectedComponentActivation.getOutput()).thenReturn(Arrays.asList(mockNeuronsActivation1, mockNeuronsActivation2));
-		
+
+		Mockito.when(
+				mockOneToManyDirectedComponent.forwardPropagate(mockInputActivation, mockDirectedComponentsContext))
+				.thenReturn(mockOneToManyDirectedComponentActivation);
+		Mockito.when(mockManyToOneDirectedComponent.forwardPropagate(
+				Arrays.asList(mockNeuronsActivation3, mockNeuronsActivation4), mockDirectedComponentsContext))
+				.thenReturn(mockManyToOneDirectedComponentActivation);
+
+		Mockito.when(mockOneToManyDirectedComponentActivation.getOutput())
+				.thenReturn(Arrays.asList(mockNeuronsActivation1, mockNeuronsActivation2));
+
 		NeuronsActivation mockOutput = MockTestData.mockNeuronsActivation(100, 32);
-		
+
 		Mockito.when(mockManyToOneDirectedComponentActivation.getOutput()).thenReturn(mockOutput);
-		
-		Mockito.when(mockComponentChainBatch.forwardPropagate(Arrays.asList(mockNeuronsActivation1, mockNeuronsActivation2), mockDirectedComponentsContext))
-		.thenReturn(mockComponentChainBatchActivation);
-		Mockito.when(mockComponentChainBatchActivation.getOutput()).thenReturn(Arrays.asList(mockNeuronsActivation3, mockNeuronsActivation4));
-		return new DefaultDirectedComponentChainBipoleGraphImpl(factory, new Neurons(10, false), new Neurons(100, false), mockComponentChainBatch, pathCombinationStrategy);
+
+		Mockito.when(mockComponentChainBatch.forwardPropagate(
+				Arrays.asList(mockNeuronsActivation1, mockNeuronsActivation2), mockDirectedComponentsContext))
+				.thenReturn(mockComponentChainBatchActivation);
+		Mockito.when(mockComponentChainBatchActivation.getOutput())
+				.thenReturn(Arrays.asList(mockNeuronsActivation3, mockNeuronsActivation4));
+		return new DefaultDirectedComponentChainBipoleGraphImpl(factory, new Neurons(10, false),
+				new Neurons(100, false), mockComponentChainBatch, pathCombinationStrategy);
 	}
 
-	
 	@Override
 	protected MatrixFactory createMatrixFactory() {
 		return Mockito.mock(MatrixFactory.class);

@@ -38,7 +38,8 @@ import org.ml4j.nn.neurons.Neurons;
 import org.ml4j.nn.neurons.Neurons3D;
 
 /**
- * Default implementation of AxonsFactory, used to generate Axons implementations.
+ * Default implementation of AxonsFactory, used to generate Axons
+ * implementations.
  * 
  * @author Michael Lavelle
  *
@@ -53,7 +54,8 @@ public class DefaultAxonsFactoryImpl implements AxonsFactory {
 	protected MatrixFactory matrixFactory;
 
 	/**
-	 * @param matrixFactory The MatrixFactory used to construct matrices used by the generated Axons implementations.
+	 * @param matrixFactory The MatrixFactory used to construct matrices used by the
+	 *                      generated Axons implementations.
 	 */
 	public DefaultAxonsFactoryImpl(MatrixFactory matrixFactory) {
 		this.matrixFactory = matrixFactory;
@@ -90,12 +92,14 @@ public class DefaultAxonsFactoryImpl implements AxonsFactory {
 	}
 
 	@Override
-	public AveragePoolingAxons createAveragePoolingAxons(Neurons3D leftNeurons, Neurons3D rightNeurons, Axons3DConfig config) {
+	public AveragePoolingAxons createAveragePoolingAxons(Neurons3D leftNeurons, Neurons3D rightNeurons,
+			Axons3DConfig config) {
 		return new DefaultAveragePoolingAxonsImpl(matrixFactory, leftNeurons, rightNeurons, config);
 	}
 
 	@Override
-	public ConvolutionalAxons createConvolutionalAxons(Neurons3D leftNeurons, Neurons3D rightNeurons,Axons3DConfig config, Matrix connectionWeights, Matrix biases) {
+	public ConvolutionalAxons createConvolutionalAxons(Neurons3D leftNeurons, Neurons3D rightNeurons,
+			Axons3DConfig config, Matrix connectionWeights, Matrix biases) {
 		return new DefaultConvolutionalAxonsImpl(this, leftNeurons, rightNeurons, config, connectionWeights, biases);
 	}
 
@@ -110,16 +114,14 @@ public class DefaultAxonsFactoryImpl implements AxonsFactory {
 			Matrix gamma, Matrix beta) {
 
 		AxonWeightsInitialiser axonWeightsInitialiser = new DefaultScaleAndShiftAxonWeightsInitialiser(leftNeurons);
-		
-		Matrix initialGamma = gamma == null
-				? axonWeightsInitialiser.getInitialConnectionWeights(matrixFactory)
-				: gamma;
-		Optional<Matrix> initialBeta = beta == null
-				? axonWeightsInitialiser.getInitialLeftToRightBiases(matrixFactory)
+
+		Matrix initialGamma = gamma == null ? axonWeightsInitialiser.getInitialConnectionWeights(matrixFactory) : gamma;
+		Optional<Matrix> initialBeta = beta == null ? axonWeightsInitialiser.getInitialLeftToRightBiases(matrixFactory)
 				: Optional.of(beta);
-		
-		ScaleAndShiftAxonWeightsImpl weights = new ScaleAndShiftAxonWeightsImpl(leftNeurons.getNeuronCountExcludingBias(), 
-				rightNeurons.getNeuronCountExcludingBias(),initialGamma, initialBeta.isPresent() ? initialBeta.get() : null, null);
+
+		ScaleAndShiftAxonWeightsImpl weights = new ScaleAndShiftAxonWeightsImpl(
+				leftNeurons.getNeuronCountExcludingBias(), rightNeurons.getNeuronCountExcludingBias(), initialGamma,
+				initialBeta.isPresent() ? initialBeta.get() : null, null);
 		return new DefaultScaleAndShiftAxonsImpl<>(leftNeurons, rightNeurons, weights);
 	}
 

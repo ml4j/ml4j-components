@@ -45,13 +45,12 @@ public class DefaultSigmoidActivationFunctionImpl implements DifferentiableActiv
 			NeuronsActivationContext context) {
 		LOGGER.debug("Activating through SigmoidActivationFunction:" + input.getFeatureCount() + ":"
 				+ +input.getExampleCount() + ":" + input.getFeatureOrientation());
-		
 
 		Matrix sigmoidOfInputActivationsMatrix = input.getActivations(context.getMatrixFactory()).sigmoid();
-		NeuronsActivation output = new NeuronsActivationImpl(input.getNeurons(), sigmoidOfInputActivationsMatrix, input.getFeatureOrientation());
+		NeuronsActivation output = new NeuronsActivationImpl(input.getNeurons(), sigmoidOfInputActivationsMatrix,
+				input.getFeatureOrientation());
 		output.setImmutable(true);
-		return new DefaultDifferentiableActivationFunctionActivationImpl(this, input, output
-				);
+		return new DefaultDifferentiableActivationFunctionActivationImpl(this, input, output);
 	}
 
 	@Override
@@ -68,10 +67,9 @@ public class DefaultSigmoidActivationFunctionImpl implements DifferentiableActiv
 					.asInterrimMatrix()) {
 
 				Matrix gradientAtActivationInput = sigmoidOfActivationInput.sub(sigmoidOfActivationInputSquared);
-				return new NeuronsActivationImpl(activationFunctionActivation.getInput().getNeurons(), gradientAtActivationInput,
-						activationFunctionActivation.getInput().getFeatureOrientation());
+				return new NeuronsActivationImpl(activationFunctionActivation.getInput().getNeurons(),
+						gradientAtActivationInput, activationFunctionActivation.getInput().getFeatureOrientation());
 			}
-			
 
 		} else {
 
@@ -83,8 +81,8 @@ public class DefaultSigmoidActivationFunctionImpl implements DifferentiableActiv
 
 					Matrix gradientAtActivationInput = sigmoidOfActivationInput.sub(sigmoidOfActivationInputSquared);
 
-					return new NeuronsActivationImpl(activationFunctionActivation.getInput().getNeurons(), gradientAtActivationInput,
-							activationFunctionActivation.getInput().getFeatureOrientation());
+					return new NeuronsActivationImpl(activationFunctionActivation.getInput().getNeurons(),
+							gradientAtActivationInput, activationFunctionActivation.getInput().getFeatureOrientation());
 				}
 			}
 

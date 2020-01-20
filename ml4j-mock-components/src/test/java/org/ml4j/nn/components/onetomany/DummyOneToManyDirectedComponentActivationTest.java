@@ -29,11 +29,10 @@ public class DummyOneToManyDirectedComponentActivationTest extends OneToManyDire
 
 	@Override
 	protected OneToManyDirectedComponentActivation createOneToManyDirectedComponentActivationUnderTest(
-			MatrixFactory matrixFactory, 
-			NeuronsActivation input, int outputCount) {
+			MatrixFactory matrixFactory, NeuronsActivation input, int outputCount) {
 		return new DummyOneToManyDirectedComponentActivation(input, outputCount);
 	}
-	
+
 	@Override
 	protected MatrixFactory createMatrixFactory() {
 		return Mockito.mock(MatrixFactory.class);

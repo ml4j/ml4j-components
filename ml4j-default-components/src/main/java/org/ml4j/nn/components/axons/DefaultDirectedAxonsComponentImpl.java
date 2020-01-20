@@ -28,7 +28,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Default implementation of a DefaultChainableDirectedComponent adapter for an Axons instance.
+ * Default implementation of a DefaultChainableDirectedComponent adapter for an
+ * Axons instance.
  * 
  * @author Michael Lavelle
  *
@@ -36,7 +37,9 @@ import org.slf4j.LoggerFactory;
  * @param <R> The type of Neurons on the RHS of this DirectedAxonsComponent.
  * @param <A> The specific type of Axons wrapped by this DirectedAxonsComponent.
  */
-public class DefaultDirectedAxonsComponentImpl<L extends Neurons, R extends Neurons> extends DirectedAxonsComponentBase<L, R, Axons<? extends L, ? extends R, ?>> implements DirectedAxonsComponent<L, R, Axons<? extends L, ? extends R, ?>> {
+public class DefaultDirectedAxonsComponentImpl<L extends Neurons, R extends Neurons>
+		extends DirectedAxonsComponentBase<L, R, Axons<? extends L, ? extends R, ?>>
+		implements DirectedAxonsComponent<L, R, Axons<? extends L, ? extends R, ?>> {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(DefaultDirectedAxonsComponentImpl.class);
 
@@ -44,7 +47,7 @@ public class DefaultDirectedAxonsComponentImpl<L extends Neurons, R extends Neur
 	 * Default serialization id.
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	/**
 	 * @param axons The axons instance wrapped by this DirectedAxonsComponent.
 	 */
@@ -53,16 +56,17 @@ public class DefaultDirectedAxonsComponentImpl<L extends Neurons, R extends Neur
 	}
 
 	@Override
-	public DirectedAxonsComponentActivation forwardPropagate(NeuronsActivation neuronsActivation, AxonsContext context) {
+	public DirectedAxonsComponentActivation forwardPropagate(NeuronsActivation neuronsActivation,
+			AxonsContext context) {
 		LOGGER.debug("Forward propagating through DefaultDirectedAxonsComponentImpl");
-		
+
 		if (neuronsActivation.getFeatureCount() != this.getInputNeurons().getNeuronCountExcludingBias()) {
 			throw new IllegalArgumentException();
 		}
-		
+
 		AxonsActivation axonsActivation = axons.pushLeftToRight(neuronsActivation, null, context);
 		NeuronsActivation output = axonsActivation.getPostDropoutOutput();
-	
+
 		if (output.getFeatureCount() != getOutputNeurons().getNeuronCountExcludingBias()) {
 			throw new IllegalArgumentException();
 		}
@@ -81,8 +85,8 @@ public class DefaultDirectedAxonsComponentImpl<L extends Neurons, R extends Neur
 
 	@Override
 	public List<NeuronsActivationFeatureOrientation> supports() {
-		return NeuronsActivationFeatureOrientation.intersectLists(axons.supports(), 
+		return NeuronsActivationFeatureOrientation.intersectLists(axons.supports(),
 				Arrays.asList(NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET));
 	}
-	
+
 }

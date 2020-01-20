@@ -13,13 +13,13 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 public abstract class DifferentiableActivationFunctionActivationTestBase extends TestBase {
-	
+
 	@Mock
 	private NeuronsActivationContext context;
-	
+
 	@Mock
 	private DifferentiableActivationFunction mockActivationFunction;
-	
+
 	@Before
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
@@ -28,13 +28,13 @@ public abstract class DifferentiableActivationFunctionActivationTestBase extends
 
 	@Test
 	public void testConstruction() {
-		
+
 		NeuronsActivation input = createNeuronsActivation(100, 32);
 		NeuronsActivation output = createNeuronsActivation(100, 32);
-		
-		DifferentiableActivationFunctionActivation activationFunctionActivation = 
-				createDifferentiableActivationFunctionActivationUnderTest(mockActivationFunction, input, output);
-		
+
+		DifferentiableActivationFunctionActivation activationFunctionActivation = createDifferentiableActivationFunctionActivationUnderTest(
+				mockActivationFunction, input, output);
+
 		Assert.assertNotNull(activationFunctionActivation);
 		Assert.assertNotNull(activationFunctionActivation.getActivationFunction());
 		Assert.assertSame(mockActivationFunction, activationFunctionActivation.getActivationFunction());
@@ -42,10 +42,8 @@ public abstract class DifferentiableActivationFunctionActivationTestBase extends
 		Assert.assertSame(output, activationFunctionActivation.getOutput());
 
 	}
-	
-	
-	
-	protected abstract DifferentiableActivationFunctionActivation createDifferentiableActivationFunctionActivationUnderTest(DifferentiableActivationFunction activationFunction,
-			NeuronsActivation input, NeuronsActivation output);
+
+	protected abstract DifferentiableActivationFunctionActivation createDifferentiableActivationFunctionActivationUnderTest(
+			DifferentiableActivationFunction activationFunction, NeuronsActivation input, NeuronsActivation output);
 
 }

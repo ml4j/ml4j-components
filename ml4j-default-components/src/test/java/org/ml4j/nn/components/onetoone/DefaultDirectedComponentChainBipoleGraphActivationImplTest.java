@@ -15,31 +15,34 @@ import org.ml4j.nn.neurons.NeuronsActivation;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 
-public class DefaultDirectedComponentChainBipoleGraphActivationImplTest extends DefaultDirectedComponentChainBipoleGraphActivationTestBase {
+public class DefaultDirectedComponentChainBipoleGraphActivationImplTest
+		extends DefaultDirectedComponentChainBipoleGraphActivationTestBase {
 
 	@Mock
 	protected OneToManyDirectedComponentActivation mockInputLinkActivation;
-	
+
 	@Mock
 	protected ManyToOneDirectedComponentActivation mockOutputLinkActivation;
-	
+
 	@Mock
 	protected DefaultDirectedComponentChainBatchActivation mockEdgesActivation;
-	
+
 	@Override
 	protected DefaultDirectedComponentChainBipoleGraphActivation createDefaultDirectedComponentChainBipoleGraphActivationUnderTest(
 			DefaultDirectedComponentChainBipoleGraph bipoleGraph, NeuronsActivation output) {
-		
+
 		Mockito.when(mockOutputLinkActivation.getOutput()).thenReturn(output);
-		
-		return new DefaultDirectedComponentChainBipoleGraphActivationImpl(bipoleGraph, mockInputLinkActivation, mockEdgesActivation, 
-				mockOutputLinkActivation, false);
+
+		return new DefaultDirectedComponentChainBipoleGraphActivationImpl(bipoleGraph, mockInputLinkActivation,
+				mockEdgesActivation, mockOutputLinkActivation, false);
 	}
 
 	@Override
 	public void testBackPropagate() {
-		DirectedComponentGradient<List<NeuronsActivation>> batchGradient1 = MockTestData.mockBatchComponentGradient(110, 32, 2);
-		DirectedComponentGradient<List<NeuronsActivation>> batchGradient2 = MockTestData.mockBatchComponentGradient(110, 32, 2);
+		DirectedComponentGradient<List<NeuronsActivation>> batchGradient1 = MockTestData.mockBatchComponentGradient(110,
+				32, 2);
+		DirectedComponentGradient<List<NeuronsActivation>> batchGradient2 = MockTestData.mockBatchComponentGradient(110,
+				32, 2);
 		DirectedComponentGradient<NeuronsActivation> outputGradient = MockTestData.mockComponentGradient(110, 32, this);
 
 		Mockito.when(mockOutputLinkActivation.backPropagate(mockInboundGradient)).thenReturn(batchGradient1);

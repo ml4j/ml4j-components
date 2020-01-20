@@ -30,10 +30,11 @@ import org.mockito.Mockito;
 public class DefaultOneToManyDirectedComponentImplTest extends OneToManyDirectedComponentTestBase {
 
 	@Override
-	protected OneToManyDirectedComponent<?> createOneToManyDirectedComponentUnderTest(IntSupplier targetComponentsCount){
+	protected OneToManyDirectedComponent<?> createOneToManyDirectedComponentUnderTest(
+			IntSupplier targetComponentsCount) {
 		return new DefaultOneToManyDirectedComponentImpl(targetComponentsCount);
 	}
-	
+
 	@Override
 	protected MatrixFactory createMatrixFactory() {
 		return Mockito.mock(MatrixFactory.class);

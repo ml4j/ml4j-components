@@ -30,13 +30,14 @@ import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class DummyDefaultDirectedComponentChainBipoleGraph extends DefaultDirectedComponentChainBipoleGraphBase implements DefaultDirectedComponentChainBipoleGraph {
+public class DummyDefaultDirectedComponentChainBipoleGraph extends DefaultDirectedComponentChainBipoleGraphBase
+		implements DefaultDirectedComponentChainBipoleGraph {
 
 	/**
 	 * Default serialization id.
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(DummyDefaultDirectedComponentChainBipoleGraph.class);
 
 	public DummyDefaultDirectedComponentChainBipoleGraph(Neurons inputNeurons, Neurons outputNeurons,
@@ -48,18 +49,19 @@ public class DummyDefaultDirectedComponentChainBipoleGraph extends DefaultDirect
 	public DefaultDirectedComponentChainBatch getEdges() {
 		throw new UnsupportedOperationException();
 	}
-	
+
 	@Override
 	public DefaultDirectedComponentChainBipoleGraphActivation forwardPropagate(NeuronsActivation neuronsActivation,
 			DirectedComponentsContext context) {
-		
+
 		if (neuronsActivation.getFeatureCount() != getInputNeurons().getNeuronCountExcludingBias()) {
-			throw new IllegalStateException(neuronsActivation.getFeatureCount() + ":" + getInputNeurons().getNeuronCountExcludingBias());
+			throw new IllegalStateException(
+					neuronsActivation.getFeatureCount() + ":" + getInputNeurons().getNeuronCountExcludingBias());
 		}
 		LOGGER.debug("Mock forward propagating through DummyDefaultDirectedComponentChainBipoleGraph");
 
-		return new DummyDefaultDirectedComponentChainBipoleGraphActivation(this, new DummyNeuronsActivation(getOutputNeurons(),
-				neuronsActivation.getFeatureOrientation(), neuronsActivation.getExampleCount()));
+		return new DummyDefaultDirectedComponentChainBipoleGraphActivation(this, new DummyNeuronsActivation(
+				getOutputNeurons(), neuronsActivation.getFeatureOrientation(), neuronsActivation.getExampleCount()));
 	}
 
 	@Override
@@ -69,9 +71,10 @@ public class DummyDefaultDirectedComponentChainBipoleGraph extends DefaultDirect
 
 	@Override
 	public DefaultDirectedComponentChainBipoleGraph dup() {
-		return new DummyDefaultDirectedComponentChainBipoleGraph(inputNeurons, outputNeurons, parallelComponentChainsBatch.dup());
+		return new DummyDefaultDirectedComponentChainBipoleGraph(inputNeurons, outputNeurons,
+				parallelComponentChainsBatch.dup());
 	}
-	
+
 	@Override
 	public Optional<NeuronsActivationFeatureOrientation> optimisedFor() {
 		// TODO THUR

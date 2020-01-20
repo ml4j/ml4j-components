@@ -27,29 +27,36 @@ import org.ml4j.nn.neurons.DummyNeuronsActivation;
 import org.ml4j.nn.neurons.NeuronsActivation;
 
 /**
- * Mock implementation of DefaultDirectedComponentChainActivation, and provides logic to back propagate gradient through the activation.
+ * Mock implementation of DefaultDirectedComponentChainActivation, and provides
+ * logic to back propagate gradient through the activation.
  * 
- * Encapsulates the mock activations from a forward propagation through a DefaultDirectedComponentChain.
+ * Encapsulates the mock activations from a forward propagation through a
+ * DefaultDirectedComponentChain.
  * 
  * @author Michael Lavelle
  */
-public class DummyDefaultDirectedComponentActivation extends DefaultDirectedComponentChainActivationBase<DefaultDirectedComponentChain> implements DefaultDirectedComponentChainActivation {
-	
-	public DummyDefaultDirectedComponentActivation(DefaultDirectedComponentChain componentChain, List<DefaultChainableDirectedComponentActivation> activations) {
+public class DummyDefaultDirectedComponentActivation
+		extends DefaultDirectedComponentChainActivationBase<DefaultDirectedComponentChain>
+		implements DefaultDirectedComponentChainActivation {
+
+	public DummyDefaultDirectedComponentActivation(DefaultDirectedComponentChain componentChain,
+			List<DefaultChainableDirectedComponentActivation> activations) {
 		super(componentChain, activations, activations.get(activations.size() - 1).getOutput());
 	}
 
 	@Override
 	public DirectedComponentGradient<NeuronsActivation> backPropagate(
 			DirectedComponentGradient<NeuronsActivation> gradient) {
-		return new DirectedComponentGradientImpl<NeuronsActivation>(new DummyNeuronsActivation(originatingComponent.getInputNeurons(), gradient.getOutput().getFeatureOrientation(), gradient.getOutput().getExampleCount()));
+		return new DirectedComponentGradientImpl<NeuronsActivation>(
+				new DummyNeuronsActivation(originatingComponent.getInputNeurons(),
+						gradient.getOutput().getFeatureOrientation(), gradient.getOutput().getExampleCount()));
 	}
 
 	@Override
 	public List<DefaultChainableDirectedComponentActivation> decompose() {
 		return Arrays.asList(this);
 	}
-	
+
 	@Override
 	public void close(DirectedComponentActivationLifecycle arg0) {
 		// No-op

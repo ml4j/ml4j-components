@@ -5,7 +5,8 @@ import org.ml4j.nn.activationfunctions.DifferentiableActivationFunctionActivatio
 import org.ml4j.nn.activationfunctions.base.DifferentiableActivationFunctionActivationBase;
 import org.ml4j.nn.neurons.NeuronsActivation;
 
-public class DummyDifferentiableActivationFunctionActivationImpl extends DifferentiableActivationFunctionActivationBase implements DifferentiableActivationFunctionActivation {
+public class DummyDifferentiableActivationFunctionActivationImpl extends DifferentiableActivationFunctionActivationBase
+		implements DifferentiableActivationFunctionActivation {
 
 	public DummyDifferentiableActivationFunctionActivationImpl(DifferentiableActivationFunction activationFunction,
 			NeuronsActivation input, NeuronsActivation output) {

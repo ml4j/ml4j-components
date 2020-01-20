@@ -30,7 +30,8 @@ public class DefaultAveragePoolingAxonsImplTest extends Axons3DTestBase<AverageP
 	}
 
 	@Override
-	protected AveragePoolingAxons createAxonsUnderTest(Neurons3D leftNeurons, Neurons3D rightNeurons, Axons3DConfig config) {
+	protected AveragePoolingAxons createAxonsUnderTest(Neurons3D leftNeurons, Neurons3D rightNeurons,
+			Axons3DConfig config) {
 		return new DefaultAveragePoolingAxonsImpl(matrixFactory, leftNeurons, rightNeurons, config);
 	}
 
@@ -41,9 +42,11 @@ public class DefaultAveragePoolingAxonsImplTest extends Axons3DTestBase<AverageP
 
 	@Override
 	public NeuronsActivation createNeuronsActivation(int featureCount, int exampleCount) {
-		return new NeuronsActivationImpl(new Neurons(featureCount, false),matrixFactory.createMatrix(featureCount, exampleCount), NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET);
+		return new NeuronsActivationImpl(new Neurons(featureCount, false),
+				matrixFactory.createMatrix(featureCount, exampleCount),
+				NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET);
 	}
-	
+
 	@Override
 	protected int getExpectedReformattedInputColumns() {
 		return 32 * 100 * 2;
@@ -53,7 +56,7 @@ public class DefaultAveragePoolingAxonsImplTest extends Axons3DTestBase<AverageP
 	protected int getExpectedReformattedInputRows() {
 		return 11 * 11;
 	}
-	
+
 	@Override
 	protected boolean expectPostDropoutInputToBeSet() {
 		return false;

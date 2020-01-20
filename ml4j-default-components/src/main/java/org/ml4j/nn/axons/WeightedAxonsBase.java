@@ -64,39 +64,38 @@ public abstract class WeightedAxonsBase<L extends Neurons, R extends Neurons, A 
 		if (axonsDropoutMask != null && axonsDropoutMask.getType() == AxonsDropoutMaskType.OUTPUT) {
 			throw new UnsupportedOperationException("Left to right output dropout not yet supported");
 		}
-		
-		NeuronsActivation outputActivation = new NeuronsActivationImpl(rightNeurons, output, leftNeuronsActivation.getFeatureOrientation());
-		
+
+		NeuronsActivation outputActivation = new NeuronsActivationImpl(rightNeurons, output,
+				leftNeuronsActivation.getFeatureOrientation());
 
 		if (!axonsContext.isTrainingContext() && !leftNeuronsActivation.isImmutable()) {
 			leftNeuronsActivation.close();
 		} else {
 			leftNeuronsActivation.setImmutable(true);
 		}
-		
-		return new AxonsActivationImpl(this, axonsDropoutMask, () -> leftNeuronsActivation, outputActivation, leftNeurons,
-				rightNeurons);
+
+		return new AxonsActivationImpl(this, axonsDropoutMask, () -> leftNeuronsActivation, outputActivation,
+				leftNeurons, rightNeurons);
 	}
 
 	@Override
 	public AxonsActivation pushRightToLeft(NeuronsActivation rightNeuronsActivation,
 			AxonsActivation previousLeftToRightActivation, AxonsContext axonsContext) {
-		
+
 		Matrix output = axonWeights
 				.applyToRightToLeftInput(rightNeuronsActivation.getActivations(axonsContext.getMatrixFactory()))
 				.asEditableMatrix();
-		
-		if (previousLeftToRightActivation != null && previousLeftToRightActivation.getDropoutMask() != null && 
-				previousLeftToRightActivation.getDropoutMask().getType() == AxonsDropoutMaskType.INPUT) {
+
+		if (previousLeftToRightActivation != null && previousLeftToRightActivation.getDropoutMask() != null
+				&& previousLeftToRightActivation.getDropoutMask().getType() == AxonsDropoutMaskType.INPUT) {
 			LOGGER.debug("Applying right to left output dropout mask");
 			output.asEditableMatrix().muli(previousLeftToRightActivation.getDropoutMask().getDropoutMask());
 		}
-		
+
 		rightNeuronsActivation.setImmutable(true);
 
-		return new AxonsActivationImpl(this, null, () -> rightNeuronsActivation,
-				new NeuronsActivationImpl(leftNeurons, output, NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET),
-				leftNeurons, rightNeurons);
+		return new AxonsActivationImpl(this, null, () -> rightNeuronsActivation, new NeuronsActivationImpl(leftNeurons,
+				output, NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET), leftNeurons, rightNeurons);
 	}
 
 	@Override
@@ -176,8 +175,7 @@ public abstract class WeightedAxonsBase<L extends Neurons, R extends Neurons, A 
 			LOGGER.debug("Creating left input dropout mask");
 
 			EditableMatrix dropoutMask = axonsContext.getMatrixFactory()
-					.createZeros(leftNeuronsActivation.getRows(),
-							leftNeuronsActivation.getColumns())
+					.createZeros(leftNeuronsActivation.getRows(), leftNeuronsActivation.getColumns())
 					.asEditableMatrix();
 			for (int i = 0; i < dropoutMask.getRows(); i++) {
 				for (int j = 0; j < dropoutMask.getColumns(); j++) {
@@ -192,7 +190,7 @@ public abstract class WeightedAxonsBase<L extends Neurons, R extends Neurons, A 
 	}
 
 	protected abstract boolean isLeftInputDropoutSupported();
-	
+
 	@Override
 	public Optional<NeuronsActivationFeatureOrientation> optimisedFor() {
 		return Optional.empty();

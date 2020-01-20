@@ -30,13 +30,13 @@ import org.slf4j.LoggerFactory;
 import com.codepoetics.protonpack.StreamUtils;
 
 /**
- * Default implementation of a batch of DefaultChainableDirectedComponent instances with DirectedComponentsContext contexts 
- * that can be activated in parallel.
+ * Default implementation of a batch of DefaultChainableDirectedComponent
+ * instances with DirectedComponentsContext contexts that can be activated in
+ * parallel.
  * 
  * @author Michael Lavelle
  */
-public class DefaultComponentBatchImpl extends DefaultComponentBatchBase
-		 {
+public class DefaultComponentBatchImpl extends DefaultComponentBatchBase {
 
 	/**
 	 * Default serialization id.
@@ -54,16 +54,18 @@ public class DefaultComponentBatchImpl extends DefaultComponentBatchBase
 			DirectedComponentsContext context) {
 
 		LOGGER.debug("Forward propagating through DefaultComponentChainBatchImpl");
-		
+
 		List<DefaultChainableDirectedComponentActivation> chainActivations = StreamUtils
-				.zipWithIndex(neuronActivations.parallelStream())
-				.map(a -> forwardPropagate(a.getValue(), parallelComponents.get((int) a.getIndex()), (int) a.getIndex(), context))
+				.zipWithIndex(neuronActivations.parallelStream()).map(a -> forwardPropagate(a.getValue(),
+						parallelComponents.get((int) a.getIndex()), (int) a.getIndex(), context))
 				.collect(Collectors.toList());
-		
+
 		return new DefaultDirectedComponentBatchActivationImpl(chainActivations);
 	}
-	
-	protected <X, Y> Y forwardPropagate(NeuronsActivation input, DefaultChainableDirectedComponent<? extends Y, X> component, int componentIndex, DirectedComponentsContext context) {
+
+	protected <X, Y> Y forwardPropagate(NeuronsActivation input,
+			DefaultChainableDirectedComponent<? extends Y, X> component, int componentIndex,
+			DirectedComponentsContext context) {
 		return component.forwardPropagate(input, component.getContext(context, componentIndex));
 	}
 

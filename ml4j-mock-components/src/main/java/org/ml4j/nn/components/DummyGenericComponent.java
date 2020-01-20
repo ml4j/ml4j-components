@@ -11,13 +11,14 @@ import org.ml4j.nn.neurons.Neurons;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
 
-public class DummyGenericComponent implements DefaultChainableDirectedComponent<DefaultChainableDirectedComponentActivation, Object> {
+public class DummyGenericComponent
+		implements DefaultChainableDirectedComponent<DefaultChainableDirectedComponentActivation, Object> {
 
 	/**
 	 * Default serialization id.
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	private Neurons inputNeurons;
 	private Neurons outputNeurons;
 	private NeuralComponentType<? extends DefaultChainableDirectedComponent<?, ?>> neuralComponentType;
@@ -37,8 +38,8 @@ public class DummyGenericComponent implements DefaultChainableDirectedComponent<
 
 	@Override
 	public DefaultChainableDirectedComponentActivation forwardPropagate(NeuronsActivation input, Object context) {
-		NeuronsActivation dummyOutput = new DummyNeuronsActivation(outputNeurons, 
-				input.getFeatureOrientation(), input.getExampleCount());
+		NeuronsActivation dummyOutput = new DummyNeuronsActivation(outputNeurons, input.getFeatureOrientation(),
+				input.getExampleCount());
 		if (dummyOutput.getFeatureCount() != getOutputNeurons().getNeuronCountExcludingBias()) {
 			throw new IllegalArgumentException();
 		}

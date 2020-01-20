@@ -25,33 +25,39 @@ import org.ml4j.nn.neurons.NeuronsActivationContext;
 import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
 
 /**
- * Default implementation of DifferentiableActivationFunctionComponent - a component adapter for a DifferentiableActivationFunction 
+ * Default implementation of DifferentiableActivationFunctionComponent - a
+ * component adapter for a DifferentiableActivationFunction
  * 
  * @author Michael Lavelle
  *
  */
-public class DefaultDifferentiableActivationFunctionComponentImpl extends DifferentiableActivationFunctionComponentAdapterBase implements DifferentiableActivationFunctionComponent {
+public class DefaultDifferentiableActivationFunctionComponentImpl extends
+		DifferentiableActivationFunctionComponentAdapterBase implements DifferentiableActivationFunctionComponent {
 
 	/**
 	 * Generated serialization id.
 	 */
 	private static final long serialVersionUID = -6033017517698579773L;
-	
+
 	/**
 	 * Default constructor
 	 * 
-	 * @param neurons The neurons at which the underlying activation function is applied.
+	 * @param neurons            The neurons at which the underlying activation
+	 *                           function is applied.
 	 * @param activationFunction The underlying activation function.
 	 */
-	public DefaultDifferentiableActivationFunctionComponentImpl(Neurons neurons, DifferentiableActivationFunction activationFunction){
+	public DefaultDifferentiableActivationFunctionComponentImpl(Neurons neurons,
+			DifferentiableActivationFunction activationFunction) {
 		super(neurons, activationFunction);
 	}
 
 	@Override
 	public DifferentiableActivationFunctionComponentActivation forwardPropagate(NeuronsActivation inputActivation,
 			NeuronsActivationContext context) {
-		DifferentiableActivationFunctionActivation activationFunctionActivation = activationFunction.activate(inputActivation, context);
-		return new DefaultDifferentiableActivationFunctionComponentActivationImpl(this, activationFunctionActivation, context);
+		DifferentiableActivationFunctionActivation activationFunctionActivation = activationFunction
+				.activate(inputActivation, context);
+		return new DefaultDifferentiableActivationFunctionComponentActivationImpl(this, activationFunctionActivation,
+				context);
 	}
 
 	@Override

@@ -43,12 +43,14 @@ public class DummyAxonsFactoryImpl implements AxonsFactory {
 	}
 
 	@Override
-	public AveragePoolingAxons createAveragePoolingAxons(Neurons3D leftNeurons, Neurons3D rightNeurons, Axons3DConfig config) {
+	public AveragePoolingAxons createAveragePoolingAxons(Neurons3D leftNeurons, Neurons3D rightNeurons,
+			Axons3DConfig config) {
 		return new DummyAveragePoolingAxonsImpl(matrixFactory, leftNeurons, rightNeurons, config);
 	}
 
 	@Override
-	public ConvolutionalAxons createConvolutionalAxons(Neurons3D leftNeurons, Neurons3D rightNeurons,Axons3DConfig config, Matrix connectionWeights, Matrix biases) {
+	public ConvolutionalAxons createConvolutionalAxons(Neurons3D leftNeurons, Neurons3D rightNeurons,
+			Axons3DConfig config, Matrix connectionWeights, Matrix biases) {
 		return new DummyConvolutionalAxonsImpl(matrixFactory, leftNeurons, rightNeurons, config);
 	}
 

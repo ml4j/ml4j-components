@@ -33,106 +33,115 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 /**
- * Abstract base class for unit tests for implementations of ManyToOneDirectedComponent.
+ * Abstract base class for unit tests for implementations of
+ * ManyToOneDirectedComponent.
  * 
  * @author Michael Lavelle
  *
  */
 public abstract class DefaultDirectedComponentChainBipoleGraphTestBase extends TestBase {
 
-	
 	protected NeuronsActivation mockInputActivation;
-	
+
 	protected NeuronsActivation mockNeuronsActivation1;
-	
+
 	protected NeuronsActivation mockNeuronsActivation2;
-	
+
 	protected NeuronsActivation mockNeuronsActivation3;
 
 	protected NeuronsActivation mockNeuronsActivation4;
-	
+
 	@Mock
 	protected DirectedComponentsContext mockDirectedComponentsContext;
-	
+
 	@Mock
 	private DefaultChainableDirectedComponentActivation mockComponent1Activation;
-	
+
 	@Mock
 	protected DefaultChainableDirectedComponentActivation mockComponent2Activation;
-	
+
 	@Mock
 	protected DirectedComponentFactory mockDirectedComponentFactory;
-	
+
 	@Mock
 	protected DefaultChainableDirectedComponent<DefaultChainableDirectedComponentActivation, DirectedComponentsContext> mockComponent1;
 
 	@Mock
 	protected DefaultChainableDirectedComponent<DefaultChainableDirectedComponentActivation, DirectedComponentsContext> mockComponent2;
-	
+
 	@Before
 	public void setup() {
-	    MockitoAnnotations.initMocks(this);
-	    
-	    Mockito.when(mockDirectedComponentsContext.getMatrixFactory()).thenReturn(matrixFactory);
-	    
-	    mockInputActivation = createNeuronsActivation(10, 32);
-	    mockNeuronsActivation1 = createNeuronsActivation(100, 32);
-	    mockNeuronsActivation2 = createNeuronsActivation(200, 32);
-	    mockNeuronsActivation3 = createNeuronsActivation(300, 32);
-	    mockNeuronsActivation4 = createNeuronsActivation(400, 32);
-	    
-		Mockito.when(mockComponent1.forwardPropagate(Mockito.eq(mockNeuronsActivation1), Mockito.any())).thenReturn(mockComponent1Activation);
-		Mockito.when(mockComponent2.forwardPropagate(Mockito.eq(mockNeuronsActivation2), Mockito.any())).thenReturn(mockComponent2Activation);
+		MockitoAnnotations.initMocks(this);
+
+		Mockito.when(mockDirectedComponentsContext.getMatrixFactory()).thenReturn(matrixFactory);
+
+		mockInputActivation = createNeuronsActivation(10, 32);
+		mockNeuronsActivation1 = createNeuronsActivation(100, 32);
+		mockNeuronsActivation2 = createNeuronsActivation(200, 32);
+		mockNeuronsActivation3 = createNeuronsActivation(300, 32);
+		mockNeuronsActivation4 = createNeuronsActivation(400, 32);
+
+		Mockito.when(mockComponent1.forwardPropagate(Mockito.eq(mockNeuronsActivation1), Mockito.any()))
+				.thenReturn(mockComponent1Activation);
+		Mockito.when(mockComponent2.forwardPropagate(Mockito.eq(mockNeuronsActivation2), Mockito.any()))
+				.thenReturn(mockComponent2Activation);
 		Mockito.when(mockComponent1Activation.getOutput()).thenReturn(mockNeuronsActivation3);
 		Mockito.when(mockComponent2Activation.getOutput()).thenReturn(mockNeuronsActivation4);
 
 	}
 
-	private DefaultDirectedComponentChainBipoleGraphBase createDefaultDirectedComponentChainBipoleGraph(DirectedComponentFactory factory, List<DefaultChainableDirectedComponent<?, ?>> parallelComponents,
+	private DefaultDirectedComponentChainBipoleGraphBase createDefaultDirectedComponentChainBipoleGraph(
+			DirectedComponentFactory factory, List<DefaultChainableDirectedComponent<?, ?>> parallelComponents,
 			PathCombinationStrategy pathCombinationStrategy) {
-		return createDefaultDirectedComponentChainBipoleGraphUnderTest(factory, parallelComponents, pathCombinationStrategy);
+		return createDefaultDirectedComponentChainBipoleGraphUnderTest(factory, parallelComponents,
+				pathCombinationStrategy);
 	}
-		
-	protected abstract DefaultDirectedComponentChainBipoleGraphBase createDefaultDirectedComponentChainBipoleGraphUnderTest(DirectedComponentFactory factory, List<DefaultChainableDirectedComponent<?, ?>> components,
-				PathCombinationStrategy pathCombinationStrategy);
+
+	protected abstract DefaultDirectedComponentChainBipoleGraphBase createDefaultDirectedComponentChainBipoleGraphUnderTest(
+			DirectedComponentFactory factory, List<DefaultChainableDirectedComponent<?, ?>> components,
+			PathCombinationStrategy pathCombinationStrategy);
 
 	@Test
-	public void testConstruction() {	
-		
+	public void testConstruction() {
+
 		List<DefaultChainableDirectedComponent<?, ?>> mockComponents = Arrays.asList(mockComponent1, mockComponent2);
-		DefaultDirectedComponentChainBipoleGraphBase graph = createDefaultDirectedComponentChainBipoleGraph(mockDirectedComponentFactory, mockComponents, PathCombinationStrategy.ADDITION);
+		DefaultDirectedComponentChainBipoleGraphBase graph = createDefaultDirectedComponentChainBipoleGraph(
+				mockDirectedComponentFactory, mockComponents, PathCombinationStrategy.ADDITION);
 		Assert.assertNotNull(graph);
 	}
-	
+
 	@Test
-	public void testGetComponentType() {	
+	public void testGetComponentType() {
 		List<DefaultChainableDirectedComponent<?, ?>> mockComponents = Arrays.asList(mockComponent1, mockComponent2);
-		DefaultDirectedComponentChainBipoleGraphBase graph = createDefaultDirectedComponentChainBipoleGraph(mockDirectedComponentFactory, mockComponents, PathCombinationStrategy.ADDITION);
+		DefaultDirectedComponentChainBipoleGraphBase graph = createDefaultDirectedComponentChainBipoleGraph(
+				mockDirectedComponentFactory, mockComponents, PathCombinationStrategy.ADDITION);
 		Assert.assertNotNull(graph);
-		Assert.assertEquals(NeuralComponentBaseType.COMPONENT_CHAIN_BIPOLE_GRAPH, graph.getComponentType().getBaseType());
+		Assert.assertEquals(NeuralComponentBaseType.COMPONENT_CHAIN_BIPOLE_GRAPH,
+				graph.getComponentType().getBaseType());
 	}
-	
+
 	@Test
-	public void testForwardPropagate() {	
-				
+	public void testForwardPropagate() {
+
 		List<DefaultChainableDirectedComponent<?, ?>> mockComponents = Arrays.asList(mockComponent1, mockComponent2);
-		DefaultDirectedComponentChainBipoleGraphBase graph = createDefaultDirectedComponentChainBipoleGraph(mockDirectedComponentFactory, mockComponents, PathCombinationStrategy.ADDITION);
+		DefaultDirectedComponentChainBipoleGraphBase graph = createDefaultDirectedComponentChainBipoleGraph(
+				mockDirectedComponentFactory, mockComponents, PathCombinationStrategy.ADDITION);
 		Assert.assertNotNull(graph);
-		
-		DefaultDirectedComponentChainBipoleGraphActivation graphActivation =  graph.forwardPropagate(mockInputActivation, mockDirectedComponentsContext);
+
+		DefaultDirectedComponentChainBipoleGraphActivation graphActivation = graph.forwardPropagate(mockInputActivation,
+				mockDirectedComponentsContext);
 		Assert.assertNotNull(graphActivation);
 		NeuronsActivation output = graphActivation.getOutput();
 		Assert.assertNotNull(output);
 		Assert.assertEquals(mockNeuronsActivation3.getExampleCount(), output.getExampleCount());
 		Assert.assertEquals(mockNeuronsActivation3.getFeatureOrientation(), output.getFeatureOrientation());
 	}
-	
+
 	@Test
 	public void testDup() {
-				
+
 		// TODO
 
 	}
-	
 
 }

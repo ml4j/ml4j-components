@@ -17,21 +17,24 @@ public class DummyDifferentiableActivationFunctionImpl implements Differentiable
 	 * Default serialization id.
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	private ActivationFunctionType activationFunctionType;
-	
+
 	private boolean setOutputToZeros;
-	
-	public DummyDifferentiableActivationFunctionImpl(ActivationFunctionType activationFunctionType, boolean setOutputToZeros) {
+
+	public DummyDifferentiableActivationFunctionImpl(ActivationFunctionType activationFunctionType,
+			boolean setOutputToZeros) {
 		this.activationFunctionType = activationFunctionType;
 		this.setOutputToZeros = setOutputToZeros;
 	}
 
 	@Override
-	public DifferentiableActivationFunctionActivation activate(NeuronsActivation activation, NeuronsActivationContext context) {
+	public DifferentiableActivationFunctionActivation activate(NeuronsActivation activation,
+			NeuronsActivationContext context) {
 		NeuronsActivation output = activation;
 		float[] values = output.getActivations(context.getMatrixFactory()).getRowByRowArray();
-		if (setOutputToZeros) output.applyValueModifier(v -> v == values[0] ? -1 : 0);		
+		if (setOutputToZeros)
+			output.applyValueModifier(v -> v == values[0] ? -1 : 0);
 		return new DummyDifferentiableActivationFunctionActivationImpl(this, activation, output);
 	}
 

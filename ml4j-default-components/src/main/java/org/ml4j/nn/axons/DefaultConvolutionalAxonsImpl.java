@@ -105,10 +105,10 @@ public class DefaultConvolutionalAxonsImpl implements ConvolutionalAxons {
 					NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET);
 		} else {
 			ImageNeuronsActivation imageAct = leftNeuronsActivation.asImageNeuronsActivation(leftNeurons);
-			reformatted = new NeuronsActivationImpl(new Neurons(leftNeurons.getDepth() * filterWidth * filterHeight, leftNeurons.hasBiasUnit()),
-					imageAct.im2ColConv(matrixFactory, filterHeight,
-							filterWidth, config.getStrideHeight(), config.getStrideWidth(), config.getPaddingHeight(),
-							config.getPaddingWidth()),
+			reformatted = new NeuronsActivationImpl(
+					new Neurons(leftNeurons.getDepth() * filterWidth * filterHeight, leftNeurons.hasBiasUnit()),
+					imageAct.im2ColConv(matrixFactory, filterHeight, filterWidth, config.getStrideHeight(),
+							config.getStrideWidth(), config.getPaddingHeight(), config.getPaddingWidth()),
 					NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET);
 			if (!imageAct.isImmutable()) {
 				imageAct.close();
@@ -125,7 +125,8 @@ public class DefaultConvolutionalAxonsImpl implements ConvolutionalAxons {
 
 	}
 
-	public NeuronsActivation reformatLeftToRightOutput(MatrixFactory matrixFactory, NeuronsActivation output, int exampleCount) {
+	public NeuronsActivation reformatLeftToRightOutput(MatrixFactory matrixFactory, NeuronsActivation output,
+			int exampleCount) {
 		output.reshape(rightNeurons.getNeuronCountExcludingBias(), exampleCount);
 		return output.asImageNeuronsActivation(getRightNeurons());
 
@@ -136,12 +137,13 @@ public class DefaultConvolutionalAxonsImpl implements ConvolutionalAxons {
 			AxonsActivation previousRightToLeftActivation, AxonsContext axonsContext) {
 
 		int exampleCount = leftNeuronsActivation.getExampleCount();
-		
+
 		NeuronsActivation reformatted = reformatLeftToRightInput(axonsContext.getMatrixFactory(),
 				leftNeuronsActivation);
 		reformatted.setImmutable(true);
-		
-		AxonsActivation nestedActivation = fullyConnectedAxons.pushLeftToRight(reformatted, previousRightToLeftActivation, axonsContext);
+
+		AxonsActivation nestedActivation = fullyConnectedAxons.pushLeftToRight(reformatted,
+				previousRightToLeftActivation, axonsContext);
 
 		NeuronsActivation output = reformatLeftToRightOutput(axonsContext.getMatrixFactory(),
 				nestedActivation.getPostDropoutOutput(), exampleCount);
@@ -151,11 +153,11 @@ public class DefaultConvolutionalAxonsImpl implements ConvolutionalAxons {
 		} else {
 			reformatted.setImmutable(true);
 		}
-		
+
 		if (!leftNeuronsActivation.isImmutable()) {
 			leftNeuronsActivation.close();
-		}	
-		
+		}
+
 		return new AxonsActivationImpl(this, nestedActivation.getDropoutMask(), () -> reformatted, output, leftNeurons,
 				rightNeurons);
 	}
@@ -165,7 +167,7 @@ public class DefaultConvolutionalAxonsImpl implements ConvolutionalAxons {
 			AxonsActivation previousLeftToRightActivation, AxonsContext axonsContext) {
 
 		int exampleCount = previousLeftToRightActivation.getPostDropoutOutput().getExampleCount();
-		
+
 		NeuronsActivation reformattedInput = reformatRightToLeftInput(axonsContext.getMatrixFactory(),
 				rightNeuronsActivation);
 
@@ -173,16 +175,16 @@ public class DefaultConvolutionalAxonsImpl implements ConvolutionalAxons {
 				previousLeftToRightActivation, axonsContext);
 
 		NeuronsActivation reformattedOutput = reformatRightToLeftOutput(axonsContext.getMatrixFactory(),
-				axonsActivation.getPostDropoutOutput(),
-				exampleCount);
-		
+				axonsActivation.getPostDropoutOutput(), exampleCount);
+
 		axonsActivation.getPostDropoutOutput().close();
 
 		return new AxonsActivationImpl(this, null, () -> rightNeuronsActivation, reformattedOutput, leftNeurons,
 				rightNeurons);
 	}
 
-	private NeuronsActivation reformatRightToLeftOutput(MatrixFactory matrixFactory, NeuronsActivation output, int exampleCount) {
+	private NeuronsActivation reformatRightToLeftOutput(MatrixFactory matrixFactory, NeuronsActivation output,
+			int exampleCount) {
 
 		int inputWidth = leftNeurons.getWidth();
 		int inputHeight = leftNeurons.getHeight();
@@ -208,16 +210,16 @@ public class DefaultConvolutionalAxonsImpl implements ConvolutionalAxons {
 			Images images = new MultiChannelImages(data, getLeftNeurons().getDepth(), getLeftNeurons().getHeight(),
 					getLeftNeurons().getWidth(), config.getPaddingHeight(), config.getPaddingWidth(), exampleCount);
 
-			images.im2colConvImport(matrixFactory, output.getActivations(matrixFactory), filterHeight, filterWidth, config.getStrideHeight(),
-					config.getStrideWidth());
+			images.im2colConvImport(matrixFactory, output.getActivations(matrixFactory), filterHeight, filterWidth,
+					config.getStrideHeight(), config.getStrideWidth());
 
 			return new ImageNeuronsActivationImpl(getLeftNeurons(), images, output.getFeatureOrientation(), false);
 
 		}
 	}
-	
+
 	public NeuronsActivation reformatRightToLeftInput(MatrixFactory matrixFactory, NeuronsActivation input) {
-		
+
 		if (input.isImmutable()) {
 			throw new UnsupportedOperationException();
 		} else {
@@ -255,7 +257,7 @@ public class DefaultConvolutionalAxonsImpl implements ConvolutionalAxons {
 
 	@Override
 	public List<NeuronsActivationFeatureOrientation> supports() {
-		return NeuronsActivationFeatureOrientation.intersectLists(fullyConnectedAxons.supports(), 
+		return NeuronsActivationFeatureOrientation.intersectLists(fullyConnectedAxons.supports(),
 				Arrays.asList(NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET));
 	}
 }

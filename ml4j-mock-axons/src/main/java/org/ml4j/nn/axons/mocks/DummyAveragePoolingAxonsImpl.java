@@ -50,17 +50,16 @@ public class DummyAveragePoolingAxonsImpl implements AveragePoolingAxons {
 	@Override
 	public AxonsActivation pushLeftToRight(NeuronsActivation leftNeuronsActivation,
 			AxonsActivation previousRightToLeftActivation, AxonsContext axonsContext) {
-		
+
 		int exampleCount = leftNeuronsActivation.getExampleCount();
-		
+
 		if (!axonsContext.isTrainingContext() && !leftNeuronsActivation.isImmutable()) {
 			leftNeuronsActivation.close();
 		}
-		
+
 		return new AxonsActivationImpl(this, null, () -> leftNeuronsActivation,
 				new ImageNeuronsActivationImpl(
-						matrixFactory.createMatrix(rightNeurons.getNeuronCountExcludingBias(),
-								exampleCount),
+						matrixFactory.createMatrix(rightNeurons.getNeuronCountExcludingBias(), exampleCount),
 						getRightNeurons(), NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET, false),
 				leftNeurons, rightNeurons);
 	}
@@ -90,7 +89,7 @@ public class DummyAveragePoolingAxonsImpl implements AveragePoolingAxons {
 	public Axons3DConfig getConfig() {
 		return config;
 	}
-	
+
 	@Override
 	public Optional<NeuronsActivationFeatureOrientation> optimisedFor() {
 		return Optional.empty();

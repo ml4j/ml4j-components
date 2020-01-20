@@ -30,14 +30,16 @@ import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
  * @author Michael Lavelle
  *
  */
-public class DummyDifferentiableActivationFunctionComponent extends DifferentiableActivationFunctionComponentBase implements DifferentiableActivationFunctionComponent {
+public class DummyDifferentiableActivationFunctionComponent extends DifferentiableActivationFunctionComponentBase
+		implements DifferentiableActivationFunctionComponent {
 
 	/**
 	 * Generated serialization id.
 	 */
 	private static final long serialVersionUID = -6033017517698579773L;
-	
-	public DummyDifferentiableActivationFunctionComponent(Neurons neurons, ActivationFunctionType activationFunctionType){
+
+	public DummyDifferentiableActivationFunctionComponent(Neurons neurons,
+			ActivationFunctionType activationFunctionType) {
 		super(neurons, activationFunctionType);
 	}
 

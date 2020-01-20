@@ -28,19 +28,22 @@ import org.slf4j.LoggerFactory;
  * @author Michael Lavelle
  */
 public class DummyNeuronsActivation implements NeuronsActivation {
-	
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(DummyNeuronsActivation.class);
-	
+
 	protected Neurons neurons;
 	protected int examples;
 	protected NeuronsActivationFeatureOrientation featureOrientation;
-	
+
 	/**
-	 * @param neurons The neurons that have been activated.
-	 * @param featureOrientation The feature orientation of the matrix representation of these activations.
-	 * @param examples The number of training examples that caused the activations.
+	 * @param neurons            The neurons that have been activated.
+	 * @param featureOrientation The feature orientation of the matrix
+	 *                           representation of these activations.
+	 * @param examples           The number of training examples that caused the
+	 *                           activations.
 	 */
-	public DummyNeuronsActivation(Neurons neurons, NeuronsActivationFeatureOrientation featureOrientation, int examples) {
+	public DummyNeuronsActivation(Neurons neurons, NeuronsActivationFeatureOrientation featureOrientation,
+			int examples) {
 		this.neurons = neurons;
 		this.examples = examples;
 		this.featureOrientation = featureOrientation;

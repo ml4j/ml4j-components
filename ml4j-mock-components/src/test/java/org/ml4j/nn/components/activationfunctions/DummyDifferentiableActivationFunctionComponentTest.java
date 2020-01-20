@@ -8,14 +8,15 @@ import org.ml4j.nn.neurons.Neurons;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.mockito.Mockito;
 
-public class DummyDifferentiableActivationFunctionComponentTest extends DifferentiableActivationFunctionComponentTestBase<DifferentiableActivationFunctionComponent> {
+public class DummyDifferentiableActivationFunctionComponentTest
+		extends DifferentiableActivationFunctionComponentTestBase<DifferentiableActivationFunctionComponent> {
 
 	@Override
-	protected DifferentiableActivationFunctionComponent createDifferentiableActivationFunctionComponentUnderTest(Neurons neurons, 
-			ActivationFunctionType activationFunctionType) {
+	protected DifferentiableActivationFunctionComponent createDifferentiableActivationFunctionComponentUnderTest(
+			Neurons neurons, ActivationFunctionType activationFunctionType) {
 		return new DummyDifferentiableActivationFunctionComponent(neurons, activationFunctionType);
 	}
-	
+
 	@Override
 	protected MatrixFactory createMatrixFactory() {
 		return Mockito.mock(MatrixFactory.class);

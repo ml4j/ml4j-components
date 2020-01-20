@@ -23,7 +23,8 @@ public class DummyDifferentiableActivationFunctionImplTest extends Differentiabl
 	@Override
 	protected DifferentiableActivationFunction createDifferentiableActivationFunctionUnderTest(Neurons leftNeurons,
 			Neurons rightNeurons) {
-		return new DummyDifferentiableActivationFunctionImpl(ActivationFunctionType.createCustomBaseType("DUMMY"), true);
+		return new DummyDifferentiableActivationFunctionImpl(ActivationFunctionType.createCustomBaseType("DUMMY"),
+				true);
 	}
 
 }

@@ -29,11 +29,10 @@ public class DefaultOneToManyDirectedComponentActivationImplTest extends OneToMa
 
 	@Override
 	protected OneToManyDirectedComponentActivation createOneToManyDirectedComponentActivationUnderTest(
-			MatrixFactory matrixFactory, 
-			NeuronsActivation input, int outputCount) {
+			MatrixFactory matrixFactory, NeuronsActivation input, int outputCount) {
 		return new DefaultOneToManyDirectedComponentActivationImpl(matrixFactory, input, outputCount);
 	}
-	
+
 	@Override
 	protected MatrixFactory createMatrixFactory() {
 		return new JBlasRowMajorMatrixFactory();

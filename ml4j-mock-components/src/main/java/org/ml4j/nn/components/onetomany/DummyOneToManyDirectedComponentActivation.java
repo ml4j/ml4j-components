@@ -23,29 +23,35 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Mock implementation of OneToManyDirectedComponentActivation - encapsulating the activation from a DummyOneToManyDirectedComponent.
+ * Mock implementation of OneToManyDirectedComponentActivation - encapsulating
+ * the activation from a DummyOneToManyDirectedComponent.
  * 
  * @author Michael Lavelle
  */
-public class DummyOneToManyDirectedComponentActivation extends OneToManyDirectedComponentActivationBase implements OneToManyDirectedComponentActivation {
+public class DummyOneToManyDirectedComponentActivation extends OneToManyDirectedComponentActivationBase
+		implements OneToManyDirectedComponentActivation {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(DummyOneToManyDirectedComponentActivation.class);
-	
+
 	/**
 	 * DummyOneToManyDirectedComponentActivation constructor
 	 * 
-	 * @param input The neurons activation input to the one to many component.
-	 * @param outputNeuronsActivationCount The desired number of instances of output neuron activations, one for each of the components
-	 * on the RHS of the OneToManyDirectedComponentActivation.
+	 * @param input                        The neurons activation input to the one
+	 *                                     to many component.
+	 * @param outputNeuronsActivationCount The desired number of instances of output
+	 *                                     neuron activations, one for each of the
+	 *                                     components on the RHS of the
+	 *                                     OneToManyDirectedComponentActivation.
 	 */
 	public DummyOneToManyDirectedComponentActivation(NeuronsActivation input, int outputNeuronsActivationCount) {
 		super(input, outputNeuronsActivationCount);
 	}
-	
+
 	@Override
 	public DirectedComponentGradient<NeuronsActivation> backPropagate(
 			DirectedComponentGradient<List<NeuronsActivation>> gradient) {
-		LOGGER.debug("Mock back propagating multiple gradient neurons activations into a single combined neurons activation");
+		LOGGER.debug(
+				"Mock back propagating multiple gradient neurons activations into a single combined neurons activation");
 		return new DirectedComponentGradientImpl<>(gradient.getOutput().get(0));
 	}
 }

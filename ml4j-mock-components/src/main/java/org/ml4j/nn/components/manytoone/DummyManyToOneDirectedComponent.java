@@ -26,34 +26,37 @@ import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class DummyManyToOneDirectedComponent extends ManyToOneDirectedComponentBase<DummyManyToOneDirectedComponentActivation> implements ManyToOneDirectedComponent<DummyManyToOneDirectedComponentActivation> {
+public class DummyManyToOneDirectedComponent
+		extends ManyToOneDirectedComponentBase<DummyManyToOneDirectedComponentActivation>
+		implements ManyToOneDirectedComponent<DummyManyToOneDirectedComponentActivation> {
 
 	public DummyManyToOneDirectedComponent(PathCombinationStrategy pathCombinationStrategy) {
 		super(pathCombinationStrategy);
 	}
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(DummyManyToOneDirectedComponent.class);
-	
-	/**s
-	 * Serialization id.
+
+	/**
+	 * s Serialization id.
 	 */
 	private static final long serialVersionUID = -7049642040068320620L;
 
 	@Override
 	public DummyManyToOneDirectedComponentActivation forwardPropagate(List<NeuronsActivation> neuronActivations,
 			DirectedComponentsContext context) {
-		LOGGER.debug("Mock combining multiple neurons activations into a single output neurons activation") ;
+		LOGGER.debug("Mock combining multiple neurons activations into a single output neurons activation");
 		int outputNeuronCount;
 		if (pathCombinationStrategy == PathCombinationStrategy.ADDITION) {
 			outputNeuronCount = neuronActivations.get(0).getFeatureCount();
-		} else if (pathCombinationStrategy == PathCombinationStrategy.FILTER_CONCAT){
+		} else if (pathCombinationStrategy == PathCombinationStrategy.FILTER_CONCAT) {
 			outputNeuronCount = neuronActivations.stream().mapToInt(a -> a.getFeatureCount()).sum();
 		} else {
-			throw new UnsupportedOperationException("Path combination strategy of:" + pathCombinationStrategy + " not supported");
+			throw new UnsupportedOperationException(
+					"Path combination strategy of:" + pathCombinationStrategy + " not supported");
 		}
 		Neurons mockOutputNeurons = new Neurons(outputNeuronCount, false);
-		NeuronsActivation mockOutput = new DummyNeuronsActivation(mockOutputNeurons, neuronActivations.get(0).getFeatureOrientation(), 
-				neuronActivations.get(0).getExampleCount());
+		NeuronsActivation mockOutput = new DummyNeuronsActivation(mockOutputNeurons,
+				neuronActivations.get(0).getFeatureOrientation(), neuronActivations.get(0).getExampleCount());
 		return new DummyManyToOneDirectedComponentActivation(neuronActivations.size(), mockOutput);
 	}
 
@@ -61,7 +64,7 @@ public class DummyManyToOneDirectedComponent extends ManyToOneDirectedComponentB
 	public ManyToOneDirectedComponent<DummyManyToOneDirectedComponentActivation> dup() {
 		return new DummyManyToOneDirectedComponent(pathCombinationStrategy);
 	}
-	
+
 	@Override
 	public Optional<NeuronsActivationFeatureOrientation> optimisedFor() {
 		// TODO THUR

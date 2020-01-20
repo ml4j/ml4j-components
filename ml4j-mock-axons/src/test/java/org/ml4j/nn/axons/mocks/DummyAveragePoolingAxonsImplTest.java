@@ -33,7 +33,8 @@ public class DummyAveragePoolingAxonsImplTest extends Axons3DTestBase<AveragePoo
 	}
 
 	@Override
-	protected AveragePoolingAxons createAxonsUnderTest(Neurons3D leftNeurons, Neurons3D rightNeurons, Axons3DConfig config) {
+	protected AveragePoolingAxons createAxonsUnderTest(Neurons3D leftNeurons, Neurons3D rightNeurons,
+			Axons3DConfig config) {
 		return new DummyAveragePoolingAxonsImpl(matrixFactory, leftNeurons, rightNeurons, config);
 	}
 

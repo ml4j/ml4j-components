@@ -27,7 +27,9 @@ import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class DummyDirectedAxonsComponent<L extends Neurons, R extends Neurons> extends DirectedAxonsComponentBase<L, R, Axons<? extends L, ? extends R, ?>> implements DirectedAxonsComponent<L, R, Axons<? extends L, ? extends R, ?>> {
+public class DummyDirectedAxonsComponent<L extends Neurons, R extends Neurons>
+		extends DirectedAxonsComponentBase<L, R, Axons<? extends L, ? extends R, ?>>
+		implements DirectedAxonsComponent<L, R, Axons<? extends L, ? extends R, ?>> {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(DummyDirectedAxonsComponent.class);
 
@@ -35,32 +37,34 @@ public class DummyDirectedAxonsComponent<L extends Neurons, R extends Neurons> e
 	 * Default serialization id.
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	public DummyDirectedAxonsComponent(Axons<? extends L, ? extends R, ?> axons) {
 		super(axons);
 	}
 
 	@Override
-	public DirectedAxonsComponentActivation forwardPropagate(NeuronsActivation neuronsActivation, AxonsContext context) {
+	public DirectedAxonsComponentActivation forwardPropagate(NeuronsActivation neuronsActivation,
+			AxonsContext context) {
 		LOGGER.debug("Forward propagating through DummyDirectedAxonsComponent");
-		
+
 		if (neuronsActivation.getFeatureCount() != this.getInputNeurons().getNeuronCountExcludingBias()) {
 			throw new IllegalArgumentException();
 		}
-		
-		NeuronsActivation dummyOutput = new DummyNeuronsActivation(axons.getRightNeurons(), 
+
+		NeuronsActivation dummyOutput = new DummyNeuronsActivation(axons.getRightNeurons(),
 				neuronsActivation.getFeatureOrientation(), neuronsActivation.getExampleCount());
 		if (dummyOutput.getFeatureCount() != getOutputNeurons().getNeuronCountExcludingBias()) {
 			throw new IllegalArgumentException();
 		}
-		return new DummyDirectedAxonsComponentActivation<>(this, new NoOpAxonsActivation(axons, () -> neuronsActivation, dummyOutput), context);
+		return new DummyDirectedAxonsComponentActivation<>(this,
+				new NoOpAxonsActivation(axons, () -> neuronsActivation, dummyOutput), context);
 	}
 
 	@Override
 	public DirectedAxonsComponent<L, R, Axons<? extends L, ? extends R, ?>> dup() {
 		return new DummyDirectedAxonsComponent<>(axons.dup());
 	}
-	
+
 	@Override
 	public Optional<NeuronsActivationFeatureOrientation> optimisedFor() {
 		return axons.optimisedFor();

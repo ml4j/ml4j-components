@@ -20,7 +20,7 @@ public class DefaultConvolutionalAxonsImplTest extends Axons3DTestBase<Convoluti
 
 	@Mock
 	private FullyConnectedAxons mockFullyConnectedAxons;
-	
+
 	@Mock
 	private AxonsActivation mockAxonsActivation;
 
@@ -43,19 +43,21 @@ public class DefaultConvolutionalAxonsImplTest extends Axons3DTestBase<Convoluti
 	@Override
 	protected ConvolutionalAxons createAxonsUnderTest(Neurons3D leftNeurons, Neurons3D rightNeurons,
 			Axons3DConfig config) {
-		Mockito.when(mockAxonsFactory.createFullyConnectedAxons(Mockito.any(), Mockito.any()
-				,Mockito.any(), Mockito.any())).thenReturn(mockFullyConnectedAxons);
+		Mockito.when(
+				mockAxonsFactory.createFullyConnectedAxons(Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any()))
+				.thenReturn(mockFullyConnectedAxons);
 		return new DefaultConvolutionalAxonsImpl(mockAxonsFactory, leftNeurons, rightNeurons, config, null, null);
 	}
 
 	@Override
 	public void testPushLeftToRight() {
-		
+
 		NeuronsActivation nestedOutput = createNeuronsActivation(2, 32 * 400);
-		
+
 		Mockito.when(mockAxonsActivation.getPostDropoutOutput()).thenReturn(nestedOutput);
-		
-		Mockito.when(mockFullyConnectedAxons.pushLeftToRight(Mockito.any(), Mockito.any(), Mockito.any())).thenReturn(mockAxonsActivation);
+
+		Mockito.when(mockFullyConnectedAxons.pushLeftToRight(Mockito.any(), Mockito.any(), Mockito.any()))
+				.thenReturn(mockAxonsActivation);
 
 		super.testPushLeftToRight();
 	}
@@ -67,7 +69,8 @@ public class DefaultConvolutionalAxonsImplTest extends Axons3DTestBase<Convoluti
 
 	@Override
 	public NeuronsActivation createNeuronsActivation(int featureCount, int exampleCount) {
-		return new NeuronsActivationImpl(new Neurons(featureCount, false),matrixFactory.createMatrix(featureCount, exampleCount),
+		return new NeuronsActivationImpl(new Neurons(featureCount, false),
+				matrixFactory.createMatrix(featureCount, exampleCount),
 				NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET);
 	}
 

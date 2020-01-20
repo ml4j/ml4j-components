@@ -23,21 +23,32 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Dummy implementation of DifferentiableActivationFunctionComponentActivation, encapsulating the activations from a DummyDifferentiableActivationFunctionComponent
- * and providing the logic required in order to back propagate gradients back through the activations.
+ * Dummy implementation of DifferentiableActivationFunctionComponentActivation,
+ * encapsulating the activations from a
+ * DummyDifferentiableActivationFunctionComponent and providing the logic
+ * required in order to back propagate gradients back through the activations.
  * 
  * @author Michael Lavelle
  */
-public class DummyDifferentiableActivationFunctionComponentActivation extends DifferentiableActivationFunctionComponentActivationBase<DifferentiableActivationFunctionComponent> implements DifferentiableActivationFunctionComponentActivation {
+public class DummyDifferentiableActivationFunctionComponentActivation
+		extends DifferentiableActivationFunctionComponentActivationBase<DifferentiableActivationFunctionComponent>
+		implements DifferentiableActivationFunctionComponentActivation {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(DummyDifferentiableActivationFunctionComponentActivation.class);
-		
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(DummyDifferentiableActivationFunctionComponentActivation.class);
+
 	/**
-	 * @param activationFunctionComponent The DummyDifferentiableActivationFunctionComponent that generated this activation.
-	 * @param input The input to the DummyDifferentiableActivationFunctionComponent
-	 * @param output The output from the DummyDifferentiableActivationFunctionComponent
+	 * @param activationFunctionComponent The
+	 *                                    DummyDifferentiableActivationFunctionComponent
+	 *                                    that generated this activation.
+	 * @param input                       The input to the
+	 *                                    DummyDifferentiableActivationFunctionComponent
+	 * @param output                      The output from the
+	 *                                    DummyDifferentiableActivationFunctionComponent
 	 */
-	public DummyDifferentiableActivationFunctionComponentActivation(DifferentiableActivationFunctionComponent activationFunctionComponent, NeuronsActivation input, NeuronsActivation output) {
+	public DummyDifferentiableActivationFunctionComponentActivation(
+			DifferentiableActivationFunctionComponent activationFunctionComponent, NeuronsActivation input,
+			NeuronsActivation output) {
 		super(activationFunctionComponent, input, output);
 	}
 
@@ -50,7 +61,8 @@ public class DummyDifferentiableActivationFunctionComponentActivation extends Di
 
 	@Override
 	public DirectedComponentGradient<NeuronsActivation> backPropagate(CostFunctionGradient costFunctionGradient) {
-		LOGGER.debug("Mock back propagating cost function gradient through DummyDifferentiableActivationFunctionComponentActivation");
+		LOGGER.debug(
+				"Mock back propagating cost function gradient through DummyDifferentiableActivationFunctionComponentActivation");
 		return new DirectedComponentGradientImpl<>(input);
 	}
 

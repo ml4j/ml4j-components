@@ -15,10 +15,11 @@ public class DummyDirectedComponentChainActivationTest extends DefaultDirectedCo
 
 	@Override
 	protected DefaultDirectedComponentChainActivation createDefaultDirectedComponentChainActivationUnderTest(
-			DefaultDirectedComponentChain componentChain, List<DefaultChainableDirectedComponentActivation> activations) {
+			DefaultDirectedComponentChain componentChain,
+			List<DefaultChainableDirectedComponentActivation> activations) {
 		return new DummyDefaultDirectedComponentActivation(componentChain, activations);
 	}
-	
+
 	@Override
 	protected MatrixFactory createMatrixFactory() {
 		return Mockito.mock(MatrixFactory.class);

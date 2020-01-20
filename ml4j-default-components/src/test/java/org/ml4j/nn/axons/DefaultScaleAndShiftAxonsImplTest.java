@@ -20,11 +20,13 @@ public class DefaultScaleAndShiftAxonsImplTest extends AxonsTestBase<ScaleAndShi
 
 	@Override
 	protected ScaleAndShiftAxons<?> createAxonsUnderTest(Neurons leftNeurons, Neurons rightNeurons) {
-		AxonWeights axonWeights = new ScaleAndShiftAxonWeightsImpl(leftNeurons.getNeuronCountExcludingBias(), rightNeurons.getNeuronCountExcludingBias(), matrixFactory.createMatrix(leftNeurons.getNeuronCountExcludingBias(), 
-				1), matrixFactory.createMatrix(leftNeurons.getNeuronCountExcludingBias(),1), null);
+		AxonWeights axonWeights = new ScaleAndShiftAxonWeightsImpl(leftNeurons.getNeuronCountExcludingBias(),
+				rightNeurons.getNeuronCountExcludingBias(),
+				matrixFactory.createMatrix(leftNeurons.getNeuronCountExcludingBias(), 1),
+				matrixFactory.createMatrix(leftNeurons.getNeuronCountExcludingBias(), 1), null);
 		return new DefaultScaleAndShiftAxonsImpl<>(leftNeurons, rightNeurons, axonWeights);
 	}
-	
+
 	@Override
 	protected MatrixFactory createMatrixFactory() {
 		return new JBlasRowMajorMatrixFactory();
@@ -32,7 +34,9 @@ public class DefaultScaleAndShiftAxonsImplTest extends AxonsTestBase<ScaleAndShi
 
 	@Override
 	public NeuronsActivation createNeuronsActivation(int featureCount, int exampleCount) {
-		return new NeuronsActivationImpl(new Neurons(featureCount, false), matrixFactory.createMatrix(featureCount, exampleCount), NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET);
+		return new NeuronsActivationImpl(new Neurons(featureCount, false),
+				matrixFactory.createMatrix(featureCount, exampleCount),
+				NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET);
 	}
 
 	@Override
@@ -40,8 +44,5 @@ public class DefaultScaleAndShiftAxonsImplTest extends AxonsTestBase<ScaleAndShi
 		Mockito.when(mockAxonsContext.getLeftHandInputDropoutKeepProbability()).thenReturn(1f);
 		super.testPushLeftToRight();
 	}
-	
-	
-	
 
 }

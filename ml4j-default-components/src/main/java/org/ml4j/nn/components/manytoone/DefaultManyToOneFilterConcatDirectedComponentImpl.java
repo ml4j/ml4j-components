@@ -35,64 +35,70 @@ import org.slf4j.LoggerFactory;
 
 import com.codepoetics.protonpack.StreamUtils;
 
-public class DefaultManyToOneFilterConcatDirectedComponentImpl extends ManyToOneDirectedComponentBase<DefaultManyToOneDirectedComponentActivationImpl> implements ManyToOneDirectedComponent<DefaultManyToOneDirectedComponentActivationImpl> {
+public class DefaultManyToOneFilterConcatDirectedComponentImpl
+		extends ManyToOneDirectedComponentBase<DefaultManyToOneDirectedComponentActivationImpl>
+		implements ManyToOneDirectedComponent<DefaultManyToOneDirectedComponentActivationImpl> {
 
 	private Neurons3D outputNeurons;
-	
+
 	public DefaultManyToOneFilterConcatDirectedComponentImpl(Neurons3D outputNeurons) {
 		super(PathCombinationStrategy.FILTER_CONCAT);
 		this.outputNeurons = outputNeurons;
 	}
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(DefaultManyToOneFilterConcatDirectedComponentImpl.class);
-	
-	/**s
-	 * Serialization id.
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(DefaultManyToOneFilterConcatDirectedComponentImpl.class);
+
+	/**
+	 * s Serialization id.
 	 */
 	private static final long serialVersionUID = -7049642040068320620L;
 
 	@Override
 	public DefaultManyToOneDirectedComponentActivationImpl forwardPropagate(List<NeuronsActivation> neuronActivations,
 			DirectedComponentsContext context) {
-		LOGGER.debug("Combining multiple neurons activations into a single output neurons activation") ;
+		LOGGER.debug("Combining multiple neurons activations into a single output neurons activation");
 		Pair<ImageNeuronsActivation, int[]> b = getCombinedOutput(neuronActivations, context);
-		return new  ManyToOneFilterConcatDirectedComponentActivation(neuronActivations.size(), b.getRight(), b.getLeft());
+		return new ManyToOneFilterConcatDirectedComponentActivation(neuronActivations.size(), b.getRight(),
+				b.getLeft());
 	}
-	
+
 	private Pair<ImageNeuronsActivation, int[]> getCombinedOutput(List<NeuronsActivation> inputs,
 			DirectedComponentsContext context) {
 
-		List<Images> images = inputs.stream().map(i -> 
-			i.asImageNeuronsActivation(getInputNeurons3D(i.getNeurons())).getImages()).collect(Collectors.toList());
-    
+		List<Images> images = inputs.stream()
+				.map(i -> i.asImageNeuronsActivation(getInputNeurons3D(i.getNeurons())).getImages())
+				.collect(Collectors.toList());
+
 		Images result = new ChannelConcatImages(images, outputNeurons.getHeight(), outputNeurons.getWidth(), 0, 0,
 				images.get(0).getExamples());
 
 		int[] channelBoundaries = new int[inputs.size()];
-		StreamUtils.zipWithIndex(inputs.stream().map(i -> getInputNeurons3D(i.getNeurons()).getDepth()))
-				.forEach(e -> { 
-					if (e.getIndex() == 0) { 
-						channelBoundaries[(int) e.getIndex()] = e.getValue(); 
-					} else { 
-						channelBoundaries[(int) e.getIndex()] = channelBoundaries[(int) e.getIndex() - 1] + e.getValue(); 
-					}
-				});
+		StreamUtils.zipWithIndex(inputs.stream().map(i -> getInputNeurons3D(i.getNeurons()).getDepth())).forEach(e -> {
+			if (e.getIndex() == 0) {
+				channelBoundaries[(int) e.getIndex()] = e.getValue();
+			} else {
+				channelBoundaries[(int) e.getIndex()] = channelBoundaries[(int) e.getIndex() - 1] + e.getValue();
+			}
+		});
 
 		LOGGER.debug("End Combining input for many to one junction:" + result.getChannels());
 
-		return new ImmutablePair<>(
-				new ImageNeuronsActivationImpl(new Neurons3D(outputNeurons.getWidth(), outputNeurons.getHeight(), result.getChannels(), false), result,
-						NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET, false),
-				channelBoundaries);
+		return new ImmutablePair<>(new ImageNeuronsActivationImpl(
+				new Neurons3D(outputNeurons.getWidth(), outputNeurons.getHeight(), result.getChannels(), false), result,
+				NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET, false), channelBoundaries);
 	}
-	
+
 	private Neurons3D getInputNeurons3D(Neurons inputNeurons) {
 		int inputNeuronsFeatureCount = inputNeurons.getNeuronCountExcludingBias();
-		int calculatedInputNeuronsDepth = inputNeuronsFeatureCount / (outputNeurons.getWidth() * outputNeurons.getHeight());
-		if (inputNeuronsFeatureCount != calculatedInputNeuronsDepth * outputNeurons.getWidth() * outputNeurons.getHeight()) {
-			throw new IllegalArgumentException("One of the inputs to many to one component cannot be converted to Neurons3D of the correct dimensions");
+		int calculatedInputNeuronsDepth = inputNeuronsFeatureCount
+				/ (outputNeurons.getWidth() * outputNeurons.getHeight());
+		if (inputNeuronsFeatureCount != calculatedInputNeuronsDepth * outputNeurons.getWidth()
+				* outputNeurons.getHeight()) {
+			throw new IllegalArgumentException(
+					"One of the inputs to many to one component cannot be converted to Neurons3D of the correct dimensions");
 		}
-		return new Neurons3D(outputNeurons.getWidth(), outputNeurons.getHeight(), calculatedInputNeuronsDepth, 
+		return new Neurons3D(outputNeurons.getWidth(), outputNeurons.getHeight(), calculatedInputNeuronsDepth,
 				inputNeurons.hasBiasUnit());
 	}
 
@@ -100,7 +106,7 @@ public class DefaultManyToOneFilterConcatDirectedComponentImpl extends ManyToOne
 	public ManyToOneDirectedComponent<DefaultManyToOneDirectedComponentActivationImpl> dup() {
 		return new DefaultManyToOneFilterConcatDirectedComponentImpl(outputNeurons);
 	}
-	
+
 	@Override
 	public Optional<NeuronsActivationFeatureOrientation> optimisedFor() {
 		return Optional.empty();

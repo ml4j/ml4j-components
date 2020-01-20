@@ -8,14 +8,15 @@ import org.ml4j.nn.components.onetoone.base.DefaultDirectedComponentChainBipoleG
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.mockito.Mockito;
 
-public class DummyDirectedComponentChainBipoleGraphActivationTest extends DefaultDirectedComponentChainBipoleGraphActivationTestBase {
+public class DummyDirectedComponentChainBipoleGraphActivationTest
+		extends DefaultDirectedComponentChainBipoleGraphActivationTestBase {
 
 	@Override
 	protected DefaultDirectedComponentChainBipoleGraphActivation createDefaultDirectedComponentChainBipoleGraphActivationUnderTest(
 			DefaultDirectedComponentChainBipoleGraph bipoleGraph, NeuronsActivation output) {
 		return new DummyDefaultDirectedComponentChainBipoleGraphActivation(bipoleGraph, output);
 	}
-	
+
 	@Override
 	protected MatrixFactory createMatrixFactory() {
 		return Mockito.mock(MatrixFactory.class);

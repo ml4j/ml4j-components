@@ -13,10 +13,12 @@ import org.mockito.Mockito;
 public class DefaultDirectedAxonsComponentActivationImplTest extends DirectedAxonsComponentActivationTestBase {
 
 	@Override
-	protected <L extends Neurons, R extends Neurons, A extends Axons<L, R, A>> DirectedAxonsComponentActivation createDirectedAxonsComponentActivationUnderTest(DirectedAxonsComponent<L, R, A> axonsComponent, AxonsActivation axonsActivation, AxonsContext axonsContext) {
+	protected <L extends Neurons, R extends Neurons, A extends Axons<L, R, A>> DirectedAxonsComponentActivation createDirectedAxonsComponentActivationUnderTest(
+			DirectedAxonsComponent<L, R, A> axonsComponent, AxonsActivation axonsActivation,
+			AxonsContext axonsContext) {
 		return new DefaultDirectedAxonsComponentActivationImpl<>(axonsComponent, axonsActivation, axonsContext);
 	}
-	
+
 	@Override
 	protected MatrixFactory createMatrixFactory() {
 		return Mockito.mock(MatrixFactory.class);

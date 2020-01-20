@@ -34,19 +34,21 @@ import org.slf4j.LoggerFactory;
  * 
  * @author Michael Lavelle
  */
-public class DummyDefaultDirectedComponentChain extends DefaultDirectedComponentChainBase implements DefaultDirectedComponentChain {
+public class DummyDefaultDirectedComponentChain extends DefaultDirectedComponentChainBase
+		implements DefaultDirectedComponentChain {
 
 	/**
 	 * Default serialization id
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(DummyDefaultDirectedComponentChain.class);
 
 	/**
 	 * DummyDefaultDirectedComponentChain constructor
 	 * 
-	 * @param sequentialComponents The list of DefaultChainableDirectedComponents with which to initialise this chain.
+	 * @param sequentialComponents The list of DefaultChainableDirectedComponents
+	 *                             with which to initialise this chain.
 	 */
 	public DummyDefaultDirectedComponentChain(List<DefaultChainableDirectedComponent<?, ?>> sequentialComponents) {
 		super(sequentialComponents);
@@ -57,31 +59,32 @@ public class DummyDefaultDirectedComponentChain extends DefaultDirectedComponent
 			DirectedComponentsContext context) {
 		LOGGER.debug("Mock forward propagating through DummyDefaultDirectedComponentChain");
 		NeuronsActivation inFlightActivation = neuronsActivation;
-		
+
 		if (inFlightActivation.getFeatureCount() != getInputNeurons().getNeuronCountExcludingBias()) {
 			throw new IllegalStateException();
 		}
-		
+
 		List<DefaultChainableDirectedComponentActivation> activations = new ArrayList<>();
 		int index = 0;
 		for (DefaultChainableDirectedComponent<?, ?> component : sequentialComponents) {
-			DefaultChainableDirectedComponentActivation activation = forwardPropagate(inFlightActivation, component, index, context);
+			DefaultChainableDirectedComponentActivation activation = forwardPropagate(inFlightActivation, component,
+					index, context);
 			activations.add(activation);
 			inFlightActivation = activation.getOutput();
 			index++;
 		}
-		
+
 		if (inFlightActivation.getFeatureCount() != getOutputNeurons().getNeuronCountExcludingBias()) {
 			throw new IllegalStateException();
 		}
-		
+
 		return new DummyDefaultDirectedComponentActivation(this, activations);
 	}
 
 	@Override
 	public DefaultDirectedComponentChain dup() {
-		return new DummyDefaultDirectedComponentChain(sequentialComponents.stream().map(c -> c.dup()).collect(Collectors.toList()));
+		return new DummyDefaultDirectedComponentChain(
+				sequentialComponents.stream().map(c -> c.dup()).collect(Collectors.toList()));
 	}
-	
-	
+
 }

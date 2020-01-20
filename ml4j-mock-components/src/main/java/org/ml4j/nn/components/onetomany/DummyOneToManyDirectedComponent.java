@@ -26,31 +26,41 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Mock implementation of a  OneToManyDirectedComponent - a directed component which takes a single NeuronsActivation instance as input 
- * and map to many NeuronsActivation instances as output.
+ * Mock implementation of a OneToManyDirectedComponent - a directed component
+ * which takes a single NeuronsActivation instance as input and map to many
+ * NeuronsActivation instances as output.
  * 
- * Used within component graphs where the flow through the NeuralNetwork is split into paths, eg. for skip-connections in ResNets or inception modules.
+ * Used within component graphs where the flow through the NeuralNetwork is
+ * split into paths, eg. for skip-connections in ResNets or inception modules.
  * 
  * @author Michael Lavelle
  *
- * @param <A> The type of activation produced by this component on forward-propagation.
+ * @param <A> The type of activation produced by this component on
+ *            forward-propagation.
  */
-public class DummyOneToManyDirectedComponent extends OneToManyDirectedComponentBase<DummyOneToManyDirectedComponentActivation> implements OneToManyDirectedComponent<DummyOneToManyDirectedComponentActivation> {
+public class DummyOneToManyDirectedComponent
+		extends OneToManyDirectedComponentBase<DummyOneToManyDirectedComponentActivation>
+		implements OneToManyDirectedComponent<DummyOneToManyDirectedComponentActivation> {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(DummyOneToManyDirectedComponent.class);
-	
+
 	/**
 	 * Default serialization id.
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	private IntSupplier targetComponentsCountSupplier;
-	
+
 	/**
 	 * DummyOneToManyDirectedComponent constructors
 	 * 
-	 * @param targetComponentsCountSupplier Supplier of the count of target components on the RHS of this one to many component.  This is a dynamic count to 
-	 * allow this component to be constructed without knowing the number of target outputs at time of construction.
+	 * @param targetComponentsCountSupplier Supplier of the count of target
+	 *                                      components on the RHS of this one to
+	 *                                      many component. This is a dynamic count
+	 *                                      to allow this component to be
+	 *                                      constructed without knowing the number
+	 *                                      of target outputs at time of
+	 *                                      construction.
 	 */
 	public DummyOneToManyDirectedComponent(IntSupplier targetComponentsCountSupplier) {
 		this.targetComponentsCountSupplier = targetComponentsCountSupplier;
@@ -60,8 +70,9 @@ public class DummyOneToManyDirectedComponent extends OneToManyDirectedComponentB
 	public DummyOneToManyDirectedComponentActivation forwardPropagate(NeuronsActivation neuronsActivation,
 			DirectedComponentsContext context) {
 		neuronsActivation.setImmutable(true);
-		LOGGER.debug("Mock splitting input neurons activation into multiple output neurons activations" );
-		return new DummyOneToManyDirectedComponentActivation(neuronsActivation, targetComponentsCountSupplier.getAsInt());
+		LOGGER.debug("Mock splitting input neurons activation into multiple output neurons activations");
+		return new DummyOneToManyDirectedComponentActivation(neuronsActivation,
+				targetComponentsCountSupplier.getAsInt());
 	}
 
 	@Override
@@ -69,7 +80,7 @@ public class DummyOneToManyDirectedComponent extends OneToManyDirectedComponentB
 		int targetComponentsCountAtTimeOfDuplication = targetComponentsCountSupplier.getAsInt();
 		return new DummyOneToManyDirectedComponent(() -> targetComponentsCountAtTimeOfDuplication);
 	}
-	
+
 	@Override
 	public Optional<NeuronsActivationFeatureOrientation> optimisedFor() {
 		// TODO THUR

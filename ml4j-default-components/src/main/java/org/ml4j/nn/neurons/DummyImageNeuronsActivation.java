@@ -25,11 +25,14 @@ import org.ml4j.images.Images;
 public class DummyImageNeuronsActivation extends DummyNeuronsActivation implements ImageNeuronsActivation {
 
 	/**
-	 * @param neurons The neurons that have been activated.
-	 * @param featureOrientation The feature orientation of the matrix representation of these activations.
-	 * @param examples The number of training examples that caused the activations.
+	 * @param neurons            The neurons that have been activated.
+	 * @param featureOrientation The feature orientation of the matrix
+	 *                           representation of these activations.
+	 * @param examples           The number of training examples that caused the
+	 *                           activations.
 	 */
-	public DummyImageNeuronsActivation(Neurons3D neurons, NeuronsActivationFeatureOrientation featureOrientation, int examples) {
+	public DummyImageNeuronsActivation(Neurons3D neurons, NeuronsActivationFeatureOrientation featureOrientation,
+			int examples) {
 		super(neurons, featureOrientation, examples);
 	}
 
@@ -40,7 +43,7 @@ public class DummyImageNeuronsActivation extends DummyNeuronsActivation implemen
 
 	@Override
 	public Neurons3D getNeurons() {
-		return (Neurons3D)neurons;
+		return (Neurons3D) neurons;
 	}
 
 	@Override

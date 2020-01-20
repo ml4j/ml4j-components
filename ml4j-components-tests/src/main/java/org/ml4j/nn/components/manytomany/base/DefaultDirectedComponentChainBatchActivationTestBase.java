@@ -34,53 +34,54 @@ import org.mockito.MockitoAnnotations;
 
 public abstract class DefaultDirectedComponentChainBatchActivationTestBase extends TestBase {
 
-	
 	@Mock
 	protected AxonsContext mockAxonsContext;
-	
+
 	@Mock
 	protected DirectedComponentsContext mockDirectedComponentsContext;
-	
+
 	@Mock
 	protected DefaultDirectedComponentChainActivation chainActivation1;
-	
+
 	@Mock
 	protected DefaultDirectedComponentChainActivation chainActivation2;
-	
+
 	@Mock
 	protected ManyToOneDirectedComponent<?> mockManyToOneDirectedComponent;
-	
-	
+
 	@Before
 	public void setup() {
-	    MockitoAnnotations.initMocks(this);
-	    Mockito.when(mockDirectedComponentsContext.getMatrixFactory()).thenReturn(matrixFactory);
+		MockitoAnnotations.initMocks(this);
+		Mockito.when(mockDirectedComponentsContext.getMatrixFactory()).thenReturn(matrixFactory);
 	}
 
-	private DefaultDirectedComponentChainBatchActivation createDefaultDirectedComponentChainBatchActivation(List<DefaultDirectedComponentChainActivation> activations) {
+	private DefaultDirectedComponentChainBatchActivation createDefaultDirectedComponentChainBatchActivation(
+			List<DefaultDirectedComponentChainActivation> activations) {
 		return createDefaultDirectedComponentChainBatchActivationUnderTest(activations);
 	}
-		
-	protected abstract DefaultDirectedComponentChainBatchActivation createDefaultDirectedComponentChainBatchActivationUnderTest(List<DefaultDirectedComponentChainActivation> activations);
-	
+
+	protected abstract DefaultDirectedComponentChainBatchActivation createDefaultDirectedComponentChainBatchActivationUnderTest(
+			List<DefaultDirectedComponentChainActivation> activations);
+
 	@Test
 	public void testConstruction() {
-		DefaultDirectedComponentChainBatchActivation chainBatchActivation = createDefaultDirectedComponentChainBatchActivation(Arrays.asList(chainActivation1, chainActivation2));
+		DefaultDirectedComponentChainBatchActivation chainBatchActivation = createDefaultDirectedComponentChainBatchActivation(
+				Arrays.asList(chainActivation1, chainActivation2));
 		Assert.assertNotNull(chainBatchActivation);
 	}
-	
+
 	@Test
 	public void testGetOutput() {
-		
+
 		NeuronsActivation mockOutputActivation1 = MockTestData.mockNeuronsActivation(110, 32);
 
 		NeuronsActivation mockOutputActivation2 = MockTestData.mockNeuronsActivation(110, 32);
 
 		Mockito.when(chainActivation1.getOutput()).thenReturn(mockOutputActivation1);
 		Mockito.when(chainActivation2.getOutput()).thenReturn(mockOutputActivation2);
-		
-		
-		DefaultDirectedComponentChainBatchActivation chainBatchActivation = createDefaultDirectedComponentChainBatchActivation(Arrays.asList(chainActivation1, chainActivation2));
+
+		DefaultDirectedComponentChainBatchActivation chainBatchActivation = createDefaultDirectedComponentChainBatchActivation(
+				Arrays.asList(chainActivation1, chainActivation2));
 		Assert.assertNotNull(chainBatchActivation);
 		Assert.assertNotNull(chainBatchActivation.getOutput());
 		Assert.assertEquals(2, chainBatchActivation.getOutput().size());
@@ -90,33 +91,36 @@ public abstract class DefaultDirectedComponentChainBatchActivationTestBase exten
 		Assert.assertSame(mockOutputActivation2, chainBatchActivation.getOutput().get(1));
 
 	}
-	
+
 	@Test
 	public void testBackPropagate() {
-		
+
 		NeuronsActivation mockOutputActivation1 = MockTestData.mockNeuronsActivation(110, 32);
 
 		NeuronsActivation mockOutputActivation2 = MockTestData.mockNeuronsActivation(110, 32);
-		
+
 		Mockito.when(chainActivation1.getOutput()).thenReturn(mockOutputActivation1);
 		Mockito.when(chainActivation2.getOutput()).thenReturn(mockOutputActivation2);
-	
 
-		DirectedComponentGradient<List<NeuronsActivation>> mockInboundGradient = MockTestData.mockBatchComponentGradient(110, 32, 2);
-				
-		DirectedComponentGradient<NeuronsActivation> outputGradient1 = MockTestData.mockComponentGradient(110, 32, this);
-		DirectedComponentGradient<NeuronsActivation> outputGradient2 = MockTestData.mockComponentGradient(110, 32, this);
+		DirectedComponentGradient<List<NeuronsActivation>> mockInboundGradient = MockTestData
+				.mockBatchComponentGradient(110, 32, 2);
+
+		DirectedComponentGradient<NeuronsActivation> outputGradient1 = MockTestData.mockComponentGradient(110, 32,
+				this);
+		DirectedComponentGradient<NeuronsActivation> outputGradient2 = MockTestData.mockComponentGradient(110, 32,
+				this);
 
 		Mockito.when(chainActivation1.backPropagate(Mockito.any())).thenReturn(outputGradient1);
 		Mockito.when(chainActivation2.backPropagate(Mockito.any())).thenReturn(outputGradient2);
 		// TODO verify
-		
-		DefaultDirectedComponentChainBatchActivation chainBatchActivation = createDefaultDirectedComponentChainBatchActivation(Arrays.asList(chainActivation1, chainActivation2));
+
+		DefaultDirectedComponentChainBatchActivation chainBatchActivation = createDefaultDirectedComponentChainBatchActivation(
+				Arrays.asList(chainActivation1, chainActivation2));
 		Assert.assertNotNull(chainBatchActivation);
-		
-		DirectedComponentGradient<List<NeuronsActivation>> backPropagatedGradient = chainBatchActivation.backPropagate(mockInboundGradient);
-		
-		
+
+		DirectedComponentGradient<List<NeuronsActivation>> backPropagatedGradient = chainBatchActivation
+				.backPropagate(mockInboundGradient);
+
 		Assert.assertNotNull(backPropagatedGradient);
 		Assert.assertNotNull(backPropagatedGradient.getOutput());
 		Assert.assertEquals(2, backPropagatedGradient.getOutput().size());
@@ -128,13 +132,15 @@ public abstract class DefaultDirectedComponentChainBatchActivationTestBase exten
 		Assert.assertFalse(backPropagatedGradient.getOutput().get(1).getFeatureCount() == 0);
 		Assert.assertFalse(backPropagatedGradient.getOutput().get(1).getExampleCount() == 0);
 
-		Assert.assertEquals(mockInboundGradient.getOutput().get(0).getFeatureCount(), backPropagatedGradient.getOutput().get(0).getFeatureCount());
-		Assert.assertEquals(mockInboundGradient.getOutput().get(0).getExampleCount(), backPropagatedGradient.getOutput().get(0).getExampleCount());
-		Assert.assertEquals(mockInboundGradient.getOutput().get(1).getFeatureCount(), backPropagatedGradient.getOutput().get(1).getFeatureCount());
-		Assert.assertEquals(mockInboundGradient.getOutput().get(1).getExampleCount(), backPropagatedGradient.getOutput().get(1).getExampleCount());
+		Assert.assertEquals(mockInboundGradient.getOutput().get(0).getFeatureCount(),
+				backPropagatedGradient.getOutput().get(0).getFeatureCount());
+		Assert.assertEquals(mockInboundGradient.getOutput().get(0).getExampleCount(),
+				backPropagatedGradient.getOutput().get(0).getExampleCount());
+		Assert.assertEquals(mockInboundGradient.getOutput().get(1).getFeatureCount(),
+				backPropagatedGradient.getOutput().get(1).getFeatureCount());
+		Assert.assertEquals(mockInboundGradient.getOutput().get(1).getExampleCount(),
+				backPropagatedGradient.getOutput().get(1).getExampleCount());
 
-		
 	}
-
 
 }

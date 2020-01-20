@@ -36,7 +36,7 @@ public class DefaultDirectedComponentChainImplTest extends DefaultDirectedCompon
 			List<DefaultChainableDirectedComponent<?, ?>> components) {
 		return new DefaultDirectedComponentChainImpl(components);
 	}
-	
+
 	@Override
 	protected MatrixFactory createMatrixFactory() {
 		return Mockito.mock(MatrixFactory.class);

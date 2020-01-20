@@ -18,11 +18,12 @@ public class ManyToOneFilterConcatDirectedComponentActivation extends DefaultMan
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(ManyToOneFilterConcatDirectedComponentActivation.class);
-	
+
 	private int[] channelBoundaries;
 	private Neurons3D outputNeurons;
-	
-	public ManyToOneFilterConcatDirectedComponentActivation(int size, int[] channelBoundaries, ImageNeuronsActivation output) {
+
+	public ManyToOneFilterConcatDirectedComponentActivation(int size, int[] channelBoundaries,
+			ImageNeuronsActivation output) {
 		super(size, output);
 		this.outputNeurons = output.getNeurons();
 		this.channelBoundaries = channelBoundaries;
@@ -30,36 +31,38 @@ public class ManyToOneFilterConcatDirectedComponentActivation extends DefaultMan
 			throw new IllegalArgumentException();
 		}
 	}
-	
+
 	private Images getChannelImages(Images images, int channelBoundaryIndex) {
-		return channelBoundaryIndex == 0 ? images.getChannels(0, channelBoundaries[channelBoundaryIndex]) : 
-			images.getChannels(channelBoundaries[channelBoundaryIndex - 1], channelBoundaries[channelBoundaryIndex]);
+		return channelBoundaryIndex == 0 ? images.getChannels(0, channelBoundaries[channelBoundaryIndex])
+				: images.getChannels(channelBoundaries[channelBoundaryIndex - 1],
+						channelBoundaries[channelBoundaryIndex]);
 	}
 
 	@Override
 	public DirectedComponentGradient<List<NeuronsActivation>> backPropagate(
 			DirectedComponentGradient<NeuronsActivation> outerGradient) {
-		
+
 		LOGGER.debug("Splitting gradient for many to one filter");
-		
+
 		// Convert the outer gradient into image format
 		ImageNeuronsActivation imagesActivation = outerGradient.getOutput().asImageNeuronsActivation(outputNeurons);
-		Images outerGradientAsImage = imagesActivation.getImages();	
-		
-		// Split according to the filter channel boundaries into multiple back-propagated gradients activations.
+		Images outerGradientAsImage = imagesActivation.getImages();
+
+		// Split according to the filter channel boundaries into multiple
+		// back-propagated gradients activations.
 		List<NeuronsActivation> outerGradientBackPropagatedImages = IntStream.range(0, channelBoundaries.length)
 				.mapToObj(i -> getChannelImages(outerGradientAsImage, i))
-				.map(channelImage -> 
-				new ImageNeuronsActivationImpl(new Neurons3D(outputNeurons.getWidth(), 
-						outputNeurons.getHeight(), channelImage.getChannels(), false), 
-						channelImage, imagesActivation.getFeatureOrientation(), 
-						imagesActivation.isImmutable()))
+				.map(channelImage -> new ImageNeuronsActivationImpl(
+						new Neurons3D(outputNeurons.getWidth(), outputNeurons.getHeight(), channelImage.getChannels(),
+								false),
+						channelImage, imagesActivation.getFeatureOrientation(), imagesActivation.isImmutable()))
 				.collect(Collectors.toList());
-		
+
 		outerGradientBackPropagatedImages.stream().forEach(i -> i.setImmutable(true));
 
 		LOGGER.debug("End splitting gradient for many to one filter");
 
-		return new DirectedComponentGradientImpl<>(outerGradient.getTotalTrainableAxonsGradients(), outerGradientBackPropagatedImages);
+		return new DirectedComponentGradientImpl<>(outerGradient.getTotalTrainableAxonsGradients(),
+				outerGradientBackPropagatedImages);
 	}
 }

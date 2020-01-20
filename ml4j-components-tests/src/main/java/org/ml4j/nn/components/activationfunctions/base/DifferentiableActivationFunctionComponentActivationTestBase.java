@@ -29,70 +29,77 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-public abstract class DifferentiableActivationFunctionComponentActivationTestBase<L extends DifferentiableActivationFunctionComponent> extends TestBase {
-	
+public abstract class DifferentiableActivationFunctionComponentActivationTestBase<L extends DifferentiableActivationFunctionComponent>
+		extends TestBase {
+
 	@Mock
 	protected AxonsContext mockAxonsContext;
-	
+
 	protected NeuronsActivation mockInputActivation;
-	
+
 	protected NeuronsActivation mockOutputActivation;
-	
+
 	protected DirectedComponentGradient<NeuronsActivation> mockInboundGradient;
-	
+
 	@Mock
 	protected DirectedComponentsContext mockDirectedComponentsContext;
 
 	protected L activationFunctionComponent;
-	
+
 	// TODO THUR
-	//@Mock
-	//protected DifferentiableActivationFunction mockActivationFunction;
+	// @Mock
+	// protected DifferentiableActivationFunction mockActivationFunction;
 
 	@Mock
 	protected ManyToOneDirectedComponent<?> mockManyToOneDirectedComponent;
-		
+
 	@Before
 	public void setup() {
-	    MockitoAnnotations.initMocks(this);
-	    Mockito.when(mockDirectedComponentsContext.getMatrixFactory()).thenReturn(createMatrixFactory());
-	    //Mockito.when(mockActivationFunctionComponent.getActivationFunction()).thenReturn(mockActivationFunction);
-	    this.mockInputActivation = createNeuronsActivation(110, 32);
-	    this.mockOutputActivation = createNeuronsActivation(110, 32);
-	    this.activationFunctionComponent = createMockActivationFunctionComponent();
-	    this.mockInboundGradient = MockTestData.mockComponentGradient(110, 32, this);
+		MockitoAnnotations.initMocks(this);
+		Mockito.when(mockDirectedComponentsContext.getMatrixFactory()).thenReturn(createMatrixFactory());
+		// Mockito.when(mockActivationFunctionComponent.getActivationFunction()).thenReturn(mockActivationFunction);
+		this.mockInputActivation = createNeuronsActivation(110, 32);
+		this.mockOutputActivation = createNeuronsActivation(110, 32);
+		this.activationFunctionComponent = createMockActivationFunctionComponent();
+		this.mockInboundGradient = MockTestData.mockComponentGradient(110, 32, this);
 	}
 
-	private DifferentiableActivationFunctionComponentActivation createDifferentiableActivationFunctionComponentActivation(L activationFunction, NeuronsActivation input, NeuronsActivation output) {
+	private DifferentiableActivationFunctionComponentActivation createDifferentiableActivationFunctionComponentActivation(
+			L activationFunction, NeuronsActivation input, NeuronsActivation output) {
 		return createDifferentiableActivationFunctionComponentActivationUnderTest(activationFunction, input, output);
 	}
-	
-	protected abstract  L createMockActivationFunctionComponent();
-		
-	protected abstract DifferentiableActivationFunctionComponentActivation createDifferentiableActivationFunctionComponentActivationUnderTest(L activationFunction, NeuronsActivation input, NeuronsActivation output);
-	
+
+	protected abstract L createMockActivationFunctionComponent();
+
+	protected abstract DifferentiableActivationFunctionComponentActivation createDifferentiableActivationFunctionComponentActivationUnderTest(
+			L activationFunction, NeuronsActivation input, NeuronsActivation output);
+
 	@Test
 	public void testConstruction() {
-		DifferentiableActivationFunctionComponentActivation activation = createDifferentiableActivationFunctionComponentActivation(activationFunctionComponent, mockInputActivation, mockOutputActivation);
+		DifferentiableActivationFunctionComponentActivation activation = createDifferentiableActivationFunctionComponentActivation(
+				activationFunctionComponent, mockInputActivation, mockOutputActivation);
 		Assert.assertNotNull(activation);
 	}
-	
+
 	@Test
 	public void testGetOutput() {
-		DifferentiableActivationFunctionComponentActivation activation = createDifferentiableActivationFunctionComponentActivation(activationFunctionComponent, mockInputActivation, mockOutputActivation);
+		DifferentiableActivationFunctionComponentActivation activation = createDifferentiableActivationFunctionComponentActivation(
+				activationFunctionComponent, mockInputActivation, mockOutputActivation);
 		Assert.assertNotNull(activation);
 		Assert.assertNotNull(activation.getOutput());
 		Assert.assertSame(mockOutputActivation, activation.getOutput());
 	}
-	
+
 	@Test
 	public void testBackPropagate() {
-		
-		DifferentiableActivationFunctionComponentActivation activation = createDifferentiableActivationFunctionComponentActivation(activationFunctionComponent, mockInputActivation, mockOutputActivation);
+
+		DifferentiableActivationFunctionComponentActivation activation = createDifferentiableActivationFunctionComponentActivation(
+				activationFunctionComponent, mockInputActivation, mockOutputActivation);
 		Assert.assertNotNull(activation);
-		
-		DirectedComponentGradient<NeuronsActivation> backPropagatedGradient = activation.backPropagate(mockInboundGradient);
-		
+
+		DirectedComponentGradient<NeuronsActivation> backPropagatedGradient = activation
+				.backPropagate(mockInboundGradient);
+
 		Assert.assertNotNull(backPropagatedGradient);
 		Assert.assertNotNull(backPropagatedGradient.getOutput());
 		Assert.assertFalse(backPropagatedGradient.getOutput().getExampleCount() == 0);
@@ -102,6 +109,5 @@ public abstract class DifferentiableActivationFunctionComponentActivationTestBas
 		Assert.assertSame(32, backPropagatedGradient.getOutput().getExampleCount());
 
 	}
-
 
 }

@@ -32,81 +32,84 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 public abstract class ManyToOneDirectedComponentActivationTestBase extends TestBase {
-	
+
 	protected NeuronsActivation mockOutputActivation;
-	
+
 	@Mock
 	protected AxonsContext mockAxonsContext;
-	
+
 	@Mock
 	protected DirectedComponentsContext mockDirectedComponentsContext;
-	
+
 	protected DirectedComponentGradient<NeuronsActivation> mockInboundGradient;
-		
+
 	@Mock
 	protected ManyToOneDirectedComponent<?> mockManyToOneDirectedComponent;
-	
+
 	@Mock
 	protected NeuronsActivation mockOutputGradientActivation;
-	
-	
+
 	@Before
 	public void setup() {
-	    MockitoAnnotations.initMocks(this);
-	    Mockito.when(mockDirectedComponentsContext.getMatrixFactory()).thenReturn(matrixFactory);
-	    this.mockOutputActivation = createNeuronsActivation(110, 32);
-	    this.mockInboundGradient = MockTestData.mockComponentGradient(110, 32, this);
+		MockitoAnnotations.initMocks(this);
+		Mockito.when(mockDirectedComponentsContext.getMatrixFactory()).thenReturn(matrixFactory);
+		this.mockOutputActivation = createNeuronsActivation(110, 32);
+		this.mockInboundGradient = MockTestData.mockComponentGradient(110, 32, this);
 	}
 
-	private ManyToOneDirectedComponentActivation createManyToOneDirectedComponentActivation(NeuronsActivation output, int inputCount) {
-		return createManyToOneDirectedComponentActivationUnderTest(output, inputCount, PathCombinationStrategy.ADDITION);
+	private ManyToOneDirectedComponentActivation createManyToOneDirectedComponentActivation(NeuronsActivation output,
+			int inputCount) {
+		return createManyToOneDirectedComponentActivationUnderTest(output, inputCount,
+				PathCombinationStrategy.ADDITION);
 	}
-		
-	protected abstract ManyToOneDirectedComponentActivation createManyToOneDirectedComponentActivationUnderTest(NeuronsActivation output, int inputCount, PathCombinationStrategy pathCombinationStrategy);
-	
+
+	protected abstract ManyToOneDirectedComponentActivation createManyToOneDirectedComponentActivationUnderTest(
+			NeuronsActivation output, int inputCount, PathCombinationStrategy pathCombinationStrategy);
+
 	@Test
 	public void testConstruction() {
-		ManyToOneDirectedComponentActivation manyToOneDirectedComponentActivation = createManyToOneDirectedComponentActivation(mockOutputActivation, 2);
+		ManyToOneDirectedComponentActivation manyToOneDirectedComponentActivation = createManyToOneDirectedComponentActivation(
+				mockOutputActivation, 2);
 		Assert.assertNotNull(manyToOneDirectedComponentActivation);
 	}
-	
+
 	@Test
 	public void testGetOutput() {
-				
-		ManyToOneDirectedComponentActivation manyToOneDirectedComponentActivation = createManyToOneDirectedComponentActivation(mockOutputActivation, 2);
+
+		ManyToOneDirectedComponentActivation manyToOneDirectedComponentActivation = createManyToOneDirectedComponentActivation(
+				mockOutputActivation, 2);
 		Assert.assertNotNull(manyToOneDirectedComponentActivation);
 		Assert.assertNotNull(manyToOneDirectedComponentActivation.getOutput());
 		Assert.assertSame(mockOutputActivation, manyToOneDirectedComponentActivation.getOutput());
 	}
-	
+
 	@Test
 	public void testBackPropagate() {
-		
-		ManyToOneDirectedComponentActivation manyToOneDirectedComponentActivation = createManyToOneDirectedComponentActivation(mockOutputActivation, 2);
-		
+
+		ManyToOneDirectedComponentActivation manyToOneDirectedComponentActivation = createManyToOneDirectedComponentActivation(
+				mockOutputActivation, 2);
+
 		Assert.assertNotNull(manyToOneDirectedComponentActivation);
-		
-		DirectedComponentGradient<List<NeuronsActivation>> backPropagatedGradient = manyToOneDirectedComponentActivation.backPropagate(mockInboundGradient);
-		
+
+		DirectedComponentGradient<List<NeuronsActivation>> backPropagatedGradient = manyToOneDirectedComponentActivation
+				.backPropagate(mockInboundGradient);
+
 		Assert.assertNotNull(backPropagatedGradient);
 		Assert.assertNotNull(backPropagatedGradient.getOutput());
 		Assert.assertEquals(2, backPropagatedGradient.getOutput().size());
 		Assert.assertNotNull(backPropagatedGradient.getOutput().get(0));
 		Assert.assertNotNull(backPropagatedGradient.getOutput().get(1));
 
-		
 		Assert.assertFalse(backPropagatedGradient.getOutput().get(0).getFeatureCount() == 0);
 		Assert.assertFalse(backPropagatedGradient.getOutput().get(0).getExampleCount() == 0);
 		Assert.assertFalse(backPropagatedGradient.getOutput().get(1).getFeatureCount() == 0);
 		Assert.assertFalse(backPropagatedGradient.getOutput().get(1).getExampleCount() == 0);
-		
-		
+
 		Assert.assertEquals(110, backPropagatedGradient.getOutput().get(0).getFeatureCount());
 		Assert.assertEquals(32, backPropagatedGradient.getOutput().get(0).getExampleCount());
 		Assert.assertEquals(110, backPropagatedGradient.getOutput().get(1).getFeatureCount());
 		Assert.assertEquals(32, backPropagatedGradient.getOutput().get(1).getExampleCount());
-		
-	}
 
+	}
 
 }

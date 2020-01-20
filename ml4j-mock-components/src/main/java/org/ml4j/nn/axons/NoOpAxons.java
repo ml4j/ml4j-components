@@ -23,14 +23,16 @@ import org.ml4j.nn.neurons.NeuronsActivation;
 import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
 
 /**
- * Mock implementation of Axons provided for component construction purposes but not intended to be interacted with.
+ * Mock implementation of Axons provided for component construction purposes but
+ * not intended to be interacted with.
  * 
  * @author Michael Lavelle
  *
  * @param <L> The type of Neurons on the LHS of these Axons
  * @param <R> The type of Neurons on the RHS of these Axons
  */
-public class NoOpAxons<L extends Neurons, R extends Neurons> extends AxonsBase<L, R,  NoOpAxons<L, R>> implements Axons<L, R, NoOpAxons<L, R>> {
+public class NoOpAxons<L extends Neurons, R extends Neurons> extends AxonsBase<L, R, NoOpAxons<L, R>>
+		implements Axons<L, R, NoOpAxons<L, R>> {
 
 	/**
 	 * Default serialization id.

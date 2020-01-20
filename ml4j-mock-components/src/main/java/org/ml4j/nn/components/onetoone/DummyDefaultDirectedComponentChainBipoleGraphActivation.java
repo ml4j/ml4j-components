@@ -26,25 +26,28 @@ import org.ml4j.nn.components.onetoone.base.DefaultDirectedComponentChainBipoleG
 import org.ml4j.nn.neurons.DummyNeuronsActivation;
 import org.ml4j.nn.neurons.NeuronsActivation;
 
-public class DummyDefaultDirectedComponentChainBipoleGraphActivation extends DefaultDirectedComponentChainBipoleGraphActivationBase
+public class DummyDefaultDirectedComponentChainBipoleGraphActivation
+		extends DefaultDirectedComponentChainBipoleGraphActivationBase
 		implements DefaultDirectedComponentChainBipoleGraphActivation {
-	
-	public DummyDefaultDirectedComponentChainBipoleGraphActivation(DefaultDirectedComponentChainBipoleGraph bipoleGraph, NeuronsActivation output) {
+
+	public DummyDefaultDirectedComponentChainBipoleGraphActivation(DefaultDirectedComponentChainBipoleGraph bipoleGraph,
+			NeuronsActivation output) {
 		super(bipoleGraph, output);
 	}
-	
+
 	@Override
 	public DirectedComponentGradient<NeuronsActivation> backPropagate(
 			DirectedComponentGradient<NeuronsActivation> gradient) {
-		return new DirectedComponentGradientImpl<>(gradient.getTotalTrainableAxonsGradients(), new DummyNeuronsActivation(this.originatingComponent.getInputNeurons(), gradient.getOutput().getFeatureOrientation(), 
-				gradient.getOutput().getExampleCount()));
+		return new DirectedComponentGradientImpl<>(gradient.getTotalTrainableAxonsGradients(),
+				new DummyNeuronsActivation(this.originatingComponent.getInputNeurons(),
+						gradient.getOutput().getFeatureOrientation(), gradient.getOutput().getExampleCount()));
 	}
 
 	@Override
 	public List<DefaultChainableDirectedComponentActivation> decompose() {
 		return Arrays.asList(this);
 	}
-	
+
 	@Override
 	public void close(DirectedComponentActivationLifecycle arg0) {
 		// No-op

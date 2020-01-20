@@ -35,80 +35,91 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 public abstract class DefaultDirectedComponentChainActivationTestBase extends TestBase {
-	
+
 	@Mock
 	protected AxonsContext mockAxonsContext;
-	
+
 	@Mock
 	protected DirectedComponentsContext mockDirectedComponentsContext;
-	
-	
+
 	@SuppressWarnings("rawtypes")
 	@Mock
 	protected DirectedAxonsComponent mockAxonsComponent;
-	
+
 	@Mock
 	protected DefaultDirectedComponentChain mockComponentChain;
-	
+
 	@Before
 	public void setup() {
-	    MockitoAnnotations.initMocks(this);
-	    
+		MockitoAnnotations.initMocks(this);
+
 		// Create the mock chain, with 100 input neurons and 110 output neurons.
 		Mockito.when(mockComponentChain.getInputNeurons()).thenReturn(new Neurons(100, false));
 		Mockito.when(mockComponentChain.getOutputNeurons()).thenReturn(new Neurons(110, false));
-		
-	    Mockito.when(mockDirectedComponentsContext.getMatrixFactory()).thenReturn(matrixFactory);
+
+		Mockito.when(mockDirectedComponentsContext.getMatrixFactory()).thenReturn(matrixFactory);
 
 	}
 
-	private DefaultDirectedComponentChainActivation createDefaultDirectedComponentChainActivation(DefaultDirectedComponentChain componentChain, List<DefaultChainableDirectedComponentActivation> activations) {
+	private DefaultDirectedComponentChainActivation createDefaultDirectedComponentChainActivation(
+			DefaultDirectedComponentChain componentChain,
+			List<DefaultChainableDirectedComponentActivation> activations) {
 		return createDefaultDirectedComponentChainActivationUnderTest(componentChain, activations);
 	}
-		
+
 	protected abstract DefaultDirectedComponentChainActivation createDefaultDirectedComponentChainActivationUnderTest(
-			DefaultDirectedComponentChain componentChain, List<DefaultChainableDirectedComponentActivation> activations);
-		
+			DefaultDirectedComponentChain componentChain,
+			List<DefaultChainableDirectedComponentActivation> activations);
+
 	@Test
 	public void testConstruction() {
-		
+
 		int exampleCount = 32;
 
 		// Create the mock activations created by 2 components within the mock chain
-		DefaultChainableDirectedComponentActivation mockChainableActivation1 = MockTestData.mockComponentActivation(100, 105, exampleCount, this);
-		DefaultChainableDirectedComponentActivation mockChainableActivation2 = MockTestData.mockComponentActivation(105, 110, exampleCount, this);
+		DefaultChainableDirectedComponentActivation mockChainableActivation1 = MockTestData.mockComponentActivation(100,
+				105, exampleCount, this);
+		DefaultChainableDirectedComponentActivation mockChainableActivation2 = MockTestData.mockComponentActivation(105,
+				110, exampleCount, this);
 
-		DefaultDirectedComponentChainActivation componentChainActivation = createDefaultDirectedComponentChainActivation(mockComponentChain, Arrays.asList(mockChainableActivation1, mockChainableActivation2));
+		DefaultDirectedComponentChainActivation componentChainActivation = createDefaultDirectedComponentChainActivation(
+				mockComponentChain, Arrays.asList(mockChainableActivation1, mockChainableActivation2));
 
 		Assert.assertNotNull(componentChainActivation);
 	}
-	
+
 	@Test
 	public void testGetOutput() {
-				
+
 		int exampleCount = 32;
 
 		// Create the mock chain activations
-		DefaultChainableDirectedComponentActivation mockChainableActivation1 = MockTestData.mockComponentActivation(100, 105, exampleCount, this);
-		DefaultChainableDirectedComponentActivation mockChainableActivation2 = MockTestData.mockComponentActivation(105, 110, exampleCount, this);
+		DefaultChainableDirectedComponentActivation mockChainableActivation1 = MockTestData.mockComponentActivation(100,
+				105, exampleCount, this);
+		DefaultChainableDirectedComponentActivation mockChainableActivation2 = MockTestData.mockComponentActivation(105,
+				110, exampleCount, this);
 
-		DefaultDirectedComponentChainActivation componentChainActivation = createDefaultDirectedComponentChainActivation(mockComponentChain, Arrays.asList(mockChainableActivation1, mockChainableActivation2));
+		DefaultDirectedComponentChainActivation componentChainActivation = createDefaultDirectedComponentChainActivation(
+				mockComponentChain, Arrays.asList(mockChainableActivation1, mockChainableActivation2));
 		Assert.assertNotNull(componentChainActivation);
 		Assert.assertNotNull(componentChainActivation.getOutput());
 		Assert.assertSame(mockChainableActivation2.getOutput(), componentChainActivation.getOutput());
 	}
-	
+
 	@Test
 	public void testGetActivations() {
-		
-		int exampleCount = 32;
-		
-		// Create the mock chain activations
-		DefaultChainableDirectedComponentActivation mockChainableActivation1 = MockTestData.mockComponentActivation(100, 105, exampleCount, this);
-		DefaultChainableDirectedComponentActivation mockChainableActivation2 = MockTestData.mockComponentActivation(105, 110, exampleCount, this);
 
-		DefaultDirectedComponentChainActivation componentChainActivation = createDefaultDirectedComponentChainActivation(mockComponentChain, Arrays.asList(mockChainableActivation1, mockChainableActivation2));
-		
+		int exampleCount = 32;
+
+		// Create the mock chain activations
+		DefaultChainableDirectedComponentActivation mockChainableActivation1 = MockTestData.mockComponentActivation(100,
+				105, exampleCount, this);
+		DefaultChainableDirectedComponentActivation mockChainableActivation2 = MockTestData.mockComponentActivation(105,
+				110, exampleCount, this);
+
+		DefaultDirectedComponentChainActivation componentChainActivation = createDefaultDirectedComponentChainActivation(
+				mockComponentChain, Arrays.asList(mockChainableActivation1, mockChainableActivation2));
+
 		Assert.assertNotNull(componentChainActivation);
 		Assert.assertNotNull(componentChainActivation.getActivations());
 		Assert.assertFalse(componentChainActivation.getActivations().isEmpty());
@@ -117,27 +128,32 @@ public abstract class DefaultDirectedComponentChainActivationTestBase extends Te
 		Assert.assertSame(mockChainableActivation2, componentChainActivation.getActivations().get(1));
 
 	}
-	
+
 	@Test
 	public void testBackPropagate() {
-	
+
 		int exampleCount = 32;
-		
+
 		// Create the mock activations created by 2 components within the mock chain
-		DefaultChainableDirectedComponentActivation mockChainableActivation1 = MockTestData.mockComponentActivation(100, 105, exampleCount, this);
-		DefaultChainableDirectedComponentActivation mockChainableActivation2 = MockTestData.mockComponentActivation(105, 110, exampleCount, this);
-	
-		// Create the chain activation under test, from the mock chain and mock activations.
-		DefaultDirectedComponentChainActivation componentChainActivation = createDefaultDirectedComponentChainActivation(mockComponentChain, 
-				Arrays.asList(mockChainableActivation1, mockChainableActivation2));
+		DefaultChainableDirectedComponentActivation mockChainableActivation1 = MockTestData.mockComponentActivation(100,
+				105, exampleCount, this);
+		DefaultChainableDirectedComponentActivation mockChainableActivation2 = MockTestData.mockComponentActivation(105,
+				110, exampleCount, this);
+
+		// Create the chain activation under test, from the mock chain and mock
+		// activations.
+		DefaultDirectedComponentChainActivation componentChainActivation = createDefaultDirectedComponentChainActivation(
+				mockComponentChain, Arrays.asList(mockChainableActivation1, mockChainableActivation2));
 		Assert.assertNotNull(componentChainActivation);
-		
+
 		// Create a mock in-bound gradient
-		DirectedComponentGradient<NeuronsActivation> mockInboundGradient = MockTestData.mockComponentGradient(110, 32, this);
-		
+		DirectedComponentGradient<NeuronsActivation> mockInboundGradient = MockTestData.mockComponentGradient(110, 32,
+				this);
+
 		// Back propagate the in-bound gradient through the chain activation
-		DirectedComponentGradient<NeuronsActivation> backPropagatedGradient = componentChainActivation.backPropagate(mockInboundGradient);
-		
+		DirectedComponentGradient<NeuronsActivation> backPropagatedGradient = componentChainActivation
+				.backPropagate(mockInboundGradient);
+
 		// Assertions
 		Assert.assertNotNull(backPropagatedGradient);
 		Assert.assertNotNull(backPropagatedGradient.getOutput());
@@ -145,7 +161,8 @@ public abstract class DefaultDirectedComponentChainActivationTestBase extends Te
 		Assert.assertFalse(backPropagatedGradient.getOutput().getFeatureCount() == 0);
 		Assert.assertFalse(backPropagatedGradient.getOutput().getExampleCount() == 0);
 
-		Assert.assertSame(mockComponentChain.getInputNeurons().getNeuronCountExcludingBias(), backPropagatedGradient.getOutput().getFeatureCount());
+		Assert.assertSame(mockComponentChain.getInputNeurons().getNeuronCountExcludingBias(),
+				backPropagatedGradient.getOutput().getFeatureCount());
 		Assert.assertSame(exampleCount, backPropagatedGradient.getOutput().getExampleCount());
 	}
 

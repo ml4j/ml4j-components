@@ -10,23 +10,25 @@ import org.ml4j.nn.neurons.NeuronsActivation;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 
-public class DefaultDifferentiableActivationFunctionComponentImplTest extends DifferentiableActivationFunctionComponentTestBase<DifferentiableActivationFunctionComponentAdapter> {
+public class DefaultDifferentiableActivationFunctionComponentImplTest
+		extends DifferentiableActivationFunctionComponentTestBase<DifferentiableActivationFunctionComponentAdapter> {
 
 	@Mock
 	protected DifferentiableActivationFunction mockActivationFunction;
-	
-	@Override
-	protected DifferentiableActivationFunctionComponentAdapter createDifferentiableActivationFunctionComponentUnderTest(Neurons neurons, 
-			ActivationFunctionType activationFunctionType) {
-		
-		Mockito.when(mockActivationFunction.getActivationFunctionType()).thenReturn(ActivationFunctionType.createCustomBaseType("DUMMY"));
 
-		
-		Mockito.when(mockActivationFunction.activate(mockNeuronsActivation, mockNeuronsActivationContext)).thenReturn(mockActivationFunctionActivation);
-	
+	@Override
+	protected DifferentiableActivationFunctionComponentAdapter createDifferentiableActivationFunctionComponentUnderTest(
+			Neurons neurons, ActivationFunctionType activationFunctionType) {
+
+		Mockito.when(mockActivationFunction.getActivationFunctionType())
+				.thenReturn(ActivationFunctionType.createCustomBaseType("DUMMY"));
+
+		Mockito.when(mockActivationFunction.activate(mockNeuronsActivation, mockNeuronsActivationContext))
+				.thenReturn(mockActivationFunctionActivation);
+
 		return new DefaultDifferentiableActivationFunctionComponentImpl(neurons, mockActivationFunction);
 	}
-	
+
 	@Override
 	protected MatrixFactory createMatrixFactory() {
 		return Mockito.mock(MatrixFactory.class);

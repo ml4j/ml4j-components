@@ -17,10 +17,10 @@ public class ScaleAndShiftAxonWeightsImpl extends AxonWeightsBase implements Axo
 
 	public ScaleAndShiftAxonWeightsImpl(int inputNeuronCount, int outputNeuronCount, Matrix connectionWeights,
 			Matrix leftToRightBiases, Matrix rightToLeftBiases) {
-		super(inputNeuronCount, outputNeuronCount, connectionWeights, leftToRightBiases, rightToLeftBiases, AxonWeightsType.SCALE_AND_SHIFT);
+		super(inputNeuronCount, outputNeuronCount, connectionWeights, leftToRightBiases, rightToLeftBiases,
+				AxonWeightsType.SCALE_AND_SHIFT);
 	}
 
-	
 	@Override
 	public Matrix applyToRightToLeftInput(Matrix input) {
 
@@ -46,6 +46,5 @@ public class ScaleAndShiftAxonWeightsImpl extends AxonWeightsBase implements Axo
 				leftToRightBiases == null ? null : leftToRightBiases.dup(),
 				rightToLeftBiases == null ? null : rightToLeftBiases.dup());
 	}
-
 
 }

@@ -37,11 +37,12 @@ public class DefaultComponentChainBatchImplTest extends DefaultDirectedComponent
 	@Override
 	protected DefaultDirectedComponentChainBatch createDefaultDirectedComponentChainBatchUnderTest(
 			List<DefaultChainableDirectedComponent<?, ?>> components) {
-		
-		List<DefaultDirectedComponentChain> chains = components.stream().map(c -> new DefaultDirectedComponentChainImpl(Arrays.asList(c))).collect(Collectors.toList());
+
+		List<DefaultDirectedComponentChain> chains = components.stream()
+				.map(c -> new DefaultDirectedComponentChainImpl(Arrays.asList(c))).collect(Collectors.toList());
 		return new DefaultComponentChainBatchImpl(chains);
 	}
-	
+
 	@Override
 	protected MatrixFactory createMatrixFactory() {
 		return Mockito.mock(MatrixFactory.class);

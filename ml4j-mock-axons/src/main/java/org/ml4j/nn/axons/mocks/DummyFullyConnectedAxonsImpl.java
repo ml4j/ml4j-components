@@ -49,17 +49,16 @@ public class DummyFullyConnectedAxonsImpl implements FullyConnectedAxons {
 	@Override
 	public AxonsActivation pushLeftToRight(NeuronsActivation leftNeuronsActivation,
 			AxonsActivation previousRightToLeftActivation, AxonsContext axonsContext) {
-		
+
 		int exampleCount = leftNeuronsActivation.getExampleCount();
-		
+
 		if (!axonsContext.isTrainingContext() && !leftNeuronsActivation.isImmutable()) {
 			leftNeuronsActivation.close();
 		}
-		
+
 		return new AxonsActivationImpl(this, null, () -> leftNeuronsActivation,
 				new NeuronsActivationImpl(getRightNeurons(),
-						matrixFactory.createMatrix(rightNeurons.getNeuronCountExcludingBias(),exampleCount
-								),
+						matrixFactory.createMatrix(rightNeurons.getNeuronCountExcludingBias(), exampleCount),
 						NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET),
 				leftNeurons, rightNeurons);
 	}
@@ -95,7 +94,7 @@ public class DummyFullyConnectedAxonsImpl implements FullyConnectedAxons {
 	public AxonWeights getDetachedAxonWeights() {
 		throw new UnsupportedOperationException();
 	}
-	
+
 	@Override
 	public Optional<NeuronsActivationFeatureOrientation> optimisedFor() {
 		return Optional.empty();

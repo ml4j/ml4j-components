@@ -36,11 +36,12 @@ import org.mockito.Mockito;
  * @author Michael Lavelle
  *
  */
-public class DummyDefaultDirectedComponentChainBipoleGraphTest extends DefaultDirectedComponentChainBipoleGraphTestBase {
+public class DummyDefaultDirectedComponentChainBipoleGraphTest
+		extends DefaultDirectedComponentChainBipoleGraphTestBase {
 
 	@Mock
 	private DefaultDirectedComponentChainBatch mockComponentChainBatch;
-	
+
 	@Mock
 	private DefaultDirectedComponentChainBatchActivation mockComponentChainBatchActivation;
 
@@ -48,13 +49,16 @@ public class DummyDefaultDirectedComponentChainBipoleGraphTest extends DefaultDi
 	protected DefaultDirectedComponentChainBipoleGraphBase createDefaultDirectedComponentChainBipoleGraphUnderTest(
 			DirectedComponentFactory factory, List<DefaultChainableDirectedComponent<?, ?>> components,
 			PathCombinationStrategy pathCombinationStrategy) {
-		Mockito.when(mockComponentChainBatch.forwardPropagate(Arrays.asList(mockNeuronsActivation1, mockNeuronsActivation2), mockDirectedComponentsContext))
-		.thenReturn(mockComponentChainBatchActivation);
-		Mockito.when(mockComponentChainBatchActivation.getOutput()).thenReturn(Arrays.asList(mockNeuronsActivation3, mockNeuronsActivation4));
-	
-		return new DummyDefaultDirectedComponentChainBipoleGraph(new Neurons(10, false), new Neurons(100, false), mockComponentChainBatch);
+		Mockito.when(mockComponentChainBatch.forwardPropagate(
+				Arrays.asList(mockNeuronsActivation1, mockNeuronsActivation2), mockDirectedComponentsContext))
+				.thenReturn(mockComponentChainBatchActivation);
+		Mockito.when(mockComponentChainBatchActivation.getOutput())
+				.thenReturn(Arrays.asList(mockNeuronsActivation3, mockNeuronsActivation4));
+
+		return new DummyDefaultDirectedComponentChainBipoleGraph(new Neurons(10, false), new Neurons(100, false),
+				mockComponentChainBatch);
 	}
-	
+
 	@Override
 	protected MatrixFactory createMatrixFactory() {
 		return Mockito.mock(MatrixFactory.class);
