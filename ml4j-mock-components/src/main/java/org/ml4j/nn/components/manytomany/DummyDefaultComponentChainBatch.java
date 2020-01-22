@@ -64,8 +64,7 @@ public class DummyDefaultComponentChainBatch extends DefaultComponentChainBatchB
 	}
 
 	@Override
-	public DirectedComponentsContext getContext(DirectedComponentsContext directedComponentsContext,
-			int componentIndex) {
+	public DirectedComponentsContext getContext(DirectedComponentsContext directedComponentsContext) {
 		return directedComponentsContext;
 	}
 

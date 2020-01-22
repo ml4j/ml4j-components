@@ -88,8 +88,8 @@ public abstract class DefaultDirectedComponentChainBatchTestBase extends TestBas
 		Mockito.when(mockComponent1.getOutputNeurons()).thenReturn(new Neurons(300, false));
 		Mockito.when(mockComponent2.getOutputNeurons()).thenReturn(new Neurons(400, false));
 		
-		Mockito.when(mockComponent1.getContext(mockDirectedComponentsContext, 0)).thenReturn(mockAxonsContext1);
-		Mockito.when(mockComponent2.getContext(mockDirectedComponentsContext, 0)).thenReturn(mockAxonsContext2);
+		Mockito.when(mockComponent1.getContext(mockDirectedComponentsContext)).thenReturn(mockAxonsContext1);
+		Mockito.when(mockComponent2.getContext(mockDirectedComponentsContext)).thenReturn(mockAxonsContext2);
 
 		Mockito.when(mockComponent1.forwardPropagate(Mockito.eq(mockNeuronsActivation1), Mockito.same(mockAxonsContext1)))
 				.thenReturn(mockComponent1Activation);

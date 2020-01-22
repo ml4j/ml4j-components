@@ -69,8 +69,7 @@ public class DefaultComponentChainBatchImpl extends DefaultComponentChainBatchBa
 	}
 
 	@Override
-	public DirectedComponentsContext getContext(DirectedComponentsContext directedComponentsContext,
-			int componentIndex) {
+	public DirectedComponentsContext getContext(DirectedComponentsContext directedComponentsContext) {
 		return directedComponentsContext;
 	}
 

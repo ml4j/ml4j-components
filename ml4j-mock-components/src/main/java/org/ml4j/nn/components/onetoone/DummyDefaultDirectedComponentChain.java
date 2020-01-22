@@ -65,13 +65,11 @@ public class DummyDefaultDirectedComponentChain extends DefaultDirectedComponent
 		}
 
 		List<DefaultChainableDirectedComponentActivation> activations = new ArrayList<>();
-		int index = 0;
 		for (DefaultChainableDirectedComponent<?, ?> component : sequentialComponents) {
 			DefaultChainableDirectedComponentActivation activation = forwardPropagate(inFlightActivation, component,
-					index, context);
+					context);
 			activations.add(activation);
 			inFlightActivation = activation.getOutput();
-			index++;
 		}
 
 		if (inFlightActivation.getFeatureCount() != getOutputNeurons().getNeuronCountExcludingBias()) {

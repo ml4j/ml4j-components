@@ -32,7 +32,7 @@ public class DummyGenericComponent
 	}
 
 	@Override
-	public Object getContext(DirectedComponentsContext directedComponentsContext, int componentIndex) {
+	public Object getContext(DirectedComponentsContext directedComponentsContext) {
 		return new Object();
 	}
 
@@ -86,6 +86,6 @@ public class DummyGenericComponent
 	@Override
 	public DefaultChainableDirectedComponentActivation forwardPropagate(NeuronsActivation input,
 			DirectedComponentsContext context) {
-		return forwardPropagate(input, getContext(context, 0));
+		return forwardPropagate(input, getContext(context));
 	}
 }
