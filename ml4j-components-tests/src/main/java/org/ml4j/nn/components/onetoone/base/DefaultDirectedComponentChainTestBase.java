@@ -19,11 +19,13 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.ml4j.nn.axons.AxonsContext;
 import org.ml4j.nn.components.DirectedComponentsContext;
 import org.ml4j.nn.components.NeuralComponentBaseType;
+import org.ml4j.nn.components.axons.DirectedAxonsComponent;
+import org.ml4j.nn.components.axons.DirectedAxonsComponentActivation;
 import org.ml4j.nn.components.base.TestBase;
 import org.ml4j.nn.components.onetone.DefaultChainableDirectedComponent;
-import org.ml4j.nn.components.onetone.DefaultChainableDirectedComponentActivation;
 import org.ml4j.nn.components.onetone.DefaultDirectedComponentChain;
 import org.ml4j.nn.components.onetone.DefaultDirectedComponentChainActivation;
 import org.ml4j.nn.neurons.Neurons;
@@ -51,16 +53,22 @@ public abstract class DefaultDirectedComponentChainTestBase extends TestBase {
 	private DirectedComponentsContext mockDirectedComponentsContext;
 
 	@Mock
-	private DefaultChainableDirectedComponentActivation mockComponent1Activation;
+	private DirectedAxonsComponentActivation mockComponent1Activation;
 
 	@Mock
-	private DefaultChainableDirectedComponentActivation mockComponent2Activation;
+	private DirectedAxonsComponentActivation mockComponent2Activation;
 
 	@Mock
-	private DefaultChainableDirectedComponent<DefaultChainableDirectedComponentActivation, DirectedComponentsContext> mockComponent1;
+	private DirectedAxonsComponent<?, ?, ?> mockComponent1;
 
 	@Mock
-	private DefaultChainableDirectedComponent<DefaultChainableDirectedComponentActivation, DirectedComponentsContext> mockComponent2;
+	private DirectedAxonsComponent<?, ?, ?> mockComponent2;
+	
+	@Mock
+	private AxonsContext mockAxonsContext1;
+	
+	@Mock
+	private AxonsContext mockAxonsContext2;
 
 	@Before
 	public void setup() {
@@ -76,10 +84,14 @@ public abstract class DefaultDirectedComponentChainTestBase extends TestBase {
 		Mockito.when(mockComponent2.getInputNeurons()).thenReturn(new Neurons(200, false));
 		Mockito.when(mockComponent1.getOutputNeurons()).thenReturn(new Neurons(200, false));
 		Mockito.when(mockComponent2.getOutputNeurons()).thenReturn(new Neurons(300, false));
+		
+		Mockito.when(mockComponent1.getContext(mockDirectedComponentsContext)).thenReturn(mockAxonsContext1);
+		
+		Mockito.when(mockComponent2.getContext(mockDirectedComponentsContext)).thenReturn(mockAxonsContext2);
 
-		Mockito.when(mockComponent1.forwardPropagate(Mockito.eq(mockNeuronsActivation1), Mockito.any()))
+		Mockito.when(mockComponent1.forwardPropagate(Mockito.eq(mockNeuronsActivation1), Mockito.same(mockAxonsContext1)))
 				.thenReturn(mockComponent1Activation);
-		Mockito.when(mockComponent2.forwardPropagate(Mockito.eq(mockNeuronsActivation2), Mockito.any()))
+		Mockito.when(mockComponent2.forwardPropagate(Mockito.eq(mockNeuronsActivation2), Mockito.same(mockAxonsContext2)))
 				.thenReturn(mockComponent2Activation);
 		Mockito.when(mockComponent1Activation.getOutput()).thenReturn(mockNeuronsActivation2);
 		Mockito.when(mockComponent2Activation.getOutput()).thenReturn(mockNeuronsActivation3);

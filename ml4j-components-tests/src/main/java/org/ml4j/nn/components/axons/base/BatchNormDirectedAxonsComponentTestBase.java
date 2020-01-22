@@ -168,7 +168,7 @@ public abstract class BatchNormDirectedAxonsComponentTestBase extends TestBase {
 		Mockito.when(mockDirectedComponentsContext.getContext(Mockito.same(directedAxonsComponent), Mockito.any()))
 				.thenReturn(mockAxonsContext2);
 
-		AxonsContext axonsContext = directedAxonsComponent.getContext(mockDirectedComponentsContext, 0);
+		AxonsContext axonsContext = directedAxonsComponent.getContext(mockDirectedComponentsContext);
 		Assert.assertNotNull(axonsContext);
 		Assert.assertNotSame(mockAxonsContext, axonsContext);
 		Assert.assertSame(mockAxonsContext2, axonsContext);

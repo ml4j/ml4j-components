@@ -32,7 +32,7 @@ public class DummyGenericComponent
 	}
 
 	@Override
-	public Object getContext(DirectedComponentsContext directedComponentsContext, int componentIndex) {
+	public Object getContext(DirectedComponentsContext directedComponentsContext) {
 		return new Object();
 	}
 
@@ -81,5 +81,11 @@ public class DummyGenericComponent
 	public List<NeuronsActivationFeatureOrientation> supports() {
 		// TODO THUR
 		return Arrays.asList(NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET);
+	}
+
+	@Override
+	public DefaultChainableDirectedComponentActivation forwardPropagate(NeuronsActivation input,
+			DirectedComponentsContext context) {
+		return forwardPropagate(input, getContext(context));
 	}
 }

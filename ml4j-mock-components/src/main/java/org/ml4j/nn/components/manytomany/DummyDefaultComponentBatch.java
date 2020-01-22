@@ -48,7 +48,7 @@ public class DummyDefaultComponentBatch extends DefaultComponentBatchBase implem
 		List<DefaultChainableDirectedComponentActivation> chainActivations = new ArrayList<>();
 		for (NeuronsActivation neuronActivation : neuronActivations) {
 			DefaultChainableDirectedComponentActivation chainActivation = forwardPropagate(neuronActivation,
-					parallelComponents.get(index), index, context);
+					parallelComponents.get(index), context);
 			chainActivations.add(chainActivation);
 			index++;
 		}
@@ -58,9 +58,9 @@ public class DummyDefaultComponentBatch extends DefaultComponentBatchBase implem
 	}
 
 	protected <X, Y> Y forwardPropagate(NeuronsActivation input,
-			DefaultChainableDirectedComponent<? extends Y, X> component, int componentIndex,
+			DefaultChainableDirectedComponent<? extends Y, X> component,
 			DirectedComponentsContext context) {
-		return component.forwardPropagate(input, component.getContext(context, componentIndex));
+		return component.forwardPropagate(input, component.getContext(context));
 	}
 
 	@Override
@@ -69,8 +69,7 @@ public class DummyDefaultComponentBatch extends DefaultComponentBatchBase implem
 	}
 
 	@Override
-	public DirectedComponentsContext getContext(DirectedComponentsContext directedComponentsContext,
-			int componentIndex) {
+	public DirectedComponentsContext getContext(DirectedComponentsContext directedComponentsContext) {
 		return directedComponentsContext;
 	}
 

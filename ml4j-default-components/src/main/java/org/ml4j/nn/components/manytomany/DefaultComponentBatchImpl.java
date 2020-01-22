@@ -66,7 +66,7 @@ public class DefaultComponentBatchImpl extends DefaultComponentBatchBase {
 	protected <X, Y> Y forwardPropagate(NeuronsActivation input,
 			DefaultChainableDirectedComponent<? extends Y, X> component, int componentIndex,
 			DirectedComponentsContext context) {
-		return component.forwardPropagate(input, component.getContext(context, componentIndex));
+		return component.forwardPropagate(input, component.getContext(context));
 	}
 
 	@Override
@@ -75,8 +75,7 @@ public class DefaultComponentBatchImpl extends DefaultComponentBatchBase {
 	}
 
 	@Override
-	public DirectedComponentsContext getContext(DirectedComponentsContext directedComponentsContext,
-			int componentIndex) {
+	public DirectedComponentsContext getContext(DirectedComponentsContext directedComponentsContext) {
 		return directedComponentsContext;
 	}
 
