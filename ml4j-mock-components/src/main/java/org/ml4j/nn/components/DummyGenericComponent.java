@@ -82,4 +82,10 @@ public class DummyGenericComponent
 		// TODO THUR
 		return Arrays.asList(NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET);
 	}
+
+	@Override
+	public DefaultChainableDirectedComponentActivation forwardPropagate(NeuronsActivation input,
+			DirectedComponentsContext context) {
+		return forwardPropagate(input, getContext(context, 0));
+	}
 }

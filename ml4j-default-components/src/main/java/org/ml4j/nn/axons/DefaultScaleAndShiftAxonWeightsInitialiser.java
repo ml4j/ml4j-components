@@ -12,9 +12,6 @@ public class DefaultScaleAndShiftAxonWeightsInitialiser implements AxonWeightsIn
 
 	public DefaultScaleAndShiftAxonWeightsInitialiser(Neurons neurons) {
 		this.neurons = neurons;
-		if (!neurons.hasBiasUnit()) {
-			throw new IllegalArgumentException("For scale and shift axons left neurons must contain bias unit");
-		}
 	}
 
 	@Override
