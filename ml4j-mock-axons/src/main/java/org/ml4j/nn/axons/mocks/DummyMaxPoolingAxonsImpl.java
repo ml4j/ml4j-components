@@ -1,7 +1,5 @@
 package org.ml4j.nn.axons.mocks;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 
 import org.ml4j.MatrixFactory;
@@ -14,6 +12,7 @@ import org.ml4j.nn.neurons.ImageNeuronsActivationImpl;
 import org.ml4j.nn.neurons.Neurons3D;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
+import org.ml4j.nn.neurons.NeuronsActivationFormat;
 
 public class DummyMaxPoolingAxonsImpl implements MaxPoolingAxons {
 
@@ -91,13 +90,13 @@ public class DummyMaxPoolingAxonsImpl implements MaxPoolingAxons {
 	}
 
 	@Override
-	public Optional<NeuronsActivationFeatureOrientation> optimisedFor() {
+	public Optional<NeuronsActivationFormat<?>> optimisedFor() {
 		return Optional.empty();
 	}
-
+	
 	@Override
-	public List<NeuronsActivationFeatureOrientation> supports() {
-		return Arrays.asList(NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET);
+	public boolean isSupported(NeuronsActivationFormat<?> format) {
+		return NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET.equals(format.getFeatureOrientation());
 	}
 
 }

@@ -13,7 +13,6 @@
  */
 package org.ml4j.nn.components.activationfunctions;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.ml4j.nn.activationfunctions.DifferentiableActivationFunction;
@@ -22,7 +21,7 @@ import org.ml4j.nn.components.activationfunctions.base.DifferentiableActivationF
 import org.ml4j.nn.neurons.Neurons;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.ml4j.nn.neurons.NeuronsActivationContext;
-import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
+import org.ml4j.nn.neurons.NeuronsActivationFormat;
 
 /**
  * Default implementation of DifferentiableActivationFunctionComponent - a
@@ -66,12 +65,12 @@ public class DefaultDifferentiableActivationFunctionComponentImpl extends
 	}
 
 	@Override
-	public Optional<NeuronsActivationFeatureOrientation> optimisedFor() {
-		return activationFunction.optimisedFor();
+	public Optional<NeuronsActivationFormat<?>> optimisedFor() {
+		return Optional.empty();
 	}
 
 	@Override
-	public List<NeuronsActivationFeatureOrientation> supports() {
-		return activationFunction.supports();
+	public boolean isSupported(NeuronsActivationFormat<?> format) {
+		return activationFunction.isSupported(format);
 	}
 }

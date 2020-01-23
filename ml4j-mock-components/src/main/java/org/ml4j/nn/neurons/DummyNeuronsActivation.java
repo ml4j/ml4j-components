@@ -144,4 +144,9 @@ public class DummyNeuronsActivation implements NeuronsActivation {
 		this.neurons = new Neurons(featureCount, neurons.hasBiasUnit());
 		this.examples = exampleCount;
 	}
+	
+	@Override
+	public NeuronsActivationFormat<?> getFormat() {
+		return new NeuronsActivationFormat<>(featureOrientation, new FlatFeaturesFormat());
+	}
 }

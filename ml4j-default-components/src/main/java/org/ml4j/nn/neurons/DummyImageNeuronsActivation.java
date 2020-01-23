@@ -60,4 +60,9 @@ public class DummyImageNeuronsActivation extends DummyNeuronsActivation implemen
 	public DummyImageNeuronsActivation dup() {
 		return new DummyImageNeuronsActivation(getNeurons(), featureOrientation, examples);
 	}
+	
+	@Override
+	public ImageNeuronsActivationFormat getFormat() {
+		return ImageNeuronsActivationFormat.ML4J_DEFAULT_IMAGE_FORMAT;
+	}
 }

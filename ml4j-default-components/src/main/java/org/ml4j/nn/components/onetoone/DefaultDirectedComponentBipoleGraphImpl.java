@@ -34,6 +34,7 @@ import org.ml4j.nn.neurons.Neurons;
 import org.ml4j.nn.neurons.Neurons3D;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
+import org.ml4j.nn.neurons.NeuronsActivationFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -200,18 +201,19 @@ public class DefaultDirectedComponentBipoleGraphImpl extends DefaultDirectedComp
 		return new DefaultDirectedComponentBipoleGraphImpl(inputNeurons, outputNeurons, parallelComponentBatch.dup(),
 				oneToManyDirectedComponent.dup(), manyToOneDirectedComponent.dup(), pathCombinationStrategy);
 	}
-
+	
 	@Override
-	public List<NeuronsActivationFeatureOrientation> supports() {
-		return NeuronsActivationFeatureOrientation.intersectLists(Arrays.asList(oneToManyDirectedComponent.supports(),
-				parallelComponentBatch.supports(), manyToOneDirectedComponent.supports()));
-	}
-
-	@Override
-	public Optional<NeuronsActivationFeatureOrientation> optimisedFor() {
-		return NeuronsActivationFeatureOrientation
+	public Optional<NeuronsActivationFormat<?>> optimisedFor() {
+		return NeuronsActivationFormat
 				.intersectOptionals(Arrays.asList(oneToManyDirectedComponent.optimisedFor(),
 						parallelComponentBatch.optimisedFor(), manyToOneDirectedComponent.optimisedFor()));
+	}
+	
+	@Override
+	public boolean isSupported(NeuronsActivationFormat<?> format) {
+		return oneToManyDirectedComponent.isSupported(format)
+				&& NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET.equals(format.getFeatureOrientation())
+				&& parallelComponentBatch.isSupported(format) && manyToOneDirectedComponent.isSupported(format);
 	}
 
 }

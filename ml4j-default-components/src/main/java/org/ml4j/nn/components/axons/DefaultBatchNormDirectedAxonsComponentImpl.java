@@ -13,8 +13,6 @@
  */
 package org.ml4j.nn.components.axons;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 
 import org.ml4j.EditableMatrix;
@@ -28,6 +26,7 @@ import org.ml4j.nn.components.axons.base.DirectedAxonsComponentBase;
 import org.ml4j.nn.neurons.Neurons;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
+import org.ml4j.nn.neurons.NeuronsActivationFormat;
 import org.ml4j.nn.neurons.NeuronsActivationImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -207,14 +206,13 @@ public class DefaultBatchNormDirectedAxonsComponentImpl<L extends Neurons> exten
 	}
 
 	@Override
-	public Optional<NeuronsActivationFeatureOrientation> optimisedFor() {
+	public Optional<NeuronsActivationFormat<?>> optimisedFor() {
 		return axons.optimisedFor();
 	}
 
 	@Override
-	public List<NeuronsActivationFeatureOrientation> supports() {
-		return NeuronsActivationFeatureOrientation.intersectLists(axons.supports(),
-				Arrays.asList(NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET));
+	public boolean isSupported(NeuronsActivationFormat<?> format) {
+		return axons.isSupported(format) && NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET.equals(format.getFeatureOrientation());
 	}
 
 }
