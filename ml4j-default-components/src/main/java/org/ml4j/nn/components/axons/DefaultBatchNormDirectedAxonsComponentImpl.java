@@ -26,8 +26,8 @@ import org.ml4j.nn.components.axons.base.DirectedAxonsComponentBase;
 import org.ml4j.nn.neurons.Neurons;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
-import org.ml4j.nn.neurons.NeuronsActivationFormat;
 import org.ml4j.nn.neurons.NeuronsActivationImpl;
+import org.ml4j.nn.neurons.format.NeuronsActivationFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -119,7 +119,7 @@ public class DefaultBatchNormDirectedAxonsComponentImpl<L extends Neurons> exten
 		}
 
 		NeuronsActivation xhatN = new NeuronsActivationImpl(this.getAxons().getRightNeurons(), xhat,
-				featureOrientation);
+				input.getFormat());
 
 		AxonsActivation axonsActivation = axons.pushLeftToRight(xhatN, null, axonsContext);
 

@@ -34,7 +34,7 @@ import org.ml4j.nn.neurons.Neurons;
 import org.ml4j.nn.neurons.Neurons3D;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
-import org.ml4j.nn.neurons.NeuronsActivationFormat;
+import org.ml4j.nn.neurons.format.NeuronsActivationFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -208,16 +208,29 @@ public class DefaultDirectedComponentChainBipoleGraphImpl extends DefaultDirecte
 
 	@Override
 	public Optional<NeuronsActivationFormat<?>> optimisedFor() {
-		return NeuronsActivationFormat
-				.intersectOptionals(Arrays.asList(oneToManyDirectedComponent.optimisedFor(),
-						parallelComponentChainsBatch.optimisedFor(), manyToOneDirectedComponent.optimisedFor()));
+		if (oneToManyDirectedComponent != null && manyToOneDirectedComponent != null) {
+			return NeuronsActivationFormat
+					.intersectOptionals(Arrays.asList(oneToManyDirectedComponent.optimisedFor(),
+							parallelComponentChainsBatch.optimisedFor(), manyToOneDirectedComponent.optimisedFor()));
+		} else if (oneToManyDirectedComponent != null) {
+			return NeuronsActivationFormat
+					.intersectOptionals(Arrays.asList(oneToManyDirectedComponent.optimisedFor(),
+							parallelComponentChainsBatch.optimisedFor()));
+		} else if (manyToOneDirectedComponent != null) {
+			return NeuronsActivationFormat
+					.intersectOptionals(Arrays.asList(manyToOneDirectedComponent.optimisedFor(),
+							parallelComponentChainsBatch.optimisedFor()));
+		} else {
+			return parallelComponentChainsBatch.optimisedFor();
+		}
 	}
 	
 	@Override
 	public boolean isSupported(NeuronsActivationFormat<?> format) {
-		return oneToManyDirectedComponent.isSupported(format)
+		return (oneToManyDirectedComponent == null || oneToManyDirectedComponent.isSupported(format))
 				&& NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET.equals(format.getFeatureOrientation())
-				&& parallelComponentChainsBatch.isSupported(format) && manyToOneDirectedComponent.isSupported(format);
+				&& parallelComponentChainsBatch.isSupported(format) && 
+				(manyToOneDirectedComponent == null || manyToOneDirectedComponent.isSupported(format));
 	}
 
 }

@@ -13,12 +13,16 @@
  */
 package org.ml4j.nn.neurons;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 import org.ml4j.FloatModifier;
 import org.ml4j.FloatPredicate;
 import org.ml4j.Matrix;
 import org.ml4j.MatrixFactory;
+import org.ml4j.nn.neurons.format.NeuronsActivationFormat;
+import org.ml4j.nn.neurons.format.features.Dimension;
+import org.ml4j.nn.neurons.format.features.FlatFeaturesFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -147,6 +151,6 @@ public class DummyNeuronsActivation implements NeuronsActivation {
 	
 	@Override
 	public NeuronsActivationFormat<?> getFormat() {
-		return new NeuronsActivationFormat<>(featureOrientation, new FlatFeaturesFormat());
+		return new NeuronsActivationFormat<>(featureOrientation, new FlatFeaturesFormat(), Arrays.asList(Dimension.EXAMPLE));
 	}
 }

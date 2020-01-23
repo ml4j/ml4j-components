@@ -14,8 +14,9 @@ import org.ml4j.nn.neurons.Neurons;
 import org.ml4j.nn.neurons.Neurons3D;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
-import org.ml4j.nn.neurons.NeuronsActivationFormat;
 import org.ml4j.nn.neurons.NeuronsActivationImpl;
+import org.ml4j.nn.neurons.format.ImageNeuronsActivationFormat;
+import org.ml4j.nn.neurons.format.NeuronsActivationFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -103,7 +104,7 @@ public class DefaultAveragePoolingAxonsImpl implements AveragePoolingAxons {
 
 		ImageNeuronsActivation onesActivation = new ImageNeuronsActivationImpl(
 				axonsContext.getMatrixFactory().createOnes(inputMatrixRows, inputMatrixColumns),
-				inputImageActivation.getNeurons(), NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET, false);
+				inputImageActivation.getNeurons(), inputImageActivation.getFormat(), false);
 
 		// Reformat the input and the ones activations.
 
@@ -122,9 +123,10 @@ public class DefaultAveragePoolingAxonsImpl implements AveragePoolingAxons {
 		Neurons averageNeurons = new Neurons(1, false);
 
 		// Obtain pooled feature averages
+		// TODO - format
 		NeuronsActivation preFormattedOutput = new NeuronsActivationImpl(averageNeurons,
 				reformatted.columnSums().asEditableMatrix().diviRowVector(counts),
-				NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET);
+				ImageNeuronsActivationFormat.ML4J_DEFAULT_IMAGE_FORMAT);
 		reformatted.close();
 
 		// Reformat back to output shape.
@@ -215,7 +217,7 @@ public class DefaultAveragePoolingAxonsImpl implements AveragePoolingAxons {
 		images.im2colPoolImport(matrixFactory, output, filterHeight, filterWidth, config.getStrideHeight(),
 				config.getStrideWidth());
 
-		return new ImageNeuronsActivationImpl(getLeftNeurons(), images, featureOrientation, false);
+		return new ImageNeuronsActivationImpl(getLeftNeurons(), images, ImageNeuronsActivationFormat.ML4J_DEFAULT_IMAGE_FORMAT, false);
 	}
 
 	@Override

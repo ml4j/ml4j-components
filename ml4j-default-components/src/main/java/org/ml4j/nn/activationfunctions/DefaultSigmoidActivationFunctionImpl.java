@@ -19,8 +19,8 @@ import org.ml4j.InterrimMatrix;
 import org.ml4j.Matrix;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.ml4j.nn.neurons.NeuronsActivationContext;
-import org.ml4j.nn.neurons.NeuronsActivationFormat;
 import org.ml4j.nn.neurons.NeuronsActivationImpl;
+import org.ml4j.nn.neurons.format.NeuronsActivationFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,7 +46,7 @@ public class DefaultSigmoidActivationFunctionImpl implements DifferentiableActiv
 
 		Matrix sigmoidOfInputActivationsMatrix = input.getActivations(context.getMatrixFactory()).sigmoid();
 		NeuronsActivation output = new NeuronsActivationImpl(input.getNeurons(), sigmoidOfInputActivationsMatrix,
-				input.getFeatureOrientation());
+				input.getFormat());
 		output.setImmutable(true);
 		return new DefaultDifferentiableActivationFunctionActivationImpl(this, input, output);
 	}
@@ -66,7 +66,7 @@ public class DefaultSigmoidActivationFunctionImpl implements DifferentiableActiv
 
 				Matrix gradientAtActivationInput = sigmoidOfActivationInput.sub(sigmoidOfActivationInputSquared);
 				return new NeuronsActivationImpl(activationFunctionActivation.getInput().getNeurons(),
-						gradientAtActivationInput, activationFunctionActivation.getInput().getFeatureOrientation());
+						gradientAtActivationInput, activationFunctionActivation.getInput().getFormat());
 			}
 
 		} else {
@@ -80,7 +80,7 @@ public class DefaultSigmoidActivationFunctionImpl implements DifferentiableActiv
 					Matrix gradientAtActivationInput = sigmoidOfActivationInput.sub(sigmoidOfActivationInputSquared);
 
 					return new NeuronsActivationImpl(activationFunctionActivation.getInput().getNeurons(),
-							gradientAtActivationInput, activationFunctionActivation.getInput().getFeatureOrientation());
+							gradientAtActivationInput, activationFunctionActivation.getInput().getFormat());
 				}
 			}
 

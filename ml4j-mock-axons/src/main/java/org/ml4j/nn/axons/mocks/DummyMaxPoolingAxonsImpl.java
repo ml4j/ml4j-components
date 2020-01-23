@@ -12,7 +12,8 @@ import org.ml4j.nn.neurons.ImageNeuronsActivationImpl;
 import org.ml4j.nn.neurons.Neurons3D;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
-import org.ml4j.nn.neurons.NeuronsActivationFormat;
+import org.ml4j.nn.neurons.format.ImageNeuronsActivationFormat;
+import org.ml4j.nn.neurons.format.NeuronsActivationFormat;
 
 public class DummyMaxPoolingAxonsImpl implements MaxPoolingAxons {
 
@@ -59,7 +60,7 @@ public class DummyMaxPoolingAxonsImpl implements MaxPoolingAxons {
 		return new AxonsActivationImpl(this, null, () -> leftNeuronsActivation,
 				new ImageNeuronsActivationImpl(
 						matrixFactory.createMatrix(rightNeurons.getNeuronCountExcludingBias(), exampleCount),
-						getRightNeurons(), NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET, false),
+						getRightNeurons(), ImageNeuronsActivationFormat.ML4J_DEFAULT_IMAGE_FORMAT, false),
 				leftNeurons, rightNeurons);
 	}
 
@@ -70,7 +71,7 @@ public class DummyMaxPoolingAxonsImpl implements MaxPoolingAxons {
 				new ImageNeuronsActivationImpl(
 						matrixFactory.createMatrix(leftNeurons.getNeuronCountExcludingBias(),
 								rightNeuronsActivation.getExampleCount()),
-						getLeftNeurons(), NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET, false),
+						getLeftNeurons(), ImageNeuronsActivationFormat.ML4J_DEFAULT_IMAGE_FORMAT, false),
 				leftNeurons, rightNeurons);
 	}
 

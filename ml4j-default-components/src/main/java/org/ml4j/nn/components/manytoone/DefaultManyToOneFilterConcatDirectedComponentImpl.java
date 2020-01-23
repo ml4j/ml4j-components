@@ -15,6 +15,7 @@ package org.ml4j.nn.components.manytoone;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -29,7 +30,7 @@ import org.ml4j.nn.neurons.Neurons;
 import org.ml4j.nn.neurons.Neurons3D;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
-import org.ml4j.nn.neurons.NeuronsActivationFormat;
+import org.ml4j.nn.neurons.format.NeuronsActivationFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,6 +58,11 @@ public class DefaultManyToOneFilterConcatDirectedComponentImpl
 	@Override
 	public DefaultManyToOneDirectedComponentActivationImpl forwardPropagate(List<NeuronsActivation> neuronActivations,
 			DirectedComponentsContext context) {
+		
+		if (!neuronActivations.stream().map(n -> isSupported(n.getFormat())).allMatch(Predicate.isEqual(true))) {
+			throw new IllegalArgumentException("Unsupported NeuronsActivation format");
+		}
+		
 		LOGGER.debug("Combining multiple neurons activations into a single output neurons activation");
 		Pair<ImageNeuronsActivation, int[]> b = getCombinedOutput(neuronActivations, context);
 		return new ManyToOneFilterConcatDirectedComponentActivation(neuronActivations.size(), b.getRight(),
@@ -86,7 +92,7 @@ public class DefaultManyToOneFilterConcatDirectedComponentImpl
 
 		return new ImmutablePair<>(new ImageNeuronsActivationImpl(
 				new Neurons3D(outputNeurons.getWidth(), outputNeurons.getHeight(), result.getChannels(), false), result,
-				NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET, false), channelBoundaries);
+				inputs.get(0).asImageNeuronsActivation(getInputNeurons3D(inputs.get(0).getNeurons())).getFormat(), false), channelBoundaries);
 	}
 
 	private Neurons3D getInputNeurons3D(Neurons inputNeurons) {

@@ -8,7 +8,7 @@ import org.ml4j.nn.activationfunctions.DifferentiableActivationFunctionActivatio
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.ml4j.nn.neurons.NeuronsActivationContext;
 import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
-import org.ml4j.nn.neurons.NeuronsActivationFormat;
+import org.ml4j.nn.neurons.format.NeuronsActivationFormat;
 
 public class DummyDifferentiableActivationFunctionImpl implements DifferentiableActivationFunction {
 

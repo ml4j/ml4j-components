@@ -17,8 +17,8 @@ import java.util.Optional;
 
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.ml4j.nn.neurons.NeuronsActivationContext;
-import org.ml4j.nn.neurons.NeuronsActivationFormat;
 import org.ml4j.nn.neurons.NeuronsActivationImpl;
+import org.ml4j.nn.neurons.format.NeuronsActivationFormat;
 
 /**
  * Default implementation of a Linear (identity) activation function
@@ -45,7 +45,7 @@ public class DefaultLinearActivationFunctionImpl implements DifferentiableActiva
 		NeuronsActivation output = new NeuronsActivationImpl(
 				activation.getOutput().getNeurons(), context.getMatrixFactory()
 						.createOnes(activation.getInput().getFeatureCount(), activation.getInput().getExampleCount()),
-				activation.getInput().getFeatureOrientation());
+				activation.getInput().getFormat());
 		return output;
 	}
 

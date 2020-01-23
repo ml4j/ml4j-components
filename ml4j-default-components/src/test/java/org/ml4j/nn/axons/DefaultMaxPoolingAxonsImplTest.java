@@ -4,11 +4,10 @@ import org.junit.Before;
 import org.ml4j.MatrixFactory;
 import org.ml4j.jblas.JBlasRowMajorMatrixFactory;
 import org.ml4j.nn.axons.base.Axons3DTestBase;
-import org.ml4j.nn.neurons.Neurons;
+import org.ml4j.nn.neurons.ImageNeuronsActivationImpl;
 import org.ml4j.nn.neurons.Neurons3D;
 import org.ml4j.nn.neurons.NeuronsActivation;
-import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
-import org.ml4j.nn.neurons.NeuronsActivationImpl;
+import org.ml4j.nn.neurons.format.ImageNeuronsActivationFormat;
 import org.mockito.Mockito;
 
 public class DefaultMaxPoolingAxonsImplTest extends Axons3DTestBase<MaxPoolingAxons> {
@@ -42,9 +41,10 @@ public class DefaultMaxPoolingAxonsImplTest extends Axons3DTestBase<MaxPoolingAx
 
 	@Override
 	public NeuronsActivation createNeuronsActivation(int featureCount, int exampleCount) {
-		return new NeuronsActivationImpl(new Neurons(featureCount, false),
+		return new ImageNeuronsActivationImpl(
 				matrixFactory.createMatrix(featureCount, exampleCount),
-				NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET);
+				leftNeurons,
+				ImageNeuronsActivationFormat.ML4J_DEFAULT_IMAGE_FORMAT, false);
 	}
 
 	@Override

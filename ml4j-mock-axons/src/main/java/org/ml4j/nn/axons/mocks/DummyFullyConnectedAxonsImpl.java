@@ -13,8 +13,9 @@ import org.ml4j.nn.axons.FullyConnectedAxons;
 import org.ml4j.nn.neurons.Neurons;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
-import org.ml4j.nn.neurons.NeuronsActivationFormat;
 import org.ml4j.nn.neurons.NeuronsActivationImpl;
+import org.ml4j.nn.neurons.format.ImageNeuronsActivationFormat;
+import org.ml4j.nn.neurons.format.NeuronsActivationFormat;
 
 public class DummyFullyConnectedAxonsImpl implements FullyConnectedAxons {
 
@@ -58,7 +59,7 @@ public class DummyFullyConnectedAxonsImpl implements FullyConnectedAxons {
 		return new AxonsActivationImpl(this, null, () -> leftNeuronsActivation,
 				new NeuronsActivationImpl(getRightNeurons(),
 						matrixFactory.createMatrix(rightNeurons.getNeuronCountExcludingBias(), exampleCount),
-						NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET),
+						ImageNeuronsActivationFormat.ML4J_DEFAULT_IMAGE_FORMAT),
 				leftNeurons, rightNeurons);
 	}
 
@@ -69,7 +70,7 @@ public class DummyFullyConnectedAxonsImpl implements FullyConnectedAxons {
 				new NeuronsActivationImpl(getLeftNeurons(),
 						matrixFactory.createMatrix(leftNeurons.getNeuronCountExcludingBias(),
 								rightNeuronsActivation.getExampleCount()),
-						NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET),
+						ImageNeuronsActivationFormat.ML4J_DEFAULT_IMAGE_FORMAT),
 				leftNeurons, rightNeurons);
 	}
 

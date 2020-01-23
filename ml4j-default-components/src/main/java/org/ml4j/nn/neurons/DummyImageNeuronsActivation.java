@@ -16,6 +16,7 @@ package org.ml4j.nn.neurons;
 import org.ml4j.Matrix;
 import org.ml4j.MatrixFactory;
 import org.ml4j.images.Images;
+import org.ml4j.nn.neurons.format.ImageNeuronsActivationFormat;
 
 /**
  * Mock implementation of ImageNeuronsActivation

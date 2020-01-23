@@ -14,8 +14,8 @@ import org.ml4j.nn.axons.ScaleAndShiftAxons;
 import org.ml4j.nn.neurons.Neurons;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
-import org.ml4j.nn.neurons.NeuronsActivationFormat;
 import org.ml4j.nn.neurons.NeuronsActivationImpl;
+import org.ml4j.nn.neurons.format.NeuronsActivationFormat;
 
 public class DummyScaleAndShiftAxonsImpl<N extends Neurons> implements ScaleAndShiftAxons<N> {
 
@@ -64,7 +64,7 @@ public class DummyScaleAndShiftAxonsImpl<N extends Neurons> implements ScaleAndS
 		return new AxonsActivationImpl(this, null, () -> leftNeuronsActivation,
 				new NeuronsActivationImpl(getRightNeurons(),
 						matrixFactory.createMatrix(rightNeurons.getNeuronCountExcludingBias(), exampleCount),
-						NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET),
+						NeuronsActivationFormat.ROWS_SPAN_FEATURE_SET),
 				leftNeurons, rightNeurons);
 	}
 
@@ -76,7 +76,7 @@ public class DummyScaleAndShiftAxonsImpl<N extends Neurons> implements ScaleAndS
 				new NeuronsActivationImpl(getLeftNeurons(),
 						matrixFactory.createMatrix(leftNeurons.getNeuronCountExcludingBias(),
 								rightNeuronsActivation.getExampleCount()),
-						NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET),
+						NeuronsActivationFormat.ROWS_SPAN_FEATURE_SET),
 				leftNeurons, rightNeurons);
 	}
 

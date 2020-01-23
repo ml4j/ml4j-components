@@ -8,8 +8,8 @@ import org.ml4j.nn.axons.factories.AxonsFactory;
 import org.ml4j.nn.neurons.Neurons;
 import org.ml4j.nn.neurons.Neurons3D;
 import org.ml4j.nn.neurons.NeuronsActivation;
-import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
 import org.ml4j.nn.neurons.NeuronsActivationImpl;
+import org.ml4j.nn.neurons.format.ImageNeuronsActivationFormat;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 
@@ -71,7 +71,7 @@ public class DefaultConvolutionalAxonsImplTest extends Axons3DTestBase<Convoluti
 	public NeuronsActivation createNeuronsActivation(int featureCount, int exampleCount) {
 		return new NeuronsActivationImpl(new Neurons(featureCount, false),
 				matrixFactory.createMatrix(featureCount, exampleCount),
-				NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET);
+				ImageNeuronsActivationFormat.ML4J_DEFAULT_IMAGE_FORMAT);
 	}
 
 	@Override

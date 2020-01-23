@@ -55,7 +55,7 @@ public class ManyToOneFilterConcatDirectedComponentActivation extends DefaultMan
 				.map(channelImage -> new ImageNeuronsActivationImpl(
 						new Neurons3D(outputNeurons.getWidth(), outputNeurons.getHeight(), channelImage.getChannels(),
 								false),
-						channelImage, imagesActivation.getFeatureOrientation(), imagesActivation.isImmutable()))
+						channelImage, imagesActivation.getFormat(), imagesActivation.isImmutable()))
 				.collect(Collectors.toList());
 
 		outerGradientBackPropagatedImages.stream().forEach(i -> i.setImmutable(true));

@@ -6,8 +6,8 @@ import org.ml4j.jblas.JBlasRowMajorMatrixFactory;
 import org.ml4j.nn.axons.base.AxonsTestBase;
 import org.ml4j.nn.neurons.Neurons;
 import org.ml4j.nn.neurons.NeuronsActivation;
-import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
 import org.ml4j.nn.neurons.NeuronsActivationImpl;
+import org.ml4j.nn.neurons.format.NeuronsActivationFormat;
 import org.mockito.Mockito;
 
 public class DefaultScaleAndShiftAxonsImplTest extends AxonsTestBase<ScaleAndShiftAxons<?>> {
@@ -36,7 +36,7 @@ public class DefaultScaleAndShiftAxonsImplTest extends AxonsTestBase<ScaleAndShi
 	public NeuronsActivation createNeuronsActivation(int featureCount, int exampleCount) {
 		return new NeuronsActivationImpl(new Neurons(featureCount, false),
 				matrixFactory.createMatrix(featureCount, exampleCount),
-				NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET);
+				NeuronsActivationFormat.ROWS_SPAN_FEATURE_SET);
 	}
 
 	@Override

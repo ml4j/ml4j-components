@@ -21,8 +21,8 @@ import org.ml4j.Matrix;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.ml4j.nn.neurons.NeuronsActivationContext;
 import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
-import org.ml4j.nn.neurons.NeuronsActivationFormat;
 import org.ml4j.nn.neurons.NeuronsActivationImpl;
+import org.ml4j.nn.neurons.format.NeuronsActivationFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,7 +56,7 @@ public class DefaultSoftmaxActivationFunctionImpl implements DifferentiableActiv
 		// input.close();
 
 		return new DefaultDifferentiableActivationFunctionActivationImpl(this, input, new NeuronsActivationImpl(
-				input.getNeurons(), softmaxOfInputActivationsMatrix, input.getFeatureOrientation()));
+				input.getNeurons(), softmaxOfInputActivationsMatrix, input.getFormat()));
 	}
 
 	/**

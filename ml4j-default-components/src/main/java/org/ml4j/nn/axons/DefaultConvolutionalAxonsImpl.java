@@ -14,8 +14,9 @@ import org.ml4j.nn.neurons.Neurons;
 import org.ml4j.nn.neurons.Neurons3D;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
-import org.ml4j.nn.neurons.NeuronsActivationFormat;
 import org.ml4j.nn.neurons.NeuronsActivationImpl;
+import org.ml4j.nn.neurons.format.ImageNeuronsActivationFormat;
+import org.ml4j.nn.neurons.format.NeuronsActivationFormat;
 
 public class DefaultConvolutionalAxonsImpl implements ConvolutionalAxons {
 
@@ -101,14 +102,15 @@ public class DefaultConvolutionalAxonsImpl implements ConvolutionalAxons {
 		if (isEligableOneByOne(filterWidth, filterHeight)) {
 			reformatted = new NeuronsActivationImpl(new Neurons(leftNeurons.getDepth(), leftNeurons.hasBiasUnit()),
 					reformatLeftToRightInputOneByOne(matrixFactory, leftNeuronsActivation),
-					NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET);
+					leftNeuronsActivation.getFormat());
 		} else {
 			ImageNeuronsActivation imageAct = leftNeuronsActivation.asImageNeuronsActivation(leftNeurons);
 			reformatted = new NeuronsActivationImpl(
 					new Neurons(leftNeurons.getDepth() * filterWidth * filterHeight, leftNeurons.hasBiasUnit()),
 					imageAct.im2ColConv(matrixFactory, filterHeight, filterWidth, config.getStrideHeight(),
 							config.getStrideWidth(), config.getPaddingHeight(), config.getPaddingWidth()),
-					NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET);
+					// TODO Format
+					ImageNeuronsActivationFormat.ML4J_DEFAULT_IMAGE_FORMAT);
 			if (!imageAct.isImmutable()) {
 				imageAct.close();
 			}
@@ -143,6 +145,8 @@ public class DefaultConvolutionalAxonsImpl implements ConvolutionalAxons {
 
 		AxonsActivation nestedActivation = fullyConnectedAxons.pushLeftToRight(reformatted,
 				previousRightToLeftActivation, axonsContext);
+		
+		
 
 		NeuronsActivation output = reformatLeftToRightOutput(axonsContext.getMatrixFactory(),
 				nestedActivation.getPostDropoutOutput(), exampleCount);
@@ -212,7 +216,7 @@ public class DefaultConvolutionalAxonsImpl implements ConvolutionalAxons {
 			images.im2colConvImport(matrixFactory, output.getActivations(matrixFactory), filterHeight, filterWidth,
 					config.getStrideHeight(), config.getStrideWidth());
 
-			return new ImageNeuronsActivationImpl(getLeftNeurons(), images, output.getFeatureOrientation(), false);
+			return new ImageNeuronsActivationImpl(getLeftNeurons(), images, ImageNeuronsActivationFormat.ML4J_DEFAULT_IMAGE_FORMAT, false);
 
 		}
 	}

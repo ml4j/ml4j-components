@@ -21,7 +21,7 @@ import org.ml4j.nn.components.activationfunctions.base.DifferentiableActivationF
 import org.ml4j.nn.neurons.Neurons;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.ml4j.nn.neurons.NeuronsActivationContext;
-import org.ml4j.nn.neurons.NeuronsActivationFormat;
+import org.ml4j.nn.neurons.format.NeuronsActivationFormat;
 
 /**
  * Default implementation of DifferentiableActivationFunctionComponent - a
