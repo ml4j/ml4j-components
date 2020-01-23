@@ -13,6 +13,9 @@ import org.ml4j.nn.neurons.ImageNeuronsActivation;
 import org.ml4j.nn.neurons.Neurons;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
+import org.ml4j.nn.neurons.format.ImageNeuronsActivationFormat;
+import org.ml4j.nn.neurons.format.NeuronsActivationFormat;
+import org.ml4j.nn.neurons.format.features.FeaturesFormat;
 import org.mockito.Mockito;
 
 public class MockTestData {
@@ -24,6 +27,7 @@ public class MockTestData {
 		Mockito.when(neuronsActivation.getRows()).thenReturn(featureCount);
 		Mockito.when(neuronsActivation.getColumns()).thenReturn(exampleCount);
 		Mockito.when(neuronsActivation.getNeurons()).thenReturn(new Neurons(featureCount, false));
+		Mockito.when(neuronsActivation.getFormat()).thenReturn(createMockFormat());
 		Mockito.when(neuronsActivation.getExampleCount()).thenReturn(exampleCount);
 		Mockito.when(neuronsActivation.getFeatureOrientation())
 				.thenReturn(NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET);
@@ -69,9 +73,17 @@ public class MockTestData {
 		Mockito.when(neuronsActivation.getExampleCount()).thenReturn(exampleCount);
 		Mockito.when(neuronsActivation.getFeatureOrientation())
 				.thenReturn(NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET);
+		Mockito.when(neuronsActivation.getFormat()).thenReturn(createMockFormat());
+		Mockito.when(mockImageActivation.getFormat()).thenReturn(ImageNeuronsActivationFormat.ML4J_DEFAULT_IMAGE_FORMAT);
+
 		Mockito.when(neuronsActivation.getActivations(Mockito.any())).thenReturn(matrix);
 		Mockito.when(neuronsActivation.dup()).thenReturn(neuronsActivation);
 		return neuronsActivation;
+	}
+	
+	@SuppressWarnings("unchecked")
+	private static <T extends FeaturesFormat> NeuronsActivationFormat<T> createMockFormat() {
+		return (NeuronsActivationFormat<T>) NeuronsActivationFormat.ROWS_SPAN_FEATURE_SET;
 	}
 
 	public static DirectedComponentGradient<NeuronsActivation> mockComponentGradient(int featureCount, int exampleCount,

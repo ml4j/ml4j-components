@@ -192,7 +192,7 @@ public class PrototypeBatchNormDirectedAxonsComponentActivationImpl<N extends Ne
 								.subiColumnVector(dbetaColumnVector).muliColumnVector(gammaMulIstdDiviNum);
 
 						NeuronsActivation dxn = new NeuronsActivationImpl(outerGradient.getOutput().getNeurons(), dx,
-								outerGradient.getOutput().getFeatureOrientation());
+								outerGradient.getOutput().getFormat());
 
 						// outerGradient.getOutput().close();
 
@@ -372,7 +372,7 @@ public class PrototypeBatchNormDirectedAxonsComponentActivationImpl<N extends Ne
 
 						NeuronsActivation dxn = new NeuronsActivationImpl(
 								rightToLeftGradientActivation.getPostDropoutOutput().getNeurons(), dx,
-								rightToLeftGradientActivation.getPostDropoutOutput().getFeatureOrientation());
+								rightToLeftGradientActivation.getPostDropoutOutput().getFormat());
 
 						// outerGradient.getOutput().close();
 

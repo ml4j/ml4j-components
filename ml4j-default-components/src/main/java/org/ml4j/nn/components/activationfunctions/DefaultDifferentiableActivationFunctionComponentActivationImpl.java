@@ -22,7 +22,6 @@ import org.ml4j.nn.components.activationfunctions.base.DifferentiableActivationF
 import org.ml4j.nn.costfunctions.CostFunctionGradient;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.ml4j.nn.neurons.NeuronsActivationContext;
-import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
 import org.ml4j.nn.neurons.NeuronsActivationImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -77,7 +76,7 @@ public class DefaultDifferentiableActivationFunctionComponentActivationImpl exte
 					new NeuronsActivationImpl(gradient.getOutput().getNeurons(),
 							backPropGradientMatrix.asEditableMatrix()
 									.mul(gradient.getOutput().getActivations(activationContext.getMatrixFactory())),
-							NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET));
+									gradient.getOutput().getFormat()));
 
 			activationFunctionActivation.getInput().close();
 

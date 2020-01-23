@@ -13,14 +13,12 @@
  */
 package org.ml4j.nn.axons;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 
 import org.ml4j.nn.axons.base.AxonsBase;
 import org.ml4j.nn.neurons.Neurons;
 import org.ml4j.nn.neurons.NeuronsActivation;
-import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
+import org.ml4j.nn.neurons.format.NeuronsActivationFormat;
 
 /**
  * Mock implementation of Axons provided for component construction purposes but
@@ -64,13 +62,12 @@ public class NoOpAxons<L extends Neurons, R extends Neurons> extends AxonsBase<L
 	}
 
 	@Override
-	public Optional<NeuronsActivationFeatureOrientation> optimisedFor() {
+	public Optional<NeuronsActivationFormat<?>> optimisedFor() {
 		return Optional.empty();
 	}
 
 	@Override
-	public List<NeuronsActivationFeatureOrientation> supports() {
-		return Arrays.asList(NeuronsActivationFeatureOrientation.values());
+	public boolean isSupported(NeuronsActivationFormat<?> format) {
+		return true;
 	}
-
 }

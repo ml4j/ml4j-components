@@ -65,7 +65,7 @@ public class DefaultOneToManyDirectedComponentActivationImpl extends OneToManyDi
 
 		NeuronsActivation totalActivation = new NeuronsActivationImpl(inputNeurons,
 				matrixFactory.createMatrix(gradients.get(0).getRows(), gradients.get(0).getColumns()),
-				gradients.get(0).getFeatureOrientation(), false);
+				gradients.get(0).getFormat(), false);
 
 		for (NeuronsActivation activation : gradients) {
 			totalActivation.addInline(matrixFactory, activation);

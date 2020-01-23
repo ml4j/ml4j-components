@@ -1,7 +1,5 @@
 package org.ml4j.nn.axons;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 
 import org.ml4j.EditableMatrix;
@@ -10,6 +8,7 @@ import org.ml4j.nn.neurons.Neurons;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
 import org.ml4j.nn.neurons.NeuronsActivationImpl;
+import org.ml4j.nn.neurons.format.NeuronsActivationFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -66,7 +65,7 @@ public abstract class WeightedAxonsBase<L extends Neurons, R extends Neurons, A 
 		}
 
 		NeuronsActivation outputActivation = new NeuronsActivationImpl(rightNeurons, output,
-				leftNeuronsActivation.getFeatureOrientation());
+				leftNeuronsActivation.getFormat());
 
 		if (!axonsContext.isTrainingContext() && !leftNeuronsActivation.isImmutable()) {
 			leftNeuronsActivation.close();
@@ -95,7 +94,7 @@ public abstract class WeightedAxonsBase<L extends Neurons, R extends Neurons, A 
 		rightNeuronsActivation.setImmutable(true);
 
 		return new AxonsActivationImpl(this, null, () -> rightNeuronsActivation, new NeuronsActivationImpl(leftNeurons,
-				output, NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET), leftNeurons, rightNeurons);
+				output, rightNeuronsActivation.getFormat()), leftNeurons, rightNeurons);
 	}
 
 	@Override
@@ -192,13 +191,12 @@ public abstract class WeightedAxonsBase<L extends Neurons, R extends Neurons, A 
 	protected abstract boolean isLeftInputDropoutSupported();
 
 	@Override
-	public Optional<NeuronsActivationFeatureOrientation> optimisedFor() {
+	public Optional<NeuronsActivationFormat<?>> optimisedFor() {
 		return Optional.empty();
 	}
 
 	@Override
-	public List<NeuronsActivationFeatureOrientation> supports() {
-		return Arrays.asList(NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET);
+	public boolean isSupported(NeuronsActivationFormat<?> format) {
+		return NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET.equals(format.getFeatureOrientation());
 	}
-
 }

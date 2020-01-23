@@ -13,7 +13,6 @@
  */
 package org.ml4j.nn.components.axons;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.ml4j.nn.axons.Axons;
@@ -23,7 +22,7 @@ import org.ml4j.nn.components.axons.base.DirectedAxonsComponentBase;
 import org.ml4j.nn.neurons.DummyNeuronsActivation;
 import org.ml4j.nn.neurons.Neurons;
 import org.ml4j.nn.neurons.NeuronsActivation;
-import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
+import org.ml4j.nn.neurons.format.NeuronsActivationFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -66,13 +65,12 @@ public class DummyDirectedAxonsComponent<L extends Neurons, R extends Neurons>
 	}
 
 	@Override
-	public Optional<NeuronsActivationFeatureOrientation> optimisedFor() {
+	public Optional<NeuronsActivationFormat<?>> optimisedFor() {
 		return axons.optimisedFor();
 	}
-
+	
 	@Override
-	public List<NeuronsActivationFeatureOrientation> supports() {
-		// TODO THUR
-		return axons.supports();
+	public boolean isSupported(NeuronsActivationFormat<?> format) {
+		return axons.isSupported(format);
 	}
 }

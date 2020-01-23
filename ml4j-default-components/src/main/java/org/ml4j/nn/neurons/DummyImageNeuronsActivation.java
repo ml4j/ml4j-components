@@ -16,6 +16,7 @@ package org.ml4j.nn.neurons;
 import org.ml4j.Matrix;
 import org.ml4j.MatrixFactory;
 import org.ml4j.images.Images;
+import org.ml4j.nn.neurons.format.ImageNeuronsActivationFormat;
 
 /**
  * Mock implementation of ImageNeuronsActivation
@@ -59,5 +60,10 @@ public class DummyImageNeuronsActivation extends DummyNeuronsActivation implemen
 	@Override
 	public DummyImageNeuronsActivation dup() {
 		return new DummyImageNeuronsActivation(getNeurons(), featureOrientation, examples);
+	}
+	
+	@Override
+	public ImageNeuronsActivationFormat getFormat() {
+		return ImageNeuronsActivationFormat.ML4J_DEFAULT_IMAGE_FORMAT;
 	}
 }

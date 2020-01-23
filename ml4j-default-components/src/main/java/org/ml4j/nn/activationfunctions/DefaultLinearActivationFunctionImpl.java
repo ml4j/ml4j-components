@@ -13,14 +13,12 @@
  */
 package org.ml4j.nn.activationfunctions;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.ml4j.nn.neurons.NeuronsActivationContext;
-import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
 import org.ml4j.nn.neurons.NeuronsActivationImpl;
+import org.ml4j.nn.neurons.format.NeuronsActivationFormat;
 
 /**
  * Default implementation of a Linear (identity) activation function
@@ -47,7 +45,7 @@ public class DefaultLinearActivationFunctionImpl implements DifferentiableActiva
 		NeuronsActivation output = new NeuronsActivationImpl(
 				activation.getOutput().getNeurons(), context.getMatrixFactory()
 						.createOnes(activation.getInput().getFeatureCount(), activation.getInput().getExampleCount()),
-				activation.getInput().getFeatureOrientation());
+				activation.getInput().getFormat());
 		return output;
 	}
 
@@ -57,12 +55,12 @@ public class DefaultLinearActivationFunctionImpl implements DifferentiableActiva
 	}
 
 	@Override
-	public Optional<NeuronsActivationFeatureOrientation> optimisedFor() {
+	public Optional<NeuronsActivationFormat<?>> optimisedFor() {
 		return Optional.empty();
 	}
 
 	@Override
-	public List<NeuronsActivationFeatureOrientation> supports() {
-		return Arrays.asList(NeuronsActivationFeatureOrientation.values());
+	public boolean isSupported(NeuronsActivationFormat<?> format) {
+		return true;
 	}
 }

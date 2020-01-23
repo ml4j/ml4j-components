@@ -13,16 +13,14 @@
  */
 package org.ml4j.nn.activationfunctions;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 
 import org.ml4j.InterrimMatrix;
 import org.ml4j.Matrix;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.ml4j.nn.neurons.NeuronsActivationContext;
-import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
 import org.ml4j.nn.neurons.NeuronsActivationImpl;
+import org.ml4j.nn.neurons.format.NeuronsActivationFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,7 +46,7 @@ public class DefaultSigmoidActivationFunctionImpl implements DifferentiableActiv
 
 		Matrix sigmoidOfInputActivationsMatrix = input.getActivations(context.getMatrixFactory()).sigmoid();
 		NeuronsActivation output = new NeuronsActivationImpl(input.getNeurons(), sigmoidOfInputActivationsMatrix,
-				input.getFeatureOrientation());
+				input.getFormat());
 		output.setImmutable(true);
 		return new DefaultDifferentiableActivationFunctionActivationImpl(this, input, output);
 	}
@@ -68,7 +66,7 @@ public class DefaultSigmoidActivationFunctionImpl implements DifferentiableActiv
 
 				Matrix gradientAtActivationInput = sigmoidOfActivationInput.sub(sigmoidOfActivationInputSquared);
 				return new NeuronsActivationImpl(activationFunctionActivation.getInput().getNeurons(),
-						gradientAtActivationInput, activationFunctionActivation.getInput().getFeatureOrientation());
+						gradientAtActivationInput, activationFunctionActivation.getInput().getFormat());
 			}
 
 		} else {
@@ -82,7 +80,7 @@ public class DefaultSigmoidActivationFunctionImpl implements DifferentiableActiv
 					Matrix gradientAtActivationInput = sigmoidOfActivationInput.sub(sigmoidOfActivationInputSquared);
 
 					return new NeuronsActivationImpl(activationFunctionActivation.getInput().getNeurons(),
-							gradientAtActivationInput, activationFunctionActivation.getInput().getFeatureOrientation());
+							gradientAtActivationInput, activationFunctionActivation.getInput().getFormat());
 				}
 			}
 
@@ -96,12 +94,12 @@ public class DefaultSigmoidActivationFunctionImpl implements DifferentiableActiv
 	}
 
 	@Override
-	public Optional<NeuronsActivationFeatureOrientation> optimisedFor() {
+	public Optional<NeuronsActivationFormat<?>> optimisedFor() {
 		return Optional.empty();
 	}
 
 	@Override
-	public List<NeuronsActivationFeatureOrientation> supports() {
-		return Arrays.asList(NeuronsActivationFeatureOrientation.values());
+	public boolean isSupported(NeuronsActivationFormat<?> format) {
+		return true;
 	}
 }

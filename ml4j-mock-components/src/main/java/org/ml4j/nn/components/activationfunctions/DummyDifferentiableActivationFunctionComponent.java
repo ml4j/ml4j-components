@@ -13,8 +13,6 @@
  */
 package org.ml4j.nn.components.activationfunctions;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 
 import org.ml4j.nn.activationfunctions.ActivationFunctionType;
@@ -22,7 +20,7 @@ import org.ml4j.nn.components.activationfunctions.base.DifferentiableActivationF
 import org.ml4j.nn.neurons.Neurons;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.ml4j.nn.neurons.NeuronsActivationContext;
-import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
+import org.ml4j.nn.neurons.format.NeuronsActivationFormat;
 
 /**
  * Mock implementation of DifferentiableActivationFunctionComponent
@@ -56,13 +54,13 @@ public class DummyDifferentiableActivationFunctionComponent extends Differentiab
 	}
 
 	@Override
-	public Optional<NeuronsActivationFeatureOrientation> optimisedFor() {
+	public Optional<NeuronsActivationFormat<?>> optimisedFor() {
 		return Optional.empty();
 	}
-
+	
 	@Override
-	public List<NeuronsActivationFeatureOrientation> supports() {
-		return Arrays.asList(NeuronsActivationFeatureOrientation.values());
+	public boolean isSupported(NeuronsActivationFormat<?> format) {
+		return true;
 	}
 
 }

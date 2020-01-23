@@ -1,7 +1,5 @@
 package org.ml4j.nn.axons.mocks;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 
 import org.ml4j.Matrix;
@@ -13,6 +11,7 @@ import org.ml4j.nn.neurons.Neurons;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
 import org.ml4j.nn.neurons.NeuronsActivationImpl;
+import org.ml4j.nn.neurons.format.NeuronsActivationFormat;
 
 public class DummyAxons<L extends Neurons, R extends Neurons, A extends Axons<L, R, A>> implements Axons<L, R, A> {
 
@@ -47,7 +46,7 @@ public class DummyAxons<L extends Neurons, R extends Neurons, A extends Axons<L,
 		Matrix output = matrixFactory.createMatrix(rightNeurons.getNeuronCountExcludingBias(),
 				leftNeuronsActivation.getExampleCount());
 		NeuronsActivation outputActivation = new NeuronsActivationImpl(getRightNeurons(), output,
-				leftNeuronsActivation.getFeatureOrientation());
+				leftNeuronsActivation.getFormat());
 		return new DummyAxonsActivation(this, () -> leftNeuronsActivation, outputActivation);
 	}
 
@@ -68,13 +67,13 @@ public class DummyAxons<L extends Neurons, R extends Neurons, A extends Axons<L,
 	}
 
 	@Override
-	public Optional<NeuronsActivationFeatureOrientation> optimisedFor() {
+	public Optional<NeuronsActivationFormat<?>> optimisedFor() {
 		return Optional.empty();
 	}
-
+	
 	@Override
-	public List<NeuronsActivationFeatureOrientation> supports() {
-		return Arrays.asList(NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET);
+	public boolean isSupported(NeuronsActivationFormat<?> format) {
+		return NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET.equals(format.getFeatureOrientation());
 	}
 
 }

@@ -1,7 +1,5 @@
 package org.ml4j.nn.axons;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 
 import org.ml4j.EditableMatrix;
@@ -17,6 +15,8 @@ import org.ml4j.nn.neurons.Neurons3D;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
 import org.ml4j.nn.neurons.NeuronsActivationImpl;
+import org.ml4j.nn.neurons.format.ImageNeuronsActivationFormat;
+import org.ml4j.nn.neurons.format.NeuronsActivationFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -76,7 +76,7 @@ public class DefaultMaxPoolingAxonsImpl implements MaxPoolingAxons {
 				new Neurons(filterWidth * filterHeight, leftNeurons.hasBiasUnit()),
 				act.im2ColPool(matrixFactory, filterHeight, filterWidth, config.getStrideHeight(),
 						config.getStrideWidth(), config.getPaddingHeight(), config.getPaddingWidth()),
-				NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET);
+				ImageNeuronsActivationFormat.ML4J_IM_TO_COL_POOL_FORMAT);
 		if (!act.isImmutable()) {
 			act.close();
 		}
@@ -129,7 +129,7 @@ public class DefaultMaxPoolingAxonsImpl implements MaxPoolingAxons {
 		Neurons reformattedNeurons = new Neurons(origOutput.getRows(), this.leftNeurons.hasBiasUnit());
 
 		NeuronsActivation preFormattedOutput = new NeuronsActivationImpl(reformattedNeurons, origOutput,
-				NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET);
+				leftNeuronsActivation.getFormat());
 
 		AxonsDropoutMask maxesDropoutMask = new AxonsDropoutMaskImpl(maxes, AxonsDropoutMaskType.INPUT);
 
@@ -220,7 +220,7 @@ public class DefaultMaxPoolingAxonsImpl implements MaxPoolingAxons {
 		// exampleCount, images.getData()),
 		// NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET);
 
-		return new ImageNeuronsActivationImpl(getLeftNeurons(), images, featureOrientation, false);
+		return new ImageNeuronsActivationImpl(getLeftNeurons(), images, ImageNeuronsActivationFormat.ML4J_DEFAULT_IMAGE_FORMAT, false);
 	}
 
 	public NeuronsActivation reformatRightToLeftInput(MatrixFactory matrixFactory, NeuronsActivation input) {
@@ -248,13 +248,13 @@ public class DefaultMaxPoolingAxonsImpl implements MaxPoolingAxons {
 	}
 
 	@Override
-	public Optional<NeuronsActivationFeatureOrientation> optimisedFor() {
+	public Optional<NeuronsActivationFormat<?>> optimisedFor() {
 		return Optional.empty();
 	}
 
 	@Override
-	public List<NeuronsActivationFeatureOrientation> supports() {
-		return Arrays.asList(NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET);
+	public boolean isSupported(NeuronsActivationFormat<?> format) {
+		return NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET.equals(format.getFeatureOrientation());
 	}
 
 }

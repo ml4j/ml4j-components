@@ -13,8 +13,6 @@
  */
 package org.ml4j.nn.components.onetomany;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 import java.util.function.IntSupplier;
 
@@ -22,6 +20,7 @@ import org.ml4j.nn.components.DirectedComponentsContext;
 import org.ml4j.nn.components.onetomany.base.OneToManyDirectedComponentBase;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
+import org.ml4j.nn.neurons.format.NeuronsActivationFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -80,12 +79,12 @@ public class DefaultOneToManyDirectedComponentImpl
 	}
 
 	@Override
-	public Optional<NeuronsActivationFeatureOrientation> optimisedFor() {
+	public Optional<NeuronsActivationFormat<?>> optimisedFor() {
 		return Optional.empty();
 	}
 
 	@Override
-	public List<NeuronsActivationFeatureOrientation> supports() {
-		return Arrays.asList(NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET);
+	public boolean isSupported(NeuronsActivationFormat<?> format) {
+		return NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET.equals(format.getFeatureOrientation());
 	}
 }

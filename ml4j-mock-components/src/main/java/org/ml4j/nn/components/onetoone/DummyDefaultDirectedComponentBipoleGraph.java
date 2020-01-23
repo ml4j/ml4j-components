@@ -27,6 +27,7 @@ import org.ml4j.nn.neurons.DummyNeuronsActivation;
 import org.ml4j.nn.neurons.Neurons;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
+import org.ml4j.nn.neurons.format.NeuronsActivationFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -73,17 +74,13 @@ public class DummyDefaultDirectedComponentBipoleGraph extends DefaultDirectedCom
 	public DefaultDirectedComponentBipoleGraph dup() {
 		return new DummyDefaultDirectedComponentBipoleGraph(inputNeurons, outputNeurons, parallelComponentBatch.dup());
 	}
-
 	@Override
-	public Optional<NeuronsActivationFeatureOrientation> optimisedFor() {
-		// TODO THUR
+	public Optional<NeuronsActivationFormat<?>> optimisedFor() {
 		return Optional.empty();
 	}
-
+	
 	@Override
-	public List<NeuronsActivationFeatureOrientation> supports() {
-		// TODO THUR
-		return Arrays.asList(NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET);
+	public boolean isSupported(NeuronsActivationFormat<?> format) {
+		return NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET.equals(format.getFeatureOrientation());
 	}
-
 }

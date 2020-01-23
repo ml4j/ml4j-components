@@ -7,8 +7,8 @@ import org.ml4j.nn.axons.base.Axons3DTestBase;
 import org.ml4j.nn.neurons.Neurons;
 import org.ml4j.nn.neurons.Neurons3D;
 import org.ml4j.nn.neurons.NeuronsActivation;
-import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
 import org.ml4j.nn.neurons.NeuronsActivationImpl;
+import org.ml4j.nn.neurons.format.ImageNeuronsActivationFormat;
 import org.mockito.Mockito;
 
 public class DefaultAveragePoolingAxonsImplTest extends Axons3DTestBase<AveragePoolingAxons> {
@@ -44,7 +44,7 @@ public class DefaultAveragePoolingAxonsImplTest extends Axons3DTestBase<AverageP
 	public NeuronsActivation createNeuronsActivation(int featureCount, int exampleCount) {
 		return new NeuronsActivationImpl(new Neurons(featureCount, false),
 				matrixFactory.createMatrix(featureCount, exampleCount),
-				NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET);
+				ImageNeuronsActivationFormat.ML4J_DEFAULT_IMAGE_FORMAT);
 	}
 
 	@Override
