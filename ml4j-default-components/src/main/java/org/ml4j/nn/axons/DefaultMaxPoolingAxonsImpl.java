@@ -167,10 +167,10 @@ public class DefaultMaxPoolingAxonsImpl implements MaxPoolingAxons {
 
 		try (InterrimMatrix outputMatrix = axonsDropoutMask.getDropoutMask().asInterrimMatrix()) {
 
-			EditableMatrix reformatted2 = (EditableMatrix) axonsContext.getMatrixFactory()
-					.createMatrix(outputMatrix.getRows(), outputMatrix.getColumns());
+			EditableMatrix reformatted2 = axonsContext.getMatrixFactory()
+					.createMatrix(outputMatrix.getRows(), outputMatrix.getColumns()).asEditableMatrix();
 			for (int r = 0; r < reformatted2.getRows(); r++) {
-				reformatted2.putRow(r, reformatted.asEditableMatrix());
+				reformatted2.putRow(r, reformatted);
 			}
 			// reformatted.close();
 			outputMatrix.asEditableMatrix().muli(reformatted2);
