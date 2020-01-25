@@ -62,23 +62,26 @@ public class DefaultDirectedComponentChainImpl extends DefaultDirectedComponentC
 		NeuronsActivation inFlightActivation = neuronsActivation;
 
 		if (inFlightActivation.getFeatureCount() != getInputNeurons().getNeuronCountExcludingBias()) {
-			throw new IllegalStateException();
+			throw new IllegalStateException("Expected " + getInputNeurons().getNeuronCountExcludingBias() + " features but received " + inFlightActivation.getFeatureCount()) ;
 		}
+		int inFlightActivationFeatureCount = neuronsActivation.getFeatureCount();
 		List<DefaultChainableDirectedComponentActivation> activations = new ArrayList<>();
 		for (DefaultChainableDirectedComponent<?, ?> component : sequentialComponents) {
 			DefaultChainableDirectedComponentActivation activation = forwardPropagate(inFlightActivation, component,
 					context);
 			activations.add(activation);
 			inFlightActivation = activation.getOutput();
+			inFlightActivationFeatureCount = inFlightActivation.getFeatureCount();
 		}
 
 		for (DefaultChainableDirectedComponentActivation act : activations) {
-			if (act.getOutput() != inFlightActivation) {
+			// TODO
+			if (act.getOutput() != inFlightActivation && context.isTrainingContext()) {
 				act.close(DirectedComponentActivationLifecycle.FORWARD_PROPAGATION);
 			}
 		}
 
-		if (inFlightActivation.getFeatureCount() != getOutputNeurons().getNeuronCountExcludingBias()) {
+		if (inFlightActivationFeatureCount != getOutputNeurons().getNeuronCountExcludingBias()) {
 			throw new IllegalStateException();
 		}
 
