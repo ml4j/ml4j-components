@@ -18,7 +18,7 @@ public class DefaultDirectedAxonsComponentImplTest extends DirectedAxonsComponen
 	@Override
 	protected <L extends Neurons, R extends Neurons> DirectedAxonsComponent<L, R, ?> createDirectedAxonsComponentUnderTest(
 			Axons<L, R, ?> axons) {
-		return new DefaultDirectedAxonsComponentImpl<>(axons);
+		return new DefaultDirectedAxonsComponentImpl<>("someName", axons);
 	}
 
 	@Override

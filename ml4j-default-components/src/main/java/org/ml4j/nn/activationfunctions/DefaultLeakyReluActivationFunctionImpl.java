@@ -17,35 +17,40 @@ import java.util.Optional;
 
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.ml4j.nn.neurons.NeuronsActivationContext;
-import org.ml4j.nn.neurons.NeuronsActivationImpl;
 import org.ml4j.nn.neurons.format.NeuronsActivationFormat;
 
 /**
- * Default implementation of a Linear (identity) activation function
+ * Default implementation of a Relu (pseudo-differentiable) activation function
  * 
  * @author Michael Lavelle
  */
-public class DefaultLinearActivationFunctionImpl implements DifferentiableActivationFunction {
+public class DefaultLeakyReluActivationFunctionImpl implements DifferentiableActivationFunction {
 
 	/**
 	 * Default serialization id.
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	private float alpha;
+	
+	public DefaultLeakyReluActivationFunctionImpl(float alpha) {
+		this.alpha = alpha;
+	}
 
 	@Override
 	public DifferentiableActivationFunctionActivation activate(NeuronsActivation activation,
 			NeuronsActivationContext context) {
-		NeuronsActivation output = activation.dup();
-		return new DefaultDifferentiableActivationFunctionActivationImpl(this, activation, output);
+		NeuronsActivation input = context.isTrainingContext() ? activation.dup() : activation;
+		NeuronsActivation output = activation;
+		output.applyValueModifier(v -> v < 0, v -> alpha * v);
+		return new DefaultDifferentiableActivationFunctionActivationImpl(this, input, output);
 	}
 
 	@Override
 	public NeuronsActivation activationGradient(DifferentiableActivationFunctionActivation activation,
 			NeuronsActivationContext context) {
-		NeuronsActivation output = new NeuronsActivationImpl(
-				activation.getOutput().getNeurons(), context.getMatrixFactory()
-						.createOnes(activation.getInput().getFeatureCount(), activation.getInput().getExampleCount()),
-				activation.getInput().getFormat());
+		NeuronsActivation output = activation.getInput();
+		output.applyValueModifier(v -> true, v -> v <= 0 ? alpha : 1);
 		return output;
 	}
 
@@ -66,6 +71,6 @@ public class DefaultLinearActivationFunctionImpl implements DifferentiableActiva
 
 	@Override
 	public ActivationFunctionProperties getActivationFunctionProperties() {
-		return new ActivationFunctionProperties();
+		return new ActivationFunctionProperties().withAlpha(alpha);
 	}
 }

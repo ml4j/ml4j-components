@@ -37,8 +37,8 @@ public class DummyBatchNormDirectedAxonsComponent<L extends Neurons> extends
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public DummyBatchNormDirectedAxonsComponent(Axons<L, L, ?> axons) {
-		super(axons);
+	public DummyBatchNormDirectedAxonsComponent(String name, Axons<L, L, ?> axons) {
+		super(name, axons);
 	}
 
 	@Override
@@ -68,7 +68,7 @@ public class DummyBatchNormDirectedAxonsComponent<L extends Neurons> extends
 
 	@Override
 	public BatchNormDirectedAxonsComponent<L, Axons<L, L, ?>> dup() {
-		return new DummyBatchNormDirectedAxonsComponent<>(axons.dup());
+		return new DummyBatchNormDirectedAxonsComponent<>(name, axons.dup());
 	}
 
 	@Override

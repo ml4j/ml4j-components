@@ -2,6 +2,7 @@ package org.ml4j.nn.activationfunctions.mocks;
 
 import java.util.Optional;
 
+import org.ml4j.nn.activationfunctions.ActivationFunctionProperties;
 import org.ml4j.nn.activationfunctions.ActivationFunctionType;
 import org.ml4j.nn.activationfunctions.DifferentiableActivationFunction;
 import org.ml4j.nn.activationfunctions.DifferentiableActivationFunctionActivation;
@@ -51,6 +52,11 @@ public class DummyDifferentiableActivationFunctionImpl implements Differentiable
 	@Override
 	public Optional<NeuronsActivationFormat<?>> optimisedFor() {
 		return Optional.empty();
+	}
+
+	@Override
+	public ActivationFunctionProperties getActivationFunctionProperties() {
+		return new ActivationFunctionProperties();
 	}
 	
 	@Override

@@ -36,9 +36,9 @@ public class DummyDifferentiableActivationFunctionComponentAdapter extends
 	 */
 	private static final long serialVersionUID = -6033017517698579773L;
 
-	public DummyDifferentiableActivationFunctionComponentAdapter(Neurons neurons,
+	public DummyDifferentiableActivationFunctionComponentAdapter(String name, Neurons neurons,
 			DifferentiableActivationFunction activationFunction) {
-		super(neurons, activationFunction);
+		super(name, neurons, activationFunction);
 	}
 
 	@Override
@@ -50,7 +50,7 @@ public class DummyDifferentiableActivationFunctionComponentAdapter extends
 
 	@Override
 	public DifferentiableActivationFunctionComponentAdapter dup() {
-		return new DummyDifferentiableActivationFunctionComponentAdapter(neurons, activationFunction);
+		return new DummyDifferentiableActivationFunctionComponentAdapter(name, neurons, activationFunction);
 	}
 
 	@Override

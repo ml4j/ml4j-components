@@ -45,9 +45,9 @@ public class DefaultDifferentiableActivationFunctionComponentImpl extends
 	 *                           function is applied.
 	 * @param activationFunction The underlying activation function.
 	 */
-	public DefaultDifferentiableActivationFunctionComponentImpl(Neurons neurons,
+	public DefaultDifferentiableActivationFunctionComponentImpl(String name, Neurons neurons,
 			DifferentiableActivationFunction activationFunction) {
-		super(neurons, activationFunction);
+		super(name, neurons, activationFunction);
 	}
 
 	@Override
@@ -61,7 +61,7 @@ public class DefaultDifferentiableActivationFunctionComponentImpl extends
 
 	@Override
 	public DifferentiableActivationFunctionComponentAdapter dup() {
-		return new DefaultDifferentiableActivationFunctionComponentImpl(neurons, activationFunction);
+		return new DefaultDifferentiableActivationFunctionComponentImpl(name, neurons, activationFunction);
 	}
 
 	@Override

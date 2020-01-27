@@ -36,9 +36,9 @@ public class DummyDifferentiableActivationFunctionComponent extends Differentiab
 	 */
 	private static final long serialVersionUID = -6033017517698579773L;
 
-	public DummyDifferentiableActivationFunctionComponent(Neurons neurons,
+	public DummyDifferentiableActivationFunctionComponent(String name, Neurons neurons,
 			ActivationFunctionType activationFunctionType) {
-		super(neurons, activationFunctionType);
+		super(name, neurons, activationFunctionType);
 	}
 
 	@Override
@@ -50,7 +50,7 @@ public class DummyDifferentiableActivationFunctionComponent extends Differentiab
 
 	@Override
 	public DifferentiableActivationFunctionComponent dup() {
-		return new DummyDifferentiableActivationFunctionComponent(neurons, activationFunctionType);
+		return new DummyDifferentiableActivationFunctionComponent(name, neurons, activationFunctionType);
 	}
 
 	@Override

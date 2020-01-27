@@ -27,7 +27,7 @@ public class DefaultBatchNormDirectedAxonsComponentImplTest extends BatchNormDir
 			ScaleAndShiftAxons<N> axons) {
 		Matrix mean = null;
 		Matrix stddev = null;
-		return new DefaultBatchNormDirectedAxonsComponentImpl<>(axons, mean, stddev);
+		return new DefaultBatchNormDirectedAxonsComponentImpl<>("someName", axons, mean, stddev);
 	}
 
 	@Override
