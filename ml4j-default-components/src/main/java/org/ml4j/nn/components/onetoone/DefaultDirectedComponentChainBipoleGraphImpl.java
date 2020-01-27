@@ -232,5 +232,4 @@ public class DefaultDirectedComponentChainBipoleGraphImpl extends DefaultDirecte
 				&& parallelComponentChainsBatch.isSupported(format) && 
 				(manyToOneDirectedComponent == null || manyToOneDirectedComponent.isSupported(format));
 	}
-
 }

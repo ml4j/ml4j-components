@@ -53,8 +53,8 @@ public class DefaultBatchNormDirectedAxonsComponentImpl<L extends Neurons> exten
 	// TODO
 	private float betaForExponentiallyWeightedAverages = 0.99f;
 
-	public DefaultBatchNormDirectedAxonsComponentImpl(Axons<L, L, ?> axons, Matrix mean, Matrix stddev) {
-		super(axons);
+	public DefaultBatchNormDirectedAxonsComponentImpl(String name, Axons<L, L, ?> axons, Matrix mean, Matrix stddev) {
+		super(name, axons);
 		this.exponentiallyWeightedAverageInputFeatureMeans = mean;
 		this.exponentiallyWeightedAverageInputFeatureVariances = stddev;
 	}
@@ -87,7 +87,7 @@ public class DefaultBatchNormDirectedAxonsComponentImpl<L extends Neurons> exten
 
 	@Override
 	public BatchNormDirectedAxonsComponent<L, Axons<L, L, ?>> dup() {
-		return new DefaultBatchNormDirectedAxonsComponentImpl<>(axons.dup(),
+		return new DefaultBatchNormDirectedAxonsComponentImpl<>(name, axons.dup(),
 				exponentiallyWeightedAverageInputFeatureMeans == null ? null
 						: exponentiallyWeightedAverageInputFeatureMeans.dup(),
 				exponentiallyWeightedAverageInputFeatureVariances == null ? null

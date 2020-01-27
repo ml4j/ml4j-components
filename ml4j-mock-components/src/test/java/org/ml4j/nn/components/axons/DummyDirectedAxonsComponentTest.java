@@ -13,7 +13,7 @@ public class DummyDirectedAxonsComponentTest extends DirectedAxonsComponentTestB
 	@Override
 	protected <L extends Neurons, R extends Neurons> DirectedAxonsComponent<L, R, ?> createDirectedAxonsComponentUnderTest(
 			Axons<L, R, ?> axons) {
-		return new DummyDirectedAxonsComponent<>(axons);
+		return new DummyDirectedAxonsComponent<>("someName", axons);
 	}
 
 	@Override

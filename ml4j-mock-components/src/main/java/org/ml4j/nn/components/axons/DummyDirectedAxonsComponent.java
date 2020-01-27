@@ -37,8 +37,8 @@ public class DummyDirectedAxonsComponent<L extends Neurons, R extends Neurons>
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public DummyDirectedAxonsComponent(Axons<? extends L, ? extends R, ?> axons) {
-		super(axons);
+	public DummyDirectedAxonsComponent(String name, Axons<? extends L, ? extends R, ?> axons) {
+		super(name, axons);
 	}
 
 	@Override
@@ -61,7 +61,7 @@ public class DummyDirectedAxonsComponent<L extends Neurons, R extends Neurons>
 
 	@Override
 	public DirectedAxonsComponent<L, R, Axons<? extends L, ? extends R, ?>> dup() {
-		return new DummyDirectedAxonsComponent<>(axons.dup());
+		return new DummyDirectedAxonsComponent<>(name, axons.dup());
 	}
 
 	@Override

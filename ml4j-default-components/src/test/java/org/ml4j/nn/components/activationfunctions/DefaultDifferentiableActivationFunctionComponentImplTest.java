@@ -26,7 +26,7 @@ public class DefaultDifferentiableActivationFunctionComponentImplTest
 		Mockito.when(mockActivationFunction.activate(mockNeuronsActivation, mockNeuronsActivationContext))
 				.thenReturn(mockActivationFunctionActivation);
 
-		return new DefaultDifferentiableActivationFunctionComponentImpl(neurons, mockActivationFunction);
+		return new DefaultDifferentiableActivationFunctionComponentImpl("someName", neurons, mockActivationFunction);
 	}
 
 	@Override

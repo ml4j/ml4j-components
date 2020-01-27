@@ -50,8 +50,8 @@ public class DefaultDirectedAxonsComponentImpl<L extends Neurons, R extends Neur
 	/**
 	 * @param axons The axons instance wrapped by this DirectedAxonsComponent.
 	 */
-	public DefaultDirectedAxonsComponentImpl(Axons<? extends L, ? extends R, ?> axons) {
-		super(axons);
+	public DefaultDirectedAxonsComponentImpl(String name, Axons<? extends L, ? extends R, ?> axons) {
+		super(name, axons);
 	}
 
 	@Override
@@ -74,7 +74,7 @@ public class DefaultDirectedAxonsComponentImpl<L extends Neurons, R extends Neur
 
 	@Override
 	public DirectedAxonsComponent<L, R, Axons<? extends L, ? extends R, ?>> dup() {
-		return new DefaultDirectedAxonsComponentImpl<>(axons.dup());
+		return new DefaultDirectedAxonsComponentImpl<>(name, axons.dup());
 	}
 	
 	@Override

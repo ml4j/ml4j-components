@@ -14,7 +14,7 @@ public class DummyDifferentiableActivationFunctionComponentTest
 	@Override
 	protected DifferentiableActivationFunctionComponent createDifferentiableActivationFunctionComponentUnderTest(
 			Neurons neurons, ActivationFunctionType activationFunctionType) {
-		return new DummyDifferentiableActivationFunctionComponent(neurons, activationFunctionType);
+		return new DummyDifferentiableActivationFunctionComponent("someName", neurons, activationFunctionType);
 	}
 
 	@Override

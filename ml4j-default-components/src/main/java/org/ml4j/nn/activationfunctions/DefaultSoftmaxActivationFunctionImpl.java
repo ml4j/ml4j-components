@@ -92,4 +92,9 @@ public class DefaultSoftmaxActivationFunctionImpl implements DifferentiableActiv
 	public boolean isSupported(NeuronsActivationFormat<?> format) {
 		return NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET.equals(format.getFeatureOrientation());
 	}
+
+	@Override
+	public ActivationFunctionProperties getActivationFunctionProperties() {
+		return new ActivationFunctionProperties();
+	}
 }

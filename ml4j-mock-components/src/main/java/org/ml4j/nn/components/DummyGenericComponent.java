@@ -23,13 +23,15 @@ public class DummyGenericComponent
 	private Neurons inputNeurons;
 	private Neurons outputNeurons;
 	private NeuralComponentType<? extends DefaultChainableDirectedComponent<?, ?>> neuralComponentType;
+	private String name;
 
-	public DummyGenericComponent(Neurons inputNeurons, Neurons outputNeurons,
+	public DummyGenericComponent(String name, Neurons inputNeurons, Neurons outputNeurons,
 			NeuralComponentType<? extends DefaultChainableDirectedComponent<?, ?>> neuralComponentType2) {
 		super();
 		this.inputNeurons = inputNeurons;
 		this.outputNeurons = outputNeurons;
 		this.neuralComponentType = neuralComponentType2;
+		this.name = name;
 	}
 
 	@Override
@@ -49,7 +51,7 @@ public class DummyGenericComponent
 
 	@Override
 	public DefaultChainableDirectedComponent<DefaultChainableDirectedComponentActivation, Object> dup() {
-		return new DummyGenericComponent(inputNeurons, outputNeurons, neuralComponentType);
+		return new DummyGenericComponent(name, inputNeurons, outputNeurons, neuralComponentType);
 	}
 
 	@Override
@@ -86,5 +88,10 @@ public class DummyGenericComponent
 	public DefaultChainableDirectedComponentActivation forwardPropagate(NeuronsActivation input,
 			DirectedComponentsContext context) {
 		return forwardPropagate(input, getContext(context));
+	}
+
+	@Override
+	public String getName() {
+		return name;
 	}
 }

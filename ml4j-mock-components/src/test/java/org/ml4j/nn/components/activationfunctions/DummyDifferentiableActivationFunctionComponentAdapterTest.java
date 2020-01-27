@@ -26,7 +26,7 @@ public class DummyDifferentiableActivationFunctionComponentAdapterTest
 		Mockito.when(mockActivationFunction.activate(mockNeuronsActivation, mockNeuronsActivationContext))
 				.thenReturn(mockActivationFunctionActivation);
 
-		return new DummyDifferentiableActivationFunctionComponentAdapter(neurons, mockActivationFunction);
+		return new DummyDifferentiableActivationFunctionComponentAdapter("someName", neurons, mockActivationFunction);
 	}
 
 	@Override

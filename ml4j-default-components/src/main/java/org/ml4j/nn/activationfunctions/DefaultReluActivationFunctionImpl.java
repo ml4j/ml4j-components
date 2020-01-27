@@ -62,4 +62,9 @@ public class DefaultReluActivationFunctionImpl implements DifferentiableActivati
 	public boolean isSupported(NeuronsActivationFormat<?> format) {
 		return true;
 	}
+
+	@Override
+	public ActivationFunctionProperties getActivationFunctionProperties() {
+		return new ActivationFunctionProperties();
+	}
 }

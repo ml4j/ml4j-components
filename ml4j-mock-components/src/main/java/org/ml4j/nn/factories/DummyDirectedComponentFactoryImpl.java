@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.function.IntSupplier;
 
 import org.ml4j.Matrix;
+import org.ml4j.nn.activationfunctions.ActivationFunctionProperties;
 import org.ml4j.nn.activationfunctions.ActivationFunctionType;
 import org.ml4j.nn.activationfunctions.DifferentiableActivationFunction;
 import org.ml4j.nn.axons.Axons;
@@ -55,68 +56,68 @@ import org.ml4j.nn.neurons.Neurons3D;
 public class DummyDirectedComponentFactoryImpl implements DirectedComponentFactory {
 
 	@Override
-	public DirectedAxonsComponent<Neurons, Neurons, ?> createFullyConnectedAxonsComponent(Neurons leftNeurons,
+	public DirectedAxonsComponent<Neurons, Neurons, ?> createFullyConnectedAxonsComponent(String name, Neurons leftNeurons,
 			Neurons rightNeurons, Matrix connectionWeights, Matrix biases) {
-		return createDirectedAxonsComponent(leftNeurons, rightNeurons);
+		return createDirectedAxonsComponent(name, leftNeurons, rightNeurons);
 	}
 
 	@Override
-	public <L extends Neurons, R extends Neurons> DirectedAxonsComponent<L, R, ?> createDirectedAxonsComponent(
+	public <L extends Neurons, R extends Neurons> DirectedAxonsComponent<L, R, ?> createDirectedAxonsComponent(String name, 
 			Axons<L, R, ?> axons) {
-		return createDirectedAxonsComponent(axons.getLeftNeurons(), axons.getRightNeurons());
+		return createDirectedAxonsComponent(name, axons.getLeftNeurons(), axons.getRightNeurons());
 	}
 
-	private <L extends Neurons, R extends Neurons> DirectedAxonsComponent<L, R, ?> createDirectedAxonsComponent(
+	private <L extends Neurons, R extends Neurons> DirectedAxonsComponent<L, R, ?> createDirectedAxonsComponent(String name,
 			L leftNeurons, R rightNeurons) {
-		return new DummyDirectedAxonsComponent<>(createDummyAxons(leftNeurons, rightNeurons));
+		return new DummyDirectedAxonsComponent<>(name, createDummyAxons(leftNeurons, rightNeurons));
 	}
 
 	@Override
-	public DirectedAxonsComponent<Neurons3D, Neurons3D, ?> createConvolutionalAxonsComponent(Neurons3D leftNeurons,
+	public DirectedAxonsComponent<Neurons3D, Neurons3D, ?> createConvolutionalAxonsComponent(String name, Neurons3D leftNeurons,
 			Neurons3D rightNeurons, Axons3DConfig config, Matrix connectionWeights, Matrix biases) {
-		return createDirectedAxonsComponent(leftNeurons, rightNeurons);
+		return createDirectedAxonsComponent(name, leftNeurons, rightNeurons);
 	}
 
 	@Override
-	public DirectedAxonsComponent<Neurons3D, Neurons3D, ?> createMaxPoolingAxonsComponent(Neurons3D leftNeurons,
+	public DirectedAxonsComponent<Neurons3D, Neurons3D, ?> createMaxPoolingAxonsComponent(String name, Neurons3D leftNeurons,
 			Neurons3D rightNeurons, Axons3DConfig config, boolean scaleOutputs) {
-		return createDirectedAxonsComponent(leftNeurons, rightNeurons);
+		return createDirectedAxonsComponent(name, leftNeurons, rightNeurons);
 	}
 
 	@Override
-	public DirectedAxonsComponent<Neurons3D, Neurons3D, ?> createAveragePoolingAxonsComponent(Neurons3D leftNeurons,
+	public DirectedAxonsComponent<Neurons3D, Neurons3D, ?> createAveragePoolingAxonsComponent(String name, Neurons3D leftNeurons,
 			Neurons3D rightNeurons, Axons3DConfig config) {
-		return createDirectedAxonsComponent(leftNeurons, rightNeurons);
+		return createDirectedAxonsComponent(name, leftNeurons, rightNeurons);
 	}
 
 	@Override
-	public <N extends Neurons> BatchNormDirectedAxonsComponent<N, ?> createBatchNormAxonsComponent(N leftNeurons,
+	public <N extends Neurons> BatchNormDirectedAxonsComponent<N, ?> createBatchNormAxonsComponent(String name, N leftNeurons,
 			N rightNeurons) {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public <N extends Neurons> BatchNormDirectedAxonsComponent<N, ?> createBatchNormAxonsComponent(N leftNeurons,
+	public <N extends Neurons> BatchNormDirectedAxonsComponent<N, ?> createBatchNormAxonsComponent(String name, N leftNeurons,
 			N rightNeurons, Matrix gamma, Matrix beta, Matrix mean, Matrix stddev) {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public BatchNormDirectedAxonsComponent<Neurons3D, ?> createConvolutionalBatchNormAxonsComponent(
+	public BatchNormDirectedAxonsComponent<Neurons3D, ?> createConvolutionalBatchNormAxonsComponent(String name, 
 			Neurons3D leftNeurons, Neurons3D rightNeurons) {
-		return new DummyBatchNormDirectedAxonsComponent<>(createDummyAxons(leftNeurons, rightNeurons));
+		return new DummyBatchNormDirectedAxonsComponent<>(name, createDummyAxons(leftNeurons, rightNeurons));
 	}
 
 	@Override
-	public BatchNormDirectedAxonsComponent<Neurons3D, ?> createConvolutionalBatchNormAxonsComponent(
+	public BatchNormDirectedAxonsComponent<Neurons3D, ?> createConvolutionalBatchNormAxonsComponent(String name, 
 			Neurons3D leftNeurons, Neurons3D rightNeurons, Matrix gamma, Matrix beta, Matrix mean, Matrix stddev) {
-		return new DummyBatchNormDirectedAxonsComponent<>(createDummyAxons(leftNeurons, rightNeurons));
+		return new DummyBatchNormDirectedAxonsComponent<>(name, createDummyAxons(leftNeurons, rightNeurons));
 	}
 
 	@Override
-	public <N extends Neurons> DirectedAxonsComponent<N, N, ?> createPassThroughAxonsComponent(N leftNeurons,
+	public <N extends Neurons> DirectedAxonsComponent<N, N, ?> createPassThroughAxonsComponent(String name, N leftNeurons,
 			N rightNeurons) {
-		return createDirectedAxonsComponent(leftNeurons, rightNeurons);
+		return createDirectedAxonsComponent(name, leftNeurons, rightNeurons);
 	}
 
 	@Override
@@ -137,15 +138,15 @@ public class DummyDirectedComponentFactoryImpl implements DirectedComponentFacto
 	}
 
 	@Override
-	public DifferentiableActivationFunctionComponent createDifferentiableActivationFunctionComponent(Neurons neurons,
+	public DifferentiableActivationFunctionComponent createDifferentiableActivationFunctionComponent(String name, Neurons neurons,
 			DifferentiableActivationFunction differentiableActivationFunction) {
-		return new DummyDifferentiableActivationFunctionComponentAdapter(neurons, differentiableActivationFunction);
+		return new DummyDifferentiableActivationFunctionComponentAdapter(name, neurons, differentiableActivationFunction);
 	}
 
 	@Override
-	public DifferentiableActivationFunctionComponent createDifferentiableActivationFunctionComponent(Neurons neurons,
-			ActivationFunctionType activationFunctionType) {
-		return new DummyDifferentiableActivationFunctionComponent(neurons, activationFunctionType);
+	public DifferentiableActivationFunctionComponent createDifferentiableActivationFunctionComponent(String name, Neurons neurons,
+			ActivationFunctionType activationFunctionType, ActivationFunctionProperties activationFunctionProperties) {
+		return new DummyDifferentiableActivationFunctionComponent(name, neurons, activationFunctionType);
 	}
 
 	@Override
@@ -172,8 +173,8 @@ public class DummyDirectedComponentFactoryImpl implements DirectedComponentFacto
 	}
 
 	@Override
-	public <S extends DefaultChainableDirectedComponent<?, ?>> DefaultChainableDirectedComponent<?, ?> createComponent(
+	public <S extends DefaultChainableDirectedComponent<?, ?>> DefaultChainableDirectedComponent<?, ?> createComponent(String name, 
 			Neurons leftNeurons, Neurons rightNeurons, NeuralComponentType<S> neuralComponentType) {
-		return new DummyGenericComponent(leftNeurons, rightNeurons, neuralComponentType);
+		return new DummyGenericComponent(name, leftNeurons, rightNeurons, neuralComponentType);
 	}
 }
