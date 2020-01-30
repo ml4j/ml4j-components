@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.ml4j.Matrix;
+import org.ml4j.images.Images;
 import org.ml4j.nn.components.DirectedComponentsContext;
 import org.ml4j.nn.components.NeuralComponentBaseType;
 import org.ml4j.nn.components.NeuralComponentType;
@@ -24,15 +25,15 @@ public class DefaultSpaceToDepthDirectedComponent implements DefaultChainableDir
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private int heightFactor;
-	private int widthFactor;
+	private int blockHeight;
+	private int blockWidth;
 	private Neurons3D leftNeurons;
 	private Neurons3D rightNeurons;
 	protected String name;
 
-	public DefaultSpaceToDepthDirectedComponent(String name, Neurons3D leftNeurons, Neurons3D rightNeurons, int heightFactor, int widthFactor) {
-		this.heightFactor = heightFactor;
-		this.widthFactor = widthFactor;
+	public DefaultSpaceToDepthDirectedComponent(String name, Neurons3D leftNeurons, Neurons3D rightNeurons, int blockHeight, int blockWidth) {
+		this.blockHeight = blockHeight;
+		this.blockWidth = blockWidth;
 		this.leftNeurons = leftNeurons;
 		this.rightNeurons = rightNeurons;
 		this.name = name;
@@ -55,7 +56,7 @@ public class DefaultSpaceToDepthDirectedComponent implements DefaultChainableDir
 
 	@Override
 	public DefaultChainableDirectedComponent<DefaultSpaceToDepthDirectedComponentActivation, DirectedComponentsContext> dup() {
-		return new DefaultSpaceToDepthDirectedComponent(name, leftNeurons, rightNeurons, heightFactor, widthFactor);
+		return new DefaultSpaceToDepthDirectedComponent(name, leftNeurons, rightNeurons, blockHeight, blockWidth);
 	}
 
 	@Override
@@ -81,7 +82,8 @@ public class DefaultSpaceToDepthDirectedComponent implements DefaultChainableDir
 	@Override
 	public DefaultSpaceToDepthDirectedComponentActivation forwardPropagate(NeuronsActivation input,
 			DirectedComponentsContext context) {
-		Matrix output = input.asImageNeuronsActivation(leftNeurons).getImages().spaceToDepthExport(context.getMatrixFactory(), heightFactor, widthFactor);
+		Images images = input.asImageNeuronsActivation(leftNeurons).getImages();
+		Matrix output = images.spaceToDepthExport(context.getMatrixFactory(), blockHeight, blockWidth);
 		ImageNeuronsActivation activation =  new ImageNeuronsActivationImpl(output, 
 				rightNeurons, ImageNeuronsActivationFormat.ML4J_DEFAULT_IMAGE_FORMAT, false);
 		return new DefaultSpaceToDepthDirectedComponentActivation(this, activation);

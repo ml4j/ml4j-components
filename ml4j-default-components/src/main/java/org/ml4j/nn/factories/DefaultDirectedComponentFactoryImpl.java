@@ -228,9 +228,9 @@ public class DefaultDirectedComponentFactoryImpl implements DirectedComponentFac
 		if ("SPACE_TO_DEPTH".equals(neuralComponentType.getId()) && leftNeurons instanceof Neurons3D && rightNeurons instanceof Neurons3D) {
 			Neurons3D left = (Neurons3D)leftNeurons;
 			Neurons3D right = (Neurons3D)rightNeurons;
-			int heightFactor = left.getHeight() / right.getHeight();
-			int widthFactor = left.getWidth() / right.getWidth();
-			return new DefaultSpaceToDepthDirectedComponent(name, left, right, heightFactor, widthFactor);
+			int blockHeight = left.getHeight() / right.getHeight();
+			int blockWidth = left.getWidth() / right.getWidth();
+			return new DefaultSpaceToDepthDirectedComponent(name, left, right, blockHeight, blockWidth);
 		}
 		throw new UnsupportedOperationException("Creation of component by component type not yet implemented");
 	}
