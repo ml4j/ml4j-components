@@ -56,7 +56,7 @@ public class DefaultLeakyReluActivationFunctionImpl implements DifferentiableAct
 
 	@Override
 	public ActivationFunctionType getActivationFunctionType() {
-		return ActivationFunctionType.getBaseType(ActivationFunctionBaseType.LINEAR);
+		return ActivationFunctionType.getBaseType(ActivationFunctionBaseType.LEAKYRELU);
 	}
 
 	@Override

@@ -104,9 +104,10 @@ public class DefaultBatchNormDirectedAxonsComponentImpl<L extends Neurons> exten
 		 * IllegalArgumentException(neuronsActivation.getFeatureCount() + ":" +
 		 * getInputNeurons().getNeuronCountExcludingBias()); }
 		 */
-		NeuronsActivationFeatureOrientation featureOrientation = input.getFeatureOrientation();
 		Matrix activations = input.getActivations(axonsContext.getMatrixFactory());
-
+		if (activations.isImmutable()) {
+			activations = activations.dup();
+		}
 		Matrix meanColumnVector = getMeanColumnVector(activations, axonsContext.getMatrixFactory(),
 				axonsContext.isTrainingContext());
 
