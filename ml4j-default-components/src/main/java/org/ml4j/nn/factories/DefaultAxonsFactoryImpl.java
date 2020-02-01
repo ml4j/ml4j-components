@@ -26,6 +26,7 @@ import org.ml4j.nn.axons.DefaultConvolutionalAxonsImpl;
 import org.ml4j.nn.axons.DefaultFullyConnectedAxonWeightsInitialiser;
 import org.ml4j.nn.axons.DefaultFullyConnectedAxonsImpl;
 import org.ml4j.nn.axons.DefaultMaxPoolingAxonsImpl;
+import org.ml4j.nn.axons.DefaultOneByOneConvolutionalAxonsImpl;
 import org.ml4j.nn.axons.DefaultScaleAndShiftAxonWeightsInitialiser;
 import org.ml4j.nn.axons.DefaultScaleAndShiftAxonsImpl;
 import org.ml4j.nn.axons.FullyConnectedAxonWeightsImpl;
@@ -99,8 +100,12 @@ public class DefaultAxonsFactoryImpl implements AxonsFactory {
 
 	@Override
 	public ConvolutionalAxons createConvolutionalAxons(Neurons3D leftNeurons, Neurons3D rightNeurons,
-			Axons3DConfig config, Matrix connectionWeights, Matrix biases) {
-		return new DefaultConvolutionalAxonsImpl(this, leftNeurons, rightNeurons, config, connectionWeights, biases);
+			Axons3DConfig config, Matrix connectionWeights, Matrix biases) {	
+		if (DefaultOneByOneConvolutionalAxonsImpl.isEligible(leftNeurons, rightNeurons, config)) {
+			return new DefaultOneByOneConvolutionalAxonsImpl(this, leftNeurons, rightNeurons, config, connectionWeights, biases);
+		}  else {
+			return new DefaultConvolutionalAxonsImpl(this, leftNeurons, rightNeurons, config, connectionWeights, biases);
+		}
 	}
 
 	@Override
