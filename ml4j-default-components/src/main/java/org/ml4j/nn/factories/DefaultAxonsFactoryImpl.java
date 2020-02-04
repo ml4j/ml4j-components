@@ -88,8 +88,8 @@ public class DefaultAxonsFactoryImpl implements AxonsFactory {
 		return new DefaultFullyConnectedAxonsImpl(leftNeurons, rightNeurons,
 				new FullyConnectedAxonWeightsImpl(leftNeurons.getNeuronCountExcludingBias(),
 						rightNeurons.getNeuronCountExcludingBias(), initialConnectionWeights,
-						initialLeftToRightBiases.isPresent() ? initialLeftToRightBiases.get() : null,
-						initialRightToLeftBiases.isPresent() ? initialRightToLeftBiases.get() : null));
+						leftNeurons.hasBiasUnit() && initialLeftToRightBiases.isPresent() ? initialLeftToRightBiases.get() : null,
+						rightNeurons.hasBiasUnit() && initialRightToLeftBiases.isPresent() ? initialRightToLeftBiases.get() : null));
 	}
 
 	@Override

@@ -198,8 +198,10 @@ public class PrototypeBatchNormDirectedAxonsComponentActivationImpl<N extends Ne
 
 						leftToRightPostDropoutInput.close();
 						xhat.close();
-
-						this.leftToRightAxonsActivation.getPostDropoutOutput().close();
+						// TODO
+						if (!this.leftToRightAxonsActivation.getPostDropoutOutput().isImmutable()) {
+							this.leftToRightAxonsActivation.getPostDropoutOutput().close();
+						}
 						return new DirectedComponentGradientImpl<>(outerGradient.getTotalTrainableAxonsGradients(),
 								() -> new AxonsGradientImpl(directedAxonsComponent.getAxons(), dgammaColumnVector,
 										dbetaColumnVector),

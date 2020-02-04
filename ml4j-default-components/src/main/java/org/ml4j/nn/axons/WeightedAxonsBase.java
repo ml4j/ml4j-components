@@ -73,8 +73,7 @@ public abstract class WeightedAxonsBase<L extends Neurons, R extends Neurons, A 
 			leftNeuronsActivation.setImmutable(true);
 		}
 
-		return new AxonsActivationImpl(this, axonsDropoutMask, () -> leftNeuronsActivation, outputActivation,
-				leftNeurons, rightNeurons);
+		return new AxonsActivationImpl(this, axonsDropoutMask, () -> leftNeuronsActivation, outputActivation);
 	}
 
 	@Override
@@ -94,7 +93,7 @@ public abstract class WeightedAxonsBase<L extends Neurons, R extends Neurons, A 
 		rightNeuronsActivation.setImmutable(true);
 
 		return new AxonsActivationImpl(this, null, () -> rightNeuronsActivation, new NeuronsActivationImpl(leftNeurons,
-				output, rightNeuronsActivation.getFormat()), leftNeurons, rightNeurons);
+				output, rightNeuronsActivation.getFormat()));
 	}
 
 	@Override

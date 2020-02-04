@@ -69,8 +69,7 @@ public class DummyConvolutionalAxonsImpl implements ConvolutionalAxons {
 		return new AxonsActivationImpl(this, null, () -> leftNeuronsActivation,
 				new ImageNeuronsActivationImpl(
 						matrixFactory.createMatrix(rightNeurons.getNeuronCountExcludingBias(), exampleCount),
-						getRightNeurons(), ImageNeuronsActivationFormat.ML4J_DEFAULT_IMAGE_FORMAT, false),
-				leftNeurons, rightNeurons);
+						getRightNeurons(), ImageNeuronsActivationFormat.ML4J_DEFAULT_IMAGE_FORMAT, false));
 	}
 
 	@Override
@@ -80,8 +79,7 @@ public class DummyConvolutionalAxonsImpl implements ConvolutionalAxons {
 				new ImageNeuronsActivationImpl(
 						matrixFactory.createMatrix(leftNeurons.getNeuronCountExcludingBias(),
 								rightNeuronsActivation.getExampleCount()),
-						getLeftNeurons(), ImageNeuronsActivationFormat.ML4J_DEFAULT_IMAGE_FORMAT, false),
-				leftNeurons, rightNeurons);
+						getLeftNeurons(), ImageNeuronsActivationFormat.ML4J_DEFAULT_IMAGE_FORMAT, false));
 	}
 
 	@Override

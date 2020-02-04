@@ -106,6 +106,7 @@ public class DefaultDirectedAxonsComponentActivationImpl<A extends Axons<?, ?, ?
 					.getActivations(axonsContext.getMatrixFactory()).asInterrimMatrix()) {
 				try (InterrimMatrix second = leftToRightPostDropoutInputActivationMatrix.transpose()
 						.asInterrimMatrix()) {
+
 					totalTrainableAxonsGradientMatrixNonBias = first.mmul(second).asEditableMatrix();
 					leftToRightPostDropoutInputActivation.close();
 				}
