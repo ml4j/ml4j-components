@@ -144,8 +144,7 @@ public class DefaultOneByOneConvolutionalAxonsImpl implements ConvolutionalAxons
 			leftNeuronsActivation.close();
 		}
 
-		return new AxonsActivationImpl(this, nestedActivation.getDropoutMask(), () -> reformatted, output, leftNeurons,
-				rightNeurons);
+		return new AxonsActivationImpl(this, nestedActivation.getDropoutMask(), () -> reformatted, output);
 	}
 
 	@Override
@@ -165,8 +164,7 @@ public class DefaultOneByOneConvolutionalAxonsImpl implements ConvolutionalAxons
 
 		axonsActivation.getPostDropoutOutput().close();
 
-		return new AxonsActivationImpl(this, null, () -> rightNeuronsActivation, reformattedOutput, leftNeurons,
-				rightNeurons);
+		return new AxonsActivationImpl(this, null, () -> rightNeuronsActivation, reformattedOutput);
 	}
 
 	private NeuronsActivation reformatRightToLeftOutput(MatrixFactory matrixFactory, NeuronsActivation output,

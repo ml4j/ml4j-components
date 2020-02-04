@@ -59,8 +59,7 @@ public class DummyFullyConnectedAxonsImpl implements FullyConnectedAxons {
 		return new AxonsActivationImpl(this, null, () -> leftNeuronsActivation,
 				new NeuronsActivationImpl(getRightNeurons(),
 						matrixFactory.createMatrix(rightNeurons.getNeuronCountExcludingBias(), exampleCount),
-						ImageNeuronsActivationFormat.ML4J_DEFAULT_IMAGE_FORMAT),
-				leftNeurons, rightNeurons);
+						ImageNeuronsActivationFormat.ML4J_DEFAULT_IMAGE_FORMAT));
 	}
 
 	@Override
@@ -70,8 +69,7 @@ public class DummyFullyConnectedAxonsImpl implements FullyConnectedAxons {
 				new NeuronsActivationImpl(getLeftNeurons(),
 						matrixFactory.createMatrix(leftNeurons.getNeuronCountExcludingBias(),
 								rightNeuronsActivation.getExampleCount()),
-						ImageNeuronsActivationFormat.ML4J_DEFAULT_IMAGE_FORMAT),
-				leftNeurons, rightNeurons);
+						ImageNeuronsActivationFormat.ML4J_DEFAULT_IMAGE_FORMAT));
 	}
 
 	@Override

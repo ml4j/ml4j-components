@@ -144,7 +144,7 @@ public class DefaultMaxPoolingAxonsImpl implements MaxPoolingAxons {
 		}
 		reformattedActivation.close();
 
-		return new AxonsActivationImpl(this, maxesDropoutMask, () -> null, output, leftNeurons, rightNeurons);
+		return new AxonsActivationImpl(this, maxesDropoutMask, () -> null, output);
 
 	}
 
@@ -184,8 +184,7 @@ public class DefaultMaxPoolingAxonsImpl implements MaxPoolingAxons {
 			if (!rightNeuronsActivation.isImmutable()) {
 				rightNeuronsActivation.close();
 			}
-			return new AxonsActivationImpl(this, null, () -> rightNeuronsActivation, reformattedOutput, leftNeurons,
-					rightNeurons);
+			return new AxonsActivationImpl(this, null, () -> rightNeuronsActivation, reformattedOutput);
 
 		}
 	}

@@ -64,8 +64,7 @@ public class DummyScaleAndShiftAxonsImpl<N extends Neurons> implements ScaleAndS
 		return new AxonsActivationImpl(this, null, () -> leftNeuronsActivation,
 				new NeuronsActivationImpl(getRightNeurons(),
 						matrixFactory.createMatrix(rightNeurons.getNeuronCountExcludingBias(), exampleCount),
-						NeuronsActivationFormat.ROWS_SPAN_FEATURE_SET),
-				leftNeurons, rightNeurons);
+						NeuronsActivationFormat.ROWS_SPAN_FEATURE_SET));
 	}
 
 	@Override
@@ -76,8 +75,7 @@ public class DummyScaleAndShiftAxonsImpl<N extends Neurons> implements ScaleAndS
 				new NeuronsActivationImpl(getLeftNeurons(),
 						matrixFactory.createMatrix(leftNeurons.getNeuronCountExcludingBias(),
 								rightNeuronsActivation.getExampleCount()),
-						NeuronsActivationFormat.ROWS_SPAN_FEATURE_SET),
-				leftNeurons, rightNeurons);
+						NeuronsActivationFormat.ROWS_SPAN_FEATURE_SET));
 	}
 
 	@Override

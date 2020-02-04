@@ -141,7 +141,7 @@ public class DefaultAveragePoolingAxonsImpl implements AveragePoolingAxons {
 			leftNeuronsActivation.close();
 		}
 
-		return new AxonsActivationImpl(this, null, () -> null, output, leftNeurons, rightNeurons);
+		return new AxonsActivationImpl(this, null, () -> null, output);
 
 	}
 
@@ -183,8 +183,7 @@ public class DefaultAveragePoolingAxonsImpl implements AveragePoolingAxons {
 					if (!rightNeuronsActivation.isImmutable()) {
 						rightNeuronsActivation.close();
 					}
-					return new AxonsActivationImpl(this, null, () -> rightNeuronsActivation, reformattedOutput,
-							leftNeurons, rightNeurons);
+					return new AxonsActivationImpl(this, null, () -> rightNeuronsActivation, reformattedOutput);
 				}
 
 			}
