@@ -17,6 +17,7 @@ import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
 import org.ml4j.nn.neurons.NeuronsActivationImpl;
 import org.ml4j.nn.neurons.format.ImageNeuronsActivationFormat;
 import org.ml4j.nn.neurons.format.NeuronsActivationFormat;
+import org.ml4j.nn.neurons.format.features.DimensionScope;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -70,7 +71,7 @@ public class DefaultMaxPoolingAxonsImpl implements MaxPoolingAxons {
 
 		int filterHeight = inputHeightWithPadding + (1 - outputHeight) * (config.getStrideHeight());
 
-		ImageNeuronsActivation act = leftNeuronsActivation.asImageNeuronsActivation(leftNeurons);
+		ImageNeuronsActivation act = leftNeuronsActivation.asImageNeuronsActivation(leftNeurons, DimensionScope.INPUT);
 
 		NeuronsActivation reformatted = new NeuronsActivationImpl(
 				new Neurons(filterWidth * filterHeight, leftNeurons.hasBiasUnit()),
@@ -95,12 +96,6 @@ public class DefaultMaxPoolingAxonsImpl implements MaxPoolingAxons {
 
 	}
 
-	public NeuronsActivation reformatLeftToRightOutput(MatrixFactory matrixFactory, NeuronsActivation output,
-			int exampleCount) {
-		output.reshape(rightNeurons.getNeuronCountExcludingBias(), exampleCount);
-		return output.asImageNeuronsActivation(getRightNeurons());
-	}
-
 	@Override
 	public AxonsActivation pushLeftToRight(NeuronsActivation leftNeuronsActivation,
 			AxonsActivation previousRightToLeftActivation, AxonsContext axonsContext) {
@@ -111,8 +106,6 @@ public class DefaultMaxPoolingAxonsImpl implements MaxPoolingAxons {
 				leftNeuronsActivation);
 
 		Matrix reformatted = reformattedActivation.getActivations(matrixFactory);
-
-		// TODO
 
 		EditableMatrix maxes = (EditableMatrix) axonsContext.getMatrixFactory().createMatrix(reformatted.getRows(),
 				reformatted.getColumns());
@@ -126,18 +119,13 @@ public class DefaultMaxPoolingAxonsImpl implements MaxPoolingAxons {
 				origOutput.put(0, c, reformatted.get(maxInts[c], c));
 			}
 		}
-		Neurons reformattedNeurons = new Neurons(origOutput.getRows(), this.leftNeurons.hasBiasUnit());
-
-		NeuronsActivation preFormattedOutput = new NeuronsActivationImpl(reformattedNeurons, origOutput,
-				leftNeuronsActivation.getFormat());
-
+	
 		AxonsDropoutMask maxesDropoutMask = new AxonsDropoutMaskImpl(maxes, AxonsDropoutMaskType.INPUT);
-
-		NeuronsActivation output = reformatLeftToRightOutput(axonsContext.getMatrixFactory(), preFormattedOutput,
-				exampleCount);
-
-		// if (!axonsContext.isTrainingContext()) {
-		// }
+		
+		origOutput.reshape(rightNeurons.getNeuronCountExcludingBias(), exampleCount);
+		
+		ImageNeuronsActivation output = new ImageNeuronsActivationImpl(origOutput, getRightNeurons(),
+				ImageNeuronsActivationFormat.ML4J_DEFAULT_IMAGE_FORMAT, false);
 
 		if (!leftNeuronsActivation.isImmutable()) {
 			leftNeuronsActivation.close();
@@ -152,40 +140,34 @@ public class DefaultMaxPoolingAxonsImpl implements MaxPoolingAxons {
 	public AxonsActivation pushRightToLeft(NeuronsActivation rightNeuronsActivation,
 			AxonsActivation previousLeftToRightActivation, AxonsContext axonsContext) {
 
-		NeuronsActivation reformattedInput = reformatRightToLeftInput(axonsContext.getMatrixFactory(),
-				rightNeuronsActivation);
-
-		Matrix reformatted = reformattedInput.getActivations(axonsContext.getMatrixFactory());
+		Matrix inputActivations = rightNeuronsActivation.getActivations(axonsContext.getMatrixFactory());
 
 		int exampleCount = previousLeftToRightActivation.getPostDropoutOutput().getExampleCount();
 
-		// TODO
-
-		LOGGER.debug("Reformatted max pooling axons:" + reformatted.getRows() + ":" + reformatted.getColumns());
+		LOGGER.debug("Reformatted max pooling axons:" + inputActivations.getRows() + ":" + inputActivations.getColumns());
 
 		AxonsDropoutMask axonsDropoutMask = previousLeftToRightActivation.getDropoutMask();
 
 		try (InterrimMatrix outputMatrix = axonsDropoutMask.getDropoutMask().asInterrimMatrix()) {
 
-			EditableMatrix reformatted2 = axonsContext.getMatrixFactory()
+			EditableMatrix reformatted = axonsContext.getMatrixFactory()
 					.createMatrix(outputMatrix.getRows(), outputMatrix.getColumns()).asEditableMatrix();
-			for (int r = 0; r < reformatted2.getRows(); r++) {
-				reformatted2.putRow(r, reformatted);
+			for (int r = 0; r < reformatted.getRows(); r++) {
+				reformatted.putRow(r, inputActivations);
 			}
 			// reformatted.close();
-			outputMatrix.asEditableMatrix().muli(reformatted2);
+			outputMatrix.asEditableMatrix().muli(reformatted);
 
 			Matrix preFormattedOutput = outputMatrix;
 
 			NeuronsActivation reformattedOutput = reformatRightToLeftOutput(axonsContext.getMatrixFactory(),
 					preFormattedOutput, rightNeuronsActivation.getFeatureOrientation(), exampleCount);
 
-			reformatted2.close();
+			reformatted.close();
 			if (!rightNeuronsActivation.isImmutable()) {
 				rightNeuronsActivation.close();
 			}
 			return new AxonsActivationImpl(this, null, () -> rightNeuronsActivation, reformattedOutput);
-
 		}
 	}
 
@@ -214,20 +196,10 @@ public class DefaultMaxPoolingAxonsImpl implements MaxPoolingAxons {
 		images.im2colPoolImport(matrixFactory, output, filterHeight, filterWidth, config.getStrideHeight(),
 				config.getStrideWidth());
 
-		// return new
-		// NeuronsActivationImpl(matrixFactory.createMatrixFromRowsByRowsArray(getLeftNeurons().getNeuronCountExcludingBias(),
-		// exampleCount, images.getData()),
-		// NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET);
-
 		return new ImageNeuronsActivationImpl(getLeftNeurons(), images, ImageNeuronsActivationFormat.ML4J_DEFAULT_IMAGE_FORMAT, false);
 	}
 
 	public NeuronsActivation reformatRightToLeftInput(MatrixFactory matrixFactory, NeuronsActivation input) {
-		// EditableMatrix m = input.getActivations(matrixFactory).asEditableMatrix();
-		// m.reshape(rightNeurons.getDepth(),
-		// rightNeurons.getWidth() * rightNeurons.getHeight() *
-		// input.getExampleCount());
-		// return new NeuronsActivationImpl(m, input.getFeatureOrientation());
 		return input;
 	}
 

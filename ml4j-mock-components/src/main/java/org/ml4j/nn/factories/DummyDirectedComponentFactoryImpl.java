@@ -22,7 +22,9 @@ import org.ml4j.nn.activationfunctions.ActivationFunctionType;
 import org.ml4j.nn.activationfunctions.DifferentiableActivationFunction;
 import org.ml4j.nn.axons.Axons;
 import org.ml4j.nn.axons.Axons3DConfig;
+import org.ml4j.nn.axons.BiasMatrix;
 import org.ml4j.nn.axons.NoOpAxons;
+import org.ml4j.nn.axons.WeightsMatrix;
 import org.ml4j.nn.components.DummyGenericComponent;
 import org.ml4j.nn.components.NeuralComponentType;
 import org.ml4j.nn.components.activationfunctions.DifferentiableActivationFunctionComponent;
@@ -57,7 +59,7 @@ public class DummyDirectedComponentFactoryImpl implements DirectedComponentFacto
 
 	@Override
 	public DirectedAxonsComponent<Neurons, Neurons, ?> createFullyConnectedAxonsComponent(String name, Neurons leftNeurons,
-			Neurons rightNeurons, Matrix connectionWeights, Matrix biases) {
+			Neurons rightNeurons, WeightsMatrix connectionWeights, BiasMatrix biases) {
 		return createDirectedAxonsComponent(name, leftNeurons, rightNeurons);
 	}
 
@@ -74,7 +76,7 @@ public class DummyDirectedComponentFactoryImpl implements DirectedComponentFacto
 
 	@Override
 	public DirectedAxonsComponent<Neurons3D, Neurons3D, ?> createConvolutionalAxonsComponent(String name, Neurons3D leftNeurons,
-			Neurons3D rightNeurons, Axons3DConfig config, Matrix connectionWeights, Matrix biases) {
+			Neurons3D rightNeurons, Axons3DConfig config, WeightsMatrix connectionWeights, BiasMatrix biases) {
 		return createDirectedAxonsComponent(name, leftNeurons, rightNeurons);
 	}
 
@@ -98,7 +100,7 @@ public class DummyDirectedComponentFactoryImpl implements DirectedComponentFacto
 
 	@Override
 	public <N extends Neurons> BatchNormDirectedAxonsComponent<N, ?> createBatchNormAxonsComponent(String name, N leftNeurons,
-			N rightNeurons, Matrix gamma, Matrix beta, Matrix mean, Matrix stddev) {
+			N rightNeurons, WeightsMatrix gamma, BiasMatrix beta, Matrix mean, Matrix stddev) {
 		throw new UnsupportedOperationException();
 	}
 
@@ -110,7 +112,7 @@ public class DummyDirectedComponentFactoryImpl implements DirectedComponentFacto
 
 	@Override
 	public BatchNormDirectedAxonsComponent<Neurons3D, ?> createConvolutionalBatchNormAxonsComponent(String name, 
-			Neurons3D leftNeurons, Neurons3D rightNeurons, Matrix gamma, Matrix beta, Matrix mean, Matrix stddev) {
+			Neurons3D leftNeurons, Neurons3D rightNeurons, WeightsMatrix gamma, BiasMatrix beta, Matrix mean, Matrix stddev) {
 		return new DummyBatchNormDirectedAxonsComponent<>(name, createDummyAxons(leftNeurons, rightNeurons));
 	}
 

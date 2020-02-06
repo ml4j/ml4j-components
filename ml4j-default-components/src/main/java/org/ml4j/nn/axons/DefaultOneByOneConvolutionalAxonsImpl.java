@@ -1,5 +1,6 @@
 package org.ml4j.nn.axons;
 
+import java.util.Arrays;
 import java.util.Optional;
 
 import org.ml4j.EditableMatrix;
@@ -12,6 +13,9 @@ import org.ml4j.nn.neurons.NeuronsActivation;
 import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
 import org.ml4j.nn.neurons.NeuronsActivationImpl;
 import org.ml4j.nn.neurons.format.NeuronsActivationFormat;
+import org.ml4j.nn.neurons.format.features.Dimension;
+import org.ml4j.nn.neurons.format.features.DimensionScope;
+import org.ml4j.nn.neurons.format.features.FeaturesFormatImpl;
 
 public class DefaultOneByOneConvolutionalAxonsImpl implements ConvolutionalAxons {
 
@@ -37,7 +41,7 @@ public class DefaultOneByOneConvolutionalAxonsImpl implements ConvolutionalAxons
 	}
 
 	public DefaultOneByOneConvolutionalAxonsImpl(AxonsFactory axonsFactory, Neurons3D leftNeurons, Neurons3D rightNeurons,
-			Axons3DConfig config, Matrix connectionWeights, Matrix biases) {
+			Axons3DConfig config, WeightsMatrix connectionWeights, BiasMatrix biases) {
 		super();
 		this.leftNeurons = leftNeurons;
 		this.rightNeurons = rightNeurons;
@@ -57,7 +61,9 @@ public class DefaultOneByOneConvolutionalAxonsImpl implements ConvolutionalAxons
 		}
 		this.fullyConnectedAxons = axonsFactory.createFullyConnectedAxons(
 				new Neurons(filterWidth * filterHeight * leftNeurons.getDepth(), leftNeurons.hasBiasUnit()),
-				new Neurons(rightNeurons.getDepth(), rightNeurons.hasBiasUnit()), connectionWeights, biases);
+				new Neurons(rightNeurons.getDepth(), rightNeurons.hasBiasUnit()), 
+				connectionWeights,
+				biases);
 	}
 
 	@Override
@@ -84,12 +90,14 @@ public class DefaultOneByOneConvolutionalAxonsImpl implements ConvolutionalAxons
 	}
 
 	public NeuronsActivation reformatLeftToRightInput(MatrixFactory matrixFactory,
-			NeuronsActivation leftNeuronsActivation) {
+			NeuronsActivation leftNeuronsActivation)  {
 		final NeuronsActivation reformatted;
 			reformatted = new NeuronsActivationImpl(new Neurons(leftNeurons.getDepth(), leftNeurons.hasBiasUnit()),
 					reformatLeftToRightInputOneByOne(matrixFactory, leftNeuronsActivation),
-					leftNeuronsActivation.getFormat());
-	
+					// TODO
+					new NeuronsActivationFormat<>(leftNeuronsActivation.getFeatureOrientation(),
+							new FeaturesFormatImpl(Arrays.asList(Dimension.DEPTH)),
+									Arrays.asList(Dimension.HEIGHT, Dimension.WIDTH, Dimension.EXAMPLE)));	
 		return reformatted;
 
 	}
@@ -114,7 +122,7 @@ public class DefaultOneByOneConvolutionalAxonsImpl implements ConvolutionalAxons
 	public NeuronsActivation reformatLeftToRightOutput(MatrixFactory matrixFactory, NeuronsActivation output,
 			int exampleCount) {
 		output.reshape(rightNeurons.getNeuronCountExcludingBias(), exampleCount);
-		return output.asImageNeuronsActivation(getRightNeurons());
+		return output.asImageNeuronsActivation(getRightNeurons(), DimensionScope.OUTPUT);
 
 	}
 
@@ -170,7 +178,7 @@ public class DefaultOneByOneConvolutionalAxonsImpl implements ConvolutionalAxons
 	private NeuronsActivation reformatRightToLeftOutput(MatrixFactory matrixFactory, NeuronsActivation output,
 			int exampleCount) {
 		output.reshape(leftNeurons.getNeuronCountExcludingBias(), exampleCount);
-		return output.asImageNeuronsActivation(leftNeurons);
+		return output.asImageNeuronsActivation(leftNeurons, DimensionScope.OUTPUT);
 
 	}
 
@@ -187,8 +195,7 @@ public class DefaultOneByOneConvolutionalAxonsImpl implements ConvolutionalAxons
 
 	@Override
 	public ConvolutionalAxons dup() {
-		// TODO config.dup()
-		return new DefaultOneByOneConvolutionalAxonsImpl(leftNeurons, rightNeurons, fullyConnectedAxons, config);
+		return new DefaultOneByOneConvolutionalAxonsImpl(leftNeurons, rightNeurons, fullyConnectedAxons, config.dup());
 	}
 
 	@Override

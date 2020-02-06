@@ -1,13 +1,14 @@
 package org.ml4j.nn.factories;
 
-import org.ml4j.Matrix;
 import org.ml4j.MatrixFactory;
 import org.ml4j.nn.axons.AveragePoolingAxons;
 import org.ml4j.nn.axons.Axons3DConfig;
+import org.ml4j.nn.axons.BiasMatrix;
 import org.ml4j.nn.axons.ConvolutionalAxons;
 import org.ml4j.nn.axons.FullyConnectedAxons;
 import org.ml4j.nn.axons.MaxPoolingAxons;
 import org.ml4j.nn.axons.ScaleAndShiftAxons;
+import org.ml4j.nn.axons.WeightsMatrix;
 import org.ml4j.nn.axons.factories.AxonsFactory;
 import org.ml4j.nn.axons.mocks.DummyAveragePoolingAxonsImpl;
 import org.ml4j.nn.axons.mocks.DummyConvolutionalAxonsImpl;
@@ -16,6 +17,7 @@ import org.ml4j.nn.axons.mocks.DummyMaxPoolingAxonsImpl;
 import org.ml4j.nn.axons.mocks.DummyScaleAndShiftAxonsImpl;
 import org.ml4j.nn.neurons.Neurons;
 import org.ml4j.nn.neurons.Neurons3D;
+
 
 public class DummyAxonsFactoryImpl implements AxonsFactory {
 
@@ -32,13 +34,13 @@ public class DummyAxonsFactoryImpl implements AxonsFactory {
 
 	@Override
 	public FullyConnectedAxons createFullyConnectedAxons(Neurons leftNeurons, Neurons rightNeurons,
-			Matrix connectionWeights, Matrix biases) {
+			WeightsMatrix connectionWeights, BiasMatrix biases) {
 		return new DummyFullyConnectedAxonsImpl(matrixFactory, leftNeurons, rightNeurons);
 	}
 
 	@Override
 	public FullyConnectedAxons createFullyConnectedAxons(Neurons leftNeurons, Neurons rightNeurons,
-			Matrix connectionWeights, Matrix leftToRightBiases, Matrix rightToLeftBiases) {
+			WeightsMatrix connectionWeights, BiasMatrix leftToRightBiases, BiasMatrix rightToLeftBiases) {
 		return new DummyFullyConnectedAxonsImpl(matrixFactory, leftNeurons, rightNeurons);
 	}
 
@@ -50,7 +52,7 @@ public class DummyAxonsFactoryImpl implements AxonsFactory {
 
 	@Override
 	public ConvolutionalAxons createConvolutionalAxons(Neurons3D leftNeurons, Neurons3D rightNeurons,
-			Axons3DConfig config, Matrix connectionWeights, Matrix biases) {
+			Axons3DConfig config, WeightsMatrix connectionWeights, BiasMatrix biases) {
 		return new DummyConvolutionalAxonsImpl(matrixFactory, leftNeurons, rightNeurons, config);
 	}
 
@@ -62,7 +64,7 @@ public class DummyAxonsFactoryImpl implements AxonsFactory {
 
 	@Override
 	public <N extends Neurons> ScaleAndShiftAxons<N> createScaleAndShiftAxons(N leftNeurons, N rightNeurons,
-			Matrix gamma, Matrix beta) {
+			WeightsMatrix gamma, BiasMatrix beta) {
 		return new DummyScaleAndShiftAxonsImpl<>(matrixFactory, leftNeurons, rightNeurons);
 	}
 

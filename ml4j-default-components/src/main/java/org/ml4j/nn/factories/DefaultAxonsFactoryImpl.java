@@ -20,6 +20,8 @@ import org.ml4j.MatrixFactory;
 import org.ml4j.nn.axons.AveragePoolingAxons;
 import org.ml4j.nn.axons.AxonWeightsInitialiser;
 import org.ml4j.nn.axons.Axons3DConfig;
+import org.ml4j.nn.axons.BiasMatrix;
+import org.ml4j.nn.axons.BiasMatrixImpl;
 import org.ml4j.nn.axons.ConvolutionalAxons;
 import org.ml4j.nn.axons.DefaultAveragePoolingAxonsImpl;
 import org.ml4j.nn.axons.DefaultConvolutionalAxonsImpl;
@@ -34,6 +36,8 @@ import org.ml4j.nn.axons.FullyConnectedAxons;
 import org.ml4j.nn.axons.MaxPoolingAxons;
 import org.ml4j.nn.axons.ScaleAndShiftAxonWeightsImpl;
 import org.ml4j.nn.axons.ScaleAndShiftAxons;
+import org.ml4j.nn.axons.WeightsMatrix;
+import org.ml4j.nn.axons.WeightsMatrixImpl;
 import org.ml4j.nn.axons.factories.AxonsFactory;
 import org.ml4j.nn.neurons.Neurons;
 import org.ml4j.nn.neurons.Neurons3D;
@@ -64,26 +68,36 @@ public class DefaultAxonsFactoryImpl implements AxonsFactory {
 
 	@Override
 	public FullyConnectedAxons createFullyConnectedAxons(Neurons leftNeurons, Neurons rightNeurons,
-			Matrix connectionWeights, Matrix biases) {
+			WeightsMatrix connectionWeights, BiasMatrix biases) {
 		return createFullyConnectedAxons(leftNeurons, rightNeurons, connectionWeights, biases, null);
 	}
 
 	@Override
 	public FullyConnectedAxons createFullyConnectedAxons(Neurons leftNeurons, Neurons rightNeurons,
-			Matrix connectionWeights, Matrix leftToRightBiases, Matrix rightToLeftBiases) {
+			WeightsMatrix connectionWeights, BiasMatrix leftToRightBiases, BiasMatrix rightToLeftBiases) {
 
+		if (connectionWeights == null || connectionWeights.getFormat() == null) {
+			throw new IllegalArgumentException("Connection weights format cannot be null");
+		}
+		
 		AxonWeightsInitialiser axonWeightsInitialiser = new DefaultFullyConnectedAxonWeightsInitialiser(leftNeurons,
 				rightNeurons);
 
-		Matrix initialConnectionWeights = connectionWeights == null
-				? axonWeightsInitialiser.getInitialConnectionWeights(matrixFactory)
+		WeightsMatrix initialConnectionWeights = connectionWeights.getWeights() == null
+				? new WeightsMatrixImpl(axonWeightsInitialiser.getInitialConnectionWeights(matrixFactory), connectionWeights.getFormat())
 				: connectionWeights;
-		Optional<Matrix> initialLeftToRightBiases = leftToRightBiases == null
+		Optional<Matrix> initialLeftToRightBiasMatrix = leftToRightBiases == null
 				? axonWeightsInitialiser.getInitialLeftToRightBiases(matrixFactory)
-				: Optional.of(leftToRightBiases);
-		Optional<Matrix> initialRightToLeftBiases = rightToLeftBiases == null
+				: Optional.of(leftToRightBiases.getWeights());
+		Optional<Matrix> initialRightToLeftBiasMatrix = rightToLeftBiases == null
 				? axonWeightsInitialiser.getInitialRightToLeftBiases(matrixFactory)
-				: Optional.of(rightToLeftBiases);
+				: Optional.of(rightToLeftBiases.getWeights());
+				
+		Optional<BiasMatrix> initialLeftToRightBiases = initialLeftToRightBiasMatrix.isPresent() ? 
+				Optional.of(new BiasMatrixImpl(initialLeftToRightBiasMatrix.get())) : Optional.empty();
+				
+		Optional<BiasMatrix> initialRightToLeftBiases = initialRightToLeftBiasMatrix.isPresent() ? 
+						Optional.of(new BiasMatrixImpl(initialRightToLeftBiasMatrix.get())) : Optional.empty();
 
 		return new DefaultFullyConnectedAxonsImpl(leftNeurons, rightNeurons,
 				new FullyConnectedAxonWeightsImpl(leftNeurons.getNeuronCountExcludingBias(),
@@ -100,8 +114,9 @@ public class DefaultAxonsFactoryImpl implements AxonsFactory {
 
 	@Override
 	public ConvolutionalAxons createConvolutionalAxons(Neurons3D leftNeurons, Neurons3D rightNeurons,
-			Axons3DConfig config, Matrix connectionWeights, Matrix biases) {	
+			Axons3DConfig config, WeightsMatrix connectionWeights, BiasMatrix biases) {	
 		if (DefaultOneByOneConvolutionalAxonsImpl.isEligible(leftNeurons, rightNeurons, config)) {
+			
 			return new DefaultOneByOneConvolutionalAxonsImpl(this, leftNeurons, rightNeurons, config, connectionWeights, biases);
 		}  else {
 			return new DefaultConvolutionalAxonsImpl(this, leftNeurons, rightNeurons, config, connectionWeights, biases);
@@ -116,17 +131,23 @@ public class DefaultAxonsFactoryImpl implements AxonsFactory {
 
 	@Override
 	public <N extends Neurons> ScaleAndShiftAxons<N> createScaleAndShiftAxons(N leftNeurons, N rightNeurons,
-			Matrix gamma, Matrix beta) {
+			WeightsMatrix gamma, BiasMatrix beta) {
+		
+		if (gamma == null) {
+			throw new IllegalArgumentException("Gamma cannot be null");
+		}
 
 		AxonWeightsInitialiser axonWeightsInitialiser = new DefaultScaleAndShiftAxonWeightsInitialiser(leftNeurons);
 
-		Matrix initialGamma = gamma == null ? axonWeightsInitialiser.getInitialConnectionWeights(matrixFactory) : gamma;
+		Matrix initialGammaMatrix = gamma.getWeights() == null ? axonWeightsInitialiser.getInitialConnectionWeights(matrixFactory) : gamma.getWeights();
 		Optional<Matrix> initialBeta = beta == null ? axonWeightsInitialiser.getInitialLeftToRightBiases(matrixFactory)
-				: Optional.of(beta);
+				: Optional.of(beta.getWeights());
+		
+		WeightsMatrix intialGamma = new WeightsMatrixImpl(initialGammaMatrix, gamma.getFormat());
 
 		ScaleAndShiftAxonWeightsImpl weights = new ScaleAndShiftAxonWeightsImpl(
-				leftNeurons.getNeuronCountExcludingBias(), rightNeurons.getNeuronCountExcludingBias(), initialGamma,
-				initialBeta.isPresent() ? initialBeta.get() : null, null);
+				leftNeurons.getNeuronCountExcludingBias(), rightNeurons.getNeuronCountExcludingBias(), intialGamma,
+				initialBeta.isPresent() ? new BiasMatrixImpl(initialBeta.get()) : null, null);
 		return new DefaultScaleAndShiftAxonsImpl<>(leftNeurons, rightNeurons, weights);
 	}
 

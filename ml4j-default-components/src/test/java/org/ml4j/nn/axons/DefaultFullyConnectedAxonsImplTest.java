@@ -1,5 +1,7 @@
 package org.ml4j.nn.axons;
 
+import java.util.Arrays;
+
 import org.junit.Before;
 import org.ml4j.MatrixFactory;
 import org.ml4j.jblas.JBlasRowMajorMatrixFactory;
@@ -8,6 +10,7 @@ import org.ml4j.nn.neurons.Neurons;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.ml4j.nn.neurons.NeuronsActivationImpl;
 import org.ml4j.nn.neurons.format.NeuronsActivationFormat;
+import org.ml4j.nn.neurons.format.features.Dimension;
 import org.mockito.Mockito;
 
 public class DefaultFullyConnectedAxonsImplTest extends AxonsTestBase<FullyConnectedAxons> {
@@ -22,9 +25,11 @@ public class DefaultFullyConnectedAxonsImplTest extends AxonsTestBase<FullyConne
 	protected FullyConnectedAxons createAxonsUnderTest(Neurons leftNeurons, Neurons rightNeurons) {
 		AxonWeights axonWeights = new FullyConnectedAxonWeightsImpl(leftNeurons.getNeuronCountExcludingBias(),
 				rightNeurons.getNeuronCountExcludingBias(),
-				matrixFactory.createMatrix(rightNeurons.getNeuronCountExcludingBias(),
+				new WeightsMatrixImpl(matrixFactory.createMatrix(rightNeurons.getNeuronCountExcludingBias(),
 						leftNeurons.getNeuronCountExcludingBias()),
-				matrixFactory.createMatrix(rightNeurons.getNeuronCountExcludingBias(), 1), null);
+				new WeightsFormatImpl(Arrays.asList(Dimension.INPUT_FEATURE), Arrays.asList(Dimension.OUTPUT_FEATURE),
+						WeightsMatrixOrientation.ROWS_SPAN_OUTPUT_DIMENSIONS)),
+				new BiasMatrixImpl(matrixFactory.createMatrix(rightNeurons.getNeuronCountExcludingBias(), 1)), null);
 		return new DefaultFullyConnectedAxonsImpl(leftNeurons, rightNeurons, axonWeights);
 	}
 

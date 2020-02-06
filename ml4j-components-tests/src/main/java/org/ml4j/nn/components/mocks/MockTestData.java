@@ -61,7 +61,7 @@ public class MockTestData {
 		Mockito.when(mockImages.getHeight()).thenReturn(height);
 		Mockito.when(mockImages.getExamples()).thenReturn(exampleCount);
 		ImageNeuronsActivation mockImageActivation = Mockito.mock(ImageNeuronsActivation.class);
-		Mockito.when(neuronsActivation.asImageNeuronsActivation(Mockito.any())).thenReturn(mockImageActivation);
+		Mockito.when(neuronsActivation.asImageNeuronsActivation(Mockito.any(), Mockito.any())).thenReturn(mockImageActivation);
 		Mockito.when(mockImageActivation.getFeatureCount()).thenReturn(featureCount);
 		Mockito.when(mockImageActivation.getExampleCount()).thenReturn(exampleCount);
 		Mockito.when(mockImageActivation.getImages()).thenReturn(mockImages);

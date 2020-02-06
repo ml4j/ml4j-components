@@ -64,7 +64,7 @@ public class DefaultDirectedAxonsComponentActivationImpl<A extends Axons<?, ?, ?
 			if (directedAxonsComponent.getAxons() instanceof TrainableAxons) {
 
 				try (InterrimMatrix weightsWithoutBiases = ((TrainableAxons<?, ?, ?>) directedAxonsComponent.getAxons())
-						.getDetachedAxonWeights().getConnectionWeights().asInterrimMatrix()) {
+						.getDetachedAxonWeights().getConnectionWeights().getWeights().asInterrimMatrix()) {
 					float regularisationMatrix = weightsWithoutBiases.asEditableMatrix().muli(weightsWithoutBiases)
 							.sum();
 					totalRegularisationCost = totalRegularisationCost
@@ -95,7 +95,7 @@ public class DefaultDirectedAxonsComponentActivationImpl<A extends Axons<?, ?, ?
 					.get();
 
 			Matrix first = rightToLeftPostDropoutInput.getActivations(axonsContext.getMatrixFactory());
-
+			
 			EditableMatrix totalTrainableAxonsGradientMatrixNonBias = null;
 			Matrix totalTrainableAxonsGradientMatrixBias = null;
 
@@ -121,7 +121,7 @@ public class DefaultDirectedAxonsComponentActivationImpl<A extends Axons<?, ?, ?
 				LOGGER.debug("Calculating total regularisation Gradients");
 
 				try (InterrimMatrix connectionWeightsCopy = trainableAxons.getDetachedAxonWeights()
-						.getConnectionWeights().asInterrimMatrix()) {
+						.getConnectionWeights().getWeights().asInterrimMatrix()) {
 
 					Matrix regularisationAddition = connectionWeightsCopy.asEditableMatrix()
 							.muli(axonsContext.getRegularisationLambda());

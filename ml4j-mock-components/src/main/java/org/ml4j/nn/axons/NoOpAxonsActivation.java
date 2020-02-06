@@ -36,4 +36,9 @@ public class NoOpAxonsActivation implements AxonsActivation {
 	public Supplier<NeuronsActivation> getPostDropoutInput() {
 		return input;
 	}
+
+	@Override
+	public void setDropoutMask(AxonsDropoutMask axonsDropoutMask) {
+		// no-op
+	}
 }

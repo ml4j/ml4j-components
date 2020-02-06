@@ -8,7 +8,7 @@ import org.ml4j.nn.axons.AxonsDropoutMask;
 import org.ml4j.nn.neurons.NeuronsActivation;
 
 public class DummyAxonsActivation implements AxonsActivation {
-
+	
 	private Axons<?, ?, ?> axons;
 	private Supplier<NeuronsActivation> inputActivation;
 	private NeuronsActivation outputActivation;
@@ -29,6 +29,12 @@ public class DummyAxonsActivation implements AxonsActivation {
 	public AxonsDropoutMask getDropoutMask() {
 		return null;
 	}
+	
+	@Override
+	public void setDropoutMask(AxonsDropoutMask axonsDropoutMask) {
+		// No-op
+	}
+
 
 	@Override
 	public NeuronsActivation getPostDropoutOutput() {

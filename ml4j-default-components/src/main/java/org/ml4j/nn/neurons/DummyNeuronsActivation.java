@@ -22,6 +22,7 @@ import org.ml4j.Matrix;
 import org.ml4j.MatrixFactory;
 import org.ml4j.nn.neurons.format.NeuronsActivationFormat;
 import org.ml4j.nn.neurons.format.features.Dimension;
+import org.ml4j.nn.neurons.format.features.DimensionScope;
 import org.ml4j.nn.neurons.format.features.FlatFeaturesFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,7 +71,7 @@ public class DummyNeuronsActivation implements NeuronsActivation {
 	}
 
 	@Override
-	public ImageNeuronsActivation asImageNeuronsActivation(Neurons3D neurons) {
+	public ImageNeuronsActivation asImageNeuronsActivation(Neurons3D neurons, DimensionScope dimensionScope) {
 		return new DummyImageNeuronsActivation(neurons, featureOrientation, examples);
 	}
 
