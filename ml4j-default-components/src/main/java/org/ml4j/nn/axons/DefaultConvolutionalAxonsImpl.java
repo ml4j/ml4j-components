@@ -2,7 +2,6 @@ package org.ml4j.nn.axons;
 
 import java.util.Optional;
 
-import org.ml4j.Matrix;
 import org.ml4j.MatrixFactory;
 import org.ml4j.images.Images;
 import org.ml4j.images.MultiChannelImages;
@@ -16,6 +15,7 @@ import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
 import org.ml4j.nn.neurons.NeuronsActivationImpl;
 import org.ml4j.nn.neurons.format.ImageNeuronsActivationFormat;
 import org.ml4j.nn.neurons.format.NeuronsActivationFormat;
+import org.ml4j.nn.neurons.format.features.DimensionScope;
 
 public class DefaultConvolutionalAxonsImpl implements ConvolutionalAxons {
 
@@ -39,7 +39,7 @@ public class DefaultConvolutionalAxonsImpl implements ConvolutionalAxons {
 	}
 
 	public DefaultConvolutionalAxonsImpl(AxonsFactory axonsFactory, Neurons3D leftNeurons, Neurons3D rightNeurons,
-			Axons3DConfig config, Matrix connectionWeights, Matrix biases) {
+			Axons3DConfig config, WeightsMatrix connectionWeights,  BiasMatrix biases) {
 		super();
 		this.leftNeurons = leftNeurons;
 		this.rightNeurons = rightNeurons;
@@ -57,7 +57,9 @@ public class DefaultConvolutionalAxonsImpl implements ConvolutionalAxons {
 		int filterHeight = inputHeightWithPadding + (1 - outputHeight) * (config.getStrideHeight());
 		this.fullyConnectedAxons = axonsFactory.createFullyConnectedAxons(
 				new Neurons(filterWidth * filterHeight * leftNeurons.getDepth(), leftNeurons.hasBiasUnit()),
-				new Neurons(rightNeurons.getDepth(), rightNeurons.hasBiasUnit()), connectionWeights, biases);
+				new Neurons(rightNeurons.getDepth(), rightNeurons.hasBiasUnit()), 
+				connectionWeights,
+				biases);
 	}
 
 	@Override
@@ -91,13 +93,12 @@ public class DefaultConvolutionalAxonsImpl implements ConvolutionalAxons {
 		int filterHeight = inputHeightWithPadding + (1 - outputHeight) * (config.getStrideHeight());
 
 		final NeuronsActivation reformatted;
-			ImageNeuronsActivation imageAct = leftNeuronsActivation.asImageNeuronsActivation(leftNeurons);
+			ImageNeuronsActivation imageAct = leftNeuronsActivation.asImageNeuronsActivation(leftNeurons, DimensionScope.INPUT);
 			reformatted = new NeuronsActivationImpl(
 					new Neurons(leftNeurons.getDepth() * filterWidth * filterHeight, leftNeurons.hasBiasUnit()),
 					imageAct.im2ColConv(matrixFactory, filterHeight, filterWidth, config.getStrideHeight(),
 							config.getStrideWidth(), config.getPaddingHeight(), config.getPaddingWidth()),
-					// TODO Format
-					ImageNeuronsActivationFormat.ML4J_DEFAULT_IMAGE_FORMAT);
+					ImageNeuronsActivationFormat.ML4J_IM_TO_COL_CONV_FORMAT);
 			if (!imageAct.isImmutable()) {
 				imageAct.close();
 			}
@@ -109,7 +110,8 @@ public class DefaultConvolutionalAxonsImpl implements ConvolutionalAxons {
 	public NeuronsActivation reformatLeftToRightOutput(MatrixFactory matrixFactory, NeuronsActivation output,
 			int exampleCount) {
 		output.reshape(rightNeurons.getNeuronCountExcludingBias(), exampleCount);
-		return output.asImageNeuronsActivation(getRightNeurons());
+		
+		return output.asImageNeuronsActivation(getRightNeurons(), DimensionScope.OUTPUT);
 
 	}
 
@@ -205,8 +207,7 @@ public class DefaultConvolutionalAxonsImpl implements ConvolutionalAxons {
 
 	@Override
 	public ConvolutionalAxons dup() {
-		// TODO config.dup()
-		return new DefaultConvolutionalAxonsImpl(leftNeurons, rightNeurons, fullyConnectedAxons, config);
+		return new DefaultConvolutionalAxonsImpl(leftNeurons, rightNeurons, fullyConnectedAxons, config.dup());
 	}
 
 	@Override

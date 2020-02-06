@@ -1,5 +1,7 @@
 package org.ml4j.nn.axons;
 
+import java.util.Arrays;
+
 import org.junit.Before;
 import org.ml4j.MatrixFactory;
 import org.ml4j.jblas.JBlasRowMajorMatrixFactory;
@@ -8,6 +10,7 @@ import org.ml4j.nn.neurons.Neurons;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.ml4j.nn.neurons.NeuronsActivationImpl;
 import org.ml4j.nn.neurons.format.NeuronsActivationFormat;
+import org.ml4j.nn.neurons.format.features.Dimension;
 import org.mockito.Mockito;
 
 public class DefaultScaleAndShiftAxonsImplTest extends AxonsTestBase<ScaleAndShiftAxons<?>> {
@@ -22,8 +25,10 @@ public class DefaultScaleAndShiftAxonsImplTest extends AxonsTestBase<ScaleAndShi
 	protected ScaleAndShiftAxons<?> createAxonsUnderTest(Neurons leftNeurons, Neurons rightNeurons) {
 		AxonWeights axonWeights = new ScaleAndShiftAxonWeightsImpl(leftNeurons.getNeuronCountExcludingBias(),
 				rightNeurons.getNeuronCountExcludingBias(),
-				matrixFactory.createMatrix(leftNeurons.getNeuronCountExcludingBias(), 1),
-				matrixFactory.createMatrix(leftNeurons.getNeuronCountExcludingBias(), 1), null);
+				new WeightsMatrixImpl(matrixFactory.createMatrix(leftNeurons.getNeuronCountExcludingBias(), 1),
+						new WeightsFormatImpl(Arrays.asList(Dimension.INPUT_FEATURE), Arrays.asList(Dimension.OUTPUT_FEATURE), 
+								WeightsMatrixOrientation.ROWS_SPAN_OUTPUT_DIMENSIONS)),
+				new BiasMatrixImpl(matrixFactory.createMatrix(leftNeurons.getNeuronCountExcludingBias(), 1)), null);
 		return new DefaultScaleAndShiftAxonsImpl<>(leftNeurons, rightNeurons, axonWeights);
 	}
 

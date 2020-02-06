@@ -13,6 +13,7 @@
  */
 package org.ml4j.nn.factories;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.IntSupplier;
 
@@ -24,7 +25,13 @@ import org.ml4j.nn.activationfunctions.DifferentiableActivationFunction;
 import org.ml4j.nn.activationfunctions.factories.DifferentiableActivationFunctionFactory;
 import org.ml4j.nn.axons.Axons;
 import org.ml4j.nn.axons.Axons3DConfig;
+import org.ml4j.nn.axons.BiasMatrix;
+import org.ml4j.nn.axons.BiasMatrixImpl;
 import org.ml4j.nn.axons.PassThroughAxonsImpl;
+import org.ml4j.nn.axons.WeightsFormatImpl;
+import org.ml4j.nn.axons.WeightsMatrix;
+import org.ml4j.nn.axons.WeightsMatrixImpl;
+import org.ml4j.nn.axons.WeightsMatrixOrientation;
 import org.ml4j.nn.axons.factories.AxonsFactory;
 import org.ml4j.nn.components.NeuralComponentType;
 import org.ml4j.nn.components.activationfunctions.DefaultDifferentiableActivationFunctionComponentImpl;
@@ -49,6 +56,8 @@ import org.ml4j.nn.components.onetoone.DefaultDirectedComponentChainImpl;
 import org.ml4j.nn.components.onetoone.DefaultSpaceToDepthDirectedComponent;
 import org.ml4j.nn.neurons.Neurons;
 import org.ml4j.nn.neurons.Neurons3D;
+import org.ml4j.nn.neurons.format.features.Dimension;
+import org.ml4j.nn.neurons.format.features.DimensionScope;
 
 /**
  * Default implementation of DirectedComponentFactory
@@ -76,9 +85,11 @@ public class DefaultDirectedComponentFactoryImpl implements DirectedComponentFac
 
 	@Override
 	public DirectedAxonsComponent<Neurons, Neurons, ?> createFullyConnectedAxonsComponent(String name, Neurons leftNeurons,
-			Neurons rightNeurons, Matrix connectionWeights, Matrix biases) {
+			Neurons rightNeurons, WeightsMatrix connectionWeights, BiasMatrix biases) {
 		return createDirectedAxonsComponent(name,
-				axonsFactory.createFullyConnectedAxons(leftNeurons, rightNeurons, connectionWeights, biases));
+				axonsFactory.createFullyConnectedAxons(leftNeurons, rightNeurons, 
+						connectionWeights, 
+						biases));
 	}
 
 	@Override
@@ -89,7 +100,7 @@ public class DefaultDirectedComponentFactoryImpl implements DirectedComponentFac
 
 	@Override
 	public DirectedAxonsComponent<Neurons3D, Neurons3D, ?> createConvolutionalAxonsComponent(String name, Neurons3D leftNeurons,
-			Neurons3D rightNeurons, Axons3DConfig config, Matrix connectionWeights, Matrix biases) {
+			Neurons3D rightNeurons, Axons3DConfig config, WeightsMatrix connectionWeights, BiasMatrix biases) {
 		return createDirectedAxonsComponent(name,
 				axonsFactory.createConvolutionalAxons(leftNeurons, rightNeurons, config, connectionWeights, biases));
 	}
@@ -115,7 +126,7 @@ public class DefaultDirectedComponentFactoryImpl implements DirectedComponentFac
 
 	@Override
 	public <N extends Neurons> BatchNormDirectedAxonsComponent<N, ?> createBatchNormAxonsComponent(String name, N leftNeurons,
-			N rightNeurons, Matrix gamma, Matrix beta, Matrix mean, Matrix stddev) {
+			N rightNeurons, WeightsMatrix gamma, BiasMatrix beta, Matrix mean, Matrix stddev) {
 		throw new UnsupportedOperationException();
 	}
 
@@ -123,24 +134,50 @@ public class DefaultDirectedComponentFactoryImpl implements DirectedComponentFac
 	public BatchNormDirectedAxonsComponent<Neurons3D, ?> createConvolutionalBatchNormAxonsComponent(String name, 
 			Neurons3D leftNeurons, Neurons3D rightNeurons) {
 		return new DefaultBatchNormDirectedAxonsComponentImpl<>(name, 
-				axonsFactory.createScaleAndShiftAxons(leftNeurons, rightNeurons, null, null), null, null);
+				axonsFactory.createScaleAndShiftAxons(leftNeurons, rightNeurons, 
+						new WeightsMatrixImpl(null, 
+								new WeightsFormatImpl(Arrays.asList(
+										Dimension.INPUT_DEPTH, 
+										Dimension.INPUT_HEIGHT, 
+										Dimension.INPUT_WIDTH), 
+										Arrays.asList(Dimension.OUTPUT_FEATURE),
+										WeightsMatrixOrientation.ROWS_SPAN_OUTPUT_DIMENSIONS)), null), null, null);
 	}
 
 	@Override
 	public BatchNormDirectedAxonsComponent<Neurons3D, ?> createConvolutionalBatchNormAxonsComponent(String name, 
-			Neurons3D leftNeurons, Neurons3D rightNeurons, Matrix gamma, Matrix beta, Matrix mean, Matrix stddev) {
+			Neurons3D leftNeurons, Neurons3D rightNeurons, WeightsMatrix gamma, BiasMatrix beta, Matrix mean, Matrix stddev) {
 		return new DefaultBatchNormDirectedAxonsComponentImpl<>(name, 
 				axonsFactory.createScaleAndShiftAxons(leftNeurons, rightNeurons,
-						expandChannelValuesToFeatureValues(matrixFactory, rightNeurons, gamma),
-						expandChannelValuesToFeatureValues(matrixFactory, rightNeurons, beta)),
+						new WeightsMatrixImpl(expandChannelValuesToFeatureValues(matrixFactory, rightNeurons, gamma),
+								new WeightsFormatImpl(Arrays.asList(
+										Dimension.INPUT_DEPTH, 
+										Dimension.INPUT_HEIGHT, 
+										Dimension.INPUT_WIDTH), 
+										Arrays.asList(Dimension.OUTPUT_FEATURE),
+										WeightsMatrixOrientation.ROWS_SPAN_OUTPUT_DIMENSIONS)),
+						beta == null ? null : new BiasMatrixImpl(expandChannelValuesToFeatureValues(matrixFactory, rightNeurons, beta))),
 				expandChannelValuesToFeatureValues(matrixFactory, rightNeurons, mean),
 				expandChannelValuesToFeatureValues(matrixFactory, rightNeurons, stddev));
+	}
+	
+	public static Matrix expandChannelValuesToFeatureValues(MatrixFactory matrixFactory, Neurons3D rightNeurons,
+			WeightsMatrix channelValues) {
+		if (channelValues == null) {
+			return null;
+		}
+		if (channelValues != null && !Dimension.isEquivalent(channelValues.getFormat().getInputDimensions(), Arrays.asList(Dimension.INPUT_DEPTH), DimensionScope.INPUT)) {
+			throw new IllegalArgumentException("Expected batch norm to be of format with input dimensions:" +  Dimension.INPUT_DEPTH);
+		}
+		return expandChannelValuesToFeatureValues(matrixFactory, rightNeurons, channelValues.getWeights());
 	}
 
 	public static Matrix expandChannelValuesToFeatureValues(MatrixFactory matrixFactory, Neurons3D rightNeurons,
 			Matrix channelValues) {
-		if (channelValues == null)
+		if (channelValues == null) {
 			return null;
+		}
+	
 		float[] channelValuesArray = channelValues.getRowByRowArray();
 		float[] channelValuesExpanded = new float[rightNeurons.getNeuronCountExcludingBias()];
 		int index = 0;

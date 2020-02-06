@@ -10,13 +10,12 @@ import org.ml4j.images.Images;
 import org.ml4j.images.MultiChannelImages;
 import org.ml4j.nn.neurons.ImageNeuronsActivation;
 import org.ml4j.nn.neurons.ImageNeuronsActivationImpl;
-import org.ml4j.nn.neurons.Neurons;
 import org.ml4j.nn.neurons.Neurons3D;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
-import org.ml4j.nn.neurons.NeuronsActivationImpl;
 import org.ml4j.nn.neurons.format.ImageNeuronsActivationFormat;
 import org.ml4j.nn.neurons.format.NeuronsActivationFormat;
+import org.ml4j.nn.neurons.format.features.DimensionScope;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -68,7 +67,8 @@ public class DefaultAveragePoolingAxonsImpl implements AveragePoolingAxons {
 
 		int filterHeight = inputHeightWithPadding + (1 - outputHeight) * (config.getStrideHeight());
 
-		ImageNeuronsActivation imageNeuronsActivation = leftNeuronsActivation.asImageNeuronsActivation(leftNeurons);
+		ImageNeuronsActivation imageNeuronsActivation = leftNeuronsActivation.asImageNeuronsActivation(leftNeurons,
+				DimensionScope.INPUT);
 
 		Matrix reformatted = imageNeuronsActivation.im2ColPool(matrixFactory, filterHeight, filterWidth,
 				config.getStrideHeight(), config.getStrideWidth(), config.getPaddingHeight(), config.getPaddingWidth());
@@ -84,7 +84,7 @@ public class DefaultAveragePoolingAxonsImpl implements AveragePoolingAxons {
 	public ImageNeuronsActivation reformatLeftToRightOutput(MatrixFactory matrixFactory, NeuronsActivation output,
 			int exampleCount) {
 		output.reshape(rightNeurons.getNeuronCountExcludingBias(), exampleCount);
-		return output.asImageNeuronsActivation(getRightNeurons());
+		return output.asImageNeuronsActivation(getRightNeurons(), DimensionScope.OUTPUT);
 
 	}
 
@@ -92,11 +92,8 @@ public class DefaultAveragePoolingAxonsImpl implements AveragePoolingAxons {
 	public AxonsActivation pushLeftToRight(NeuronsActivation leftNeuronsActivation,
 			AxonsActivation previousRightToLeftActivation, AxonsContext axonsContext) {
 
-		// Obtain the inbound activation as an image activation, and create an
-		// activation of ones of the same shape.
-
-		// TODO
-		ImageNeuronsActivation inputImageActivation = leftNeuronsActivation.asImageNeuronsActivation(leftNeurons);
+	
+		ImageNeuronsActivation inputImageActivation = leftNeuronsActivation.asImageNeuronsActivation(leftNeurons, DimensionScope.INPUT);
 
 		int inputMatrixRows = inputImageActivation.getRows();
 		int inputMatrixColumns = inputImageActivation.getColumns();
@@ -120,19 +117,19 @@ public class DefaultAveragePoolingAxonsImpl implements AveragePoolingAxons {
 		onesActivation.close();
 		reformattedOnes.close();
 
-		Neurons averageNeurons = new Neurons(1, false);
-
+	
 		// Obtain pooled feature averages
-		// TODO - format
-		NeuronsActivation preFormattedOutput = new NeuronsActivationImpl(averageNeurons,
-				reformatted.columnSums().asEditableMatrix().diviRowVector(counts),
-				ImageNeuronsActivationFormat.ML4J_DEFAULT_IMAGE_FORMAT);
+		Matrix preFormattedOutput = 
+				reformatted.columnSums().asEditableMatrix().diviRowVector(counts);
+		
 		reformatted.close();
 
-		// Reformat back to output shape.
-		ImageNeuronsActivation output = reformatLeftToRightOutput(axonsContext.getMatrixFactory(), preFormattedOutput,
-				exampleCount);
-
+		// Reformat back to output shape
+		preFormattedOutput.asEditableMatrix().reshape(rightNeurons.getNeuronCountExcludingBias(), exampleCount);
+		
+		ImageNeuronsActivation output = new ImageNeuronsActivationImpl(preFormattedOutput, getRightNeurons(),
+				ImageNeuronsActivationFormat.ML4J_DEFAULT_IMAGE_FORMAT, false);
+				
 		// Close the pooled feature averages activations
 		preFormattedOutput.close();
 
@@ -148,9 +145,6 @@ public class DefaultAveragePoolingAxonsImpl implements AveragePoolingAxons {
 	@Override
 	public AxonsActivation pushRightToLeft(NeuronsActivation rightNeuronsActivation,
 			AxonsActivation previousLeftToRightActivation, AxonsContext axonsContext) {
-
-		// Matrix reformatted =
-		// reformattedInput.getActivations(axonsContext.getMatrixFactory());
 
 		int filterWidth = leftNeurons.getWidth() + (2 * config.getPaddingWidth())
 				+ (1 - rightNeurons.getWidth()) * (config.getStrideWidth());

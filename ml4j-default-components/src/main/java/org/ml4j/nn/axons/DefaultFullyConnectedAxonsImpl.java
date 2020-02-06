@@ -2,7 +2,7 @@ package org.ml4j.nn.axons;
 
 import org.ml4j.nn.neurons.Neurons;
 
-public class DefaultFullyConnectedAxonsImpl extends WeightedAxonsBase<Neurons, Neurons, FullyConnectedAxons>
+public class DefaultFullyConnectedAxonsImpl extends FullyConnectedAxonsBase<Neurons, Neurons, FullyConnectedAxons>
 		implements FullyConnectedAxons {
 
 	/**
@@ -17,10 +17,5 @@ public class DefaultFullyConnectedAxonsImpl extends WeightedAxonsBase<Neurons, N
 	@Override
 	public FullyConnectedAxons dup() {
 		return new DefaultFullyConnectedAxonsImpl(leftNeurons, rightNeurons, axonWeights.dup());
-	}
-
-	@Override
-	protected boolean isLeftInputDropoutSupported() {
-		return true;
 	}
 }

@@ -11,6 +11,7 @@ import org.ml4j.nn.neurons.ImageNeuronsActivation;
 import org.ml4j.nn.neurons.ImageNeuronsActivationImpl;
 import org.ml4j.nn.neurons.Neurons3D;
 import org.ml4j.nn.neurons.NeuronsActivation;
+import org.ml4j.nn.neurons.format.features.DimensionScope;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,7 +46,7 @@ public class ManyToOneFilterConcatDirectedComponentActivation extends DefaultMan
 		LOGGER.debug("Splitting gradient for many to one filter");
 
 		// Convert the outer gradient into image format
-		ImageNeuronsActivation imagesActivation = outerGradient.getOutput().asImageNeuronsActivation(outputNeurons);
+		ImageNeuronsActivation imagesActivation = outerGradient.getOutput().asImageNeuronsActivation(outputNeurons, DimensionScope.OUTPUT);
 		Images outerGradientAsImage = imagesActivation.getImages();
 
 		// Split according to the filter channel boundaries into multiple

@@ -17,6 +17,7 @@ import org.ml4j.nn.neurons.Neurons3D;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.ml4j.nn.neurons.format.ImageNeuronsActivationFormat;
 import org.ml4j.nn.neurons.format.NeuronsActivationFormat;
+import org.ml4j.nn.neurons.format.features.DimensionScope;
 
 public class DefaultSpaceToDepthDirectedComponent implements DefaultChainableDirectedComponent<DefaultSpaceToDepthDirectedComponentActivation, DirectedComponentsContext> {
 
@@ -82,7 +83,7 @@ public class DefaultSpaceToDepthDirectedComponent implements DefaultChainableDir
 	@Override
 	public DefaultSpaceToDepthDirectedComponentActivation forwardPropagate(NeuronsActivation input,
 			DirectedComponentsContext context) {
-		Images images = input.asImageNeuronsActivation(leftNeurons).getImages();
+		Images images = input.asImageNeuronsActivation(leftNeurons, DimensionScope.INPUT).getImages();
 		Matrix output = images.spaceToDepthExport(context.getMatrixFactory(), blockHeight, blockWidth);
 		ImageNeuronsActivation activation =  new ImageNeuronsActivationImpl(output, 
 				rightNeurons, ImageNeuronsActivationFormat.ML4J_DEFAULT_IMAGE_FORMAT, false);

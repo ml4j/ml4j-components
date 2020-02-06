@@ -31,6 +31,7 @@ import org.ml4j.nn.neurons.Neurons3D;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
 import org.ml4j.nn.neurons.format.NeuronsActivationFormat;
+import org.ml4j.nn.neurons.format.features.DimensionScope;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -73,7 +74,7 @@ public class DefaultManyToOneFilterConcatDirectedComponentImpl
 			DirectedComponentsContext context) {
 
 		List<Images> images = inputs.stream()
-				.map(i -> i.asImageNeuronsActivation(getInputNeurons3D(i.getNeurons())).getImages())
+				.map(i -> i.asImageNeuronsActivation(getInputNeurons3D(i.getNeurons()), DimensionScope.OUTPUT).getImages())
 				.collect(Collectors.toList());
 
 		Images result = new ChannelConcatImages(images, outputNeurons.getHeight(), outputNeurons.getWidth(), 0, 0,
@@ -92,7 +93,7 @@ public class DefaultManyToOneFilterConcatDirectedComponentImpl
 
 		return new ImmutablePair<>(new ImageNeuronsActivationImpl(
 				new Neurons3D(outputNeurons.getWidth(), outputNeurons.getHeight(), result.getChannels(), false), result,
-				inputs.get(0).asImageNeuronsActivation(getInputNeurons3D(inputs.get(0).getNeurons())).getFormat(), false), channelBoundaries);
+				inputs.get(0).asImageNeuronsActivation(getInputNeurons3D(inputs.get(0).getNeurons()), DimensionScope.OUTPUT).getFormat(), false), channelBoundaries);
 	}
 
 	private Neurons3D getInputNeurons3D(Neurons inputNeurons) {

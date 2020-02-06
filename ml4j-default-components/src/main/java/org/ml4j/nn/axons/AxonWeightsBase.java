@@ -1,7 +1,5 @@
 package org.ml4j.nn.axons;
 
-import org.ml4j.EditableMatrix;
-import org.ml4j.Matrix;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,19 +14,19 @@ public abstract class AxonWeightsBase implements AxonWeights {
 
 	protected int inputNeuronCount;
 	protected int outputNeuronCount;
-	protected EditableMatrix leftToRightBiases;
-	protected EditableMatrix rightToLeftBiases;
-	protected EditableMatrix connectionWeights;
+	protected BiasMatrix leftToRightBiases;
+	protected BiasMatrix rightToLeftBiases;
+	protected WeightsMatrix connectionWeights;
 	protected AxonWeightsType type;
 
-	public AxonWeightsBase(int inputNeuronCount, int outputNeuronCount, Matrix connectionWeights,
-			Matrix leftToRightBiases, Matrix rightToLeftBiases, AxonWeightsType type) {
+	public AxonWeightsBase(int inputNeuronCount, int outputNeuronCount, WeightsMatrix connectionWeights,
+			BiasMatrix leftToRightBiases, BiasMatrix rightToLeftBiases, AxonWeightsType type) {
 		super();
 		this.inputNeuronCount = inputNeuronCount;
 		this.outputNeuronCount = outputNeuronCount;
-		this.leftToRightBiases = leftToRightBiases == null ? null : leftToRightBiases.asEditableMatrix();
-		this.rightToLeftBiases = rightToLeftBiases == null ? null : rightToLeftBiases.asEditableMatrix();
-		this.connectionWeights = connectionWeights.asEditableMatrix();
+		this.leftToRightBiases = leftToRightBiases;
+		this.rightToLeftBiases = rightToLeftBiases;
+		this.connectionWeights = connectionWeights;
 		this.type = type;
 	}
 
@@ -41,27 +39,27 @@ public abstract class AxonWeightsBase implements AxonWeights {
 			AxonWeightsAdjustmentDirection adjustmentDirection) {
 		if (adjustmentDirection == AxonWeightsAdjustmentDirection.ADDITION) {
 			LOGGER.debug("Adding adjustment to axon weights");
-			connectionWeights.addi(axonWeightsAdjustment.getConnectionWeights());
+			connectionWeights.getWeights().asEditableMatrix().addi(axonWeightsAdjustment.getConnectionWeights());
 			if (axonWeightsAdjustment.getLeftToRightBiases().isPresent()) {
-				leftToRightBiases.addi(axonWeightsAdjustment.getLeftToRightBiases().get());
+				leftToRightBiases.getWeights().asEditableMatrix().addi(axonWeightsAdjustment.getLeftToRightBiases().get());
 			}
 			if (axonWeightsAdjustment.getRightToLeftBiases().isPresent()) {
-				rightToLeftBiases.addi(axonWeightsAdjustment.getRightToLeftBiases().get());
+				rightToLeftBiases.getWeights().asEditableMatrix().addi(axonWeightsAdjustment.getRightToLeftBiases().get());
 			}
 		} else {
 			LOGGER.debug("Subtracting adjustment from axon weights");
-			connectionWeights.subi(axonWeightsAdjustment.getConnectionWeights());
+			connectionWeights.getWeights().asEditableMatrix().subi(axonWeightsAdjustment.getConnectionWeights());
 			if (axonWeightsAdjustment.getLeftToRightBiases().isPresent()) {
-				leftToRightBiases.subi(axonWeightsAdjustment.getLeftToRightBiases().get());
+				leftToRightBiases.getWeights().asEditableMatrix().subi(axonWeightsAdjustment.getLeftToRightBiases().get());
 			}
 			if (axonWeightsAdjustment.getRightToLeftBiases().isPresent()) {
-				rightToLeftBiases.subi(axonWeightsAdjustment.getRightToLeftBiases().get());
+				rightToLeftBiases.getWeights().asEditableMatrix().subi(axonWeightsAdjustment.getRightToLeftBiases().get());
 			}
 		}
 	}
 
 	@Override
-	public Matrix getConnectionWeights() {
+	public WeightsMatrix getConnectionWeights() {
 		return connectionWeights;
 	}
 
@@ -71,7 +69,7 @@ public abstract class AxonWeightsBase implements AxonWeights {
 	}
 
 	@Override
-	public Matrix getLeftToRightBiases() {
+	public BiasMatrix getLeftToRightBiases() {
 		return leftToRightBiases;
 	}
 
@@ -81,7 +79,7 @@ public abstract class AxonWeightsBase implements AxonWeights {
 	}
 
 	@Override
-	public Matrix getRightToLeftBiases() {
+	public BiasMatrix getRightToLeftBiases() {
 		return rightToLeftBiases;
 	}
 
