@@ -3,6 +3,7 @@ package org.ml4j.nn.axons;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.ml4j.EditableMatrix;
@@ -25,7 +26,6 @@ public class FullyConnectedAxonWeightsImpl extends AxonWeightsBase implements Ax
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@SuppressWarnings("unused")
 	private static final Logger LOGGER = LoggerFactory.getLogger(FullyConnectedAxonWeightsImpl.class);
 
 	public FullyConnectedAxonWeightsImpl(int inputNeuronCount, int outputNeuronCount, WeightsMatrix connectionWeights,
@@ -76,7 +76,9 @@ public class FullyConnectedAxonWeightsImpl extends AxonWeightsBase implements Ax
 		if (!Dimension.isEquivalent(decomposedInputDimensions, 
 				Arrays.asList(Dimension.INPUT_FEATURE), DimensionScope.INPUT) && !Dimension.isEquivalent(
 						decomposedInputDimensions, inputActivationDimensions, DimensionScope.INPUT))	{
-			throw new IllegalArgumentException("Dimensions don't match");
+			LOGGER.error("Activation input dimensions:" + inputActivationDimensions);
+			LOGGER.error("Weights input dimensions:" + decomposedInputDimensions);
+			throw new IllegalArgumentException("Input/Weight Dimensions don't match");
 		}
 		
 		List<Dimension> inputExampleDimensions = input.getFeatureOrientation() == 
@@ -103,6 +105,16 @@ public class FullyConnectedAxonWeightsImpl extends AxonWeightsBase implements Ax
 		return new FullyConnectedAxonWeightsImpl(inputNeuronCount, outputNeuronCount, connectionWeights.dup(),
 				leftToRightBiases == null ? null : leftToRightBiases.dup(),
 				rightToLeftBiases == null ? null : rightToLeftBiases.dup());
+	}
+
+	@Override
+	public boolean isSupported(NeuronsActivationFormat<?> format) {
+		return Dimension.isEquivalent(format.getFeaturesFormat().getDimensions(), connectionWeights.getFormat().getInputDimensions(), DimensionScope.INPUT);
+	}
+
+	@Override
+	public Optional<NeuronsActivationFormat<?>> optimisedFor() {
+		return Optional.empty();
 	}
 
 }
