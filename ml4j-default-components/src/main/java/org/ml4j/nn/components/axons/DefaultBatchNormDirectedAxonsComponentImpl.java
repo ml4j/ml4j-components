@@ -96,7 +96,7 @@ public class DefaultBatchNormDirectedAxonsComponentImpl<L extends Neurons> exten
 
 	@Override
 	public DirectedAxonsComponentActivation forwardPropagate(NeuronsActivation input, AxonsContext axonsContext) {
-		LOGGER.debug("Forward propagating through DefaultBatchNormDirectedAxonsComponentImpl");
+		LOGGER.debug("Forward propagating through DefaultBatchNormDirectedAxonsComponentImpl:" + getName());
 		// TODO
 		/*
 		 * if (neuronsActivation.getFeatureCount() !=

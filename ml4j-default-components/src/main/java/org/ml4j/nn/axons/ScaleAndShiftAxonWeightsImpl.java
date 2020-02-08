@@ -1,10 +1,14 @@
 package org.ml4j.nn.axons;
 
+import java.util.Optional;
+
 import org.ml4j.EditableMatrix;
 import org.ml4j.Matrix;
 import org.ml4j.nn.neurons.Neurons;
 import org.ml4j.nn.neurons.NeuronsActivation;
+import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
 import org.ml4j.nn.neurons.NeuronsActivationImpl;
+import org.ml4j.nn.neurons.format.NeuronsActivationFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,6 +57,16 @@ public class ScaleAndShiftAxonWeightsImpl extends AxonWeightsBase implements Axo
 		return new ScaleAndShiftAxonWeightsImpl(inputNeuronCount, outputNeuronCount, connectionWeights.dup(),
 				leftToRightBiases == null ? null : leftToRightBiases.dup(),
 				rightToLeftBiases == null ? null : rightToLeftBiases.dup());
+	}
+
+	@Override
+	public boolean isSupported(NeuronsActivationFormat<?> format) {
+		return format.getFeatureOrientation() == NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET;
+	}
+
+	@Override
+	public Optional<NeuronsActivationFormat<?>> optimisedFor() {
+		return Optional.empty();
 	}
 
 }
