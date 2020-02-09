@@ -15,7 +15,6 @@ package org.ml4j.nn.factories;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.IntSupplier;
 
 import org.ml4j.Matrix;
 import org.ml4j.MatrixFactory;
@@ -48,6 +47,7 @@ import org.ml4j.nn.components.manytoone.ManyToOneDirectedComponent;
 import org.ml4j.nn.components.manytoone.PathCombinationStrategy;
 import org.ml4j.nn.components.onetomany.DefaultOneToManyDirectedComponentImpl;
 import org.ml4j.nn.components.onetomany.OneToManyDirectedComponent;
+import org.ml4j.nn.components.onetomany.SerializableIntSupplier;
 import org.ml4j.nn.components.onetone.DefaultChainableDirectedComponent;
 import org.ml4j.nn.components.onetone.DefaultDirectedComponentBipoleGraph;
 import org.ml4j.nn.components.onetone.DefaultDirectedComponentChain;
@@ -66,6 +66,10 @@ import org.ml4j.nn.neurons.format.features.DimensionScope;
  */
 public class DefaultDirectedComponentFactoryImpl implements DirectedComponentFactory {
 
+	/**
+	 * Default serialization id.
+	 */
+	private static final long serialVersionUID = 1L;
 	private MatrixFactory matrixFactory;
 	private AxonsFactory axonsFactory;
 	private DifferentiableActivationFunctionFactory activationFunctionFactory;
@@ -196,7 +200,7 @@ public class DefaultDirectedComponentFactoryImpl implements DirectedComponentFac
 	}
 
 	@Override
-	public OneToManyDirectedComponent<?> createOneToManyDirectedComponent(IntSupplier targetComponentsCount) {
+	public OneToManyDirectedComponent<?> createOneToManyDirectedComponent(SerializableIntSupplier targetComponentsCount) {
 		return new DefaultOneToManyDirectedComponentImpl(targetComponentsCount);
 	}
 
@@ -260,8 +264,8 @@ public class DefaultDirectedComponentFactoryImpl implements DirectedComponentFac
 	}
 
 	@Override
-	public <S extends DefaultChainableDirectedComponent<?, ?>> DefaultChainableDirectedComponent<?, ?> createComponent(String name, 
-			Neurons leftNeurons, Neurons rightNeurons, NeuralComponentType<S> neuralComponentType) {
+	public DefaultChainableDirectedComponent<?, ?> createComponent(String name, 
+			Neurons leftNeurons, Neurons rightNeurons, NeuralComponentType neuralComponentType) {
 		if ("SPACE_TO_DEPTH".equals(neuralComponentType.getId()) && leftNeurons instanceof Neurons3D && rightNeurons instanceof Neurons3D) {
 			Neurons3D left = (Neurons3D)leftNeurons;
 			Neurons3D right = (Neurons3D)rightNeurons;

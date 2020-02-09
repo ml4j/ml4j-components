@@ -13,8 +13,6 @@
  */
 package org.ml4j.nn.components.onetomany;
 
-import java.util.function.IntSupplier;
-
 import org.ml4j.MatrixFactory;
 import org.ml4j.nn.components.mocks.MockTestData;
 import org.ml4j.nn.components.onetomany.base.OneToManyDirectedComponentTestBase;
@@ -31,7 +29,7 @@ public class DummyOneToManyDirectedComponentTest extends OneToManyDirectedCompon
 
 	@Override
 	protected OneToManyDirectedComponent<?> createOneToManyDirectedComponentUnderTest(
-			IntSupplier targetComponentsCount) {
+			SerializableIntSupplier targetComponentsCount) {
 		return new DummyOneToManyDirectedComponent(targetComponentsCount);
 	}
 

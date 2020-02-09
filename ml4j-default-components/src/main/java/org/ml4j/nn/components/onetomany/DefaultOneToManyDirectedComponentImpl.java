@@ -14,7 +14,6 @@
 package org.ml4j.nn.components.onetomany;
 
 import java.util.Optional;
-import java.util.function.IntSupplier;
 
 import org.ml4j.nn.components.DirectedComponentsContext;
 import org.ml4j.nn.components.onetomany.base.OneToManyDirectedComponentBase;
@@ -46,7 +45,7 @@ public class DefaultOneToManyDirectedComponentImpl
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private IntSupplier targetComponentsCountSupplier;
+	private SerializableIntSupplier targetComponentsCountSupplier;
 
 	/**
 	 * DefaultOneToManyDirectedComponentImpl constructor
@@ -59,7 +58,7 @@ public class DefaultOneToManyDirectedComponentImpl
 	 *                                      of target outputs at time of
 	 *                                      construction.
 	 */
-	public DefaultOneToManyDirectedComponentImpl(IntSupplier targetComponentsCountSupplier) {
+	public DefaultOneToManyDirectedComponentImpl(SerializableIntSupplier targetComponentsCountSupplier) {
 		this.targetComponentsCountSupplier = targetComponentsCountSupplier;
 	}
 

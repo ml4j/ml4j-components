@@ -76,7 +76,7 @@ public class DefaultSpaceToDepthDirectedComponent implements DefaultChainableDir
 	}
 
 	@Override
-	public NeuralComponentType<DefaultChainableDirectedComponent<?, ?>> getComponentType() {
+	public NeuralComponentType getComponentType() {
 		return NeuralComponentType.createSubType(NeuralComponentBaseType.CUSTOM, "SPACE_TO_DEPTH");
 	}
 

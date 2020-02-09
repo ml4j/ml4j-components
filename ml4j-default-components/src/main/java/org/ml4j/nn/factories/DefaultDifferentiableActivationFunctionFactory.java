@@ -32,6 +32,11 @@ import org.ml4j.nn.activationfunctions.factories.DifferentiableActivationFunctio
  */
 public class DefaultDifferentiableActivationFunctionFactory implements DifferentiableActivationFunctionFactory {
 
+	/**
+	 * Default serialization id.
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Override
 	public DifferentiableActivationFunction createReluActivationFunction() {
 		return new DefaultReluActivationFunctionImpl();

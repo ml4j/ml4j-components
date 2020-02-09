@@ -14,7 +14,6 @@
 package org.ml4j.nn.factories;
 
 import java.util.List;
-import java.util.function.IntSupplier;
 
 import org.ml4j.Matrix;
 import org.ml4j.nn.activationfunctions.ActivationFunctionProperties;
@@ -42,6 +41,7 @@ import org.ml4j.nn.components.manytoone.ManyToOneDirectedComponent;
 import org.ml4j.nn.components.manytoone.PathCombinationStrategy;
 import org.ml4j.nn.components.onetomany.DummyOneToManyDirectedComponent;
 import org.ml4j.nn.components.onetomany.OneToManyDirectedComponent;
+import org.ml4j.nn.components.onetomany.SerializableIntSupplier;
 import org.ml4j.nn.components.onetone.DefaultChainableDirectedComponent;
 import org.ml4j.nn.components.onetone.DefaultDirectedComponentBipoleGraph;
 import org.ml4j.nn.components.onetone.DefaultDirectedComponentChain;
@@ -56,6 +56,11 @@ import org.ml4j.nn.neurons.Neurons3D;
  * @author Michael Lavelle
  */
 public class DummyDirectedComponentFactoryImpl implements DirectedComponentFactory {
+
+	/**
+	 * Default serialization id.
+	 */
+	private static final long serialVersionUID = 1L;
 
 	@Override
 	public DirectedAxonsComponent<Neurons, Neurons, ?> createFullyConnectedAxonsComponent(String name, Neurons leftNeurons,
@@ -123,7 +128,7 @@ public class DummyDirectedComponentFactoryImpl implements DirectedComponentFacto
 	}
 
 	@Override
-	public OneToManyDirectedComponent<?> createOneToManyDirectedComponent(IntSupplier targetComponentsCount) {
+	public OneToManyDirectedComponent<?> createOneToManyDirectedComponent(SerializableIntSupplier targetComponentsCount) {
 		return new DummyOneToManyDirectedComponent(targetComponentsCount);
 	}
 
@@ -175,8 +180,8 @@ public class DummyDirectedComponentFactoryImpl implements DirectedComponentFacto
 	}
 
 	@Override
-	public <S extends DefaultChainableDirectedComponent<?, ?>> DefaultChainableDirectedComponent<?, ?> createComponent(String name, 
-			Neurons leftNeurons, Neurons rightNeurons, NeuralComponentType<S> neuralComponentType) {
+	public DefaultChainableDirectedComponent<?, ?> createComponent(String name, 
+			Neurons leftNeurons, Neurons rightNeurons, NeuralComponentType neuralComponentType) {
 		return new DummyGenericComponent(name, leftNeurons, rightNeurons, neuralComponentType);
 	}
 }

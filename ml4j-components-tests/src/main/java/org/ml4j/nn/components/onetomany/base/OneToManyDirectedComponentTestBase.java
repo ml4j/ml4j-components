@@ -14,7 +14,6 @@
 package org.ml4j.nn.components.onetomany.base;
 
 import java.util.List;
-import java.util.function.IntSupplier;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -25,6 +24,7 @@ import org.ml4j.nn.components.base.TestBase;
 import org.ml4j.nn.components.mocks.MockTestData;
 import org.ml4j.nn.components.onetomany.OneToManyDirectedComponent;
 import org.ml4j.nn.components.onetomany.OneToManyDirectedComponentActivation;
+import org.ml4j.nn.components.onetomany.SerializableIntSupplier;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -48,12 +48,12 @@ public abstract class OneToManyDirectedComponentTestBase extends TestBase {
 		Mockito.when(mockDirectedComponentsContext.getMatrixFactory()).thenReturn(matrixFactory);
 	}
 
-	private OneToManyDirectedComponent<?> createOneToManyDirectedAxonsComponent(IntSupplier targetComponentsCount) {
+	private OneToManyDirectedComponent<?> createOneToManyDirectedAxonsComponent(SerializableIntSupplier targetComponentsCount) {
 		return createOneToManyDirectedComponentUnderTest(targetComponentsCount);
 	}
 
 	protected abstract OneToManyDirectedComponent<?> createOneToManyDirectedComponentUnderTest(
-			IntSupplier targetComponentsCount);
+			SerializableIntSupplier targetComponentsCount);
 
 	@Test
 	public void testConstruction() {
