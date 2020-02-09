@@ -22,11 +22,11 @@ public class DummyGenericComponent
 
 	private Neurons inputNeurons;
 	private Neurons outputNeurons;
-	private NeuralComponentType<? extends DefaultChainableDirectedComponent<?, ?>> neuralComponentType;
+	private NeuralComponentType neuralComponentType;
 	private String name;
 
 	public DummyGenericComponent(String name, Neurons inputNeurons, Neurons outputNeurons,
-			NeuralComponentType<? extends DefaultChainableDirectedComponent<?, ?>> neuralComponentType2) {
+			NeuralComponentType neuralComponentType2) {
 		super();
 		this.inputNeurons = inputNeurons;
 		this.outputNeurons = outputNeurons;
@@ -70,7 +70,7 @@ public class DummyGenericComponent
 	}
 
 	@Override
-	public NeuralComponentType<? extends DefaultChainableDirectedComponent<?, ?>> getComponentType() {
+	public NeuralComponentType getComponentType() {
 		return neuralComponentType;
 	}
 
