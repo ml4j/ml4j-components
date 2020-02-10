@@ -19,6 +19,7 @@ import java.util.Optional;
 
 import org.ml4j.nn.components.DirectedComponentsContext;
 import org.ml4j.nn.components.manytomany.DefaultDirectedComponentChainBatch;
+import org.ml4j.nn.components.manytoone.PathCombinationStrategy;
 import org.ml4j.nn.components.onetone.DefaultChainableDirectedComponent;
 import org.ml4j.nn.components.onetone.DefaultDirectedComponentChainBipoleGraph;
 import org.ml4j.nn.components.onetone.DefaultDirectedComponentChainBipoleGraphActivation;
@@ -41,9 +42,9 @@ public class DummyDefaultDirectedComponentChainBipoleGraph extends DefaultDirect
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(DummyDefaultDirectedComponentChainBipoleGraph.class);
 
-	public DummyDefaultDirectedComponentChainBipoleGraph(Neurons inputNeurons, Neurons outputNeurons,
-			DefaultDirectedComponentChainBatch parallelComponentChainsBatch) {
-		super(inputNeurons, outputNeurons, parallelComponentChainsBatch);
+	public DummyDefaultDirectedComponentChainBipoleGraph(String name, Neurons inputNeurons, Neurons outputNeurons,
+			DefaultDirectedComponentChainBatch parallelComponentChainsBatch, PathCombinationStrategy pathCombinationStrategy) {
+		super(name, inputNeurons, outputNeurons, parallelComponentChainsBatch, pathCombinationStrategy);
 	}
 
 	@Override
@@ -72,8 +73,8 @@ public class DummyDefaultDirectedComponentChainBipoleGraph extends DefaultDirect
 
 	@Override
 	public DefaultDirectedComponentChainBipoleGraph dup() {
-		return new DummyDefaultDirectedComponentChainBipoleGraph(inputNeurons, outputNeurons,
-				parallelComponentChainsBatch.dup());
+		return new DummyDefaultDirectedComponentChainBipoleGraph(name, inputNeurons, outputNeurons,
+				parallelComponentChainsBatch.dup(), pathCombinationStrategy);
 	}
 
 	@Override

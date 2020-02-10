@@ -39,4 +39,9 @@ public class DefaultScaleAndShiftAxonsImpl<N extends Neurons> extends WeightedAx
 	protected boolean isLeftInputDropoutSupported() {
 		return false;
 	}
+	
+	@Override
+	public AxonsType getAxonsType() {
+		return AxonsType.getBaseType(AxonsBaseType.SCALE_AND_SHIFT);
+	}
 }

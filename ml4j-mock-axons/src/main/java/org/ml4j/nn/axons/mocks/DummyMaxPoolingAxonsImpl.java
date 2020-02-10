@@ -6,7 +6,9 @@ import org.ml4j.MatrixFactory;
 import org.ml4j.nn.axons.Axons3DConfig;
 import org.ml4j.nn.axons.AxonsActivation;
 import org.ml4j.nn.axons.AxonsActivationImpl;
+import org.ml4j.nn.axons.AxonsBaseType;
 import org.ml4j.nn.axons.AxonsContext;
+import org.ml4j.nn.axons.AxonsType;
 import org.ml4j.nn.axons.MaxPoolingAxons;
 import org.ml4j.nn.neurons.ImageNeuronsActivationImpl;
 import org.ml4j.nn.neurons.Neurons3D;
@@ -96,6 +98,11 @@ public class DummyMaxPoolingAxonsImpl implements MaxPoolingAxons {
 	@Override
 	public boolean isSupported(NeuronsActivationFormat<?> format) {
 		return NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET.equals(format.getFeatureOrientation());
+	}
+	
+	@Override
+	public AxonsType getAxonsType() {
+		return AxonsType.getBaseType(AxonsBaseType.MAX_POOLING);
 	}
 
 }

@@ -227,5 +227,10 @@ public class DefaultMaxPoolingAxonsImpl implements MaxPoolingAxons {
 	public boolean isSupported(NeuronsActivationFormat<?> format) {
 		return NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET.equals(format.getFeatureOrientation());
 	}
+	
+	@Override
+	public AxonsType getAxonsType() {
+		return AxonsType.getBaseType(AxonsBaseType.MAX_POOLING);
+	}
 
 }

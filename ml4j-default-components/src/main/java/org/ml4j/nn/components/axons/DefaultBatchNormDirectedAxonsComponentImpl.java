@@ -20,7 +20,9 @@ import org.ml4j.Matrix;
 import org.ml4j.MatrixFactory;
 import org.ml4j.nn.axons.Axons;
 import org.ml4j.nn.axons.AxonsActivation;
+import org.ml4j.nn.axons.AxonsBaseType;
 import org.ml4j.nn.axons.AxonsContext;
+import org.ml4j.nn.axons.AxonsType;
 import org.ml4j.nn.axons.ScaleAndShiftAxons;
 import org.ml4j.nn.components.axons.base.DirectedAxonsComponentBase;
 import org.ml4j.nn.neurons.Neurons;
@@ -52,11 +54,13 @@ public class DefaultBatchNormDirectedAxonsComponentImpl<L extends Neurons> exten
 	private Matrix exponentiallyWeightedAverageInputFeatureVariances;
 	// TODO
 	private float betaForExponentiallyWeightedAverages = 0.99f;
+	private boolean convolutionalBatchNorm;
 
-	public DefaultBatchNormDirectedAxonsComponentImpl(String name, Axons<L, L, ?> axons, Matrix mean, Matrix stddev) {
+	public DefaultBatchNormDirectedAxonsComponentImpl(String name, Axons<L, L, ?> axons, Matrix mean, Matrix stddev, boolean convolutionalBatchNorm) {
 		super(name, axons);
 		this.exponentiallyWeightedAverageInputFeatureMeans = mean;
 		this.exponentiallyWeightedAverageInputFeatureVariances = stddev;
+		this.convolutionalBatchNorm = convolutionalBatchNorm;
 	}
 
 	@Override
@@ -91,7 +95,7 @@ public class DefaultBatchNormDirectedAxonsComponentImpl<L extends Neurons> exten
 				exponentiallyWeightedAverageInputFeatureMeans == null ? null
 						: exponentiallyWeightedAverageInputFeatureMeans.dup(),
 				exponentiallyWeightedAverageInputFeatureVariances == null ? null
-						: exponentiallyWeightedAverageInputFeatureVariances.dup());
+						: exponentiallyWeightedAverageInputFeatureVariances.dup(), convolutionalBatchNorm);
 	}
 
 	@Override
@@ -206,6 +210,15 @@ public class DefaultBatchNormDirectedAxonsComponentImpl<L extends Neurons> exten
 		return stdDev;
 	}
 
+
+	@Override
+	protected AxonsType getAxonsType() {
+		return AxonsType.createSubType(
+				convolutionalBatchNorm ? AxonsType.getBaseType(AxonsBaseType.CONVOLUTIONAL_BATCH_NORM) :
+					AxonsType.getBaseType(AxonsBaseType.BATCH_NORM), super.getAxonsType().getId());
+	}
+
+
 	@Override
 	public Optional<NeuronsActivationFormat<?>> optimisedFor() {
 		return axons.optimisedFor();
@@ -215,5 +228,4 @@ public class DefaultBatchNormDirectedAxonsComponentImpl<L extends Neurons> exten
 	public boolean isSupported(NeuronsActivationFormat<?> format) {
 		return axons.isSupported(format) && NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET.equals(format.getFeatureOrientation());
 	}
-
 }

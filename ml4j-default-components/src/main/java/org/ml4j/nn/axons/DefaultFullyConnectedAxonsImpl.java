@@ -18,4 +18,9 @@ public class DefaultFullyConnectedAxonsImpl extends FullyConnectedAxonsBase<Neur
 	public FullyConnectedAxons dup() {
 		return new DefaultFullyConnectedAxonsImpl(leftNeurons, rightNeurons, axonWeights.dup());
 	}
+	
+	@Override
+	public AxonsType getAxonsType() {
+		return AxonsType.getBaseType(AxonsBaseType.FULLY_CONNECTED);
+	}
 }

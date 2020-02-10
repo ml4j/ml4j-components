@@ -20,7 +20,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.ml4j.MatrixFactory;
 import org.ml4j.nn.axons.Axons;
+import org.ml4j.nn.axons.AxonsBaseType;
 import org.ml4j.nn.axons.AxonsContext;
+import org.ml4j.nn.axons.AxonsType;
 import org.ml4j.nn.axons.ScaleAndShiftAxons;
 import org.ml4j.nn.components.DirectedComponentsContext;
 import org.ml4j.nn.components.NeuralComponentBaseType;
@@ -64,6 +66,7 @@ public abstract class BatchNormDirectedAxonsComponentTestBase extends TestBase {
 			N leftNeurons, N rightNeurons) {
 		Mockito.when(((ScaleAndShiftAxons<N>) mockAxons).getLeftNeurons()).thenReturn(leftNeurons);
 		Mockito.when(((ScaleAndShiftAxons<N>) mockAxons).getRightNeurons()).thenReturn(rightNeurons);
+		Mockito.when(((ScaleAndShiftAxons<N>) mockAxons).getAxonsType()).thenReturn(AxonsType.getBaseType(AxonsBaseType.SCALE_AND_SHIFT));
 		return createBatchNormDirectedAxonsComponentUnderTest((ScaleAndShiftAxons<N>) mockAxons);
 	}
 

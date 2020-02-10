@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.ml4j.nn.components.onetone.DefaultChainableDirectedComponent;
 import org.ml4j.nn.components.onetone.DefaultChainableDirectedComponentActivation;
+import org.ml4j.nn.components.onetone.DefaultChainableDirectedComponentVisitor;
 import org.ml4j.nn.neurons.DummyNeuronsActivation;
 import org.ml4j.nn.neurons.Neurons;
 import org.ml4j.nn.neurons.NeuronsActivation;
@@ -93,5 +94,10 @@ public class DummyGenericComponent
 	@Override
 	public String getName() {
 		return name;
+	}
+
+	@Override
+	public String accept(DefaultChainableDirectedComponentVisitor visitor) {
+		return visitor.visitComponent(this);
 	}
 }
