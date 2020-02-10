@@ -9,7 +9,9 @@ import org.ml4j.nn.axons.AxonWeightsAdjustment;
 import org.ml4j.nn.axons.AxonWeightsAdjustmentDirection;
 import org.ml4j.nn.axons.AxonsActivation;
 import org.ml4j.nn.axons.AxonsActivationImpl;
+import org.ml4j.nn.axons.AxonsBaseType;
 import org.ml4j.nn.axons.AxonsContext;
+import org.ml4j.nn.axons.AxonsType;
 import org.ml4j.nn.axons.ScaleAndShiftAxons;
 import org.ml4j.nn.neurons.Neurons;
 import org.ml4j.nn.neurons.NeuronsActivation;
@@ -117,6 +119,11 @@ public class DummyScaleAndShiftAxonsImpl<N extends Neurons> implements ScaleAndS
 	@Override
 	public boolean isSupported(NeuronsActivationFormat<?> format) {
 		return NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET.equals(format.getFeatureOrientation());
+	}
+	
+	@Override
+	public AxonsType getAxonsType() {
+		return AxonsType.getBaseType(AxonsBaseType.SCALE_AND_SHIFT);
 	}
 
 }

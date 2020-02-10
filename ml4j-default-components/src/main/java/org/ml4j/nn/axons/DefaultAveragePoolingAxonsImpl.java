@@ -238,4 +238,9 @@ public class DefaultAveragePoolingAxonsImpl implements AveragePoolingAxons {
 		return NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET.equals(format.getFeatureOrientation());
 	}
 
+	@Override
+	public AxonsType getAxonsType() {
+		return AxonsType.getBaseType(AxonsBaseType.AVERAGE_POOLING);
+	}
+
 }

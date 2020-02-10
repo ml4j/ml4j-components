@@ -62,5 +62,4 @@ public class DummyDifferentiableActivationFunctionComponent extends Differentiab
 	public boolean isSupported(NeuronsActivationFormat<?> format) {
 		return true;
 	}
-
 }

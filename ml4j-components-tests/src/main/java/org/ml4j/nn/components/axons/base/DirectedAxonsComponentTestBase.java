@@ -20,6 +20,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.ml4j.nn.axons.Axons;
 import org.ml4j.nn.axons.AxonsContext;
+import org.ml4j.nn.axons.AxonsType;
 import org.ml4j.nn.components.DirectedComponentsContext;
 import org.ml4j.nn.components.NeuralComponentBaseType;
 import org.ml4j.nn.components.axons.DirectedAxonsComponent;
@@ -62,6 +63,8 @@ public abstract class DirectedAxonsComponentTestBase extends TestBase {
 			L leftNeurons, R rightNeurons) {
 		Mockito.when(mockAxons.getLeftNeurons()).thenReturn(leftNeurons);
 		Mockito.when(mockAxons.getRightNeurons()).thenReturn(rightNeurons);
+		Mockito.when(mockAxons.getAxonsType()).thenReturn(AxonsType.createCustomBaseType("someCustomType"));
+
 		return createDirectedAxonsComponentUnderTest((Axons<L, R, ?>) mockAxons);
 	}
 

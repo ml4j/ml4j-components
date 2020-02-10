@@ -18,7 +18,9 @@ import java.util.Optional;
 import org.ml4j.Matrix;
 import org.ml4j.nn.axons.Axons;
 import org.ml4j.nn.axons.AxonsActivation;
+import org.ml4j.nn.axons.AxonsBaseType;
 import org.ml4j.nn.axons.AxonsContext;
+import org.ml4j.nn.axons.AxonsType;
 import org.ml4j.nn.axons.NoOpAxonsActivation;
 import org.ml4j.nn.components.axons.base.DirectedAxonsComponentBase;
 import org.ml4j.nn.neurons.DummyNeuronsActivation;
@@ -31,14 +33,16 @@ import org.slf4j.LoggerFactory;
 public class DummyBatchNormDirectedAxonsComponent<L extends Neurons> extends
 		DirectedAxonsComponentBase<L, L, Axons<L, L, ?>> implements BatchNormDirectedAxonsComponent<L, Axons<L, L, ?>> {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(DummyDirectedAxonsComponent.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(DummyBatchNormDirectedAxonsComponent.class);
 	/**
 	 * Defaut serialization id;
 	 */
 	private static final long serialVersionUID = 1L;
+	private boolean convolutionalBatchNorm;
 
-	public DummyBatchNormDirectedAxonsComponent(String name, Axons<L, L, ?> axons) {
+	public DummyBatchNormDirectedAxonsComponent(String name, Axons<L, L, ?> axons, boolean convolutionalBatchNorm) {
 		super(name, axons);
+		this.convolutionalBatchNorm = convolutionalBatchNorm;
 	}
 
 	@Override
@@ -68,7 +72,7 @@ public class DummyBatchNormDirectedAxonsComponent<L extends Neurons> extends
 
 	@Override
 	public BatchNormDirectedAxonsComponent<L, Axons<L, L, ?>> dup() {
-		return new DummyBatchNormDirectedAxonsComponent<>(name, axons.dup());
+		return new DummyBatchNormDirectedAxonsComponent<>(name, axons.dup(), convolutionalBatchNorm);
 	}
 
 	@Override
@@ -88,6 +92,13 @@ public class DummyBatchNormDirectedAxonsComponent<L extends Neurons> extends
 		AxonsActivation dummyAxonsActivation = new NoOpAxonsActivation(axons, () -> neuronsActivation, dummyOutput);
 
 		return new DummyDirectedAxonsComponentActivation<>(this, dummyAxonsActivation, axonsContext);
+	}
+	
+	@Override
+	protected AxonsType getAxonsType() {
+		return AxonsType.createSubType(
+				convolutionalBatchNorm ? AxonsType.getBaseType(AxonsBaseType.CONVOLUTIONAL_BATCH_NORM) :
+					AxonsType.getBaseType(AxonsBaseType.BATCH_NORM), super.getAxonsType().getId());
 	}
 
 	@Override

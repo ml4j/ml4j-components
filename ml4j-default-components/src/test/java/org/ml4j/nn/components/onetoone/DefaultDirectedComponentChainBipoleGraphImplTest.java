@@ -100,7 +100,7 @@ public class DefaultDirectedComponentChainBipoleGraphImplTest extends DefaultDir
 				.thenReturn(mockComponentChainBatchActivation);
 		Mockito.when(mockComponentChainBatchActivation.getOutput())
 				.thenReturn(Arrays.asList(mockNeuronsActivation3, mockNeuronsActivation4));
-		return new DefaultDirectedComponentChainBipoleGraphImpl(factory, new Neurons(10, false),
+		return new DefaultDirectedComponentChainBipoleGraphImpl("concat_1", factory, new Neurons(10, false),
 				new Neurons(100, false), mockComponentChainBatch, pathCombinationStrategy);
 	}
 

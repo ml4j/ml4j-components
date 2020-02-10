@@ -145,7 +145,7 @@ public class DefaultDirectedComponentFactoryImpl implements DirectedComponentFac
 										Dimension.INPUT_HEIGHT, 
 										Dimension.INPUT_WIDTH), 
 										Arrays.asList(Dimension.OUTPUT_FEATURE),
-										WeightsMatrixOrientation.ROWS_SPAN_OUTPUT_DIMENSIONS)), null), null, null);
+										WeightsMatrixOrientation.ROWS_SPAN_OUTPUT_DIMENSIONS)), null), null, null, true);
 	}
 
 	@Override
@@ -162,7 +162,7 @@ public class DefaultDirectedComponentFactoryImpl implements DirectedComponentFac
 										WeightsMatrixOrientation.ROWS_SPAN_OUTPUT_DIMENSIONS)),
 						beta == null ? null : new BiasMatrixImpl(expandChannelValuesToFeatureValues(matrixFactory, rightNeurons, beta))),
 				expandChannelValuesToFeatureValues(matrixFactory, rightNeurons, mean),
-				expandChannelValuesToFeatureValues(matrixFactory, rightNeurons, stddev));
+				expandChannelValuesToFeatureValues(matrixFactory, rightNeurons, stddev), true);
 	}
 	
 	public static Matrix expandChannelValuesToFeatureValues(MatrixFactory matrixFactory, Neurons3D rightNeurons,
@@ -237,16 +237,16 @@ public class DefaultDirectedComponentFactoryImpl implements DirectedComponentFac
 	}
 
 	@Override
-	public DefaultDirectedComponentBipoleGraph createDirectedComponentBipoleGraph(Neurons leftNeurons,
+	public DefaultDirectedComponentBipoleGraph createDirectedComponentBipoleGraph(String name, Neurons leftNeurons,
 			Neurons rightNeurons, List<DefaultChainableDirectedComponent<?, ?>> parallelComponentBatch,
 			PathCombinationStrategy pathCombinationStrategy) {
 
 		if (rightNeurons instanceof Neurons3D) {
-			return new DefaultDirectedComponentBipoleGraphImpl(directedComponentFactory, leftNeurons,
+			return new DefaultDirectedComponentBipoleGraphImpl(name, directedComponentFactory, leftNeurons,
 					(Neurons3D) rightNeurons, createDirectedComponentBatch(parallelComponentBatch),
 					pathCombinationStrategy);
 		} else {
-			return new DefaultDirectedComponentBipoleGraphImpl(directedComponentFactory, leftNeurons, rightNeurons,
+			return new DefaultDirectedComponentBipoleGraphImpl(name, directedComponentFactory, leftNeurons, rightNeurons,
 					createDirectedComponentBatch(parallelComponentBatch), pathCombinationStrategy);
 		}
 	}

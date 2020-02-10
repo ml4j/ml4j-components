@@ -55,8 +55,8 @@ public class DummyDefaultDirectedComponentChainBipoleGraphTest
 		Mockito.when(mockComponentChainBatchActivation.getOutput())
 				.thenReturn(Arrays.asList(mockNeuronsActivation3, mockNeuronsActivation4));
 
-		return new DummyDefaultDirectedComponentChainBipoleGraph(new Neurons(10, false), new Neurons(100, false),
-				mockComponentChainBatch);
+		return new DummyDefaultDirectedComponentChainBipoleGraph("concat_1", new Neurons(10, false), new Neurons(100, false),
+				mockComponentChainBatch, pathCombinationStrategy);
 	}
 
 	@Override

@@ -7,6 +7,7 @@ import org.ml4j.MatrixFactory;
 import org.ml4j.nn.axons.Axons;
 import org.ml4j.nn.axons.AxonsActivation;
 import org.ml4j.nn.axons.AxonsContext;
+import org.ml4j.nn.axons.AxonsType;
 import org.ml4j.nn.neurons.Neurons;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
@@ -23,11 +24,13 @@ public class DummyAxons<L extends Neurons, R extends Neurons, A extends Axons<L,
 	private MatrixFactory matrixFactory;
 	private L leftNeurons;
 	private R rightNeurons;
+	private AxonsType axonsType;
 
-	public DummyAxons(MatrixFactory matrixFactory, L leftNeurons, R rightNeurons) {
+	public DummyAxons(AxonsType axonsType, MatrixFactory matrixFactory, L leftNeurons, R rightNeurons) {
 		this.matrixFactory = matrixFactory;
 		this.leftNeurons = leftNeurons;
 		this.rightNeurons = rightNeurons;
+		this.axonsType = axonsType;
 	}
 
 	@Override
@@ -74,6 +77,11 @@ public class DummyAxons<L extends Neurons, R extends Neurons, A extends Axons<L,
 	@Override
 	public boolean isSupported(NeuronsActivationFormat<?> format) {
 		return NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET.equals(format.getFeatureOrientation());
+	}
+
+	@Override
+	public AxonsType getAxonsType() {
+		return axonsType;
 	}
 
 }

@@ -37,13 +37,13 @@ public class NoOpAxons<L extends Neurons, R extends Neurons> extends AxonsBase<L
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public NoOpAxons(L leftNeurons, R rightNeurons) {
-		super(leftNeurons, rightNeurons);
+	public NoOpAxons(AxonsType axonsType, L leftNeurons, R rightNeurons) {
+		super(axonsType, leftNeurons, rightNeurons);
 	}
 
 	@Override
 	public NoOpAxons<L, R> dup() {
-		return new NoOpAxons<>(leftNeurons, rightNeurons);
+		return new NoOpAxons<>(axonsType, leftNeurons, rightNeurons);
 	}
 
 	@Override
