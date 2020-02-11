@@ -42,6 +42,7 @@ public class DefaultMaxPoolingAxonsImpl implements MaxPoolingAxons {
 		this.rightNeurons = rightNeurons;
 		this.config = config;
 		this.scaleOutputs = scaleOutputs;
+		this.config.setFilterWidthAndHeight(leftNeurons, rightNeurons);
 	}
 
 	private Neurons3D leftNeurons;
@@ -59,24 +60,12 @@ public class DefaultMaxPoolingAxonsImpl implements MaxPoolingAxons {
 
 	public NeuronsActivation reformatLeftToRightInput(MatrixFactory matrixFactory,
 			NeuronsActivation leftNeuronsActivation) {
-		int inputWidth = leftNeurons.getWidth();
-		int inputHeight = leftNeurons.getHeight();
-		int outputWidth = rightNeurons.getWidth();
-		int outputHeight = rightNeurons.getHeight();
-
-		int inputWidthWithPadding = inputWidth + config.getPaddingWidth() * 2;
-
-		int inputHeightWithPadding = inputHeight + config.getPaddingHeight() * 2;
-		int filterWidth = inputWidthWithPadding + (1 - outputWidth) * (config.getStrideWidth());
-
-		int filterHeight = inputHeightWithPadding + (1 - outputHeight) * (config.getStrideHeight());
-
+	
 		ImageNeuronsActivation act = leftNeuronsActivation.asImageNeuronsActivation(leftNeurons, DimensionScope.INPUT);
 
 		NeuronsActivation reformatted = new NeuronsActivationImpl(
-				new Neurons(filterWidth * filterHeight, leftNeurons.hasBiasUnit()),
-				act.im2ColPool(matrixFactory, filterHeight, filterWidth, config.getStrideHeight(),
-						config.getStrideWidth(), config.getPaddingHeight(), config.getPaddingWidth()),
+				new Neurons(config.getFilterWidth() * config.getFilterHeight(), leftNeurons.hasBiasUnit()),
+				act.im2ColPool(matrixFactory, config),
 				ImageNeuronsActivationFormat.ML4J_IM_TO_COL_POOL_FORMAT);
 		if (!act.isImmutable()) {
 			act.close();

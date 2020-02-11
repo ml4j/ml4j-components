@@ -12,6 +12,7 @@ import org.ml4j.nn.neurons.NeuronsActivationImpl;
 import org.ml4j.nn.neurons.format.ImageNeuronsActivationFormat;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 
 public class DefaultConvolutionalAxonsImplTest extends Axons3DTestBase<ConvolutionalAxons> {
 
@@ -27,7 +28,7 @@ public class DefaultConvolutionalAxonsImplTest extends Axons3DTestBase<Convoluti
 	@Before
 	@Override
 	public void setUp() {
-		super.setUp();
+		MockitoAnnotations.initMocks(this);
 		Mockito.when(leftNeurons.getNeuronCountExcludingBias()).thenReturn(784 * 3);
 		Mockito.when(leftNeurons.getDepth()).thenReturn(3);
 		Mockito.when(leftNeurons.getWidth()).thenReturn(28);
@@ -36,6 +37,7 @@ public class DefaultConvolutionalAxonsImplTest extends Axons3DTestBase<Convoluti
 		Mockito.when(rightNeurons.getDepth()).thenReturn(2);
 		Mockito.when(rightNeurons.getWidth()).thenReturn(20);
 		Mockito.when(rightNeurons.getHeight()).thenReturn(20);
+		super.setUp();
 		Mockito.when(mockAxonsContext.getMatrixFactory()).thenReturn(matrixFactory);
 		this.mockLeftToRightInputActivation = createNeuronsActivation(784 * 3, 32);
 	}
@@ -43,6 +45,8 @@ public class DefaultConvolutionalAxonsImplTest extends Axons3DTestBase<Convoluti
 	@Override
 	protected ConvolutionalAxons createAxonsUnderTest(Neurons3D leftNeurons, Neurons3D rightNeurons,
 			Axons3DConfig config) {
+		config.setFilterWidthAndHeight(leftNeurons, rightNeurons);
+
 		Mockito.when(
 				mockAxonsFactory.createFullyConnectedAxons(Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any()))
 				.thenReturn(mockFullyConnectedAxons);

@@ -8,12 +8,10 @@ import org.ml4j.nn.axons.Axons3DConfig;
 import org.ml4j.nn.axons.AxonsActivation;
 import org.ml4j.nn.axons.AxonsContext;
 import org.ml4j.nn.components.base.TestBase;
-import org.ml4j.nn.neurons.Neurons;
 import org.ml4j.nn.neurons.Neurons3D;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
 
 public abstract class Axons3DTestBase<A extends Axons<?, ?, ?>> extends TestBase {
 
@@ -32,7 +30,6 @@ public abstract class Axons3DTestBase<A extends Axons<?, ?, ?>> extends TestBase
 
 	@Before
 	public void setUp() {
-		MockitoAnnotations.initMocks(this);
 		axons = createAxonsUnderTest(leftNeurons, rightNeurons, new Axons3DConfig());
 	}
 
@@ -44,14 +41,12 @@ public abstract class Axons3DTestBase<A extends Axons<?, ?, ?>> extends TestBase
 
 	@Test
 	public void testGetLeftNeurons() {
-		Neurons leftNeurons = axons.getLeftNeurons();
-		Assert.assertNotNull(leftNeurons);
+		Assert.assertNotNull(axons.getLeftNeurons());
 	}
 
 	@Test
 	public void testGetRightNeurons() {
-		Neurons leftNeurons = axons.getRightNeurons();
-		Assert.assertNotNull(leftNeurons);
+		Assert.assertNotNull(axons.getRightNeurons());
 	}
 
 	protected abstract boolean expectPostDropoutInputToBeSet();

@@ -16,6 +16,7 @@ package org.ml4j.nn.neurons;
 import org.ml4j.Matrix;
 import org.ml4j.MatrixFactory;
 import org.ml4j.images.Images;
+import org.ml4j.nn.axons.Axons3DConfig;
 import org.ml4j.nn.neurons.format.ImageNeuronsActivationFormat;
 
 /**
@@ -48,12 +49,12 @@ public class DummyImageNeuronsActivation extends DummyNeuronsActivation implemen
 	}
 
 	@Override
-	public Matrix im2ColConv(MatrixFactory arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6) {
+	public Matrix im2ColConv(MatrixFactory arg0, Axons3DConfig config) {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public Matrix im2ColPool(MatrixFactory arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6) {
+	public Matrix im2ColPool(MatrixFactory arg0, Axons3DConfig config) {
 		throw new UnsupportedOperationException();
 	}
 

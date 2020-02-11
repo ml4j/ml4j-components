@@ -10,12 +10,14 @@ import org.ml4j.nn.neurons.NeuronsActivation;
 import org.ml4j.nn.neurons.NeuronsActivationImpl;
 import org.ml4j.nn.neurons.format.ImageNeuronsActivationFormat;
 import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 
 public class DefaultAveragePoolingAxonsImplTest extends Axons3DTestBase<AveragePoolingAxons> {
 
 	@Before
 	@Override
 	public void setUp() {
+		MockitoAnnotations.initMocks(this);
 		super.setUp();
 		Mockito.when(leftNeurons.getNeuronCountExcludingBias()).thenReturn(400 * 2);
 		Mockito.when(leftNeurons.getDepth()).thenReturn(2);
@@ -32,6 +34,9 @@ public class DefaultAveragePoolingAxonsImplTest extends Axons3DTestBase<AverageP
 	@Override
 	protected AveragePoolingAxons createAxonsUnderTest(Neurons3D leftNeurons, Neurons3D rightNeurons,
 			Axons3DConfig config) {
+		config.withStrideHeight(2);
+		config.withStrideWidth(2);
+		config.setFilterWidthAndHeight(leftNeurons, rightNeurons);
 		return new DefaultAveragePoolingAxonsImpl(matrixFactory, leftNeurons, rightNeurons, config);
 	}
 
