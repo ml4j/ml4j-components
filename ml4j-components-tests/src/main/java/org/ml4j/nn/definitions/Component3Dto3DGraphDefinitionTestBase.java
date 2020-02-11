@@ -13,7 +13,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-public abstract class Component3Dto3DGraphDefinitionTestBase<T extends NeuralComponent, D extends Component3Dto3DGraphDefinition> {
+public abstract class Component3Dto3DGraphDefinitionTestBase<T extends NeuralComponent<?>, D extends Component3Dto3DGraphDefinition> {
 
 	@Mock
 	protected DirectedComponentsContext mockDirectedComponentsContext;

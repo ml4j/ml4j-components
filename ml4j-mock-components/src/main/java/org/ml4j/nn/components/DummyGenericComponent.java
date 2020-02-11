@@ -97,7 +97,7 @@ public class DummyGenericComponent
 	}
 
 	@Override
-	public String accept(DefaultChainableDirectedComponentVisitor visitor) {
+	public String accept(NeuralComponentVisitor<DefaultChainableDirectedComponent<?, ?>> visitor) {
 		return visitor.visitComponent(this);
 	}
 }
