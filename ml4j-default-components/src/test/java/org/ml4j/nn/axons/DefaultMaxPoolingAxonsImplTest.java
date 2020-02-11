@@ -9,12 +9,14 @@ import org.ml4j.nn.neurons.Neurons3D;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.ml4j.nn.neurons.format.ImageNeuronsActivationFormat;
 import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 
 public class DefaultMaxPoolingAxonsImplTest extends Axons3DTestBase<MaxPoolingAxons> {
 
 	@Before
 	@Override
 	public void setUp() {
+		MockitoAnnotations.initMocks(this);
 		super.setUp();
 		Mockito.when(leftNeurons.getNeuronCountExcludingBias()).thenReturn(400 * 2);
 		Mockito.when(leftNeurons.getDepth()).thenReturn(2);
@@ -31,6 +33,9 @@ public class DefaultMaxPoolingAxonsImplTest extends Axons3DTestBase<MaxPoolingAx
 	@Override
 	protected MaxPoolingAxons createAxonsUnderTest(Neurons3D leftNeurons, Neurons3D rightNeurons,
 			Axons3DConfig config) {
+		config.withStrideHeight(2);
+		config.withStrideWidth(2);
+		config.setFilterWidthAndHeight(leftNeurons, rightNeurons);
 		return new DefaultMaxPoolingAxonsImpl(matrixFactory, leftNeurons, rightNeurons, config, false);
 	}
 

@@ -39,6 +39,7 @@ public class DefaultAveragePoolingAxonsImpl implements AveragePoolingAxons {
 		this.leftNeurons = leftNeurons;
 		this.rightNeurons = rightNeurons;
 		this.config = config;
+		this.config.setFilterWidthAndHeight(leftNeurons, rightNeurons);
 	}
 
 	private Neurons3D leftNeurons;
@@ -55,23 +56,11 @@ public class DefaultAveragePoolingAxonsImpl implements AveragePoolingAxons {
 	}
 
 	public Matrix reformatLeftToRightInput(MatrixFactory matrixFactory, NeuronsActivation leftNeuronsActivation) {
-		int inputWidth = leftNeurons.getWidth();
-		int inputHeight = leftNeurons.getHeight();
-		int outputWidth = rightNeurons.getWidth();
-		int outputHeight = rightNeurons.getHeight();
-
-		int inputWidthWithPadding = inputWidth + config.getPaddingWidth() * 2;
-
-		int inputHeightWithPadding = inputHeight + config.getPaddingHeight() * 2;
-		int filterWidth = inputWidthWithPadding + (1 - outputWidth) * (config.getStrideWidth());
-
-		int filterHeight = inputHeightWithPadding + (1 - outputHeight) * (config.getStrideHeight());
 
 		ImageNeuronsActivation imageNeuronsActivation = leftNeuronsActivation.asImageNeuronsActivation(leftNeurons,
 				DimensionScope.INPUT);
 
-		Matrix reformatted = imageNeuronsActivation.im2ColPool(matrixFactory, filterHeight, filterWidth,
-				config.getStrideHeight(), config.getStrideWidth(), config.getPaddingHeight(), config.getPaddingWidth());
+		Matrix reformatted = imageNeuronsActivation.im2ColPool(matrixFactory, config);
 
 		if (imageNeuronsActivation != leftNeuronsActivation) {
 			imageNeuronsActivation.close();
@@ -146,11 +135,7 @@ public class DefaultAveragePoolingAxonsImpl implements AveragePoolingAxons {
 	public AxonsActivation pushRightToLeft(NeuronsActivation rightNeuronsActivation,
 			AxonsActivation previousLeftToRightActivation, AxonsContext axonsContext) {
 
-		int filterWidth = leftNeurons.getWidth() + (2 * config.getPaddingWidth())
-				+ (1 - rightNeurons.getWidth()) * (config.getStrideWidth());
-		int filterHeight = leftNeurons.getHeight() + (2 * config.getPaddingHeight())
-				+ (1 - rightNeurons.getHeight()) * (config.getStrideHeight());
-		int filterElementCount = filterWidth * filterHeight;
+		int filterElementCount = config.getFilterWidth() * config.getFilterWidth();
 
 		try (InterrimMatrix reformattedRow = rightNeuronsActivation.getActivations(axonsContext.getMatrixFactory())
 				.asInterrimMatrix()) {
@@ -188,26 +173,13 @@ public class DefaultAveragePoolingAxonsImpl implements AveragePoolingAxons {
 	private NeuronsActivation reformatRightToLeftOutput(MatrixFactory matrixFactory,
 			NeuronsActivationFeatureOrientation featureOrientation, Matrix output, int exampleCount) {
 
-		int inputWidth = leftNeurons.getWidth();
-		int inputHeight = leftNeurons.getHeight();
-		int outputWidth = rightNeurons.getWidth();
-		int outputHeight = rightNeurons.getHeight();
-
-		int inputWidthWithPadding = inputWidth + config.getPaddingWidth() * 2;
-
-		int inputHeightWithPadding = inputHeight + config.getPaddingHeight() * 2;
-
-		int filterWidth = inputWidthWithPadding + (1 - outputWidth) * (config.getStrideWidth());
-
-		int filterHeight = inputHeightWithPadding + (1 - outputHeight) * (config.getStrideHeight());
-
 		float[] data = new float[getLeftNeurons().getDepth() * getLeftNeurons().getWidth()
 				* getLeftNeurons().getHeight() * exampleCount];
 
 		Images images = new MultiChannelImages(data, getLeftNeurons().getDepth(), getLeftNeurons().getHeight(),
 				getLeftNeurons().getWidth(), config.getPaddingHeight(), config.getPaddingWidth(), exampleCount);
 
-		images.im2colPoolImport(matrixFactory, output, filterHeight, filterWidth, config.getStrideHeight(),
+		images.im2colPoolImport(matrixFactory, output, config.getFilterHeight(), config.getFilterWidth(), config.getStrideHeight(),
 				config.getStrideWidth());
 
 		return new ImageNeuronsActivationImpl(getLeftNeurons(), images, ImageNeuronsActivationFormat.ML4J_DEFAULT_IMAGE_FORMAT, false);

@@ -35,6 +35,7 @@ public class DefaultConvolutionalAxonsImpl implements ConvolutionalAxons {
 		this.leftNeurons = leftNeurons;
 		this.rightNeurons = rightNeurons;
 		this.config = config;
+		this.config.setFilterWidthAndHeight(leftNeurons, rightNeurons);
 		this.fullyConnectedAxons = fullyConnectedAxons;
 	}
 
@@ -44,19 +45,9 @@ public class DefaultConvolutionalAxonsImpl implements ConvolutionalAxons {
 		this.leftNeurons = leftNeurons;
 		this.rightNeurons = rightNeurons;
 		this.config = config;
-		int inputWidth = leftNeurons.getWidth();
-		int inputHeight = leftNeurons.getHeight();
-		int outputWidth = rightNeurons.getWidth();
-		int outputHeight = rightNeurons.getHeight();
-
-		int inputWidthWithPadding = inputWidth + config.getPaddingWidth() * 2;
-
-		int inputHeightWithPadding = inputHeight + config.getPaddingHeight() * 2;
-		int filterWidth = inputWidthWithPadding + (1 - outputWidth) * (config.getStrideWidth());
-
-		int filterHeight = inputHeightWithPadding + (1 - outputHeight) * (config.getStrideHeight());
+		this.config.setFilterWidthAndHeight(leftNeurons, rightNeurons);
 		this.fullyConnectedAxons = axonsFactory.createFullyConnectedAxons(
-				new Neurons(filterWidth * filterHeight * leftNeurons.getDepth(), leftNeurons.hasBiasUnit()),
+				new Neurons(config.getFilterWidth() * config.getFilterHeight() * leftNeurons.getDepth(), leftNeurons.hasBiasUnit()),
 				new Neurons(rightNeurons.getDepth(), rightNeurons.hasBiasUnit()), 
 				connectionWeights,
 				biases);
@@ -80,24 +71,12 @@ public class DefaultConvolutionalAxonsImpl implements ConvolutionalAxons {
 
 	public NeuronsActivation reformatLeftToRightInput(MatrixFactory matrixFactory,
 			NeuronsActivation leftNeuronsActivation) {
-		int inputWidth = leftNeurons.getWidth();
-		int inputHeight = leftNeurons.getHeight();
-		int outputWidth = rightNeurons.getWidth();
-		int outputHeight = rightNeurons.getHeight();
-
-		int inputWidthWithPadding = inputWidth + config.getPaddingWidth() * 2;
-
-		int inputHeightWithPadding = inputHeight + config.getPaddingHeight() * 2;
-		int filterWidth = inputWidthWithPadding + (1 - outputWidth) * (config.getStrideWidth());
-
-		int filterHeight = inputHeightWithPadding + (1 - outputHeight) * (config.getStrideHeight());
 
 		final NeuronsActivation reformatted;
 			ImageNeuronsActivation imageAct = leftNeuronsActivation.asImageNeuronsActivation(leftNeurons, DimensionScope.INPUT);
 			reformatted = new NeuronsActivationImpl(
-					new Neurons(leftNeurons.getDepth() * filterWidth * filterHeight, leftNeurons.hasBiasUnit()),
-					imageAct.im2ColConv(matrixFactory, filterHeight, filterWidth, config.getStrideHeight(),
-							config.getStrideWidth(), config.getPaddingHeight(), config.getPaddingWidth()),
+					new Neurons(leftNeurons.getDepth() * config.getFilterWidth() * config.getFilterHeight(), leftNeurons.hasBiasUnit()),
+					imageAct.im2ColConv(matrixFactory, config),
 					ImageNeuronsActivationFormat.ML4J_IM_TO_COL_CONV_FORMAT);
 			if (!imageAct.isImmutable()) {
 				imageAct.close();
@@ -167,26 +146,13 @@ public class DefaultConvolutionalAxonsImpl implements ConvolutionalAxons {
 	private NeuronsActivation reformatRightToLeftOutput(MatrixFactory matrixFactory, NeuronsActivation output,
 			int exampleCount) {
 
-		int inputWidth = leftNeurons.getWidth();
-		int inputHeight = leftNeurons.getHeight();
-		int outputWidth = rightNeurons.getWidth();
-		int outputHeight = rightNeurons.getHeight();
-
-		int inputWidthWithPadding = inputWidth + config.getPaddingWidth() * 2;
-
-		int inputHeightWithPadding = inputHeight + config.getPaddingHeight() * 2;
-
-		int filterWidth = inputWidthWithPadding + (1 - outputWidth) * (config.getStrideWidth());
-
-		int filterHeight = inputHeightWithPadding + (1 - outputHeight) * (config.getStrideHeight());
-
 		float[] data = new float[getLeftNeurons().getDepth() * getLeftNeurons().getWidth()
 				* getLeftNeurons().getHeight() * exampleCount];
 
 		Images images = new MultiChannelImages(data, getLeftNeurons().getDepth(), getLeftNeurons().getHeight(),
 				getLeftNeurons().getWidth(), config.getPaddingHeight(), config.getPaddingWidth(), exampleCount);
 
-		images.im2colConvImport(matrixFactory, output.getActivations(matrixFactory), filterHeight, filterWidth,
+		images.im2colConvImport(matrixFactory, output.getActivations(matrixFactory), config.getFilterHeight(), config.getFilterWidth(),
 				config.getStrideHeight(), config.getStrideWidth());
 
 		return new ImageNeuronsActivationImpl(getLeftNeurons(), images,

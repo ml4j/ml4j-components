@@ -10,6 +10,7 @@ import org.ml4j.nn.components.mocks.MockTestData;
 import org.ml4j.nn.neurons.Neurons3D;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 
 public class DummyAveragePoolingAxonsImplTest extends Axons3DTestBase<AveragePoolingAxons> {
 
@@ -18,6 +19,7 @@ public class DummyAveragePoolingAxonsImplTest extends Axons3DTestBase<AveragePoo
 	@Before
 	@Override
 	public void setUp() {
+		MockitoAnnotations.initMocks(this);
 		matrixFactory = new JBlasRowMajorMatrixFactory();
 		super.setUp();
 		Mockito.when(leftNeurons.getNeuronCountExcludingBias()).thenReturn(400 * 2);

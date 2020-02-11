@@ -46,21 +46,13 @@ public class DefaultOneByOneConvolutionalAxonsImpl implements ConvolutionalAxons
 		this.leftNeurons = leftNeurons;
 		this.rightNeurons = rightNeurons;
 		this.config = config;
-		int inputWidth = leftNeurons.getWidth();
-		int inputHeight = leftNeurons.getHeight();
-		int outputWidth = rightNeurons.getWidth();
-		int outputHeight = rightNeurons.getHeight();
-		int inputWidthWithPadding = inputWidth + config.getPaddingWidth() * 2;
+	
 
-		int inputHeightWithPadding = inputHeight + config.getPaddingHeight() * 2;
-		int filterWidth = inputWidthWithPadding + (1 - outputWidth) * (config.getStrideWidth());
-
-		int filterHeight = inputHeightWithPadding + (1 - outputHeight) * (config.getStrideHeight());
 		if (!isEligible(rightNeurons, rightNeurons, config)) {
 			throw new IllegalArgumentException("DefaultOneByOneConvolutionalAxonsImpl cannot be used for this configuration");
 		}
 		this.fullyConnectedAxons = axonsFactory.createFullyConnectedAxons(
-				new Neurons(filterWidth * filterHeight * leftNeurons.getDepth(), leftNeurons.hasBiasUnit()),
+				new Neurons(config.getFilterWidth() * config.getFilterHeight() * leftNeurons.getDepth(), leftNeurons.hasBiasUnit()),
 				new Neurons(rightNeurons.getDepth(), rightNeurons.hasBiasUnit()), 
 				connectionWeights,
 				biases);

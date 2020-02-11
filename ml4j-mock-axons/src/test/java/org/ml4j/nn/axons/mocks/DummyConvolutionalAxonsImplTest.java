@@ -10,12 +10,14 @@ import org.ml4j.nn.components.mocks.MockTestData;
 import org.ml4j.nn.neurons.Neurons3D;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 
 public class DummyConvolutionalAxonsImplTest extends Axons3DTestBase<ConvolutionalAxons> {
 
 	@Before
 	@Override
 	public void setUp() {
+		MockitoAnnotations.initMocks(this);
 		super.setUp();
 		Mockito.when(leftNeurons.getNeuronCountExcludingBias()).thenReturn(784 * 3);
 		Mockito.when(leftNeurons.getDepth()).thenReturn(3);
