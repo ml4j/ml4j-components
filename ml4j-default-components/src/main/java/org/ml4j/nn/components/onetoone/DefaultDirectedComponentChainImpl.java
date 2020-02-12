@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 
 import org.ml4j.nn.components.DirectedComponentActivationLifecycle;
 import org.ml4j.nn.components.DirectedComponentsContext;
+import org.ml4j.nn.components.factories.DirectedComponentFactory;
 import org.ml4j.nn.components.onetone.DefaultChainableDirectedComponent;
 import org.ml4j.nn.components.onetone.DefaultChainableDirectedComponentActivation;
 import org.ml4j.nn.components.onetone.DefaultDirectedComponentChain;
@@ -89,8 +90,9 @@ public class DefaultDirectedComponentChainImpl extends DefaultDirectedComponentC
 	}
 
 	@Override
-	public DefaultDirectedComponentChain dup() {
+	public DefaultDirectedComponentChain dup(DirectedComponentFactory directedComponentFactory) {
 		return new DefaultDirectedComponentChainImpl(
-				sequentialComponents.stream().map(c -> c.dup()).collect(Collectors.toList()));
+				sequentialComponents.stream().map(c -> c.dup(directedComponentFactory)).collect(Collectors.toList()));
 	}
+
 }

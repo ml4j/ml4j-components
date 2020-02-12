@@ -32,32 +32,26 @@ public class DefaultAveragePoolingAxonsImpl implements AveragePoolingAxons {
 	private MatrixFactory matrixFactory;
 	private Axons3DConfig config;
 
-	public DefaultAveragePoolingAxonsImpl(MatrixFactory matrixFactory, Neurons3D leftNeurons, Neurons3D rightNeurons,
+	public DefaultAveragePoolingAxonsImpl(MatrixFactory matrixFactory,
 			Axons3DConfig config) {
-		super();
 		this.matrixFactory = matrixFactory;
-		this.leftNeurons = leftNeurons;
-		this.rightNeurons = rightNeurons;
 		this.config = config;
-		this.config.setFilterWidthAndHeight(leftNeurons, rightNeurons);
 	}
 
-	private Neurons3D leftNeurons;
-	private Neurons3D rightNeurons;
 
 	@Override
 	public Neurons3D getLeftNeurons() {
-		return leftNeurons;
+		return config.getLeftNeurons();
 	}
 
 	@Override
 	public Neurons3D getRightNeurons() {
-		return rightNeurons;
+		return config.getRightNeurons();
 	}
 
 	public Matrix reformatLeftToRightInput(MatrixFactory matrixFactory, NeuronsActivation leftNeuronsActivation) {
 
-		ImageNeuronsActivation imageNeuronsActivation = leftNeuronsActivation.asImageNeuronsActivation(leftNeurons,
+		ImageNeuronsActivation imageNeuronsActivation = leftNeuronsActivation.asImageNeuronsActivation(getLeftNeurons(),
 				DimensionScope.INPUT);
 
 		Matrix reformatted = imageNeuronsActivation.im2ColPool(matrixFactory, config);
@@ -72,7 +66,7 @@ public class DefaultAveragePoolingAxonsImpl implements AveragePoolingAxons {
 
 	public ImageNeuronsActivation reformatLeftToRightOutput(MatrixFactory matrixFactory, NeuronsActivation output,
 			int exampleCount) {
-		output.reshape(rightNeurons.getNeuronCountExcludingBias(), exampleCount);
+		output.reshape(getRightNeurons().getNeuronCountExcludingBias(), exampleCount);
 		return output.asImageNeuronsActivation(getRightNeurons(), DimensionScope.OUTPUT);
 
 	}
@@ -82,7 +76,7 @@ public class DefaultAveragePoolingAxonsImpl implements AveragePoolingAxons {
 			AxonsActivation previousRightToLeftActivation, AxonsContext axonsContext) {
 
 	
-		ImageNeuronsActivation inputImageActivation = leftNeuronsActivation.asImageNeuronsActivation(leftNeurons, DimensionScope.INPUT);
+		ImageNeuronsActivation inputImageActivation = leftNeuronsActivation.asImageNeuronsActivation(getLeftNeurons(), DimensionScope.INPUT);
 
 		int inputMatrixRows = inputImageActivation.getRows();
 		int inputMatrixColumns = inputImageActivation.getColumns();
@@ -114,7 +108,7 @@ public class DefaultAveragePoolingAxonsImpl implements AveragePoolingAxons {
 		reformatted.close();
 
 		// Reformat back to output shape
-		preFormattedOutput.asEditableMatrix().reshape(rightNeurons.getNeuronCountExcludingBias(), exampleCount);
+		preFormattedOutput.asEditableMatrix().reshape(getRightNeurons().getNeuronCountExcludingBias(), exampleCount);
 		
 		ImageNeuronsActivation output = new ImageNeuronsActivationImpl(preFormattedOutput, getRightNeurons(),
 				ImageNeuronsActivationFormat.ML4J_DEFAULT_IMAGE_FORMAT, false);

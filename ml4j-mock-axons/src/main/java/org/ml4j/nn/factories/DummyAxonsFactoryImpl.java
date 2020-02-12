@@ -3,6 +3,7 @@ package org.ml4j.nn.factories;
 import org.ml4j.MatrixFactory;
 import org.ml4j.nn.axons.AveragePoolingAxons;
 import org.ml4j.nn.axons.Axons3DConfig;
+import org.ml4j.nn.axons.AxonsConfig;
 import org.ml4j.nn.axons.BiasMatrix;
 import org.ml4j.nn.axons.ConvolutionalAxons;
 import org.ml4j.nn.axons.FullyConnectedAxons;
@@ -16,7 +17,6 @@ import org.ml4j.nn.axons.mocks.DummyFullyConnectedAxonsImpl;
 import org.ml4j.nn.axons.mocks.DummyMaxPoolingAxonsImpl;
 import org.ml4j.nn.axons.mocks.DummyScaleAndShiftAxonsImpl;
 import org.ml4j.nn.neurons.Neurons;
-import org.ml4j.nn.neurons.Neurons3D;
 
 
 public class DummyAxonsFactoryImpl implements AxonsFactory {
@@ -33,39 +33,39 @@ public class DummyAxonsFactoryImpl implements AxonsFactory {
 	}
 
 	@Override
-	public FullyConnectedAxons createFullyConnectedAxons(Neurons leftNeurons, Neurons rightNeurons,
+	public FullyConnectedAxons createFullyConnectedAxons(AxonsConfig<Neurons, Neurons> axonsConfig,
 			WeightsMatrix connectionWeights, BiasMatrix biases) {
-		return new DummyFullyConnectedAxonsImpl(matrixFactory, leftNeurons, rightNeurons);
+		return new DummyFullyConnectedAxonsImpl(matrixFactory, axonsConfig.getLeftNeurons(), axonsConfig.getRightNeurons());
 	}
 
 	@Override
-	public FullyConnectedAxons createFullyConnectedAxons(Neurons leftNeurons, Neurons rightNeurons,
+	public FullyConnectedAxons createFullyConnectedAxons(AxonsConfig<Neurons, Neurons> axonsConfig,
 			WeightsMatrix connectionWeights, BiasMatrix leftToRightBiases, BiasMatrix rightToLeftBiases) {
-		return new DummyFullyConnectedAxonsImpl(matrixFactory, leftNeurons, rightNeurons);
+		return new DummyFullyConnectedAxonsImpl(matrixFactory, axonsConfig.getLeftNeurons(), axonsConfig.getRightNeurons());
 	}
 
 	@Override
-	public AveragePoolingAxons createAveragePoolingAxons(Neurons3D leftNeurons, Neurons3D rightNeurons,
+	public AveragePoolingAxons createAveragePoolingAxons(
 			Axons3DConfig config) {
-		return new DummyAveragePoolingAxonsImpl(matrixFactory, leftNeurons, rightNeurons, config);
+		return new DummyAveragePoolingAxonsImpl(matrixFactory, config.getLeftNeurons(), config.getRightNeurons(), config);
 	}
 
 	@Override
-	public ConvolutionalAxons createConvolutionalAxons(Neurons3D leftNeurons, Neurons3D rightNeurons,
+	public ConvolutionalAxons createConvolutionalAxons(
 			Axons3DConfig config, WeightsMatrix connectionWeights, BiasMatrix biases) {
-		return new DummyConvolutionalAxonsImpl(matrixFactory, leftNeurons, rightNeurons, config);
+		return new DummyConvolutionalAxonsImpl(matrixFactory, config.getLeftNeurons(), config.getRightNeurons(), config);
 	}
 
 	@Override
-	public MaxPoolingAxons createMaxPoolingAxons(Neurons3D leftNeurons, Neurons3D rightNeurons, boolean scaleOutputs,
-			Axons3DConfig config) {
-		return new DummyMaxPoolingAxonsImpl(matrixFactory, leftNeurons, rightNeurons, config);
+	public MaxPoolingAxons createMaxPoolingAxons(
+			Axons3DConfig config, boolean scaleOutputs) {
+		return new DummyMaxPoolingAxonsImpl(matrixFactory, config.getLeftNeurons(), config.getRightNeurons(), config);
 	}
 
 	@Override
-	public <N extends Neurons> ScaleAndShiftAxons<N> createScaleAndShiftAxons(N leftNeurons, N rightNeurons,
+	public <N extends Neurons> ScaleAndShiftAxons<N> createScaleAndShiftAxons(AxonsConfig<N, N> axonsConfig, 
 			WeightsMatrix gamma, BiasMatrix beta) {
-		return new DummyScaleAndShiftAxonsImpl<>(matrixFactory, leftNeurons, rightNeurons);
+		return new DummyScaleAndShiftAxonsImpl<>(matrixFactory, axonsConfig.getLeftNeurons(), axonsConfig.getRightNeurons());
 	}
 
 }

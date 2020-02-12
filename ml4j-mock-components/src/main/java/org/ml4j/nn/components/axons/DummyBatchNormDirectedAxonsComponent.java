@@ -23,6 +23,7 @@ import org.ml4j.nn.axons.AxonsContext;
 import org.ml4j.nn.axons.AxonsType;
 import org.ml4j.nn.axons.NoOpAxonsActivation;
 import org.ml4j.nn.components.axons.base.DirectedAxonsComponentBase;
+import org.ml4j.nn.components.factories.DirectedComponentFactory;
 import org.ml4j.nn.neurons.DummyNeuronsActivation;
 import org.ml4j.nn.neurons.Neurons;
 import org.ml4j.nn.neurons.NeuronsActivation;
@@ -71,7 +72,7 @@ public class DummyBatchNormDirectedAxonsComponent<L extends Neurons> extends
 	}
 
 	@Override
-	public BatchNormDirectedAxonsComponent<L, Axons<L, L, ?>> dup() {
+	public BatchNormDirectedAxonsComponent<L, Axons<L, L, ?>> dup(DirectedComponentFactory directedComponentFactory) {
 		return new DummyBatchNormDirectedAxonsComponent<>(name, axons.dup(), convolutionalBatchNorm);
 	}
 

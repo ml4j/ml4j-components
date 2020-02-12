@@ -23,6 +23,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.ml4j.images.ChannelConcatImages;
 import org.ml4j.images.Images;
 import org.ml4j.nn.components.DirectedComponentsContext;
+import org.ml4j.nn.components.factories.DirectedComponentFactory;
 import org.ml4j.nn.components.manytoone.base.ManyToOneDirectedComponentBase;
 import org.ml4j.nn.neurons.ImageNeuronsActivation;
 import org.ml4j.nn.neurons.ImageNeuronsActivationImpl;
@@ -110,7 +111,7 @@ public class DefaultManyToOneFilterConcatDirectedComponentImpl
 	}
 
 	@Override
-	public ManyToOneDirectedComponent<DefaultManyToOneDirectedComponentActivationImpl> dup() {
+	public ManyToOneDirectedComponent<DefaultManyToOneDirectedComponentActivationImpl> dup(DirectedComponentFactory directedComponentFactory) {
 		return new DefaultManyToOneFilterConcatDirectedComponentImpl(outputNeurons);
 	}
 

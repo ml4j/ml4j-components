@@ -25,6 +25,7 @@ import org.ml4j.nn.axons.AxonsContext;
 import org.ml4j.nn.axons.AxonsType;
 import org.ml4j.nn.axons.ScaleAndShiftAxons;
 import org.ml4j.nn.components.axons.base.DirectedAxonsComponentBase;
+import org.ml4j.nn.components.factories.DirectedComponentFactory;
 import org.ml4j.nn.neurons.Neurons;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
@@ -90,7 +91,7 @@ public class DefaultBatchNormDirectedAxonsComponentImpl<L extends Neurons> exten
 	}
 
 	@Override
-	public BatchNormDirectedAxonsComponent<L, Axons<L, L, ?>> dup() {
+	public BatchNormDirectedAxonsComponent<L, Axons<L, L, ?>> dup(DirectedComponentFactory directedComponentFactory) {
 		return new DefaultBatchNormDirectedAxonsComponentImpl<>(name, axons.dup(),
 				exponentiallyWeightedAverageInputFeatureMeans == null ? null
 						: exponentiallyWeightedAverageInputFeatureMeans.dup(),
@@ -109,6 +110,7 @@ public class DefaultBatchNormDirectedAxonsComponentImpl<L extends Neurons> exten
 		 * getInputNeurons().getNeuronCountExcludingBias()); }
 		 */
 		Matrix activations = input.getActivations(axonsContext.getMatrixFactory());
+		
 		if (activations.isImmutable()) {
 			activations = activations.dup();
 		}

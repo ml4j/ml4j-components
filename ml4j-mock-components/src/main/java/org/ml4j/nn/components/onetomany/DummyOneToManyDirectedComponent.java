@@ -16,6 +16,7 @@ package org.ml4j.nn.components.onetomany;
 import java.util.Optional;
 
 import org.ml4j.nn.components.DirectedComponentsContext;
+import org.ml4j.nn.components.factories.DirectedComponentFactory;
 import org.ml4j.nn.components.onetomany.base.OneToManyDirectedComponentBase;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
@@ -74,7 +75,7 @@ public class DummyOneToManyDirectedComponent
 	}
 
 	@Override
-	public DummyOneToManyDirectedComponent dup() {
+	public DummyOneToManyDirectedComponent dup(DirectedComponentFactory directedComponentFactory) {
 		int targetComponentsCountAtTimeOfDuplication = targetComponentsCountSupplier.getAsInt();
 		return new DummyOneToManyDirectedComponent(() -> targetComponentsCountAtTimeOfDuplication);
 	}

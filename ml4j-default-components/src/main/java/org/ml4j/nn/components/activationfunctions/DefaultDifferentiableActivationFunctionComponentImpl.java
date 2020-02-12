@@ -18,6 +18,7 @@ import java.util.Optional;
 import org.ml4j.nn.activationfunctions.DifferentiableActivationFunction;
 import org.ml4j.nn.activationfunctions.DifferentiableActivationFunctionActivation;
 import org.ml4j.nn.components.activationfunctions.base.DifferentiableActivationFunctionComponentAdapterBase;
+import org.ml4j.nn.components.factories.DirectedComponentFactory;
 import org.ml4j.nn.neurons.Neurons;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.ml4j.nn.neurons.NeuronsActivationContext;
@@ -60,7 +61,7 @@ public class DefaultDifferentiableActivationFunctionComponentImpl extends
 	}
 
 	@Override
-	public DifferentiableActivationFunctionComponentAdapter dup() {
+	public DifferentiableActivationFunctionComponentAdapter dup(DirectedComponentFactory directedComponentFactory) {
 		return new DefaultDifferentiableActivationFunctionComponentImpl(name, neurons, activationFunction);
 	}
 

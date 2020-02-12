@@ -20,25 +20,23 @@ public abstract class WeightedAxonsBase<L extends Neurons, R extends Neurons, A 
 	@SuppressWarnings("unused")
 	private static final Logger LOGGER = LoggerFactory.getLogger(WeightedAxonsBase.class);
 
-	protected L leftNeurons;
-	protected R rightNeurons;
+	protected AxonsConfig<L, R> axonsConfig;
 	protected AxonWeights axonWeights;
 
-	public WeightedAxonsBase(L leftNeurons, R rightNeurons, AxonWeights axonWeights) {
+	public WeightedAxonsBase(AxonsConfig<L, R> axonsConfig, AxonWeights axonWeights) {
 		super();
 		this.axonWeights = axonWeights;
-		this.leftNeurons = leftNeurons;
-		this.rightNeurons = rightNeurons;
+		this.axonsConfig = axonsConfig;
 	}
 
 	@Override
 	public L getLeftNeurons() {
-		return leftNeurons;
+		return axonsConfig.getLeftNeurons();
 	}
 
 	@Override
 	public R getRightNeurons() {
-		return rightNeurons;
+		return axonsConfig.getRightNeurons();
 	}
 
 	@Override

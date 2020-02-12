@@ -18,11 +18,8 @@ public abstract class FullyConnectedAxonsBase<L extends Neurons, R extends Neuro
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(FullyConnectedAxonsBase.class);
 
-	public FullyConnectedAxonsBase(L leftNeurons, R rightNeurons, AxonWeights axonWeights) {
-		super(leftNeurons, rightNeurons, axonWeights);
-		this.axonWeights = axonWeights;
-		this.leftNeurons = leftNeurons;
-		this.rightNeurons = rightNeurons;
+	public FullyConnectedAxonsBase(AxonsConfig<L, R> axonsConfig, AxonWeights axonWeights) {
+		super(axonsConfig, axonWeights);
 	}
 
 	@Override

@@ -24,36 +24,27 @@ public class DefaultOneByOneConvolutionalAxonsImpl implements ConvolutionalAxons
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private Neurons3D leftNeurons;
-	private Neurons3D rightNeurons;
 	private Axons3DConfig config;
 	private FullyConnectedAxons fullyConnectedAxons;
 
-	public DefaultOneByOneConvolutionalAxonsImpl(Neurons3D leftNeurons, Neurons3D rightNeurons,
+	private DefaultOneByOneConvolutionalAxonsImpl(
 			FullyConnectedAxons fullyConnectedAxons, Axons3DConfig config) {
-		this.leftNeurons = leftNeurons;
-		this.rightNeurons = rightNeurons;
 		this.config = config;
 		this.fullyConnectedAxons = fullyConnectedAxons;
-		if (!isEligible(rightNeurons, rightNeurons, config)) {
+		if (!isEligible(config)) {
 			throw new IllegalArgumentException("DefaultOneByOneConvolutionalAxonsImpl cannot be used for this configuration");
 		}
 	}
 
-	public DefaultOneByOneConvolutionalAxonsImpl(AxonsFactory axonsFactory, Neurons3D leftNeurons, Neurons3D rightNeurons,
+	public DefaultOneByOneConvolutionalAxonsImpl(AxonsFactory axonsFactory,
 			Axons3DConfig config, WeightsMatrix connectionWeights, BiasMatrix biases) {
-		super();
-		this.leftNeurons = leftNeurons;
-		this.rightNeurons = rightNeurons;
 		this.config = config;
-	
-
-		if (!isEligible(rightNeurons, rightNeurons, config)) {
+		if (!isEligible(config)) {
 			throw new IllegalArgumentException("DefaultOneByOneConvolutionalAxonsImpl cannot be used for this configuration");
 		}
-		this.fullyConnectedAxons = axonsFactory.createFullyConnectedAxons(
-				new Neurons(config.getFilterWidth() * config.getFilterHeight() * leftNeurons.getDepth(), leftNeurons.hasBiasUnit()),
-				new Neurons(rightNeurons.getDepth(), rightNeurons.hasBiasUnit()), 
+		this.fullyConnectedAxons = axonsFactory.createFullyConnectedAxons(new AxonsConfig<>(
+				new Neurons(config.getFilterWidth() * config.getFilterHeight() * config.getLeftNeurons().getDepth(), config.getLeftNeurons().hasBiasUnit()),
+				new Neurons(config.getRightNeurons().getDepth(), config.getRightNeurons().hasBiasUnit())), 
 				connectionWeights,
 				biases);
 	}
@@ -66,25 +57,25 @@ public class DefaultOneByOneConvolutionalAxonsImpl implements ConvolutionalAxons
 
 	@Override
 	public Neurons3D getLeftNeurons() {
-		return leftNeurons;
+		return config.getLeftNeurons();
 	}
 
 	@Override
 	public Neurons3D getRightNeurons() {
-		return rightNeurons;
+		return config.getRightNeurons();
 	}
 
 	public Matrix reformatLeftToRightInputOneByOne(MatrixFactory matrixFactory, NeuronsActivation activations) {
 		EditableMatrix out = activations.getActivations(matrixFactory).dup().asEditableMatrix();
-		out.reshape(leftNeurons.getDepth(),
-				leftNeurons.getWidth() * leftNeurons.getHeight() * activations.getExampleCount());
+		out.reshape(config.getLeftNeurons().getDepth(),
+				config.getLeftNeurons().getWidth() * config.getLeftNeurons().getHeight() * activations.getExampleCount());
 		return out;
 	}
 
 	public NeuronsActivation reformatLeftToRightInput(MatrixFactory matrixFactory,
 			NeuronsActivation leftNeuronsActivation)  {
 		final NeuronsActivation reformatted;
-			reformatted = new NeuronsActivationImpl(new Neurons(leftNeurons.getDepth(), leftNeurons.hasBiasUnit()),
+			reformatted = new NeuronsActivationImpl(new Neurons(config.getLeftNeurons().getDepth(), config.getLeftNeurons().hasBiasUnit()),
 					reformatLeftToRightInputOneByOne(matrixFactory, leftNeuronsActivation),
 					// TODO
 					new NeuronsActivationFormat<>(leftNeuronsActivation.getFeatureOrientation(),
@@ -94,26 +85,14 @@ public class DefaultOneByOneConvolutionalAxonsImpl implements ConvolutionalAxons
 
 	}
 	
-	public static boolean isEligible(Neurons3D leftNeurons, Neurons3D rightNeurons, Axons3DConfig axonsConfig) {
-		int inputWidth = leftNeurons.getWidth();
-		int inputHeight = leftNeurons.getHeight();
-		int outputWidth = rightNeurons.getWidth();
-		int outputHeight = rightNeurons.getHeight();
-
-		int inputWidthWithPadding = inputWidth + axonsConfig.getPaddingWidth() * 2;
-
-		int inputHeightWithPadding = inputHeight + axonsConfig.getPaddingHeight() * 2;
-		int filterWidth = inputWidthWithPadding + (1 - outputWidth) * (axonsConfig.getStrideWidth());
-
-		int filterHeight = inputHeightWithPadding + (1 - outputHeight) * (axonsConfig.getStrideHeight());
-	
-		return filterWidth == 1 && filterHeight == 1 && axonsConfig.getPaddingWidth() == 0 && axonsConfig.getPaddingHeight() == 0
+	public static boolean isEligible(Axons3DConfig axonsConfig) {
+		return axonsConfig.getFilterWidth() == 1 && axonsConfig.getFilterHeight() == 1 && axonsConfig.getPaddingWidth() == 0 && axonsConfig.getPaddingHeight() == 0
 				&& axonsConfig.getStrideHeight() == 1 && axonsConfig.getStrideWidth() == 1;
 	}
 
 	public NeuronsActivation reformatLeftToRightOutput(MatrixFactory matrixFactory, NeuronsActivation output,
 			int exampleCount) {
-		output.reshape(rightNeurons.getNeuronCountExcludingBias(), exampleCount);
+		output.reshape(config.getRightNeurons().getNeuronCountExcludingBias(), exampleCount);
 		return output.asImageNeuronsActivation(getRightNeurons(), DimensionScope.OUTPUT);
 
 	}
@@ -169,8 +148,8 @@ public class DefaultOneByOneConvolutionalAxonsImpl implements ConvolutionalAxons
 
 	private NeuronsActivation reformatRightToLeftOutput(MatrixFactory matrixFactory, NeuronsActivation output,
 			int exampleCount) {
-		output.reshape(leftNeurons.getNeuronCountExcludingBias(), exampleCount);
-		return output.asImageNeuronsActivation(leftNeurons, DimensionScope.OUTPUT);
+		output.reshape(config.getLeftNeurons().getNeuronCountExcludingBias(), exampleCount);
+		return output.asImageNeuronsActivation(config.getLeftNeurons(), DimensionScope.OUTPUT);
 
 	}
 
@@ -179,15 +158,15 @@ public class DefaultOneByOneConvolutionalAxonsImpl implements ConvolutionalAxons
 		if (input.isImmutable()) {
 			throw new UnsupportedOperationException();
 		} else {
-			input.reshape(rightNeurons.getDepth(),
-					rightNeurons.getWidth() * rightNeurons.getHeight() * input.getExampleCount());
+			input.reshape(config.getRightNeurons().getDepth(),
+					config.getRightNeurons().getWidth() * config.getRightNeurons().getHeight() * input.getExampleCount());
 			return input;
 		}
 	}
 
 	@Override
 	public ConvolutionalAxons dup() {
-		return new DefaultOneByOneConvolutionalAxonsImpl(leftNeurons, rightNeurons, fullyConnectedAxons, config.dup());
+		return new DefaultOneByOneConvolutionalAxonsImpl(fullyConnectedAxons.dup(), config.dup());
 	}
 
 	@Override

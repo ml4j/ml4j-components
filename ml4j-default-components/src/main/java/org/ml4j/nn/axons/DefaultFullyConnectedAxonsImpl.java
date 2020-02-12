@@ -10,13 +10,13 @@ public class DefaultFullyConnectedAxonsImpl extends FullyConnectedAxonsBase<Neur
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public DefaultFullyConnectedAxonsImpl(Neurons leftNeurons, Neurons rightNeurons, AxonWeights axonWeights) {
-		super(leftNeurons, rightNeurons, axonWeights);
+	public DefaultFullyConnectedAxonsImpl(AxonsConfig<Neurons, Neurons> config, AxonWeights axonWeights) {
+		super(config, axonWeights);
 	}
 
 	@Override
 	public FullyConnectedAxons dup() {
-		return new DefaultFullyConnectedAxonsImpl(leftNeurons, rightNeurons, axonWeights.dup());
+		return new DefaultFullyConnectedAxonsImpl(axonsConfig.dup(), axonWeights.dup());
 	}
 	
 	@Override

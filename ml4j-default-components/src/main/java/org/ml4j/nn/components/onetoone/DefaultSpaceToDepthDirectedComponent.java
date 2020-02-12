@@ -10,6 +10,7 @@ import org.ml4j.nn.components.DirectedComponentsContext;
 import org.ml4j.nn.components.NeuralComponentBaseType;
 import org.ml4j.nn.components.NeuralComponentType;
 import org.ml4j.nn.components.NeuralComponentVisitor;
+import org.ml4j.nn.components.factories.DirectedComponentFactory;
 import org.ml4j.nn.components.onetone.DefaultChainableDirectedComponent;
 import org.ml4j.nn.neurons.ImageNeuronsActivation;
 import org.ml4j.nn.neurons.ImageNeuronsActivationImpl;
@@ -57,7 +58,7 @@ public class DefaultSpaceToDepthDirectedComponent implements DefaultChainableDir
 	}
 
 	@Override
-	public DefaultChainableDirectedComponent<DefaultSpaceToDepthDirectedComponentActivation, DirectedComponentsContext> dup() {
+	public DefaultChainableDirectedComponent<DefaultSpaceToDepthDirectedComponentActivation, DirectedComponentsContext> dup(DirectedComponentFactory directedComponentFactory) {
 		return new DefaultSpaceToDepthDirectedComponent(name, leftNeurons, rightNeurons, blockHeight, blockWidth);
 	}
 

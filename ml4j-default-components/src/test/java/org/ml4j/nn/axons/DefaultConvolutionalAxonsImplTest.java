@@ -45,12 +45,10 @@ public class DefaultConvolutionalAxonsImplTest extends Axons3DTestBase<Convoluti
 	@Override
 	protected ConvolutionalAxons createAxonsUnderTest(Neurons3D leftNeurons, Neurons3D rightNeurons,
 			Axons3DConfig config) {
-		config.setFilterWidthAndHeight(leftNeurons, rightNeurons);
-
 		Mockito.when(
-				mockAxonsFactory.createFullyConnectedAxons(Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any()))
+				mockAxonsFactory.createFullyConnectedAxons(Mockito.any(), Mockito.any(), Mockito.any()))
 				.thenReturn(mockFullyConnectedAxons);
-		return new DefaultConvolutionalAxonsImpl(mockAxonsFactory, leftNeurons, rightNeurons, config, null, null);
+		return new DefaultConvolutionalAxonsImpl(mockAxonsFactory, config, null, null);
 	}
 
 	@Override

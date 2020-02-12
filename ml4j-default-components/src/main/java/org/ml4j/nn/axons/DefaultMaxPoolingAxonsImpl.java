@@ -34,37 +34,30 @@ public class DefaultMaxPoolingAxonsImpl implements MaxPoolingAxons {
 	private Axons3DConfig config;
 	private boolean scaleOutputs;
 
-	public DefaultMaxPoolingAxonsImpl(MatrixFactory matrixFactory, Neurons3D leftNeurons, Neurons3D rightNeurons,
+	public DefaultMaxPoolingAxonsImpl(MatrixFactory matrixFactory,
 			Axons3DConfig config, boolean scaleOutputs) {
-		super();
 		this.matrixFactory = matrixFactory;
-		this.leftNeurons = leftNeurons;
-		this.rightNeurons = rightNeurons;
 		this.config = config;
 		this.scaleOutputs = scaleOutputs;
-		this.config.setFilterWidthAndHeight(leftNeurons, rightNeurons);
 	}
-
-	private Neurons3D leftNeurons;
-	private Neurons3D rightNeurons;
 
 	@Override
 	public Neurons3D getLeftNeurons() {
-		return leftNeurons;
+		return config.getLeftNeurons();
 	}
 
 	@Override
 	public Neurons3D getRightNeurons() {
-		return rightNeurons;
+		return config.getRightNeurons();
 	}
 
 	public NeuronsActivation reformatLeftToRightInput(MatrixFactory matrixFactory,
 			NeuronsActivation leftNeuronsActivation) {
 	
-		ImageNeuronsActivation act = leftNeuronsActivation.asImageNeuronsActivation(leftNeurons, DimensionScope.INPUT);
+		ImageNeuronsActivation act = leftNeuronsActivation.asImageNeuronsActivation(getLeftNeurons(), DimensionScope.INPUT);
 
 		NeuronsActivation reformatted = new NeuronsActivationImpl(
-				new Neurons(config.getFilterWidth() * config.getFilterHeight(), leftNeurons.hasBiasUnit()),
+				new Neurons(config.getFilterWidth() * config.getFilterHeight(), getLeftNeurons().hasBiasUnit()),
 				act.im2ColPool(matrixFactory, config),
 				ImageNeuronsActivationFormat.ML4J_IM_TO_COL_POOL_FORMAT);
 		if (!act.isImmutable()) {
@@ -111,7 +104,7 @@ public class DefaultMaxPoolingAxonsImpl implements MaxPoolingAxons {
 	
 		AxonsDropoutMask maxesDropoutMask = new AxonsDropoutMaskImpl(maxes, AxonsDropoutMaskType.INPUT);
 		
-		origOutput.reshape(rightNeurons.getNeuronCountExcludingBias(), exampleCount);
+		origOutput.reshape(getRightNeurons().getNeuronCountExcludingBias(), exampleCount);
 		
 		ImageNeuronsActivation output = new ImageNeuronsActivationImpl(origOutput, getRightNeurons(),
 				ImageNeuronsActivationFormat.ML4J_DEFAULT_IMAGE_FORMAT, false);
@@ -163,10 +156,10 @@ public class DefaultMaxPoolingAxonsImpl implements MaxPoolingAxons {
 	private NeuronsActivation reformatRightToLeftOutput(MatrixFactory matrixFactory, Matrix output,
 			NeuronsActivationFeatureOrientation featureOrientation, int exampleCount) {
 
-		int inputWidth = leftNeurons.getWidth();
-		int inputHeight = leftNeurons.getHeight();
-		int outputWidth = rightNeurons.getWidth();
-		int outputHeight = rightNeurons.getHeight();
+		int inputWidth = getLeftNeurons().getWidth();
+		int inputHeight = getLeftNeurons().getHeight();
+		int outputWidth = getRightNeurons().getWidth();
+		int outputHeight = getRightNeurons().getHeight();
 
 		int inputWidthWithPadding = inputWidth + config.getPaddingWidth() * 2;
 

@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import org.ml4j.nn.components.factories.DirectedComponentFactory;
 import org.ml4j.nn.components.onetone.DefaultChainableDirectedComponent;
 import org.ml4j.nn.components.onetone.DefaultChainableDirectedComponentActivation;
 import org.ml4j.nn.neurons.DummyNeuronsActivation;
@@ -50,7 +51,7 @@ public class DummyGenericComponent
 	}
 
 	@Override
-	public DefaultChainableDirectedComponent<DefaultChainableDirectedComponentActivation, Object> dup() {
+	public DefaultChainableDirectedComponent<DefaultChainableDirectedComponentActivation, Object> dup(DirectedComponentFactory directedComponentFactory) {
 		return new DummyGenericComponent(name, inputNeurons, outputNeurons, neuralComponentType);
 	}
 

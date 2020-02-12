@@ -24,6 +24,7 @@ import org.ml4j.nn.activationfunctions.DifferentiableActivationFunction;
 import org.ml4j.nn.activationfunctions.factories.DifferentiableActivationFunctionFactory;
 import org.ml4j.nn.axons.Axons;
 import org.ml4j.nn.axons.Axons3DConfig;
+import org.ml4j.nn.axons.AxonsConfig;
 import org.ml4j.nn.axons.BiasMatrix;
 import org.ml4j.nn.axons.BiasMatrixImpl;
 import org.ml4j.nn.axons.PassThroughAxonsImpl;
@@ -88,10 +89,9 @@ public class DefaultDirectedComponentFactoryImpl implements DirectedComponentFac
 	}
 
 	@Override
-	public DirectedAxonsComponent<Neurons, Neurons, ?> createFullyConnectedAxonsComponent(String name, Neurons leftNeurons,
-			Neurons rightNeurons, WeightsMatrix connectionWeights, BiasMatrix biases) {
+	public DirectedAxonsComponent<Neurons, Neurons, ?> createFullyConnectedAxonsComponent(String name, AxonsConfig<Neurons, Neurons> axonsConfig,  WeightsMatrix connectionWeights, BiasMatrix biases) {
 		return createDirectedAxonsComponent(name,
-				axonsFactory.createFullyConnectedAxons(leftNeurons, rightNeurons, 
+				axonsFactory.createFullyConnectedAxons(axonsConfig,
 						connectionWeights, 
 						biases));
 	}
@@ -103,23 +103,20 @@ public class DefaultDirectedComponentFactoryImpl implements DirectedComponentFac
 	}
 
 	@Override
-	public DirectedAxonsComponent<Neurons3D, Neurons3D, ?> createConvolutionalAxonsComponent(String name, Neurons3D leftNeurons,
-			Neurons3D rightNeurons, Axons3DConfig config, WeightsMatrix connectionWeights, BiasMatrix biases) {
+	public DirectedAxonsComponent<Neurons3D, Neurons3D, ?> createConvolutionalAxonsComponent(String name, Axons3DConfig config, WeightsMatrix connectionWeights, BiasMatrix biases) {
 		return createDirectedAxonsComponent(name,
-				axonsFactory.createConvolutionalAxons(leftNeurons, rightNeurons, config, connectionWeights, biases));
+				axonsFactory.createConvolutionalAxons(config, connectionWeights, biases));
 	}
 
 	@Override
-	public DirectedAxonsComponent<Neurons3D, Neurons3D, ?> createMaxPoolingAxonsComponent(String name, Neurons3D leftNeurons,
-			Neurons3D rightNeurons, Axons3DConfig config, boolean scaleOutputs) {
+	public DirectedAxonsComponent<Neurons3D, Neurons3D, ?> createMaxPoolingAxonsComponent(String name, Axons3DConfig config, boolean scaleOutputs) {
 		return createDirectedAxonsComponent(name,
-				axonsFactory.createMaxPoolingAxons(leftNeurons, rightNeurons, scaleOutputs, config));
+				axonsFactory.createMaxPoolingAxons(config, scaleOutputs));
 	}
 
 	@Override
-	public DirectedAxonsComponent<Neurons3D, Neurons3D, ?> createAveragePoolingAxonsComponent(String name, Neurons3D leftNeurons,
-			Neurons3D rightNeurons, Axons3DConfig config) {
-		return createDirectedAxonsComponent(name, axonsFactory.createAveragePoolingAxons(leftNeurons, rightNeurons, config));
+	public DirectedAxonsComponent<Neurons3D, Neurons3D, ?> createAveragePoolingAxonsComponent(String name, Axons3DConfig config) {
+		return createDirectedAxonsComponent(name, axonsFactory.createAveragePoolingAxons(config));
 	}
 
 	@Override
@@ -138,7 +135,7 @@ public class DefaultDirectedComponentFactoryImpl implements DirectedComponentFac
 	public BatchNormDirectedAxonsComponent<Neurons3D, ?> createConvolutionalBatchNormAxonsComponent(String name, 
 			Neurons3D leftNeurons, Neurons3D rightNeurons) {
 		return new DefaultBatchNormDirectedAxonsComponentImpl<>(name, 
-				axonsFactory.createScaleAndShiftAxons(leftNeurons, rightNeurons, 
+				axonsFactory.createScaleAndShiftAxons(new AxonsConfig<>(leftNeurons, rightNeurons), 
 						new WeightsMatrixImpl(null, 
 								new WeightsFormatImpl(Arrays.asList(
 										Dimension.INPUT_DEPTH, 
@@ -152,7 +149,7 @@ public class DefaultDirectedComponentFactoryImpl implements DirectedComponentFac
 	public BatchNormDirectedAxonsComponent<Neurons3D, ?> createConvolutionalBatchNormAxonsComponent(String name, 
 			Neurons3D leftNeurons, Neurons3D rightNeurons, WeightsMatrix gamma, BiasMatrix beta, Matrix mean, Matrix stddev) {
 		return new DefaultBatchNormDirectedAxonsComponentImpl<>(name, 
-				axonsFactory.createScaleAndShiftAxons(leftNeurons, rightNeurons,
+				axonsFactory.createScaleAndShiftAxons(new AxonsConfig<>(leftNeurons, rightNeurons),
 						new WeightsMatrixImpl(expandChannelValuesToFeatureValues(matrixFactory, rightNeurons, gamma),
 								new WeightsFormatImpl(Arrays.asList(
 										Dimension.INPUT_DEPTH, 
