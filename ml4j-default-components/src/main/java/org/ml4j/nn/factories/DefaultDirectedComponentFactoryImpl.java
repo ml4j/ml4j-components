@@ -122,20 +122,20 @@ public class DefaultDirectedComponentFactoryImpl implements DirectedComponentFac
 	}
 
 	@Override
-	public <N extends Neurons> BatchNormDirectedAxonsComponent<N, ?> createBatchNormAxonsComponent(String name, BatchNormConfig<N> batchNormConfig) {
+	public <N extends Neurons> BatchNormDirectedAxonsComponent<N, ?> createBatchNormAxonsComponent(String name, N neurons, BatchNormConfig<N> batchNormConfig) {
 		
 		return new DefaultBatchNormDirectedAxonsComponentImpl<>(name, 
-				axonsFactory.createScaleAndShiftAxons(new AxonsConfig<>(batchNormConfig.getNeurons(), batchNormConfig.getNeurons()),
-						new WeightsMatrixImpl(expandChannelValuesToFeatureValues(matrixFactory, batchNormConfig.getNeurons(), batchNormConfig.getGammaColumnVector()),
+				axonsFactory.createScaleAndShiftAxons(new AxonsConfig<N, N>(neurons, neurons),
+						new WeightsMatrixImpl(expandChannelValuesToFeatureValues(matrixFactory, neurons, batchNormConfig.getGammaColumnVector()),
 								new WeightsFormatImpl(Arrays.asList(
 										Dimension.INPUT_DEPTH, 
 										Dimension.INPUT_HEIGHT, 
 										Dimension.INPUT_WIDTH), 
 										Arrays.asList(Dimension.OUTPUT_FEATURE),
 										WeightsMatrixOrientation.ROWS_SPAN_OUTPUT_DIMENSIONS)),
-						batchNormConfig.getBetaColumnVector() == null ? null : new BiasMatrixImpl(expandChannelValuesToFeatureValues(matrixFactory, batchNormConfig.getNeurons(), batchNormConfig.getBetaColumnVector()))),
-				expandChannelValuesToFeatureValues(matrixFactory, batchNormConfig.getNeurons(), batchNormConfig.getMeanColumnVector()),
-				expandChannelValuesToFeatureValues(matrixFactory, batchNormConfig.getNeurons(), batchNormConfig.getVarianceColumnVector()));
+						batchNormConfig.getBetaColumnVector() == null ? null : new BiasMatrixImpl(expandChannelValuesToFeatureValues(matrixFactory, neurons, batchNormConfig.getBetaColumnVector()))),
+				expandChannelValuesToFeatureValues(matrixFactory, neurons, batchNormConfig.getMeanColumnVector()),
+				expandChannelValuesToFeatureValues(matrixFactory, neurons, batchNormConfig.getVarianceColumnVector()));
 	}
 
 	
