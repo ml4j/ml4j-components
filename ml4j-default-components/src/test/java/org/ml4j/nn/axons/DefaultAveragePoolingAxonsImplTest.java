@@ -36,8 +36,7 @@ public class DefaultAveragePoolingAxonsImplTest extends Axons3DTestBase<AverageP
 			Axons3DConfig config) {
 		config.withStrideHeight(2);
 		config.withStrideWidth(2);
-		config.setFilterWidthAndHeight(leftNeurons, rightNeurons);
-		return new DefaultAveragePoolingAxonsImpl(matrixFactory, leftNeurons, rightNeurons, config);
+		return new DefaultAveragePoolingAxonsImpl(matrixFactory, config);
 	}
 
 	@Override

@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.ml4j.nn.components.DirectedComponentsContext;
+import org.ml4j.nn.components.factories.DirectedComponentFactory;
 import org.ml4j.nn.components.manytoone.base.ManyToOneDirectedComponentBase;
 import org.ml4j.nn.neurons.DummyNeuronsActivation;
 import org.ml4j.nn.neurons.Neurons;
@@ -61,7 +62,7 @@ public class DummyManyToOneDirectedComponent
 	}
 
 	@Override
-	public ManyToOneDirectedComponent<DummyManyToOneDirectedComponentActivation> dup() {
+	public ManyToOneDirectedComponent<DummyManyToOneDirectedComponentActivation> dup(DirectedComponentFactory directedComponentFactory) {
 		return new DummyManyToOneDirectedComponent(pathCombinationStrategy);
 	}
 	

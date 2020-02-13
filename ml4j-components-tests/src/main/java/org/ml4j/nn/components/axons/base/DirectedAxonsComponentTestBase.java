@@ -26,6 +26,7 @@ import org.ml4j.nn.components.NeuralComponentBaseType;
 import org.ml4j.nn.components.axons.DirectedAxonsComponent;
 import org.ml4j.nn.components.axons.DirectedAxonsComponentActivation;
 import org.ml4j.nn.components.base.TestBase;
+import org.ml4j.nn.components.factories.DirectedComponentFactory;
 import org.ml4j.nn.components.onetone.DefaultChainableDirectedComponent;
 import org.ml4j.nn.neurons.Neurons;
 import org.ml4j.nn.neurons.NeuronsActivation;
@@ -48,6 +49,10 @@ public abstract class DirectedAxonsComponentTestBase extends TestBase {
 
 	@Mock
 	protected DirectedComponentsContext mockDirectedComponentsContext;
+	
+	@Mock
+	protected DirectedComponentFactory mockDirectedComponentFactory;
+	
 
 	@Before
 	public void setup() {
@@ -138,7 +143,7 @@ public abstract class DirectedAxonsComponentTestBase extends TestBase {
 		DirectedAxonsComponent<?, ?, ?> directedAxonsComponent = createDirectedAxonsComponent(leftNeurons,
 				rightNeurons);
 
-		DirectedAxonsComponent<?, ?, ?> dupComponent = directedAxonsComponent.dup();
+		DirectedAxonsComponent<?, ?, ?> dupComponent = directedAxonsComponent.dup(mockDirectedComponentFactory);
 		Assert.assertNotNull(dupComponent);
 		Assert.assertNotSame(directedAxonsComponent, dupComponent);
 

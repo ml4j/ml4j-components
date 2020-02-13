@@ -17,9 +17,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.ml4j.nn.components.ChainableDirectedComponent;
-import org.ml4j.nn.components.ChainableDirectedComponentActivation;
 import org.ml4j.nn.components.DirectedComponentsContext;
+import org.ml4j.nn.components.factories.DirectedComponentFactory;
 import org.ml4j.nn.components.manytomany.base.DefaultComponentBatchBase;
 import org.ml4j.nn.components.onetone.DefaultChainableDirectedComponent;
 import org.ml4j.nn.components.onetone.DefaultChainableDirectedComponentActivation;
@@ -64,7 +63,7 @@ public class DummyDefaultComponentBatch extends DefaultComponentBatchBase implem
 	}
 
 	@Override
-	public DefaultDirectedComponentBatch dup() {
+	public DefaultDirectedComponentBatch dup(DirectedComponentFactory directedComponentFactory) {
 		return new DummyDefaultComponentBatch(parallelComponents);
 	}
 
@@ -74,7 +73,7 @@ public class DummyDefaultComponentBatch extends DefaultComponentBatchBase implem
 	}
 
 	@Override
-	public List<ChainableDirectedComponent<List<NeuronsActivation>, ? extends ChainableDirectedComponentActivation<List<NeuronsActivation>>, ?>> decompose() {
+	public List<DefaultDirectedComponentBatch> decompose() {
 		return Arrays.asList(this);
 	}
 

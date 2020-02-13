@@ -30,7 +30,7 @@ public class DefaultFullyConnectedAxonsImplTest extends AxonsTestBase<FullyConne
 				new WeightsFormatImpl(Arrays.asList(Dimension.INPUT_FEATURE), Arrays.asList(Dimension.OUTPUT_FEATURE),
 						WeightsMatrixOrientation.ROWS_SPAN_OUTPUT_DIMENSIONS)),
 				new BiasMatrixImpl(matrixFactory.createMatrix(rightNeurons.getNeuronCountExcludingBias(), 1)), null);
-		return new DefaultFullyConnectedAxonsImpl(leftNeurons, rightNeurons, axonWeights);
+		return new DefaultFullyConnectedAxonsImpl(new AxonsConfig<>(leftNeurons, rightNeurons), axonWeights);
 	}
 
 	@Override

@@ -193,9 +193,9 @@ public class DefaultDirectedComponentChainBipoleGraphImpl extends DefaultDirecte
 	}
 
 	@Override
-	public DefaultDirectedComponentChainBipoleGraph dup() {
+	public DefaultDirectedComponentChainBipoleGraph dup(DirectedComponentFactory directedComponentFactory) {
 		return new DefaultDirectedComponentChainBipoleGraphImpl(name, inputNeurons, outputNeurons,
-				parallelComponentChainsBatch.dup(), oneToManyDirectedComponent.dup(), manyToOneDirectedComponent.dup(),
+				parallelComponentChainsBatch.dup(directedComponentFactory), oneToManyDirectedComponent.dup(directedComponentFactory), manyToOneDirectedComponent.dup(directedComponentFactory),
 				pathCombinationStrategy);
 	}
 

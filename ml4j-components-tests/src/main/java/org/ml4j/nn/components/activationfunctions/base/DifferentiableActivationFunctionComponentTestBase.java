@@ -24,6 +24,7 @@ import org.ml4j.nn.components.NeuralComponentBaseType;
 import org.ml4j.nn.components.activationfunctions.DifferentiableActivationFunctionComponent;
 import org.ml4j.nn.components.activationfunctions.DifferentiableActivationFunctionComponentActivation;
 import org.ml4j.nn.components.base.TestBase;
+import org.ml4j.nn.components.factories.DirectedComponentFactory;
 import org.ml4j.nn.neurons.Neurons;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.ml4j.nn.neurons.NeuronsActivationContext;
@@ -59,6 +60,10 @@ public abstract class DifferentiableActivationFunctionComponentTestBase<L extend
 
 	@Mock
 	protected NeuronsActivationContext mockNeuronsActivationContext;
+	
+	@Mock
+	protected DirectedComponentFactory mockDirectedComponentFactory;
+	
 
 	@Before
 	public void setup() {
@@ -171,7 +176,7 @@ public abstract class DifferentiableActivationFunctionComponentTestBase<L extend
 		Neurons neurons = new Neurons(110, false);
 		DifferentiableActivationFunctionComponent activationFunctionComponent = createDifferentiableActivationFunctionComponent(
 				neurons, activationFunctionType);
-		DifferentiableActivationFunctionComponent dupComponent = activationFunctionComponent.dup();
+		DifferentiableActivationFunctionComponent dupComponent = activationFunctionComponent.dup(mockDirectedComponentFactory);
 
 		DifferentiableActivationFunctionComponentActivation dupActivation = dupComponent
 				.forwardPropagate(mockNeuronsActivation, mockNeuronsActivationContext);

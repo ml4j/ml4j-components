@@ -23,6 +23,7 @@ import org.ml4j.nn.axons.AxonsContext;
 import org.ml4j.nn.axons.AxonsType;
 import org.ml4j.nn.axons.NoOpAxonsActivation;
 import org.ml4j.nn.components.axons.base.DirectedAxonsComponentBase;
+import org.ml4j.nn.components.factories.DirectedComponentFactory;
 import org.ml4j.nn.neurons.DummyNeuronsActivation;
 import org.ml4j.nn.neurons.Neurons;
 import org.ml4j.nn.neurons.NeuronsActivation;
@@ -38,11 +39,9 @@ public class DummyBatchNormDirectedAxonsComponent<L extends Neurons> extends
 	 * Defaut serialization id;
 	 */
 	private static final long serialVersionUID = 1L;
-	private boolean convolutionalBatchNorm;
 
-	public DummyBatchNormDirectedAxonsComponent(String name, Axons<L, L, ?> axons, boolean convolutionalBatchNorm) {
+	public DummyBatchNormDirectedAxonsComponent(String name, Axons<L, L, ?> axons) {
 		super(name, axons);
-		this.convolutionalBatchNorm = convolutionalBatchNorm;
 	}
 
 	@Override
@@ -71,8 +70,8 @@ public class DummyBatchNormDirectedAxonsComponent<L extends Neurons> extends
 	}
 
 	@Override
-	public BatchNormDirectedAxonsComponent<L, Axons<L, L, ?>> dup() {
-		return new DummyBatchNormDirectedAxonsComponent<>(name, axons.dup(), convolutionalBatchNorm);
+	public BatchNormDirectedAxonsComponent<L, Axons<L, L, ?>> dup(DirectedComponentFactory directedComponentFactory) {
+		return new DummyBatchNormDirectedAxonsComponent<>(name, axons.dup());
 	}
 
 	@Override
@@ -97,7 +96,6 @@ public class DummyBatchNormDirectedAxonsComponent<L extends Neurons> extends
 	@Override
 	protected AxonsType getAxonsType() {
 		return AxonsType.createSubType(
-				convolutionalBatchNorm ? AxonsType.getBaseType(AxonsBaseType.CONVOLUTIONAL_BATCH_NORM) :
 					AxonsType.getBaseType(AxonsBaseType.BATCH_NORM), super.getAxonsType().getId());
 	}
 

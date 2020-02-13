@@ -35,8 +35,7 @@ public class DefaultMaxPoolingAxonsImplTest extends Axons3DTestBase<MaxPoolingAx
 			Axons3DConfig config) {
 		config.withStrideHeight(2);
 		config.withStrideWidth(2);
-		config.setFilterWidthAndHeight(leftNeurons, rightNeurons);
-		return new DefaultMaxPoolingAxonsImpl(matrixFactory, leftNeurons, rightNeurons, config, false);
+		return new DefaultMaxPoolingAxonsImpl(matrixFactory, config, false);
 	}
 
 	@Override

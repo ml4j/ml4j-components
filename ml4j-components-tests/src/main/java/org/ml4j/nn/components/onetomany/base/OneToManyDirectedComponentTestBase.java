@@ -21,6 +21,7 @@ import org.junit.Test;
 import org.ml4j.nn.components.DirectedComponentsContext;
 import org.ml4j.nn.components.NeuralComponentBaseType;
 import org.ml4j.nn.components.base.TestBase;
+import org.ml4j.nn.components.factories.DirectedComponentFactory;
 import org.ml4j.nn.components.mocks.MockTestData;
 import org.ml4j.nn.components.onetomany.OneToManyDirectedComponent;
 import org.ml4j.nn.components.onetomany.OneToManyDirectedComponentActivation;
@@ -41,6 +42,10 @@ public abstract class OneToManyDirectedComponentTestBase extends TestBase {
 
 	@Mock
 	private DirectedComponentsContext mockDirectedComponentsContext;
+	
+	@Mock
+	protected DirectedComponentFactory mockDirectedComponentFactory;
+	
 
 	@Before
 	public void setup() {
@@ -102,7 +107,7 @@ public abstract class OneToManyDirectedComponentTestBase extends TestBase {
 		OneToManyDirectedComponent<?> oneToManyDirectedComponent = createOneToManyDirectedAxonsComponent(
 				() -> targetComponentCount);
 
-		OneToManyDirectedComponent<?> dupComponent = oneToManyDirectedComponent.dup();
+		OneToManyDirectedComponent<?> dupComponent = oneToManyDirectedComponent.dup(mockDirectedComponentFactory);
 
 		NeuronsActivation mockNeuronsActivation = MockTestData.mockNeuronsActivation(100, 32);
 

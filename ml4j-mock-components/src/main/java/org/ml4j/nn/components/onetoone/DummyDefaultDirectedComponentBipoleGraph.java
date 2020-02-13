@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.ml4j.nn.components.DirectedComponentsContext;
+import org.ml4j.nn.components.factories.DirectedComponentFactory;
 import org.ml4j.nn.components.manytomany.DefaultDirectedComponentBatch;
 import org.ml4j.nn.components.manytoone.PathCombinationStrategy;
 import org.ml4j.nn.components.onetone.DefaultChainableDirectedComponent;
@@ -72,8 +73,8 @@ public class DummyDefaultDirectedComponentBipoleGraph extends DefaultDirectedCom
 	}
 
 	@Override
-	public DefaultDirectedComponentBipoleGraph dup() {
-		return new DummyDefaultDirectedComponentBipoleGraph(name, inputNeurons, outputNeurons, parallelComponentBatch.dup(), pathCombinationStrategy);
+	public DefaultDirectedComponentBipoleGraph dup(DirectedComponentFactory directedComponentFactory) {
+		return new DummyDefaultDirectedComponentBipoleGraph(name, inputNeurons, outputNeurons, parallelComponentBatch.dup(directedComponentFactory), pathCombinationStrategy);
 	}
 	@Override
 	public Optional<NeuronsActivationFormat<?>> optimisedFor() {

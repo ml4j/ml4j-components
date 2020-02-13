@@ -22,6 +22,7 @@ import org.junit.Test;
 import org.ml4j.nn.components.DirectedComponentsContext;
 import org.ml4j.nn.components.NeuralComponentBaseType;
 import org.ml4j.nn.components.base.TestBase;
+import org.ml4j.nn.components.factories.DirectedComponentFactory;
 import org.ml4j.nn.components.manytoone.ManyToOneDirectedComponent;
 import org.ml4j.nn.components.manytoone.ManyToOneDirectedComponentActivation;
 import org.ml4j.nn.components.manytoone.PathCombinationStrategy;
@@ -43,6 +44,10 @@ public abstract class ManyToOneDirectedComponentTestBase extends TestBase {
 
 	@Mock
 	protected DirectedComponentsContext mockDirectedComponentsContext;
+	
+	@Mock
+	protected DirectedComponentFactory mockDirectedComponentFactory;
+	
 
 	@Before
 	public void setup() {
@@ -115,7 +120,7 @@ public abstract class ManyToOneDirectedComponentTestBase extends TestBase {
 		ManyToOneDirectedComponent<?> oneToManyDirectedComponent = createManyToOneDirectedAxonsComponent(
 				PathCombinationStrategy.FILTER_CONCAT, outputNeurons);
 
-		ManyToOneDirectedComponent<?> dupComponent = oneToManyDirectedComponent.dup();
+		ManyToOneDirectedComponent<?> dupComponent = oneToManyDirectedComponent.dup(mockDirectedComponentFactory);
 
 		Assert.assertNotNull(dupComponent);
 		Assert.assertEquals(NeuralComponentBaseType.MANY_TO_ONE,

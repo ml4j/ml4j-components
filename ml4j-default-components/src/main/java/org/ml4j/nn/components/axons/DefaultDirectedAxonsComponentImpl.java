@@ -19,6 +19,7 @@ import org.ml4j.nn.axons.Axons;
 import org.ml4j.nn.axons.AxonsActivation;
 import org.ml4j.nn.axons.AxonsContext;
 import org.ml4j.nn.components.axons.base.DirectedAxonsComponentBase;
+import org.ml4j.nn.components.factories.DirectedComponentFactory;
 import org.ml4j.nn.neurons.Neurons;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
@@ -73,7 +74,7 @@ public class DefaultDirectedAxonsComponentImpl<L extends Neurons, R extends Neur
 	}
 
 	@Override
-	public DirectedAxonsComponent<L, R, Axons<? extends L, ? extends R, ?>> dup() {
+	public DirectedAxonsComponent<L, R, Axons<? extends L, ? extends R, ?>> dup(DirectedComponentFactory directedComponentFactory) {
 		return new DefaultDirectedAxonsComponentImpl<>(name, axons.dup());
 	}
 	

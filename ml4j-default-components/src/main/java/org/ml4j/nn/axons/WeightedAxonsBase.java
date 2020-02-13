@@ -9,7 +9,8 @@ import org.ml4j.nn.neurons.format.NeuronsActivationFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public abstract class WeightedAxonsBase<L extends Neurons, R extends Neurons, A extends TrainableAxons<L, R, A>>
+public abstract class WeightedAxonsBase<L extends Neurons, R extends Neurons, A extends TrainableAxons<L, R, A>, C extends AxonsConfig<L, R>>
+		extends AxonsBase<L, R, A, C>
 		implements TrainableAxons<L, R, A> {
 
 	/**
@@ -19,26 +20,12 @@ public abstract class WeightedAxonsBase<L extends Neurons, R extends Neurons, A 
 
 	@SuppressWarnings("unused")
 	private static final Logger LOGGER = LoggerFactory.getLogger(WeightedAxonsBase.class);
-
-	protected L leftNeurons;
-	protected R rightNeurons;
+	
 	protected AxonWeights axonWeights;
-
-	public WeightedAxonsBase(L leftNeurons, R rightNeurons, AxonWeights axonWeights) {
-		super();
+	
+	public WeightedAxonsBase(C axonsConfig, AxonWeights axonWeights) {
+		super(axonsConfig);
 		this.axonWeights = axonWeights;
-		this.leftNeurons = leftNeurons;
-		this.rightNeurons = rightNeurons;
-	}
-
-	@Override
-	public L getLeftNeurons() {
-		return leftNeurons;
-	}
-
-	@Override
-	public R getRightNeurons() {
-		return rightNeurons;
 	}
 
 	@Override

@@ -24,33 +24,22 @@ public class DefaultConvolutionalAxonsImpl implements ConvolutionalAxons {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private Neurons3D leftNeurons;
-	private Neurons3D rightNeurons;
 	private Axons3DConfig config;
 	private FullyConnectedAxons fullyConnectedAxons;
 
-	public DefaultConvolutionalAxonsImpl(Neurons3D leftNeurons, Neurons3D rightNeurons,
-			FullyConnectedAxons fullyConnectedAxons, Axons3DConfig config) {
-		super();
-		this.leftNeurons = leftNeurons;
-		this.rightNeurons = rightNeurons;
-		this.config = config;
-		this.config.setFilterWidthAndHeight(leftNeurons, rightNeurons);
-		this.fullyConnectedAxons = fullyConnectedAxons;
-	}
-
-	public DefaultConvolutionalAxonsImpl(AxonsFactory axonsFactory, Neurons3D leftNeurons, Neurons3D rightNeurons,
+	public DefaultConvolutionalAxonsImpl(AxonsFactory axonsFactory,
 			Axons3DConfig config, WeightsMatrix connectionWeights,  BiasMatrix biases) {
-		super();
-		this.leftNeurons = leftNeurons;
-		this.rightNeurons = rightNeurons;
 		this.config = config;
-		this.config.setFilterWidthAndHeight(leftNeurons, rightNeurons);
-		this.fullyConnectedAxons = axonsFactory.createFullyConnectedAxons(
-				new Neurons(config.getFilterWidth() * config.getFilterHeight() * leftNeurons.getDepth(), leftNeurons.hasBiasUnit()),
-				new Neurons(rightNeurons.getDepth(), rightNeurons.hasBiasUnit()), 
+		this.fullyConnectedAxons = axonsFactory.createFullyConnectedAxons(new AxonsConfig<>(
+				new Neurons(config.getFilterWidth() * config.getFilterHeight() * config.getLeftNeurons().getDepth(), config.getLeftNeurons().hasBiasUnit()),
+				new Neurons(config.getRightNeurons().getDepth(), config.getRightNeurons().hasBiasUnit())), 
 				connectionWeights,
 				biases);
+	}
+	
+	private DefaultConvolutionalAxonsImpl(FullyConnectedAxons fullyConnectedAxons, Axons3DConfig config) {
+		this.config = config;
+		this.fullyConnectedAxons = fullyConnectedAxons;
 	}
 
 	@Override
@@ -61,21 +50,21 @@ public class DefaultConvolutionalAxonsImpl implements ConvolutionalAxons {
 
 	@Override
 	public Neurons3D getLeftNeurons() {
-		return leftNeurons;
+		return config.getLeftNeurons();
 	}
 
 	@Override
 	public Neurons3D getRightNeurons() {
-		return rightNeurons;
+		return config.getRightNeurons();
 	}
 
 	public NeuronsActivation reformatLeftToRightInput(MatrixFactory matrixFactory,
 			NeuronsActivation leftNeuronsActivation) {
 
 		final NeuronsActivation reformatted;
-			ImageNeuronsActivation imageAct = leftNeuronsActivation.asImageNeuronsActivation(leftNeurons, DimensionScope.INPUT);
+			ImageNeuronsActivation imageAct = leftNeuronsActivation.asImageNeuronsActivation(getLeftNeurons(), DimensionScope.INPUT);
 			reformatted = new NeuronsActivationImpl(
-					new Neurons(leftNeurons.getDepth() * config.getFilterWidth() * config.getFilterHeight(), leftNeurons.hasBiasUnit()),
+					new Neurons(getLeftNeurons().getDepth() * config.getFilterWidth() * config.getFilterHeight(), getLeftNeurons().hasBiasUnit()),
 					imageAct.im2ColConv(matrixFactory, config),
 					ImageNeuronsActivationFormat.ML4J_IM_TO_COL_CONV_FORMAT);
 			if (!imageAct.isImmutable()) {
@@ -88,7 +77,7 @@ public class DefaultConvolutionalAxonsImpl implements ConvolutionalAxons {
 	
 	public NeuronsActivation reformatLeftToRightOutput(MatrixFactory matrixFactory, NeuronsActivation output,
 			int exampleCount) {
-		output.reshape(rightNeurons.getNeuronCountExcludingBias(), exampleCount);
+		output.reshape(getRightNeurons().getNeuronCountExcludingBias(), exampleCount);
 		
 		return output.asImageNeuronsActivation(getRightNeurons(), DimensionScope.OUTPUT);
 
@@ -165,15 +154,15 @@ public class DefaultConvolutionalAxonsImpl implements ConvolutionalAxons {
 		if (input.isImmutable()) {
 			throw new UnsupportedOperationException();
 		} else {
-			input.reshape(rightNeurons.getDepth(),
-					rightNeurons.getWidth() * rightNeurons.getHeight() * input.getExampleCount());
+			input.reshape(getRightNeurons().getDepth(),
+					getRightNeurons().getWidth() * getRightNeurons().getHeight() * input.getExampleCount());
 			return input;
 		}
 	}
 
 	@Override
 	public ConvolutionalAxons dup() {
-		return new DefaultConvolutionalAxonsImpl(leftNeurons, rightNeurons, fullyConnectedAxons, config.dup());
+		return new DefaultConvolutionalAxonsImpl(fullyConnectedAxons.dup(), config.dup());
 	}
 
 	@Override

@@ -1,7 +1,6 @@
 package org.ml4j.nn.axons.base;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.ml4j.nn.axons.Axons;
 import org.ml4j.nn.axons.Axons3DConfig;
@@ -28,9 +27,9 @@ public abstract class Axons3DTestBase<A extends Axons<?, ?, ?>> extends TestBase
 
 	protected NeuronsActivation mockLeftToRightInputActivation;
 
-	@Before
 	public void setUp() {
-		axons = createAxonsUnderTest(leftNeurons, rightNeurons, new Axons3DConfig());
+		Axons3DConfig config = new Axons3DConfig(leftNeurons, rightNeurons);
+		axons = createAxonsUnderTest(leftNeurons, rightNeurons, config);
 	}
 
 	protected abstract A createAxonsUnderTest(Neurons3D leftNeurons, Neurons3D rightNeurons, Axons3DConfig config);
