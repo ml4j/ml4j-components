@@ -98,8 +98,8 @@ public class DummyDirectedComponentFactoryImpl implements DirectedComponentFacto
 	}
 
 	@Override
-	public <N extends Neurons> BatchNormDirectedAxonsComponent<N, ?> createBatchNormAxonsComponent(String name, BatchNormConfig<N> batchNormConfig) {
-		return new DummyBatchNormDirectedAxonsComponent<>(name, createDummyAxons(AxonsType.getBaseType(AxonsBaseType.SCALE_AND_SHIFT), batchNormConfig.getNeurons(), batchNormConfig.getNeurons()));
+	public <N extends Neurons> BatchNormDirectedAxonsComponent<N, ?> createBatchNormAxonsComponent(String name, N neurons, BatchNormConfig<N> batchNormConfig) {
+		return new DummyBatchNormDirectedAxonsComponent<>(name, createDummyAxons(AxonsType.getBaseType(AxonsBaseType.SCALE_AND_SHIFT), neurons, neurons));
 	}
 
 	@Override
