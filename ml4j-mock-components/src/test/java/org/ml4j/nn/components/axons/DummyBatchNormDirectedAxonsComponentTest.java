@@ -13,7 +13,7 @@ public class DummyBatchNormDirectedAxonsComponentTest extends BatchNormDirectedA
 	@Override
 	protected <N extends Neurons> BatchNormDirectedAxonsComponent<N, ?> createBatchNormDirectedAxonsComponentUnderTest(
 			ScaleAndShiftAxons<N> axons) {
-		return new DummyBatchNormDirectedAxonsComponent<>("someName", axons, true);
+		return new DummyBatchNormDirectedAxonsComponent<>("someName", axons);
 	}
 
 	@Override

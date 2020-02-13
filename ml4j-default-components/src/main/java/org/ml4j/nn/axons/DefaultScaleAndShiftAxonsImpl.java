@@ -3,7 +3,7 @@ package org.ml4j.nn.axons;
 import org.ml4j.Matrix;
 import org.ml4j.nn.neurons.Neurons;
 
-public class DefaultScaleAndShiftAxonsImpl<N extends Neurons> extends WeightedAxonsBase<N, N, ScaleAndShiftAxons<N>>
+public class DefaultScaleAndShiftAxonsImpl<N extends Neurons> extends WeightedAxonsBase<N, N, ScaleAndShiftAxons<N>, AxonsConfig<N, N>>
 		implements ScaleAndShiftAxons<N> {
 
 	public DefaultScaleAndShiftAxonsImpl(AxonsConfig<N, N> axonsConfig, AxonWeights axonWeights) {

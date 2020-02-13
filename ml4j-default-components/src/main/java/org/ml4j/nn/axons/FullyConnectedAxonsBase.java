@@ -9,7 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public abstract class FullyConnectedAxonsBase<L extends Neurons, R extends Neurons, A extends TrainableAxons<L, R, A>>
-		extends WeightedAxonsBase<L, R, A> implements TrainableAxons<L, R, A> {
+		extends WeightedAxonsBase<L, R, A, AxonsConfig<L, R>> implements TrainableAxons<L, R, A> {
 
 	/**
 	 * Default serialization id.
@@ -155,6 +155,7 @@ public abstract class FullyConnectedAxonsBase<L extends Neurons, R extends Neuro
 		}
 	}
 
+	@Override
 	protected boolean isLeftInputDropoutSupported() {
 		return true;
 	}

@@ -55,13 +55,11 @@ public class DefaultBatchNormDirectedAxonsComponentImpl<L extends Neurons> exten
 	private Matrix exponentiallyWeightedAverageInputFeatureVariances;
 	// TODO
 	private float betaForExponentiallyWeightedAverages = 0.99f;
-	private boolean convolutionalBatchNorm;
-
-	public DefaultBatchNormDirectedAxonsComponentImpl(String name, Axons<L, L, ?> axons, Matrix mean, Matrix stddev, boolean convolutionalBatchNorm) {
+	
+	public DefaultBatchNormDirectedAxonsComponentImpl(String name, Axons<L, L, ?> axons, Matrix mean, Matrix stddev) {
 		super(name, axons);
 		this.exponentiallyWeightedAverageInputFeatureMeans = mean;
 		this.exponentiallyWeightedAverageInputFeatureVariances = stddev;
-		this.convolutionalBatchNorm = convolutionalBatchNorm;
 	}
 
 	@Override
@@ -96,12 +94,13 @@ public class DefaultBatchNormDirectedAxonsComponentImpl<L extends Neurons> exten
 				exponentiallyWeightedAverageInputFeatureMeans == null ? null
 						: exponentiallyWeightedAverageInputFeatureMeans.dup(),
 				exponentiallyWeightedAverageInputFeatureVariances == null ? null
-						: exponentiallyWeightedAverageInputFeatureVariances.dup(), convolutionalBatchNorm);
+						: exponentiallyWeightedAverageInputFeatureVariances.dup());
 	}
 
 	@Override
 	public DirectedAxonsComponentActivation forwardPropagate(NeuronsActivation input, AxonsContext axonsContext) {
 		LOGGER.debug("Forward propagating through DefaultBatchNormDirectedAxonsComponentImpl:" + getName());
+		
 		// TODO
 		/*
 		 * if (neuronsActivation.getFeatureCount() !=
@@ -216,8 +215,7 @@ public class DefaultBatchNormDirectedAxonsComponentImpl<L extends Neurons> exten
 	@Override
 	protected AxonsType getAxonsType() {
 		return AxonsType.createSubType(
-				convolutionalBatchNorm ? AxonsType.getBaseType(AxonsBaseType.CONVOLUTIONAL_BATCH_NORM) :
-					AxonsType.getBaseType(AxonsBaseType.BATCH_NORM), super.getAxonsType().getId());
+				AxonsType.getBaseType(AxonsBaseType.BATCH_NORM), super.getAxonsType().getId());
 	}
 
 

@@ -2,8 +2,10 @@ package org.ml4j.nn.factories;
 
 import org.ml4j.MatrixFactory;
 import org.ml4j.nn.axons.AveragePoolingAxons;
+import org.ml4j.nn.axons.Axons;
 import org.ml4j.nn.axons.Axons3DConfig;
 import org.ml4j.nn.axons.AxonsConfig;
+import org.ml4j.nn.axons.AxonsType;
 import org.ml4j.nn.axons.BiasMatrix;
 import org.ml4j.nn.axons.ConvolutionalAxons;
 import org.ml4j.nn.axons.FullyConnectedAxons;
@@ -17,6 +19,7 @@ import org.ml4j.nn.axons.mocks.DummyFullyConnectedAxonsImpl;
 import org.ml4j.nn.axons.mocks.DummyMaxPoolingAxonsImpl;
 import org.ml4j.nn.axons.mocks.DummyScaleAndShiftAxonsImpl;
 import org.ml4j.nn.neurons.Neurons;
+import org.ml4j.nn.neurons.Neurons3D;
 
 
 public class DummyAxonsFactoryImpl implements AxonsFactory {
@@ -66,6 +69,21 @@ public class DummyAxonsFactoryImpl implements AxonsFactory {
 	public <N extends Neurons> ScaleAndShiftAxons<N> createScaleAndShiftAxons(AxonsConfig<N, N> axonsConfig, 
 			WeightsMatrix gamma, BiasMatrix beta) {
 		return new DummyScaleAndShiftAxonsImpl<>(matrixFactory, axonsConfig.getLeftNeurons(), axonsConfig.getRightNeurons());
+	}
+
+	@Override
+	public Axons<Neurons, Neurons, ?> createAxons(AxonsType arg0, AxonsConfig<Neurons, Neurons> arg1) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public Axons<Neurons3D, Neurons3D, ?> createAxons3D(AxonsType arg0, AxonsConfig<Neurons3D, Neurons3D> arg1) {
+		throw new UnsupportedOperationException();
+	}
+	
+	@Override
+	public Axons<Neurons3D, Neurons3D, ?> createAxons3DWith3DConfig(AxonsType arg0, Axons3DConfig arg1) {
+		throw new UnsupportedOperationException();
 	}
 
 }

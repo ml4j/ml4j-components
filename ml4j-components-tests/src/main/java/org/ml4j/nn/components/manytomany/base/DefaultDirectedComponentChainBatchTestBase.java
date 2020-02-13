@@ -15,6 +15,7 @@ package org.ml4j.nn.components.manytomany.base;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -78,6 +79,12 @@ public abstract class DefaultDirectedComponentChainBatchTestBase extends TestBas
 
 		Mockito.when(mockDirectedComponentsContext.getMatrixFactory()).thenReturn(matrixFactory);
 
+		Mockito.when(mockComponent1.isSupported(Mockito.any())).thenReturn(true);
+		Mockito.when(mockComponent1.getName()).thenReturn("mockComponent1");
+		Mockito.when(mockComponent2.getName()).thenReturn("mockComponent2");
+		Mockito.when(mockComponent2.isSupported(Mockito.any())).thenReturn(true);
+		Mockito.when(mockComponent1.optimisedFor()).thenReturn(Optional.empty());
+		Mockito.when(mockComponent2.optimisedFor()).thenReturn(Optional.empty());
 		this.mockNeuronsActivation1 = createNeuronsActivation(100, 32);
 		this.mockNeuronsActivation2 = createNeuronsActivation(200, 32);
 		this.mockNeuronsActivation3 = createNeuronsActivation(300, 32);

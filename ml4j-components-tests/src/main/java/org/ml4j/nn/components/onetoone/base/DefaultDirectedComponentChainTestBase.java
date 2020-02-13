@@ -73,6 +73,12 @@ public abstract class DefaultDirectedComponentChainTestBase extends TestBase {
 	@Before
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
+	
+		Mockito.when(mockComponent1.isSupported(Mockito.any())).thenReturn(true);
+		Mockito.when(mockComponent1.getName()).thenReturn("mockComponent1");
+		Mockito.when(mockComponent2.getName()).thenReturn("mockComponent2");
+		Mockito.when(mockComponent2.isSupported(Mockito.any())).thenReturn(true);
+
 
 		mockNeuronsActivation1 = createNeuronsActivation(100, 32);
 		mockNeuronsActivation2 = createNeuronsActivation(200, 32);

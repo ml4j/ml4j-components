@@ -15,6 +15,7 @@ package org.ml4j.nn.components.onetoone;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.ml4j.nn.components.DirectedComponentActivationLifecycle;
@@ -26,6 +27,9 @@ import org.ml4j.nn.components.onetone.DefaultDirectedComponentChain;
 import org.ml4j.nn.components.onetone.DefaultDirectedComponentChainActivation;
 import org.ml4j.nn.components.onetoone.base.DefaultDirectedComponentChainBase;
 import org.ml4j.nn.neurons.NeuronsActivation;
+import org.ml4j.nn.neurons.format.NeuronsActivationFormat;
+import org.ml4j.nn.neurons.format.features.Dimension;
+import org.ml4j.nn.neurons.format.features.DimensionScope;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -68,6 +72,21 @@ public class DefaultDirectedComponentChainImpl extends DefaultDirectedComponentC
 		int inFlightActivationFeatureCount = neuronsActivation.getFeatureCount();
 		List<DefaultChainableDirectedComponentActivation> activations = new ArrayList<>();
 		for (DefaultChainableDirectedComponent<?, ?> component : sequentialComponents) {
+			NeuronsActivationFormat<?> neuronsActivationFormat = neuronsActivation.getFormat();
+			if (neuronsActivationFormat != null) {
+				if (!component.isSupported(neuronsActivationFormat)) {
+					throw new IllegalArgumentException(component.getName() + " does not support format:" + neuronsActivationFormat);
+				}
+				Optional<NeuronsActivationFormat<?>> optimisedForOptional = component.optimisedFor();
+				NeuronsActivationFormat<?> optimisedFor = optimisedForOptional == null ? null :  !optimisedForOptional.isPresent() ? null : optimisedForOptional.get();
+				List<Dimension> optimisedForDimensions  = optimisedFor == null ? null :  optimisedFor.getDimensions();
+				
+				List<Dimension> neuronsActivationDimensions  = neuronsActivationFormat == null ? null :  neuronsActivationFormat.getDimensions();
+
+				if (optimisedForDimensions != null && neuronsActivationDimensions != null && !Dimension.isEquivalent(optimisedForDimensions, neuronsActivationDimensions, DimensionScope.INPUT))  {
+					LOGGER.warn(component.getName() + " is not using optimal input format of:" + optimisedFor);
+				}
+			}
 			DefaultChainableDirectedComponentActivation activation = forwardPropagate(inFlightActivation, component,
 					context);
 			activations.add(activation);

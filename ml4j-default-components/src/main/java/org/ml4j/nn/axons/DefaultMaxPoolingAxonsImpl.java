@@ -71,7 +71,6 @@ public class DefaultMaxPoolingAxonsImpl implements MaxPoolingAxons {
 
 			float scaleDown = inputDim / outputDim;
 			reformatted.applyValueModifier(v -> v * scaleDown);
-			// reformatted.muli(scaleDown);
 		}
 
 		return reformatted;
