@@ -204,15 +204,20 @@ public class DefaultDirectedComponentBipoleGraphImpl extends DefaultDirectedComp
 	
 	@Override
 	public Optional<NeuronsActivationFormat<?>> optimisedFor() {
-		return NeuronsActivationFormat
-				.intersectOptionals(Arrays.asList(oneToManyDirectedComponent.optimisedFor(),
-						parallelComponentBatch.optimisedFor(), manyToOneDirectedComponent.optimisedFor()));
+		if (oneToManyDirectedComponent != null && manyToOneDirectedComponent != null) {
+			return NeuronsActivationFormat
+					.intersectOptionals(Arrays.asList(oneToManyDirectedComponent.optimisedFor(),
+							parallelComponentBatch.optimisedFor(), manyToOneDirectedComponent.optimisedFor()));
+		} else {
+			return parallelComponentBatch.optimisedFor();
+		}
+		
 	}
 	
 	@Override
 	public boolean isSupported(NeuronsActivationFormat<?> format) {
-		return oneToManyDirectedComponent.isSupported(format)
+		return (oneToManyDirectedComponent == null || oneToManyDirectedComponent.isSupported(format))
 				&& NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET.equals(format.getFeatureOrientation())
-				&& parallelComponentBatch.isSupported(format) && manyToOneDirectedComponent.isSupported(format);
+				&& parallelComponentBatch.isSupported(format) && (manyToOneDirectedComponent == null || manyToOneDirectedComponent.isSupported(format));
 	}
 }
