@@ -228,4 +228,12 @@ public class DefaultBatchNormDirectedAxonsComponentImpl<L extends Neurons> exten
 	public boolean isSupported(NeuronsActivationFormat<?> format) {
 		return axons.isSupported(format) && NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET.equals(format.getFeatureOrientation());
 	}
+	
+
+	@Override
+	public String toString() {
+		return "DefaultBatchNormDirectedAxonsComponentImpl [name='" + name + "', axonsType=" + getAxonsType()
+				+ ", inputNeurons=" + getInputNeurons() + ", outputNeurons()=" + getOutputNeurons() + "]";
+	}
+	
 }

@@ -74,4 +74,10 @@ public class DummyDirectedAxonsComponent<L extends Neurons, R extends Neurons>
 	public boolean isSupported(NeuronsActivationFormat<?> format) {
 		return axons.isSupported(format);
 	}
+	
+	@Override
+	public String toString() {
+		return "DummyDirectedAxonsComponent [name='" + name + "', axonsType=" + getAxonsType()
+				+ ", inputNeurons=" + getInputNeurons() + ", outputNeurons()=" + getOutputNeurons() + "]";
+	}
 }
