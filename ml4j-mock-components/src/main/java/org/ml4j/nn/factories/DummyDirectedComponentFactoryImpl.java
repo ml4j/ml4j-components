@@ -19,13 +19,15 @@ import org.ml4j.nn.activationfunctions.ActivationFunctionProperties;
 import org.ml4j.nn.activationfunctions.ActivationFunctionType;
 import org.ml4j.nn.activationfunctions.DifferentiableActivationFunction;
 import org.ml4j.nn.axons.Axons;
-import org.ml4j.nn.axons.Axons3DConfig;
 import org.ml4j.nn.axons.AxonsBaseType;
-import org.ml4j.nn.axons.AxonsConfig;
+import org.ml4j.nn.axons.AxonsContextConfigurer;
 import org.ml4j.nn.axons.AxonsType;
-import org.ml4j.nn.axons.BatchNormConfig;
-import org.ml4j.nn.axons.BiasMatrix;
+import org.ml4j.nn.axons.BatchNormAxonsConfig;
+import org.ml4j.nn.axons.BiasVector;
+import org.ml4j.nn.axons.ConvolutionalAxonsConfig;
+import org.ml4j.nn.axons.FullyConnectedAxonsConfig;
 import org.ml4j.nn.axons.NoOpAxons;
+import org.ml4j.nn.axons.PoolingAxonsConfig;
 import org.ml4j.nn.axons.WeightsMatrix;
 import org.ml4j.nn.components.DummyGenericComponent;
 import org.ml4j.nn.components.NeuralComponentType;
@@ -66,13 +68,13 @@ public class DummyDirectedComponentFactoryImpl implements DirectedComponentFacto
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public DirectedAxonsComponent<Neurons, Neurons, ?> createFullyConnectedAxonsComponent(String name, AxonsConfig<Neurons, Neurons> axonsConfig,  WeightsMatrix connectionWeights, BiasMatrix biases) {
-		return createDirectedAxonsComponent(name, AxonsType.getBaseType(AxonsBaseType.FULLY_CONNECTED), axonsConfig.getLeftNeurons(), axonsConfig.getRightNeurons());
+	public DirectedAxonsComponent<Neurons, Neurons, ?> createFullyConnectedAxonsComponent(String name, FullyConnectedAxonsConfig config,  WeightsMatrix connectionWeights, BiasVector biases) {
+		return createDirectedAxonsComponent(name, AxonsType.getBaseType(AxonsBaseType.FULLY_CONNECTED), config.getAxonsConfig().getLeftNeurons(), config.getAxonsConfig().getRightNeurons());
 	}
 
 	@Override
 	public <L extends Neurons, R extends Neurons> DirectedAxonsComponent<L, R, ?> createDirectedAxonsComponent(String name, 
-			Axons<L, R, ?> axons) {
+			Axons<L, R, ?> axons, AxonsContextConfigurer axonsContextConfigurer) {
 		return createDirectedAxonsComponent(name, axons.getAxonsType(), axons.getLeftNeurons(), axons.getRightNeurons());
 	}
 
@@ -83,23 +85,23 @@ public class DummyDirectedComponentFactoryImpl implements DirectedComponentFacto
 	}
 
 	@Override
-	public DirectedAxonsComponent<Neurons3D, Neurons3D, ?> createConvolutionalAxonsComponent(String name, Axons3DConfig config, WeightsMatrix connectionWeights, BiasMatrix biases) {
-		return createDirectedAxonsComponent(name, AxonsType.getBaseType(AxonsBaseType.CONVOLUTIONAL), config.getLeftNeurons(), config.getRightNeurons());
+	public DirectedAxonsComponent<Neurons3D, Neurons3D, ?> createConvolutionalAxonsComponent(String name, ConvolutionalAxonsConfig config, WeightsMatrix connectionWeights, BiasVector biases) {
+		return createDirectedAxonsComponent(name, AxonsType.getBaseType(AxonsBaseType.CONVOLUTIONAL), config.getAxonsConfig().getLeftNeurons(), config.getAxonsConfig().getRightNeurons());
 	}
 
 	@Override
-	public DirectedAxonsComponent<Neurons3D, Neurons3D, ?> createMaxPoolingAxonsComponent(String name, Axons3DConfig config, boolean scaleOutputs) {
-		return createDirectedAxonsComponent(name, AxonsType.getBaseType(AxonsBaseType.MAX_POOLING), config.getLeftNeurons(), config.getRightNeurons());
+	public DirectedAxonsComponent<Neurons3D, Neurons3D, ?> createMaxPoolingAxonsComponent(String name, PoolingAxonsConfig config, boolean scaleOutputs) {
+		return createDirectedAxonsComponent(name, AxonsType.getBaseType(AxonsBaseType.MAX_POOLING), config.getAxonsConfig().getLeftNeurons(), config.getAxonsConfig().getRightNeurons());
 	}
 
 	@Override
-	public DirectedAxonsComponent<Neurons3D, Neurons3D, ?> createAveragePoolingAxonsComponent(String name, Axons3DConfig config) {
-		return createDirectedAxonsComponent(name, AxonsType.getBaseType(AxonsBaseType.AVERAGE_POOLING), config.getLeftNeurons(), config.getRightNeurons());
+	public DirectedAxonsComponent<Neurons3D, Neurons3D, ?> createAveragePoolingAxonsComponent(String name, PoolingAxonsConfig config) {
+		return createDirectedAxonsComponent(name, AxonsType.getBaseType(AxonsBaseType.AVERAGE_POOLING), config.getAxonsConfig().getLeftNeurons(), config.getAxonsConfig().getRightNeurons());
 	}
 
 	@Override
-	public <N extends Neurons> BatchNormDirectedAxonsComponent<N, ?> createBatchNormAxonsComponent(String name, N neurons, BatchNormConfig<N> batchNormConfig) {
-		return new DummyBatchNormDirectedAxonsComponent<>(name, createDummyAxons(AxonsType.getBaseType(AxonsBaseType.SCALE_AND_SHIFT), neurons, neurons));
+	public <N extends Neurons> BatchNormDirectedAxonsComponent<N, ?> createBatchNormAxonsComponent(String name, BatchNormAxonsConfig<N> axonsConfig) {
+		return new DummyBatchNormDirectedAxonsComponent<>(name, createDummyAxons(AxonsType.getBaseType(AxonsBaseType.SCALE_AND_SHIFT), axonsConfig.getNeurons(), axonsConfig.getNeurons()));
 	}
 
 	@Override

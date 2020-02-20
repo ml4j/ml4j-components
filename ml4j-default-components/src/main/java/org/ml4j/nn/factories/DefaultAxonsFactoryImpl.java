@@ -24,8 +24,8 @@ import org.ml4j.nn.axons.Axons3DConfig;
 import org.ml4j.nn.axons.AxonsBaseType;
 import org.ml4j.nn.axons.AxonsConfig;
 import org.ml4j.nn.axons.AxonsType;
-import org.ml4j.nn.axons.BiasMatrix;
-import org.ml4j.nn.axons.BiasMatrixImpl;
+import org.ml4j.nn.axons.BiasVector;
+import org.ml4j.nn.axons.BiasVectorImpl;
 import org.ml4j.nn.axons.ConvolutionalAxons;
 import org.ml4j.nn.axons.DefaultAveragePoolingAxonsImpl;
 import org.ml4j.nn.axons.DefaultConvolutionalAxonsImpl;
@@ -36,6 +36,7 @@ import org.ml4j.nn.axons.DefaultOneByOneConvolutionalAxonsImpl;
 import org.ml4j.nn.axons.DefaultScaleAndShiftAxonWeightsInitialiser;
 import org.ml4j.nn.axons.DefaultScaleAndShiftAxonsImpl;
 import org.ml4j.nn.axons.DefaultSpaceToDepthAxons;
+import org.ml4j.nn.axons.FeaturesVectorFormat;
 import org.ml4j.nn.axons.FullyConnectedAxonWeightsImpl;
 import org.ml4j.nn.axons.FullyConnectedAxons;
 import org.ml4j.nn.axons.MaxPoolingAxons;
@@ -74,13 +75,13 @@ public class DefaultAxonsFactoryImpl implements AxonsFactory {
 
 	@Override
 	public FullyConnectedAxons createFullyConnectedAxons(AxonsConfig<Neurons, Neurons> axonsConfig,
-			WeightsMatrix connectionWeights, BiasMatrix biases) {
+			WeightsMatrix connectionWeights, BiasVector biases) {
 		return createFullyConnectedAxons(axonsConfig, connectionWeights, biases, null);
 	}
 
 	@Override
 	public FullyConnectedAxons createFullyConnectedAxons(AxonsConfig<Neurons, Neurons> axonsConfig,
-			WeightsMatrix connectionWeights, BiasMatrix leftToRightBiases, BiasMatrix rightToLeftBiases) {
+			WeightsMatrix connectionWeights, BiasVector leftToRightBiases, BiasVector rightToLeftBiases) {
 
 		if (connectionWeights == null || connectionWeights.getFormat() == null) {
 			throw new IllegalArgumentException("Connection weights format cannot be null");
@@ -89,22 +90,22 @@ public class DefaultAxonsFactoryImpl implements AxonsFactory {
 		AxonWeightsInitialiser axonWeightsInitialiser = new DefaultFullyConnectedAxonWeightsInitialiser(
 				axonsConfig.getLeftNeurons(), axonsConfig.getRightNeurons());
 
-		WeightsMatrix initialConnectionWeights = connectionWeights.getWeights() == null ? new WeightsMatrixImpl(
+		WeightsMatrix initialConnectionWeights = connectionWeights.getMatrix() == null ? new WeightsMatrixImpl(
 				axonWeightsInitialiser.getInitialConnectionWeights(matrixFactory), connectionWeights.getFormat())
 				: connectionWeights;
 		Optional<Matrix> initialLeftToRightBiasMatrix = leftToRightBiases == null
 				? axonWeightsInitialiser.getInitialLeftToRightBiases(matrixFactory)
-				: Optional.of(leftToRightBiases.getWeights());
+				: Optional.of(leftToRightBiases.getVector());
 		Optional<Matrix> initialRightToLeftBiasMatrix = rightToLeftBiases == null
 				? axonWeightsInitialiser.getInitialRightToLeftBiases(matrixFactory)
-				: Optional.of(rightToLeftBiases.getWeights());
+				: Optional.of(rightToLeftBiases.getVector());
 
-		Optional<BiasMatrix> initialLeftToRightBiases = initialLeftToRightBiasMatrix.isPresent()
-				? Optional.of(new BiasMatrixImpl(initialLeftToRightBiasMatrix.get()))
+		Optional<BiasVector> initialLeftToRightBiases = initialLeftToRightBiasMatrix.isPresent()
+				? Optional.of(new BiasVectorImpl(initialLeftToRightBiasMatrix.get(), FeaturesVectorFormat.DEFAULT_BIAS_FORMAT))
 				: Optional.empty();
 
-		Optional<BiasMatrix> initialRightToLeftBiases = initialRightToLeftBiasMatrix.isPresent()
-				? Optional.of(new BiasMatrixImpl(initialRightToLeftBiasMatrix.get()))
+		Optional<BiasVector> initialRightToLeftBiases = initialRightToLeftBiasMatrix.isPresent()
+				? Optional.of(new BiasVectorImpl(initialRightToLeftBiasMatrix.get(), FeaturesVectorFormat.DEFAULT_BIAS_FORMAT))
 				: Optional.empty();
 
 		return new DefaultFullyConnectedAxonsImpl(axonsConfig,
@@ -125,7 +126,7 @@ public class DefaultAxonsFactoryImpl implements AxonsFactory {
 
 	@Override
 	public ConvolutionalAxons createConvolutionalAxons(Axons3DConfig config, WeightsMatrix connectionWeights,
-			BiasMatrix biases) {
+			BiasVector biases) {
 		if (DefaultOneByOneConvolutionalAxonsImpl.isEligible(config)) {
 
 			return new DefaultOneByOneConvolutionalAxonsImpl(this, config, connectionWeights, biases);
@@ -141,7 +142,7 @@ public class DefaultAxonsFactoryImpl implements AxonsFactory {
 
 	@Override
 	public <N extends Neurons> ScaleAndShiftAxons<N> createScaleAndShiftAxons(AxonsConfig<N, N> axonsConfig,
-			WeightsMatrix gamma, BiasMatrix beta) {
+			WeightsMatrix gamma, BiasVector beta) {
 
 		if (gamma == null) {
 			throw new IllegalArgumentException("Gamma cannot be null");
@@ -150,52 +151,52 @@ public class DefaultAxonsFactoryImpl implements AxonsFactory {
 		AxonWeightsInitialiser axonWeightsInitialiser = new DefaultScaleAndShiftAxonWeightsInitialiser(
 				axonsConfig.getLeftNeurons());
 
-		Matrix initialGammaMatrix = gamma.getWeights() == null
+		Matrix initialGammaMatrix = gamma.getMatrix() == null
 				? axonWeightsInitialiser.getInitialConnectionWeights(matrixFactory)
-				: gamma.getWeights();
+				: gamma.getMatrix();
 		Optional<Matrix> initialBeta = beta == null ? axonWeightsInitialiser.getInitialLeftToRightBiases(matrixFactory)
-				: Optional.of(beta.getWeights());
+				: Optional.of(beta.getVector());
 
 		WeightsMatrix intialGamma = new WeightsMatrixImpl(initialGammaMatrix, gamma.getFormat());
 
 		ScaleAndShiftAxonWeightsImpl weights = new ScaleAndShiftAxonWeightsImpl(
 				axonsConfig.getLeftNeurons().getNeuronCountExcludingBias(),
 				axonsConfig.getRightNeurons().getNeuronCountExcludingBias(), intialGamma,
-				initialBeta.isPresent() ? new BiasMatrixImpl(initialBeta.get()) : null, null);
+				initialBeta.isPresent() ? new BiasVectorImpl(initialBeta.get(), FeaturesVectorFormat.DEFAULT_BIAS_FORMAT) : null, null);
 		return new DefaultScaleAndShiftAxonsImpl<>(axonsConfig, weights);
 	}
 
 	@Override
-	public Axons<Neurons, Neurons, ?> createAxons(AxonsType axonsType, AxonsConfig<Neurons, Neurons> axonsConfig) {
-		if (axonsType.getBaseType().equals(AxonsBaseType.FULLY_CONNECTED)) {
-			return createFullyConnectedAxons(axonsConfig, null, null);
-		} else if (axonsType.getBaseType().equals(AxonsBaseType.SCALE_AND_SHIFT)) {
-			return createScaleAndShiftAxons(axonsConfig, null, null);
-		} else if (axonsType.getBaseType().equals(AxonsBaseType.PASS_THROUGH)) {
-			return new PassThroughAxonsImpl<>(axonsConfig.getLeftNeurons(), axonsConfig.getRightNeurons());
+	public <A extends Axons<Neurons, Neurons, ?>> A createAxons(AxonsType axonsType, Class<A> axonsClass, AxonsConfig<Neurons, Neurons> axonsConfig) {
+		if (axonsType.getBaseType().equals(AxonsBaseType.FULLY_CONNECTED) && axonsClass.isAssignableFrom(FullyConnectedAxons.class)) {
+			return axonsClass.cast(createFullyConnectedAxons(axonsConfig, null, null));
+		} else if (axonsType.getBaseType().equals(AxonsBaseType.SCALE_AND_SHIFT) && axonsClass.isAssignableFrom(ScaleAndShiftAxons.class)) {
+			return axonsClass.cast(createScaleAndShiftAxons(axonsConfig, null, null));
+		} else if (axonsType.getBaseType().equals(AxonsBaseType.PASS_THROUGH) && axonsClass.isAssignableFrom(PassThroughAxonsImpl.class) ) {
+			return axonsClass.cast(new PassThroughAxonsImpl<>(axonsConfig.getLeftNeurons(), axonsConfig.getRightNeurons()));
 		} else {
 			throw new IllegalArgumentException("Unable to create axons of type:" + axonsType);
 		}
 	}
 
 	@Override
-	public Axons<Neurons3D, Neurons3D, ?> createAxons3D(AxonsType axonsType, AxonsConfig<Neurons3D, Neurons3D> config) {
-		if (axonsType.equals(DefaultSpaceToDepthAxons.SPACE_TO_DEPTH_AXONS_TYPE)) {
-			return new DefaultSpaceToDepthAxons(config);
+	public <A extends Axons<Neurons3D, Neurons3D, ?>> A createAxons3D(AxonsType axonsType, Class<A> axonsClass, AxonsConfig<Neurons3D, Neurons3D> config) {
+		if (axonsType.equals(DefaultSpaceToDepthAxons.SPACE_TO_DEPTH_AXONS_TYPE) && axonsClass.isAssignableFrom(DefaultSpaceToDepthAxons.class)) {
+			return axonsClass.cast(new DefaultSpaceToDepthAxons(config));
 		}
 		throw new IllegalArgumentException("Unable to create axons of type:" + axonsType);
 	}
 
 	@Override
-	public Axons<Neurons3D, Neurons3D, ?> createAxons3DWith3DConfig(AxonsType axonsType, Axons3DConfig axonsConfig) {
-		if (axonsType.getBaseType().equals(AxonsBaseType.CONVOLUTIONAL)) {
-			return createConvolutionalAxons(axonsConfig, null, null);
-		} else if (axonsType.getBaseType().equals(AxonsBaseType.MAX_POOLING)) {
-			return createMaxPoolingAxons(axonsConfig, false);
-		} else if (axonsType.getBaseType().equals(AxonsBaseType.AVERAGE_POOLING)) {
-			return createAveragePoolingAxons(axonsConfig);
-		} else if (axonsType.getBaseType().equals(AxonsBaseType.PASS_THROUGH)) {
-			return new PassThroughAxonsImpl<>(axonsConfig.getLeftNeurons(), axonsConfig.getRightNeurons());
+	public <A extends Axons<Neurons3D, Neurons3D, ?>> A createAxons3DWith3DConfig(AxonsType axonsType, Class<A> axonsClass, Axons3DConfig axonsConfig) {
+		if (axonsType.getBaseType().equals(AxonsBaseType.CONVOLUTIONAL) && axonsClass.isAssignableFrom(ConvolutionalAxons.class)) {
+			return axonsClass.cast(createConvolutionalAxons(axonsConfig, null, null));
+		} else if (axonsType.getBaseType().equals(AxonsBaseType.MAX_POOLING) && axonsClass.isAssignableFrom(MaxPoolingAxons.class)) {
+			return axonsClass.cast(createMaxPoolingAxons(axonsConfig, false));
+		} else if (axonsType.getBaseType().equals(AxonsBaseType.AVERAGE_POOLING) && axonsClass.isAssignableFrom(AveragePoolingAxons.class)) {
+			return axonsClass.cast(createAveragePoolingAxons(axonsConfig));
+		} else if (axonsType.getBaseType().equals(AxonsBaseType.PASS_THROUGH) && axonsClass.isAssignableFrom(PassThroughAxonsImpl.class)) {
+			return axonsClass.cast(new PassThroughAxonsImpl<>(axonsConfig.getLeftNeurons(), axonsConfig.getRightNeurons()));
 		} else {
 			throw new IllegalArgumentException("Unable to create axons of type:" + axonsType);
 		}

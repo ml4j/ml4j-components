@@ -27,12 +27,12 @@ public class DefaultScaleAndShiftAxonsImpl<N extends Neurons> extends WeightedAx
 
 	@Override
 	public Matrix getScaleColumnVector() {
-		return axonWeights.getConnectionWeights().getWeights();
+		return axonWeights.getConnectionWeights().getMatrix();
 	}
 
 	@Override
 	public Matrix getShiftColumnVector() {
-		return axonWeights.getLeftToRightBiases().getWeights();
+		return axonWeights.getLeftToRightBiases().getVector();
 	}
 
 	@Override

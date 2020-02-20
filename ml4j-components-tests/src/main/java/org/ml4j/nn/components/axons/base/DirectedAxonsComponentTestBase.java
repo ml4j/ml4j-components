@@ -174,7 +174,7 @@ public abstract class DirectedAxonsComponentTestBase extends TestBase {
 
 		AxonsContext mockAxonsContext2 = Mockito.mock(AxonsContext.class);
 
-		Mockito.when(mockDirectedComponentsContext.getContext(Mockito.same(directedAxonsComponent), Mockito.any()))
+		Mockito.when(mockDirectedComponentsContext.getContext(Mockito.same(directedAxonsComponent), Mockito.any(), Mockito.any()))
 				.thenReturn(mockAxonsContext2);
 
 		AxonsContext axonsContext = directedAxonsComponent.getContext(mockDirectedComponentsContext);

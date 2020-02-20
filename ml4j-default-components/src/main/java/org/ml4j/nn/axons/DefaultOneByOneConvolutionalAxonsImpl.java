@@ -37,7 +37,7 @@ public class DefaultOneByOneConvolutionalAxonsImpl implements ConvolutionalAxons
 	}
 
 	public DefaultOneByOneConvolutionalAxonsImpl(AxonsFactory axonsFactory,
-			Axons3DConfig config, WeightsMatrix connectionWeights, BiasMatrix biases) {
+			Axons3DConfig config, WeightsMatrix connectionWeights, BiasVector biases) {
 		this.config = config;
 		if (!isEligible(config)) {
 			throw new IllegalArgumentException("DefaultOneByOneConvolutionalAxonsImpl cannot be used for this configuration");

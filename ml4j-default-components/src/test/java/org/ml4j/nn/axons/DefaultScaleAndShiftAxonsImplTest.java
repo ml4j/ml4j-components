@@ -28,7 +28,7 @@ public class DefaultScaleAndShiftAxonsImplTest extends AxonsTestBase<ScaleAndShi
 				new WeightsMatrixImpl(matrixFactory.createMatrix(leftNeurons.getNeuronCountExcludingBias(), 1),
 						new WeightsFormatImpl(Arrays.asList(Dimension.INPUT_FEATURE), Arrays.asList(Dimension.OUTPUT_FEATURE), 
 								WeightsMatrixOrientation.ROWS_SPAN_OUTPUT_DIMENSIONS)),
-				new BiasMatrixImpl(matrixFactory.createMatrix(leftNeurons.getNeuronCountExcludingBias(), 1)), null);
+				new BiasVectorImpl(matrixFactory.createMatrix(leftNeurons.getNeuronCountExcludingBias(), 1), FeaturesVectorFormat.DEFAULT_BIAS_FORMAT), null);
 		return new DefaultScaleAndShiftAxonsImpl<>(new AxonsConfig<>(leftNeurons, rightNeurons), axonWeights);
 	}
 

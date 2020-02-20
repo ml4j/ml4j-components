@@ -37,6 +37,8 @@ public abstract class AxonsTestBase<A extends Axons<?, ?, ?>> extends TestBase {
 		Mockito.when(leftNeurons.getNeuronCountExcludingBias()).thenReturn(100);
 		Mockito.when(rightNeurons.getNeuronCountExcludingBias()).thenReturn(110);
 		Mockito.when(mockAxonsContext.getMatrixFactory()).thenReturn(matrixFactory);
+		Mockito.when(mockAxonsContext.getLeftHandInputDropoutKeepProbability()).thenReturn(1f);
+
 		axons = createAxonsUnderTest(leftNeurons, rightNeurons);
 	}
 

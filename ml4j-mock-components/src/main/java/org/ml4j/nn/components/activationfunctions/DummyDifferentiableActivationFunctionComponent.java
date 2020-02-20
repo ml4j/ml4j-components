@@ -13,11 +13,15 @@
  */
 package org.ml4j.nn.components.activationfunctions;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 import org.ml4j.nn.activationfunctions.ActivationFunctionType;
 import org.ml4j.nn.components.activationfunctions.base.DifferentiableActivationFunctionComponentBase;
 import org.ml4j.nn.components.factories.DirectedComponentFactory;
+import org.ml4j.nn.components.onetone.DefaultChainableDirectedComponent;
 import org.ml4j.nn.neurons.Neurons;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.ml4j.nn.neurons.NeuronsActivationContext;
@@ -62,5 +66,11 @@ public class DummyDifferentiableActivationFunctionComponent extends Differentiab
 	@Override
 	public boolean isSupported(NeuronsActivationFormat<?> format) {
 		return true;
+	}
+	
+	@Override
+	public Set<DefaultChainableDirectedComponent<?, ?>> flatten() {
+		Set<DefaultChainableDirectedComponent<?, ?>> allComponentsIncludingThis = new HashSet<>(Arrays.asList(this));
+		return allComponentsIncludingThis;
 	}
 }

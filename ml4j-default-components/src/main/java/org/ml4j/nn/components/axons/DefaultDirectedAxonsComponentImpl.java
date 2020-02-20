@@ -13,13 +13,17 @@
  */
 package org.ml4j.nn.components.axons;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 import org.ml4j.nn.axons.Axons;
 import org.ml4j.nn.axons.AxonsActivation;
 import org.ml4j.nn.axons.AxonsContext;
 import org.ml4j.nn.components.axons.base.DirectedAxonsComponentBase;
 import org.ml4j.nn.components.factories.DirectedComponentFactory;
+import org.ml4j.nn.components.onetone.DefaultChainableDirectedComponent;
 import org.ml4j.nn.neurons.Neurons;
 import org.ml4j.nn.neurons.NeuronsActivation;
 import org.ml4j.nn.neurons.NeuronsActivationFeatureOrientation;
@@ -37,9 +41,9 @@ import org.slf4j.LoggerFactory;
  * @param <R> The type of Neurons on the RHS of this DirectedAxonsComponent.
  * @param <A> The specific type of Axons wrapped by this DirectedAxonsComponent.
  */
-public class DefaultDirectedAxonsComponentImpl<L extends Neurons, R extends Neurons>
-		extends DirectedAxonsComponentBase<L, R, Axons<? extends L, ? extends R, ?>>
-		implements DirectedAxonsComponent<L, R, Axons<? extends L, ? extends R, ?>> {
+public class DefaultDirectedAxonsComponentImpl<L extends Neurons, R extends Neurons, A extends Axons<L, R, A>>
+		extends DirectedAxonsComponentBase<L, R, A>
+		implements DirectedAxonsComponent<L, R, A> {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(DefaultDirectedAxonsComponentImpl.class);
 
@@ -51,7 +55,7 @@ public class DefaultDirectedAxonsComponentImpl<L extends Neurons, R extends Neur
 	/**
 	 * @param axons The axons instance wrapped by this DirectedAxonsComponent.
 	 */
-	public DefaultDirectedAxonsComponentImpl(String name, Axons<? extends L, ? extends R, ?> axons) {
+	public DefaultDirectedAxonsComponentImpl(String name, A axons) {
 		super(name, axons);
 	}
 
@@ -63,7 +67,7 @@ public class DefaultDirectedAxonsComponentImpl<L extends Neurons, R extends Neur
 		if (neuronsActivation.getFeatureCount() != this.getInputNeurons().getNeuronCountExcludingBias()) {
 			throw new IllegalArgumentException();
 		}
-
+		
 		AxonsActivation axonsActivation = axons.pushLeftToRight(neuronsActivation, null, context);
 		NeuronsActivation output = axonsActivation.getPostDropoutOutput();
 
@@ -74,7 +78,7 @@ public class DefaultDirectedAxonsComponentImpl<L extends Neurons, R extends Neur
 	}
 
 	@Override
-	public DirectedAxonsComponent<L, R, Axons<? extends L, ? extends R, ?>> dup(DirectedComponentFactory directedComponentFactory) {
+	public DirectedAxonsComponent<L, R, A> dup(DirectedComponentFactory directedComponentFactory) {
 		return new DefaultDirectedAxonsComponentImpl<>(name, axons.dup());
 	}
 	
@@ -86,6 +90,12 @@ public class DefaultDirectedAxonsComponentImpl<L extends Neurons, R extends Neur
 	@Override
 	public boolean isSupported(NeuronsActivationFormat<?> format) {
 		return axons.isSupported(format) && NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET.equals(format.getFeatureOrientation());
+	}
+	
+	@Override
+	public Set<DefaultChainableDirectedComponent<?, ?>> flatten() {
+		Set<DefaultChainableDirectedComponent<?, ?>> allComponentsIncludingThis = new HashSet<>(Arrays.asList(this));
+		return allComponentsIncludingThis;
 	}
 
 }

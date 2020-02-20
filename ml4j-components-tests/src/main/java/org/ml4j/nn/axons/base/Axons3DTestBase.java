@@ -54,6 +54,9 @@ public abstract class Axons3DTestBase<A extends Axons<?, ?, ?>> extends TestBase
 	public void testPushLeftToRight() {
 
 		Mockito.when(mockAxonsContext.isTrainingContext()).thenReturn(true);
+		
+		Mockito.when(mockAxonsContext.getLeftHandInputDropoutKeepProbability()).thenReturn(1f);
+
 
 		Mockito.when(mockAxonsContext.isTrainingContext()).thenReturn(true);
 

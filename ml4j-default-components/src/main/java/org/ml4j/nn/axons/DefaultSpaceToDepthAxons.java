@@ -15,7 +15,8 @@ import org.ml4j.nn.neurons.format.features.DimensionScope;
 public class DefaultSpaceToDepthAxons extends AxonsBase<Neurons3D, Neurons3D, DefaultSpaceToDepthAxons, AxonsConfig<Neurons3D, Neurons3D>> {
 
 	public static final AxonsType SPACE_TO_DEPTH_AXONS_TYPE = AxonsType.createCustomBaseType("SPACE_TO_DEPTH");
-	
+	public static final Class<DefaultSpaceToDepthAxons> SPACE_TO_DEPTH_AXONS_CLASS = DefaultSpaceToDepthAxons.class;
+
 	/**
 	 * Default serialization id.
 	 */

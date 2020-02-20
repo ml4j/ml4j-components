@@ -6,7 +6,7 @@ import org.ml4j.nn.axons.Axons;
 import org.ml4j.nn.axons.Axons3DConfig;
 import org.ml4j.nn.axons.AxonsConfig;
 import org.ml4j.nn.axons.AxonsType;
-import org.ml4j.nn.axons.BiasMatrix;
+import org.ml4j.nn.axons.BiasVector;
 import org.ml4j.nn.axons.ConvolutionalAxons;
 import org.ml4j.nn.axons.FullyConnectedAxons;
 import org.ml4j.nn.axons.MaxPoolingAxons;
@@ -37,13 +37,13 @@ public class DummyAxonsFactoryImpl implements AxonsFactory {
 
 	@Override
 	public FullyConnectedAxons createFullyConnectedAxons(AxonsConfig<Neurons, Neurons> axonsConfig,
-			WeightsMatrix connectionWeights, BiasMatrix biases) {
+			WeightsMatrix connectionWeights, BiasVector biases) {
 		return new DummyFullyConnectedAxonsImpl(matrixFactory, axonsConfig.getLeftNeurons(), axonsConfig.getRightNeurons());
 	}
 
 	@Override
 	public FullyConnectedAxons createFullyConnectedAxons(AxonsConfig<Neurons, Neurons> axonsConfig,
-			WeightsMatrix connectionWeights, BiasMatrix leftToRightBiases, BiasMatrix rightToLeftBiases) {
+			WeightsMatrix connectionWeights, BiasVector leftToRightBiases, BiasVector rightToLeftBiases) {
 		return new DummyFullyConnectedAxonsImpl(matrixFactory, axonsConfig.getLeftNeurons(), axonsConfig.getRightNeurons());
 	}
 
@@ -55,7 +55,7 @@ public class DummyAxonsFactoryImpl implements AxonsFactory {
 
 	@Override
 	public ConvolutionalAxons createConvolutionalAxons(
-			Axons3DConfig config, WeightsMatrix connectionWeights, BiasMatrix biases) {
+			Axons3DConfig config, WeightsMatrix connectionWeights, BiasVector biases) {
 		return new DummyConvolutionalAxonsImpl(matrixFactory, config.getLeftNeurons(), config.getRightNeurons(), config);
 	}
 
@@ -67,23 +67,28 @@ public class DummyAxonsFactoryImpl implements AxonsFactory {
 
 	@Override
 	public <N extends Neurons> ScaleAndShiftAxons<N> createScaleAndShiftAxons(AxonsConfig<N, N> axonsConfig, 
-			WeightsMatrix gamma, BiasMatrix beta) {
+			WeightsMatrix gamma, BiasVector beta) {
 		return new DummyScaleAndShiftAxonsImpl<>(matrixFactory, axonsConfig.getLeftNeurons(), axonsConfig.getRightNeurons());
 	}
 
 	@Override
-	public Axons<Neurons, Neurons, ?> createAxons(AxonsType arg0, AxonsConfig<Neurons, Neurons> arg1) {
+	public <A extends Axons<Neurons, Neurons, ?>> A createAxons(AxonsType axonsType, Class<A> axonsClass,
+			AxonsConfig<Neurons, Neurons> axonsConfig) {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public Axons<Neurons3D, Neurons3D, ?> createAxons3D(AxonsType arg0, AxonsConfig<Neurons3D, Neurons3D> arg1) {
+	public <A extends Axons<Neurons3D, Neurons3D, ?>> A createAxons3D(AxonsType axonsType, Class<A> axonsClass,
+			AxonsConfig<Neurons3D, Neurons3D> axonsConfig) {
 		throw new UnsupportedOperationException();
 	}
-	
+
 	@Override
-	public Axons<Neurons3D, Neurons3D, ?> createAxons3DWith3DConfig(AxonsType arg0, Axons3DConfig arg1) {
+	public <A extends Axons<Neurons3D, Neurons3D, ?>> A createAxons3DWith3DConfig(AxonsType axonsType,
+			Class<A> axonsClass, Axons3DConfig axonsConfig) {
 		throw new UnsupportedOperationException();
 	}
+
+	
 
 }
