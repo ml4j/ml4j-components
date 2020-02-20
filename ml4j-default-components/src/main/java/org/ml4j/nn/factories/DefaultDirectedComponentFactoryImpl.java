@@ -23,19 +23,28 @@ import org.ml4j.nn.activationfunctions.ActivationFunctionType;
 import org.ml4j.nn.activationfunctions.DifferentiableActivationFunction;
 import org.ml4j.nn.activationfunctions.factories.DifferentiableActivationFunctionFactory;
 import org.ml4j.nn.axons.Axons;
-import org.ml4j.nn.axons.Axons3DConfig;
 import org.ml4j.nn.axons.AxonsConfig;
+import org.ml4j.nn.axons.AxonsContextConfigurer;
 import org.ml4j.nn.axons.AxonsType;
-import org.ml4j.nn.axons.BatchNormConfig;
-import org.ml4j.nn.axons.BiasMatrix;
-import org.ml4j.nn.axons.BiasMatrixImpl;
+import org.ml4j.nn.axons.BatchNormAxonsConfig;
+import org.ml4j.nn.axons.BiasVector;
+import org.ml4j.nn.axons.BiasVectorImpl;
+import org.ml4j.nn.axons.ConvolutionalAxonsConfig;
 import org.ml4j.nn.axons.DefaultSpaceToDepthAxons;
+import org.ml4j.nn.axons.FeaturesVector;
+import org.ml4j.nn.axons.FeaturesVectorFormat;
+import org.ml4j.nn.axons.FullyConnectedAxonsConfig;
+import org.ml4j.nn.axons.GenericAxonsAdapter;
+import org.ml4j.nn.axons.GenericTrainableAxonsAdapter;
 import org.ml4j.nn.axons.PassThroughAxonsImpl;
+import org.ml4j.nn.axons.PoolingAxonsConfig;
+import org.ml4j.nn.axons.TrainableAxons;
 import org.ml4j.nn.axons.WeightsFormatImpl;
 import org.ml4j.nn.axons.WeightsMatrix;
 import org.ml4j.nn.axons.WeightsMatrixImpl;
 import org.ml4j.nn.axons.WeightsMatrixOrientation;
 import org.ml4j.nn.axons.factories.AxonsFactory;
+import org.ml4j.nn.components.DirectedComponentsContext;
 import org.ml4j.nn.components.NeuralComponentType;
 import org.ml4j.nn.components.activationfunctions.DefaultDifferentiableActivationFunctionComponentImpl;
 import org.ml4j.nn.components.activationfunctions.DifferentiableActivationFunctionComponent;
@@ -77,13 +86,15 @@ public class DefaultDirectedComponentFactoryImpl implements DirectedComponentFac
 	private AxonsFactory axonsFactory;
 	private DifferentiableActivationFunctionFactory activationFunctionFactory;
 	private DirectedComponentFactory directedComponentFactory;
+	private DirectedComponentsContext directedComponentsContext;
 
 	public DefaultDirectedComponentFactoryImpl(MatrixFactory matrixFactory, AxonsFactory axonsFactory,
-			DifferentiableActivationFunctionFactory activationFunctionFactory) {
+			DifferentiableActivationFunctionFactory activationFunctionFactory, DirectedComponentsContext directedComponentsContext) {
 		this.matrixFactory = matrixFactory;
 		this.axonsFactory = axonsFactory;
 		this.directedComponentFactory = this;
 		this.activationFunctionFactory = activationFunctionFactory;
+		this.directedComponentsContext = directedComponentsContext;
 	}
 
 	public void setDirectedComponentFactory(DirectedComponentFactory directedComponentFactory) {
@@ -91,51 +102,74 @@ public class DefaultDirectedComponentFactoryImpl implements DirectedComponentFac
 	}
 
 	@Override
-	public DirectedAxonsComponent<Neurons, Neurons, ?> createFullyConnectedAxonsComponent(String name, AxonsConfig<Neurons, Neurons> axonsConfig,  WeightsMatrix connectionWeights, BiasMatrix biases) {
-		return createDirectedAxonsComponent(name,
-				axonsFactory.createFullyConnectedAxons(axonsConfig,
+	public DirectedAxonsComponent<Neurons, Neurons, ?> createFullyConnectedAxonsComponent(String name, FullyConnectedAxonsConfig axonsConfig,  WeightsMatrix connectionWeights, BiasVector biases) {
+		return createTypedDirectedAxonsComponent(name,
+				axonsFactory.createFullyConnectedAxons(axonsConfig.getAxonsConfig(),
 						connectionWeights, 
-						biases));
+						biases), axonsConfig.getAxonsContextConfigurer());
+	}
+	
+	private <L extends Neurons, R extends Neurons, A extends Axons<L, R, A>> DirectedAxonsComponent<L, R, ?> createTypedDirectedAxonsComponent(String name, 
+			A axons, AxonsContextConfigurer axonsContextConfiguer) {
+		DirectedAxonsComponent<L, R, ?> directedAxonsComponent = new DefaultDirectedAxonsComponentImpl<>(name, axons);
+		
+		if (axonsContextConfiguer != null) {
+			axonsContextConfiguer.accept(directedAxonsComponent.getContext(directedComponentsContext));
+		}
+		
+		return directedAxonsComponent;
 	}
 
 	@Override
 	public <L extends Neurons, R extends Neurons> DirectedAxonsComponent<L, R, ?> createDirectedAxonsComponent(String name, 
-			Axons<L, R, ?> axons) {
-		return new DefaultDirectedAxonsComponentImpl<>(name, axons);
+			Axons<L, R, ?> axons, AxonsContextConfigurer axonsContextConfiguer) {
+		if (axons instanceof TrainableAxons) {
+			return createTypedDirectedAxonsComponent(name, new GenericTrainableAxonsAdapter<L, R>((TrainableAxons<L, R, ?>)axons), axonsContextConfiguer);
+		} else {
+			return createTypedDirectedAxonsComponent(name, new GenericAxonsAdapter<L, R>(axons), axonsContextConfiguer);
+		}
 	}
 
 	@Override
-	public DirectedAxonsComponent<Neurons3D, Neurons3D, ?> createConvolutionalAxonsComponent(String name, Axons3DConfig config, WeightsMatrix connectionWeights, BiasMatrix biases) {
-		return createDirectedAxonsComponent(name,
-				axonsFactory.createConvolutionalAxons(config, connectionWeights, biases));
-	}
-
-	@Override
-	public DirectedAxonsComponent<Neurons3D, Neurons3D, ?> createMaxPoolingAxonsComponent(String name, Axons3DConfig config, boolean scaleOutputs) {
-		return createDirectedAxonsComponent(name,
-				axonsFactory.createMaxPoolingAxons(config, scaleOutputs));
-	}
-
-	@Override
-	public DirectedAxonsComponent<Neurons3D, Neurons3D, ?> createAveragePoolingAxonsComponent(String name, Axons3DConfig config) {
-		return createDirectedAxonsComponent(name, axonsFactory.createAveragePoolingAxons(config));
-	}
-
-	@Override
-	public <N extends Neurons> BatchNormDirectedAxonsComponent<N, ?> createBatchNormAxonsComponent(String name, N neurons, BatchNormConfig<N> batchNormConfig) {
+	public DirectedAxonsComponent<Neurons3D, Neurons3D, ?> createConvolutionalAxonsComponent(String name, ConvolutionalAxonsConfig config, WeightsMatrix connectionWeights, BiasVector biases) {
+		return createTypedDirectedAxonsComponent(name,
+				axonsFactory.createConvolutionalAxons(config.getAxonsConfig(), connectionWeights, biases), config.getAxonsContextConfigurer());
 		
-		return new DefaultBatchNormDirectedAxonsComponentImpl<>(name, 
-				axonsFactory.createScaleAndShiftAxons(new AxonsConfig<N, N>(neurons, neurons),
-						new WeightsMatrixImpl(expandChannelValuesToFeatureValues(matrixFactory, neurons, batchNormConfig.getGammaColumnVector()),
+		
+	}
+
+	@Override
+	public DirectedAxonsComponent<Neurons3D, Neurons3D, ?> createMaxPoolingAxonsComponent(String name, PoolingAxonsConfig config, boolean scaleOutputs) {
+		return createTypedDirectedAxonsComponent(name,
+				axonsFactory.createMaxPoolingAxons(config.getAxonsConfig(), scaleOutputs), AxonsContextConfigurer.defaultConfigurer());
+	}
+
+	@Override
+	public DirectedAxonsComponent<Neurons3D, Neurons3D, ?> createAveragePoolingAxonsComponent(String name, PoolingAxonsConfig config) {
+		return createTypedDirectedAxonsComponent(name, axonsFactory.createAveragePoolingAxons(config.getAxonsConfig()), AxonsContextConfigurer.defaultConfigurer());
+	}
+
+	@Override
+	public <N extends Neurons> BatchNormDirectedAxonsComponent<N, ?> createBatchNormAxonsComponent(String name, BatchNormAxonsConfig<N> config) {
+		
+		BatchNormDirectedAxonsComponent<N, ?>  component =  new DefaultBatchNormDirectedAxonsComponentImpl<>(name, 
+				axonsFactory.createScaleAndShiftAxons(config.getAxonsConfig(),
+						new WeightsMatrixImpl(expandChannelValuesToFeatureValues(matrixFactory, config.getNeurons(), config.getBatchNormConfig().getGammaColumnVector()),
 								new WeightsFormatImpl(Arrays.asList(
 										Dimension.INPUT_DEPTH, 
 										Dimension.INPUT_HEIGHT, 
 										Dimension.INPUT_WIDTH), 
 										Arrays.asList(Dimension.OUTPUT_FEATURE),
 										WeightsMatrixOrientation.ROWS_SPAN_OUTPUT_DIMENSIONS)),
-						batchNormConfig.getBetaColumnVector() == null ? null : new BiasMatrixImpl(expandChannelValuesToFeatureValues(matrixFactory, neurons, batchNormConfig.getBetaColumnVector()))),
-				expandChannelValuesToFeatureValues(matrixFactory, neurons, batchNormConfig.getMeanColumnVector()),
-				expandChannelValuesToFeatureValues(matrixFactory, neurons, batchNormConfig.getVarianceColumnVector()));
+						config.getBatchNormConfig().getBetaColumnVector() == null ? null : new BiasVectorImpl(expandChannelValuesToFeatureValues(matrixFactory, config.getNeurons(), config.getBatchNormConfig().getBetaColumnVector()), FeaturesVectorFormat.DEFAULT_BIAS_FORMAT)),
+				expandChannelValuesToFeatureValues(matrixFactory, config.getNeurons(), config.getBatchNormConfig().getMeanColumnVector()),
+				expandChannelValuesToFeatureValues(matrixFactory, config.getNeurons(), config.getBatchNormConfig().getVarianceColumnVector()));
+		
+		if (config.getBatchNormAxonsContextConfigurer() != null) {
+			config.getBatchNormAxonsContextConfigurer() .accept(component.getContext(directedComponentsContext));
+		}
+		
+		return component;
 	}
 
 	
@@ -147,7 +181,20 @@ public class DefaultDirectedComponentFactoryImpl implements DirectedComponentFac
 		if (!Dimension.isEquivalent(channelValues.getFormat().getInputDimensions(), Arrays.asList(Dimension.INPUT_DEPTH), DimensionScope.INPUT)) {
 			throw new IllegalArgumentException("Expected batch norm to be of format with input dimensions:" +  Dimension.INPUT_DEPTH);
 		}
-		return expandChannelValuesToFeatureValues(matrixFactory, rightNeurons, channelValues.getWeights());
+		return expandChannelValuesToFeatureValues(matrixFactory, rightNeurons, channelValues.getMatrix());
+	}
+	
+	
+	
+	public static Matrix expandChannelValuesToFeatureValues(MatrixFactory matrixFactory, Neurons rightNeurons,
+			FeaturesVector channelValues) {
+		if (channelValues == null) {
+			return null;
+		}
+		if (!Dimension.isEquivalent(channelValues.getFormat().getDimensions(), Arrays.asList(Dimension.OUTPUT_DEPTH), DimensionScope.OUTPUT)) {
+			throw new IllegalArgumentException("Expected batch norm to be of format with input dimensions:" +  Dimension.OUTPUT_DEPTH);
+		}
+		return expandChannelValuesToFeatureValues(matrixFactory, rightNeurons, channelValues.getVector());
 	}
 
 	public static Matrix expandChannelValuesToFeatureValues(MatrixFactory matrixFactory, Neurons rightNeurons,
@@ -181,7 +228,7 @@ public class DefaultDirectedComponentFactoryImpl implements DirectedComponentFac
 	@Override
 	public <N extends Neurons> DirectedAxonsComponent<N, N, ?> createPassThroughAxonsComponent(String name, N leftNeurons,
 			N rightNeurons) {
-		return createDirectedAxonsComponent(name, new PassThroughAxonsImpl<>(leftNeurons, rightNeurons));
+		return createDirectedAxonsComponent(name, new PassThroughAxonsImpl<>(leftNeurons, rightNeurons), AxonsContextConfigurer.defaultConfigurer());
 	}
 
 	@Override
@@ -253,7 +300,7 @@ public class DefaultDirectedComponentFactoryImpl implements DirectedComponentFac
 		if (DefaultSpaceToDepthAxons.SPACE_TO_DEPTH_AXONS_TYPE.getId().equals(neuralComponentType.getId()) && leftNeurons instanceof Neurons3D && rightNeurons instanceof Neurons3D) {
 			return createDirectedAxonsComponent(name, axonsFactory
 					.createAxons3D(AxonsType.createCustomBaseType("SPACE_TO_DEPTH"), 
-							new AxonsConfig<Neurons3D, Neurons3D>((Neurons3D)leftNeurons,(Neurons3D)rightNeurons)));			
+							DefaultSpaceToDepthAxons.class, new AxonsConfig<Neurons3D, Neurons3D>((Neurons3D)leftNeurons,(Neurons3D)rightNeurons)), AxonsContextConfigurer.defaultConfigurer());			
 		}
 		throw new UnsupportedOperationException("Creation of component by component type not yet implemented");
 	}

@@ -14,8 +14,11 @@
 package org.ml4j.nn.components.onetoone;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.ml4j.nn.components.DirectedComponentsContext;
 import org.ml4j.nn.components.factories.DirectedComponentFactory;
@@ -70,6 +73,14 @@ public class DummyDefaultDirectedComponentBipoleGraph extends DefaultDirectedCom
 	@Override
 	public List<DefaultChainableDirectedComponent<?, ?>> decompose() {
 		return Arrays.asList(this);
+	}
+	
+
+	@Override
+	public Set<DefaultChainableDirectedComponent<?, ?>> flatten() {
+		Set<DefaultChainableDirectedComponent<?, ?>> allComponentsIncludingThis = new HashSet<>(Arrays.asList(this));
+		allComponentsIncludingThis.addAll(this.parallelComponentBatch.getComponents().stream().flatMap(c -> c.flatten().stream()).collect(Collectors.toSet()));
+		return allComponentsIncludingThis;
 	}
 
 	@Override

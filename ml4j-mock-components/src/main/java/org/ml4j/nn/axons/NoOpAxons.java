@@ -28,6 +28,7 @@ import org.ml4j.nn.neurons.format.NeuronsActivationFormat;
  *
  * @param <L> The type of Neurons on the LHS of these Axons
  * @param <R> The type of Neurons on the RHS of these Axons
+ * @param <A> The type of Axons.
  */
 public class NoOpAxons<L extends Neurons, R extends Neurons> extends AxonsBase<L, R, NoOpAxons<L, R>>
 		implements Axons<L, R, NoOpAxons<L, R>> {
@@ -41,10 +42,6 @@ public class NoOpAxons<L extends Neurons, R extends Neurons> extends AxonsBase<L
 		super(axonsType, leftNeurons, rightNeurons);
 	}
 
-	@Override
-	public NoOpAxons<L, R> dup() {
-		return new NoOpAxons<>(axonsType, leftNeurons, rightNeurons);
-	}
 
 	@Override
 	public boolean isTrainable(AxonsContext axonsContext) {
@@ -69,5 +66,11 @@ public class NoOpAxons<L extends Neurons, R extends Neurons> extends AxonsBase<L
 	@Override
 	public boolean isSupported(NeuronsActivationFormat<?> format) {
 		return true;
+	}
+
+
+	@Override
+	public NoOpAxons<L, R> dup() {
+		return new NoOpAxons<>(axonsType, leftNeurons, rightNeurons);
 	}
 }

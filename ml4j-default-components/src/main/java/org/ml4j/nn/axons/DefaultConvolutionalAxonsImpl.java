@@ -28,7 +28,7 @@ public class DefaultConvolutionalAxonsImpl implements ConvolutionalAxons {
 	private FullyConnectedAxons fullyConnectedAxons;
 
 	public DefaultConvolutionalAxonsImpl(AxonsFactory axonsFactory,
-			Axons3DConfig config, WeightsMatrix connectionWeights,  BiasMatrix biases) {
+			Axons3DConfig config, WeightsMatrix connectionWeights,  BiasVector biases) {
 		this.config = config;
 		this.fullyConnectedAxons = axonsFactory.createFullyConnectedAxons(new AxonsConfig<>(
 				new Neurons(config.getFilterWidth() * config.getFilterHeight() * config.getLeftNeurons().getDepth(), config.getLeftNeurons().hasBiasUnit()),
@@ -86,6 +86,10 @@ public class DefaultConvolutionalAxonsImpl implements ConvolutionalAxons {
 	@Override
 	public AxonsActivation pushLeftToRight(NeuronsActivation leftNeuronsActivation,
 			AxonsActivation previousRightToLeftActivation, AxonsContext axonsContext) {
+		
+		if (axonsContext.getLeftHandInputDropoutKeepProbability() != 1) {
+			throw new IllegalArgumentException("Convolutional layers do not support dropout");
+		}
 
 		int exampleCount = leftNeuronsActivation.getExampleCount();
 
@@ -115,6 +119,10 @@ public class DefaultConvolutionalAxonsImpl implements ConvolutionalAxons {
 	@Override
 	public AxonsActivation pushRightToLeft(NeuronsActivation rightNeuronsActivation,
 			AxonsActivation previousLeftToRightActivation, AxonsContext axonsContext) {
+		
+		if (axonsContext.getLeftHandInputDropoutKeepProbability() != 1) {
+			throw new IllegalArgumentException("Convolutional layers do not support dropout");
+		}
 
 		int exampleCount = previousLeftToRightActivation.getPostDropoutOutput().getExampleCount();
 

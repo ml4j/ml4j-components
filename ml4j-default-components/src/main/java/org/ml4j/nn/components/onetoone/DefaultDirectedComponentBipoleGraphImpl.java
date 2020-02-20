@@ -14,8 +14,11 @@
 package org.ml4j.nn.components.onetoone;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.ml4j.nn.components.DirectedComponentsContext;
 import org.ml4j.nn.components.factories.DirectedComponentFactory;
@@ -219,5 +222,12 @@ public class DefaultDirectedComponentBipoleGraphImpl extends DefaultDirectedComp
 		return (oneToManyDirectedComponent == null || oneToManyDirectedComponent.isSupported(format))
 				&& NeuronsActivationFeatureOrientation.ROWS_SPAN_FEATURE_SET.equals(format.getFeatureOrientation())
 				&& parallelComponentBatch.isSupported(format) && (manyToOneDirectedComponent == null || manyToOneDirectedComponent.isSupported(format));
+	}
+
+	@Override
+	public Set<DefaultChainableDirectedComponent<?, ?>> flatten() {
+		Set<DefaultChainableDirectedComponent<?, ?>> allComponentsIncludingThis = new HashSet<>(Arrays.asList(this));
+		allComponentsIncludingThis.addAll(this.parallelComponentBatch.getComponents().stream().flatMap(c -> c.flatten().stream()).collect(Collectors.toSet()));
+		return allComponentsIncludingThis;
 	}
 }

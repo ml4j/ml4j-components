@@ -23,7 +23,7 @@ public class ScaleAndShiftAxonWeightsImpl extends AxonWeightsBase implements Axo
 	private static final Logger LOGGER = LoggerFactory.getLogger(ScaleAndShiftAxonWeightsImpl.class);
 
 	public ScaleAndShiftAxonWeightsImpl(int inputNeuronCount, int outputNeuronCount, WeightsMatrix connectionWeights,
-			BiasMatrix leftToRightBiases, BiasMatrix rightToLeftBiases) {
+			BiasVector leftToRightBiases, BiasVector rightToLeftBiases) {
 		super(inputNeuronCount, outputNeuronCount, connectionWeights, leftToRightBiases, rightToLeftBiases,
 				AxonWeightsType.SCALE_AND_SHIFT);
 	}
@@ -33,9 +33,9 @@ public class ScaleAndShiftAxonWeightsImpl extends AxonWeightsBase implements Axo
 
 		Matrix axonWeightsInput = input.getActivations(axonsContext.getMatrixFactory());
 		
-		EditableMatrix output = axonWeightsInput.mulColumnVector(connectionWeights.getWeights()).asEditableMatrix();
+		EditableMatrix output = axonWeightsInput.mulColumnVector(connectionWeights.getMatrix()).asEditableMatrix();
 		if (rightToLeftBiases != null) {
-			output.addiColumnVector(rightToLeftBiases.getWeights());
+			output.addiColumnVector(rightToLeftBiases.getVector());
 		}
 		return new NeuronsActivationImpl(new Neurons(this.inputNeuronCount, false), output, input.getFormat());
 	}
@@ -45,9 +45,9 @@ public class ScaleAndShiftAxonWeightsImpl extends AxonWeightsBase implements Axo
 		
 		Matrix axonWeightsInput = input.getActivations(axonsContext.getMatrixFactory());
 		
-		EditableMatrix output = axonWeightsInput.mulColumnVector(connectionWeights.getWeights()).asEditableMatrix();
+		EditableMatrix output = axonWeightsInput.mulColumnVector(connectionWeights.getMatrix()).asEditableMatrix();
 		if (leftToRightBiases != null) {
-			output.addiColumnVector(leftToRightBiases.getWeights());
+			output.addiColumnVector(leftToRightBiases.getVector());
 		}
 		return new NeuronsActivationImpl(new Neurons(this.outputNeuronCount, false), output, input.getFormat());
 	}

@@ -113,5 +113,4 @@ public class DefaultDirectedComponentChainImpl extends DefaultDirectedComponentC
 		return new DefaultDirectedComponentChainImpl(
 				sequentialComponents.stream().map(c -> c.dup(directedComponentFactory)).collect(Collectors.toList()));
 	}
-
 }

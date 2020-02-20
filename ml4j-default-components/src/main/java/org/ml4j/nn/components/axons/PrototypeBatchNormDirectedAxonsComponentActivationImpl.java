@@ -224,9 +224,9 @@ public class PrototypeBatchNormDirectedAxonsComponentActivationImpl<N extends Ne
 
 			if (directedAxonsComponent.getAxons() instanceof TrainableAxons) {
 				try (InterrimMatrix weightsWithoutBiases = directedAxonsComponent.getAxons().getDetachedAxonWeights()
-						.getConnectionWeights().getWeights().asInterrimMatrix()) {
+						.getConnectionWeights().getMatrix().asInterrimMatrix()) {
 					try (InterrimMatrix biases = directedAxonsComponent.getAxons().getDetachedAxonWeights()
-							.getLeftToRightBiases().getWeights().asInterrimMatrix()) {
+							.getLeftToRightBiases().getVector().asInterrimMatrix()) {
 						float regularisationCostForWeights = weightsWithoutBiases.asEditableMatrix()
 								.muli(weightsWithoutBiases).sum();
 						float regularisationCostForBiases = biases.asEditableMatrix().muli(biases).sum();

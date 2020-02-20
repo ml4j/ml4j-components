@@ -13,6 +13,7 @@
  */
 package org.ml4j.nn.components.manytomany;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -62,7 +63,7 @@ public class DefaultComponentBatchImpl extends DefaultComponentBatchBase {
 		return new DefaultDirectedComponentBatchActivationImpl(chainActivations);
 	}
 
-	protected <X, Y> Y forwardPropagate(NeuronsActivation input,
+	protected <X extends Serializable, Y> Y forwardPropagate(NeuronsActivation input,
 			DefaultChainableDirectedComponent<? extends Y, X> component, int componentIndex,
 			DirectedComponentsContext context) {
 		return component.forwardPropagate(input, component.getContext(context));

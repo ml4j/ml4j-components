@@ -85,5 +85,4 @@ public class DummyDefaultDirectedComponentChain extends DefaultDirectedComponent
 		return new DummyDefaultDirectedComponentChain(
 				sequentialComponents.stream().map(c -> c.dup(directedComponentFactory)).collect(Collectors.toList()));
 	}
-
 }

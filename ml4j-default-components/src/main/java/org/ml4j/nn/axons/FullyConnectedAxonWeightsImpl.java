@@ -29,17 +29,17 @@ public class FullyConnectedAxonWeightsImpl extends AxonWeightsBase implements Ax
 	private static final Logger LOGGER = LoggerFactory.getLogger(FullyConnectedAxonWeightsImpl.class);
 
 	public FullyConnectedAxonWeightsImpl(int inputNeuronCount, int outputNeuronCount, WeightsMatrix connectionWeights,
-			BiasMatrix leftToRightBiases, BiasMatrix rightToLeftBiases) {
+			BiasVector leftToRightBiases, BiasVector rightToLeftBiases) {
 		super(inputNeuronCount, outputNeuronCount, connectionWeights, leftToRightBiases, rightToLeftBiases,
 				AxonWeightsType.FULLY_CONNECTED);
 		if (connectionWeights != null && connectionWeights.getFormat().getOrientation() != WeightsMatrixOrientation.ROWS_SPAN_OUTPUT_DIMENSIONS) {
 			throw new IllegalArgumentException("Currently only " + WeightsMatrixOrientation.ROWS_SPAN_OUTPUT_DIMENSIONS + " weights format supported");
 		}
-		if (leftToRightBiases != null && leftToRightBiases.getFormat().getOrientation() != WeightsMatrixOrientation.ROWS_SPAN_OUTPUT_DIMENSIONS) {
-			throw new IllegalArgumentException("Currently only " + WeightsMatrixOrientation.ROWS_SPAN_OUTPUT_DIMENSIONS + " bias format supported");
+		if (leftToRightBiases != null && leftToRightBiases.getFormat().getOrientation() != FeaturesVectorOrientation.COLUMN_VECTOR) {
+			throw new IllegalArgumentException("Currently only " + FeaturesVectorOrientation.COLUMN_VECTOR + " bias format supported");
 		}
-		if (rightToLeftBiases != null && rightToLeftBiases.getFormat().getOrientation() != WeightsMatrixOrientation.ROWS_SPAN_OUTPUT_DIMENSIONS) {
-			throw new IllegalArgumentException("Currently only " + WeightsMatrixOrientation.ROWS_SPAN_OUTPUT_DIMENSIONS + " bias format supported");
+		if (rightToLeftBiases != null && rightToLeftBiases.getFormat().getOrientation() != FeaturesVectorOrientation.COLUMN_VECTOR) {
+			throw new IllegalArgumentException("Currently only " + FeaturesVectorOrientation.COLUMN_VECTOR + " bias format supported");
 		}
 	}
 
@@ -52,9 +52,9 @@ public class FullyConnectedAxonWeightsImpl extends AxonWeightsBase implements Ax
 		
 		Matrix axonWeightsInput = input.getActivations(axonsContext.getMatrixFactory());
 		
-		EditableMatrix output = connectionWeights.getWeights().transpose().mmul(axonWeightsInput).asEditableMatrix();
+		EditableMatrix output = connectionWeights.getMatrix().transpose().mmul(axonWeightsInput).asEditableMatrix();
 		if (rightToLeftBiases != null) {
-			output.addiColumnVector(rightToLeftBiases.getWeights());
+			output.addiColumnVector(rightToLeftBiases.getVector());
 		}
 		// TODO format
 		return new NeuronsActivationImpl(new Neurons(this.inputNeuronCount, false), output, input.getFormat());
@@ -93,9 +93,9 @@ public class FullyConnectedAxonWeightsImpl extends AxonWeightsBase implements Ax
 	
 		Matrix axonWeightsInput = input.getActivations(axonsContext.getMatrixFactory());
 		
-		EditableMatrix output = connectionWeights.getWeights().mmul(axonWeightsInput).asEditableMatrix();
+		EditableMatrix output = connectionWeights.getMatrix().mmul(axonWeightsInput).asEditableMatrix();
 		if (leftToRightBiases != null) {
-			output.addiColumnVector(leftToRightBiases.getWeights());
+			output.addiColumnVector(leftToRightBiases.getVector());
 		}
 		return new NeuronsActivationImpl(new Neurons(this.outputNeuronCount, false), output, outputFormat);
 	}

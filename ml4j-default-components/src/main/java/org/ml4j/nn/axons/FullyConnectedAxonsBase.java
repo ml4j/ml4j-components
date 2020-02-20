@@ -25,14 +25,19 @@ public abstract class FullyConnectedAxonsBase<L extends Neurons, R extends Neuro
 	@Override
 	public AxonsActivation pushLeftToRight(NeuronsActivation leftNeuronsActivation,
 			AxonsActivation previousRightToLeftActivation, AxonsContext axonsContext) {
-
+		
 		AxonsDropoutMask axonsDropoutMask = getLeftToRightAxonsDropoutMask(leftNeuronsActivation,
 				previousRightToLeftActivation, axonsContext);
 
 		Matrix axonWeightsInput = leftNeuronsActivation.getActivations(axonsContext.getMatrixFactory());
 
 		if (axonsDropoutMask != null && axonsDropoutMask.getType() == AxonsDropoutMaskType.INPUT) {
-			LOGGER.debug("Applying left to right input dropout mask and scaling");
+			
+			if (axonWeightsInput.isImmutable()) {
+				axonWeightsInput = axonWeightsInput.dup();
+			}
+			
+			LOGGER.info("Applying left to right input dropout mask and scaling");
 			axonWeightsInput.asEditableMatrix().muli(axonsDropoutMask.getDropoutMask());
 			axonWeightsInput.asEditableMatrix().muli(getLeftInputPostDropoutScaling(axonsContext));
 		}
@@ -46,7 +51,7 @@ public abstract class FullyConnectedAxonsBase<L extends Neurons, R extends Neuro
 			throw new UnsupportedOperationException("Left to right output dropout not yet supported");
 		}
 
-		if (!axonsContext.isTrainingContext() && !leftNeuronsActivation.isImmutable()) {
+		if (axonsContext.isWithFreezeOut() || (!axonsContext.isTrainingContext() && !leftNeuronsActivation.isImmutable())) {
 			leftNeuronsActivation.close();
 		} else {
 			leftNeuronsActivation.setImmutable(true);
@@ -62,7 +67,6 @@ public abstract class FullyConnectedAxonsBase<L extends Neurons, R extends Neuro
 		NeuronsActivation outputActivation = axonWeights
 				.applyToRightToLeftInput(rightNeuronsActivation, axonsContext);
 
-		
 		NeuronsActivation postDropoutOutputActivation;
 		
 		if (previousLeftToRightActivation != null && previousLeftToRightActivation.getDropoutMask() != null

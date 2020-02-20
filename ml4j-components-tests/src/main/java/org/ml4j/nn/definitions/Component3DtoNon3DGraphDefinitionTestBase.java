@@ -9,6 +9,7 @@ import org.ml4j.nn.components.NeuralComponent;
 import org.ml4j.nn.components.builders.componentsgraph.InitialComponentsGraphBuilder;
 import org.ml4j.nn.components.factories.NeuralComponentFactory;
 import org.ml4j.nn.sessions.Session;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
@@ -29,10 +30,13 @@ public abstract class Component3DtoNon3DGraphDefinitionTestBase<T extends Neural
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
 		this.neuralComponentFactory = createNeuralComponentFactory();
-		Mockito.when(mockDirectedComponentsContext.getContext(Mockito.any(), Mockito.any()))
+		Mockito.when(mockDirectedComponentsContext.getContext(Mockito.any(), Mockito.any(), Mockito.any()))
 				.thenReturn(mockAxonsContext);
-		Mockito.when(mockAxonsContext.withRegularisationLambda(Mockito.anyFloat())).thenReturn(mockAxonsContext);
-		Mockito.when(mockAxonsContext.withFreezeOut(Mockito.anyBoolean())).thenReturn(mockAxonsContext);
+		Mockito.when(mockAxonsContext.withRegularisationLambda(ArgumentMatchers.anyFloat())).thenReturn(mockAxonsContext);
+		Mockito.when(mockAxonsContext.withFreezeOut(ArgumentMatchers.anyBoolean())).thenReturn(mockAxonsContext);
+		Mockito.when(mockAxonsContext.isTrainingContext()).thenReturn(false);
+		Mockito.when(mockAxonsContext.getLeftHandInputDropoutKeepProbability()).thenReturn(1f);
+		Mockito.when(mockAxonsContext.dup()).thenReturn(mockAxonsContext);
 	}
 
 	protected abstract void runAssertionsOnCreatedComponentGraph(D graphDefinition,
