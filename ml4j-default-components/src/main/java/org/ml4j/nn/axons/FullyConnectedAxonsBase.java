@@ -37,7 +37,7 @@ public abstract class FullyConnectedAxonsBase<L extends Neurons, R extends Neuro
 				axonWeightsInput = axonWeightsInput.dup();
 			}
 			
-			LOGGER.info("Applying left to right input dropout mask and scaling");
+			LOGGER.debug("Applying left to right input dropout mask and scaling");
 			axonWeightsInput.asEditableMatrix().muli(axonsDropoutMask.getDropoutMask());
 			axonWeightsInput.asEditableMatrix().muli(getLeftInputPostDropoutScaling(axonsContext));
 		}
